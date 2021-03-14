@@ -16,28 +16,9 @@ export interface AllProps {
 };
 
 class App extends React.Component<AllProps> {
-
-  _controllValue = (type : boolean) => {
-    const { value, initActions } = this.props;
-    
-    if(type === true) {
-      initActions.redux_test({ 'value' : value + 1 })
-
-    } else if(type === false) {
-      initActions.redux_test({ 'value' : value - 1 })
-    }
-  }
-
   render() {
-    const { value } = this.props;
-    const { _controllValue } = this;
-
     return(
       <div>
-        <input type='button' value='삭감' onClick={() => _controllValue(false)} />
-        {value}
-        <input type='button' value='추가' onClick={() => _controllValue(true)} />
-
         <Home />
       </div>
     )
