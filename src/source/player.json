@@ -1,0 +1,77 @@
+{
+    "list" : [
+        {
+            "number" : 1,
+            "name" : "나",
+            "able" : true,
+            "character" : 1,
+            "plus" : true,
+            "minus" : false,
+            "select" : false
+        },
+
+        {
+            "number" : 2,
+            "name" : "플레이어 2",
+            "able" : true,
+            "character" : 2,
+            "plus" : true,
+            "minus" : false,
+            "select" : false
+        },
+
+        {
+            "number" : 3,
+            "name" : "플레이어 3",
+            "able" : false,
+            "character" : 0,
+            "plus" : false,
+            "minus" : false,
+            "select" : false
+        },
+
+        {
+            "number" : 4,
+            "name" : "플레이어 4",
+            "able" : false,
+            "character" : 0,
+            "plus" : false,
+            "minus" : false,
+            "select" : false
+        }
+    ],
+
+    "select_list" : [
+        {
+            "number" : 0,
+            "type" : "remove",
+            "stop" : "close_gray",
+            "action" : "close_red",
+            "name" : "캐릭터 삭제"
+        },
+
+        {
+            "number" : 1,
+            "type" : "character",
+            "name" : "댕댕이"
+        },
+
+        {
+            "number" : 2,
+            "type" : "character",
+            "name" : "냥냥이"
+        },
+
+        {
+            "number" : 3,
+            "type" : "character",
+            "name" : "흰냥이"
+        },
+
+        {
+            "number" : 4,
+            "type" : "character",
+            "name" : "점냥이"
+        }
+    ]
+}

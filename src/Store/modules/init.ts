@@ -3,11 +3,13 @@ import { createAction, handleActions } from 'redux-actions';
 const REDUXTEST = 'init/redux_test';
 const TOGGLESEETINGMODAL = 'init/toggle_setting_modal';
 const SETSETTINGSTATE = 'init/set_setting_state';
+const SETPLAYERINFO = 'init/set_player_info';
 
 export const actionCreators = {
     redux_test : createAction(REDUXTEST),
     toggle_setting_modal : createAction(TOGGLESEETINGMODAL),
-    set_setting_state : createAction(SETSETTINGSTATE)
+    set_setting_state : createAction(SETSETTINGSTATE),
+    set_player_info : createAction(SETPLAYERINFO)
 }
 
 // export const redux_test = createAction(REDUXTEST);
@@ -22,6 +24,14 @@ export interface initState {
     round_timer : number;
     game_event : boolean;
     setting_modify : boolean;
+    round_limit : number;
+    pass_price : number;
+    player_list : string;
+    able_player : number;
+    card_limit : number;
+    select_character : boolean;
+    select_info : string;
+    select_character_list : string;
 }
 
 const initialState : initState = {
@@ -33,7 +43,15 @@ const initialState : initState = {
     start_price : 100,
     round_timer : 60,
     game_event : true,
-    setting_modify : false
+    setting_modify : false,
+    round_limit : 0,
+    pass_price : 0,
+    player_list : JSON.stringify([]),
+    able_player : 2,
+    card_limit : 1,
+    select_character : false,
+    select_info : JSON.stringify({}),
+    select_character_list : JSON.stringify({})
 }
 
 // const initialState = {
@@ -65,9 +83,25 @@ export default handleActions<initState> ({
             setting_modify : data.payload.modify !== undefined ? data.payload.modify : state.setting_modify,
             start_price : data.payload.price !== undefined ? data.payload.price : state.start_price,
             round_timer : data.payload.round_timer !== undefined ? data.payload.round_timer : state.round_timer,
-            game_event : data.payload.event !== undefined ? data.payload.event : state.game_event
+            game_event : data.payload.event !== undefined ? data.payload.event : state.game_event,
+            round_limit : data.payload.round_limit !== undefined ? data.payload.round_limit : state.round_limit,
+            pass_price : data.payload.pass_price !== undefined ? data.payload.pass_price : state.pass_price,
+            card_limit : data.payload.card_limit !== undefined ? data.payload.card_limit : state.card_limit
         }
-    }
+    },
+
+    // 플레이어 셋팅하기
+    [SETPLAYERINFO] : (state : any, data : any) => {
+        return {
+            ...state,
+            player_list : data.payload.player_list !== undefined ? data.payload.player_list : state.player_list,
+            select_character_list : data.payload.select_character_list !== undefined ? data.payload.select_character_list : state.select_character_list,
+            able_player : data.payload.able_player !== undefined ? data.payload.able_player : state.able_player,
+            select_character : data.payload.select_character !== undefined ? data.payload.select_character : state.select_character,
+            select_info : data.payload.select_info !== undefined ? data.payload.select_info : state.select_info
+        }
+
+    },
 
 
 }, initialState);

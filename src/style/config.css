@@ -50,6 +50,21 @@ body {
   cursor: default !important;
   min-width: 1000px;
 }
+body #notice_div {
+  position: absolute !important;
+  height: auto !important;
+  width: 60% !important;
+  line-height: 17px !important;
+  margin-top: 20px;
+  margin-left: -55%;
+  background-color: white;
+  border: solid 3px #046582;
+  border-radius: 5px;
+  padding: 15px;
+  z-index: 1000;
+  font-family: paybooc-Bold;
+  font-size: 12px;
+}
 
 #game_start_home_div {
   text-align: center;
@@ -98,6 +113,7 @@ body {
   font-size: 12px;
   margin-top: 20px;
   font-family: paybooc-Bold;
+  padding: 0px 10px;
 }
 #game_setting_div #game_setting_state_div div {
   display: inline-block;
@@ -107,9 +123,15 @@ body {
 #game_setting_div #game_setting_state_div div b {
   cursor: pointer;
 }
+#game_setting_div #game_setting_state_div div #select_setting_option {
+  border-bottom: solid 2px #78c4d4;
+  padding-bottom: 4px;
+  color: #78c4d4;
+}
 
 #game_setting_contents_div {
   margin-top: 40px;
+  min-height: 350px;
 }
 #game_setting_contents_div #game_setting_contents {
   padding: 0px 10px 0px 10px;
@@ -130,7 +152,9 @@ body {
 }
 #game_setting_contents_div #game_setting_contents #game_info_setting_div ul li div {
   display: inline-block;
-  width: 50%;
+}
+#game_setting_contents_div #game_setting_contents #game_info_setting_div ul li .game_setting_title_div {
+  width: 55%;
 }
 #game_setting_contents_div #game_setting_contents #game_info_setting_div select {
   cursor: pointer;
@@ -138,10 +162,10 @@ body {
   width: 130px;
 }
 #game_setting_contents_div #game_setting_contents #game_info_setting_div .game_setting_radio_div {
-  width: 100% !important;
+  width: 120% !important;
 }
 #game_setting_contents_div #game_setting_contents #game_info_setting_div .game_setting_radio_div div {
-  width: 50px !important;
+  width: 90px !important;
 }
 #game_setting_contents_div #game_setting_contents #game_info_setting_div .game_setting_radio_div div input, #game_setting_contents_div #game_setting_contents #game_info_setting_div .game_setting_radio_div div label {
   cursor: pointer;
@@ -166,6 +190,74 @@ body {
   width: 15px;
   position: absolute;
   margin: 13px 0px 0px 10px;
+}
+#game_setting_contents_div #game_setting_player_div #game_playing_player_number, #game_setting_contents_div #game_setting_player_div #game_select_player_character_title {
+  font-size: 12px;
+  font-family: paybooc-Bold;
+}
+#game_setting_contents_div #game_setting_player_div #game_player_select_div {
+  margin: 10px 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 25%);
+}
+#game_setting_contents_div #game_setting_player_div #game_player_select_div .game_player_select_divs .game_player_profile_div {
+  height: 120px;
+  border: solid 1px #ababab;
+  cursor: pointer;
+  background-size: 40%;
+  background-repeat: no-repeat;
+  background-position-x: center;
+  background-position-y: center;
+}
+#game_setting_contents_div #game_setting_player_div #game_player_select_div .game_player_select_divs .game_player_name_div {
+  font-size: 12px;
+  text-align: center;
+  margin-top: 10px;
+}
+#game_setting_contents_div #game_setting_player_div #game_player_select_div .game_player_select_divs #game_select_disable {
+  background-color: #bbbbbb;
+}
+#game_setting_contents_div #game_setting_player_div #game_player_select_div #game_player_selector {
+  color: #03506f !important;
+  font-weight: bold !important;
+  font-family: Recipekorea;
+}
+#game_setting_contents_div #game_setting_player_div #game_player_select_div #game_player_selector .game_player_profile_div {
+  border: solid 1px #03506f;
+}
+#game_setting_contents_div #game_setting_player_div #game_select_player_character_div {
+  margin-top: 40px;
+}
+#game_setting_contents_div #game_setting_player_div #game_select_player_character_div #game_select_player_character_contents_div {
+  display: grid;
+  grid-template-columns: repeat(5, 20%);
+}
+#game_setting_contents_div #game_setting_player_div #game_select_player_character_div #game_select_player_character_contents_div div {
+  border: solid 1px #ababab;
+  padding: 10px;
+  text-align: center;
+  height: 90px;
+  cursor: pointer;
+}
+#game_setting_contents_div #game_setting_player_div #game_select_player_character_div #game_select_player_character_contents_div div img {
+  width: 100%;
+  margin-top: -10px;
+}
+#game_setting_contents_div #game_setting_player_div #game_select_player_character_div #game_select_player_character_contents_div div #game_select_remove_character_icon {
+  width: 50px !important;
+  margin-top: 10px;
+}
+#game_setting_contents_div #game_setting_player_div #game_select_player_character_div #game_select_player_character_contents_div div p {
+  font-size: 12px;
+}
+#game_setting_contents_div #game_setting_player_div #game_select_player_character_div #game_select_player_character_contents_div #select_player_character {
+  border: solid 1px #03506f;
+  background-color: #03506f;
+}
+#game_setting_contents_div #game_setting_player_div #game_select_player_character_div #game_select_player_character_contents_div #select_player_character p {
+  color: white;
+  font-weight: bold;
+  font-family: paybooc-Bold;
 }
 
 /*# sourceMappingURL=config.css.map */

@@ -63,6 +63,22 @@ $font_12 : 12px;
 body {
     cursor: default !important;
     min-width : 1000px;
+
+    #notice_div { 
+        position: $absolute !important;
+        height: auto !important;
+        width: 60% !important;
+        line-height: 17px !important;
+        margin-top: 20px;
+        margin-left: -55%;
+        background-color: white;
+        border: solid 3px #046582;
+        border-radius: 5px;
+        padding: 15px;
+        z-index: 1000;
+        font-family: $paybook_bold;
+        font-size: 12px;
+    }
 }
 
 #game_start_home_div { 
@@ -120,6 +136,7 @@ body {
         font-size: $font_12;
         margin-top: $margin_20;
         font-family: $paybook_bold;
+        padding: 0px 10px;
         
         div {
             display: $inline_block;
@@ -129,18 +146,19 @@ body {
             b { 
                 cursor: $pointer;
             }
+
+            #select_setting_option {
+                border-bottom: solid 2px #78c4d4;
+                padding-bottom: 4px;
+                color: #78c4d4;
+            }
         }
     }
 }
 
 #game_setting_contents_div { 
     margin-top: $margin_40;
-
-    // #game_setting_move_prev_page_icon { margin-left: -50px; }
-    // #game_setting_move_next_page_icon {
-    //     right: 0px;
-    //     margin-top: -80px;
-    // }
+    min-height: 350px;
     
     #game_setting_contents { 
         padding: 0px 10px 0px 10px;
@@ -166,8 +184,13 @@ body {
                 li {
                     div {
                         display: $inline_block;
-                        width: 50%;
+                        // width: 50%;
                     }
+
+                    .game_setting_title_div {
+                        width: 55%;
+                    }
+
                 }
             }
 
@@ -179,10 +202,10 @@ body {
             }
 
             .game_setting_radio_div {
-                width: 100% !important;
+                width: 120% !important;
 
                 div {
-                    width: 50px !important;
+                    width: 90px !important;
                     
                     input, label {
                         cursor: pointer;
@@ -216,5 +239,95 @@ body {
         width: 15px;
         position: $absolute;
         margin: 13px 0px 0px 10px;
+    }
+
+    #game_setting_player_div {
+        #game_playing_player_number, #game_select_player_character_title {
+            font-size: $font_12;
+            font-family: $paybook_bold;
+        }
+
+        #game_player_select_div {
+            margin: 10px 20px;
+            display: grid;
+            grid-template-columns: repeat(4, 25%);
+
+            .game_player_select_divs {
+                .game_player_profile_div { 
+                    height: 120px;
+                    border : solid 1px #ababab;
+                    cursor: $pointer;
+                    background-size: 40%;
+                    background-repeat: no-repeat;
+                    background-position-x: center;
+                    background-position-y: center;
+                }
+
+                .game_player_name_div { 
+                    font-size: $font_12;
+                    text-align: $aCenter;
+                    margin-top: $margin_10;
+                }
+
+                #game_select_disable {
+                    background-color: #bbbbbb;
+                }
+            }
+
+            #game_player_selector {
+                color: #03506f !important;
+                font-weight: bold !important;
+                font-family: $recipe_korea;
+
+                .game_player_profile_div {
+                    border: solid 1px #03506f;
+                }
+            }
+        }
+        
+
+        #game_select_player_character_div {
+            margin-top: $margin_40;
+
+            #game_select_player_character_contents_div {
+                display: $grid;
+                grid-template-columns: repeat(5, 20%);
+                
+                div {
+                    border: solid 1px #ababab;
+                    padding: 10px;
+                    text-align: $aCenter;
+                    height: 90px;
+                    cursor: pointer;
+
+                    img {
+                        width: 100%;
+                        margin-top: -10px;
+
+                    }
+
+                    #game_select_remove_character_icon {
+                        width: 50px !important;
+                        margin-top: 10px;
+                    }
+
+                    p {
+                        font-size: 12px;
+                    }
+                }
+
+                #select_player_character {
+                    border: solid 1px #03506f;
+                    background-color: #03506f;
+                    
+                    p {
+                        color: white;
+                        font-weight: bold;
+                        font-family: $paybook_bold;
+                    }
+                }
+            }
+
+        }
     }
 }
