@@ -253,6 +253,12 @@ body {
             grid-template-columns: repeat(4, 25%);
 
             .game_player_select_divs {
+                .game_player_fix_icon {
+                    position: absolute;
+                    width: 15px;
+                    margin : -10px 100px;
+                }
+
                 .game_player_profile_div { 
                     height: 120px;
                     border : solid 1px #ababab;
@@ -325,6 +331,12 @@ body {
                         font-weight: bold;
                         font-family: $paybook_bold;
                     }
+                }
+
+                #select_player_character_point_icon {
+                    width: 25px;
+                    position: absolute;
+                    margin: -26px 25px;
                 }
             }
 

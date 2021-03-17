@@ -546,6 +546,17 @@ class Setting extends React.Component<AllProps> {
                                             style={el.able === false ? { 'color' : '#ababab' } : undefined}
                                             id={select_info.number === (key + 1) ? "game_player_selector" : undefined}
                                         >
+                                            {el.number === 1 || el.number === 2
+                                                ? <img 
+                                                    src={icon.icon.fix}
+                                                    alt=''
+                                                    className='game_player_fix_icon'
+                                                    title='삭제할 수 없는 필수 플레이어 입니다.'
+                                                  />
+
+                                                : undefined
+                                            }
+
                                             <div className='game_player_profile_div'
                                                  onMouseEnter={(event) => el.select === false ? _setPlayerList(event, el, 'on') : undefined}
                                                  onMouseLeave={(event) => el.select === false ? _setPlayerList(event, el, 'off') : undefined}
@@ -604,9 +615,6 @@ class Setting extends React.Component<AllProps> {
                                             }
 
                                             let name : string = el.name;
-                                            // if(el.type === 'character' && select_character_list[el.number] === true) {
-                                            //     name += ' ()';
-                                            // }
 
                                             return(
                                                 <div key={key}
@@ -614,6 +622,14 @@ class Setting extends React.Component<AllProps> {
                                                      onClick={() => _selectCharacter(el.type, el.number)}
                                                      style={select_character_list[key] === true ? { 'color' : "#ababab" } : undefined}
                                                 >
+                                                    {select_condition === true
+                                                        ? <img alt='' id='select_player_character_point_icon' 
+                                                            src={icon.icon.point}
+                                                        />
+
+                                                        : null
+                                                    }   
+
                                                     <img 
                                                         id={el.type === 'remove' ? 'game_select_remove_character_icon' : undefined}
                                                         src={img}

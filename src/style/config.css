@@ -200,6 +200,11 @@ body #notice_div {
   display: grid;
   grid-template-columns: repeat(4, 25%);
 }
+#game_setting_contents_div #game_setting_player_div #game_player_select_div .game_player_select_divs .game_player_fix_icon {
+  position: absolute;
+  width: 15px;
+  margin: -10px 100px;
+}
 #game_setting_contents_div #game_setting_player_div #game_player_select_div .game_player_select_divs .game_player_profile_div {
   height: 120px;
   border: solid 1px #ababab;
@@ -258,6 +263,11 @@ body #notice_div {
   color: white;
   font-weight: bold;
   font-family: paybooc-Bold;
+}
+#game_setting_contents_div #game_setting_player_div #game_select_player_character_div #game_select_player_character_contents_div #select_player_character_point_icon {
+  width: 25px;
+  position: absolute;
+  margin: -26px 25px;
 }
 
 /*# sourceMappingURL=config.css.map */
