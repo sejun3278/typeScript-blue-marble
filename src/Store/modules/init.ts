@@ -20,6 +20,7 @@ export interface initState {
     setting_modal : boolean;
     setting_type : string | null;
     setting_stage : number;
+    setting_able : boolean;
     start_price : number;
     round_timer : number;
     game_event : boolean;
@@ -39,13 +40,14 @@ const initialState : initState = {
     game_start : false,
     setting_modal : false,
     setting_type : null,
+    setting_able : true,
     setting_stage : 1,
     start_price : 100,
     round_timer : 60,
     game_event : true,
     setting_modify : false,
     round_limit : 0,
-    pass_price : 0,
+    pass_price : 1,
     player_list : JSON.stringify([]),
     able_player : 2,
     card_limit : 1,
@@ -70,8 +72,9 @@ export default handleActions<initState> ({
     [TOGGLESEETINGMODAL] : (state : any, data : any) => {
         return {
             ...state,
-            setting_modal : data.payload.modal,
-            setting_type : data.payload.type
+            setting_modal : data.payload.modal !== undefined ? data.payload.modal : state.setting_modal,
+            setting_type : data.payload.type !== undefined ? data.payload.type : state.setting_type,
+            setting_able : data.payload.able !== undefined ? data.payload.able : state.setting_able
         }
     },
 
@@ -81,9 +84,9 @@ export default handleActions<initState> ({
             ...state,
             setting_stage : data.payload.stage !== undefined ? data.payload.stage : state.setting_stage,
             setting_modify : data.payload.modify !== undefined ? data.payload.modify : state.setting_modify,
-            start_price : data.payload.price !== undefined ? data.payload.price : state.start_price,
+            start_price : data.payload.start_price !== undefined ? data.payload.start_price : state.start_price,
             round_timer : data.payload.round_timer !== undefined ? data.payload.round_timer : state.round_timer,
-            game_event : data.payload.event !== undefined ? data.payload.event : state.game_event,
+            game_event : data.payload.game_event !== undefined ? data.payload.game_event : state.game_event,
             round_limit : data.payload.round_limit !== undefined ? data.payload.round_limit : state.round_limit,
             pass_price : data.payload.pass_price !== undefined ? data.payload.pass_price : state.pass_price,
             card_limit : data.payload.card_limit !== undefined ? data.payload.card_limit : state.card_limit

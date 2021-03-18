@@ -66,23 +66,30 @@ body #notice_div {
   font-size: 12px;
 }
 
-#game_start_home_div {
+#game_home_div #game_title_div {
   text-align: center;
-}
-#game_start_home_div #game_title_div {
   margin-top: 100px;
   font-family: paybooc-Bold;
 }
-#game_start_home_div #game_title_div h2 {
+#game_home_div #game_title_div h2 {
   margin-bottom: 5px !important;
 }
-#game_start_home_div #game_title_div p {
+#game_home_div #game_title_div p {
   margin: 0px 0px 0px 0px !important;
   color: #ababab;
   font-size: 13px;
 }
+#game_home_div #game_loading_div {
+  text-align: center;
+  margin-top: 70px;
+  font-family: Recipekorea;
+}
+
+#game_start_home_div {
+  text-align: center;
+}
 #game_start_home_div #game_select_div {
-  margin-top: 80px;
+  margin-top: 50px;
 }
 #game_start_home_div #game_select_div div {
   font-family: paybooc-Bold;
@@ -129,6 +136,17 @@ body #notice_div {
   color: #78c4d4;
 }
 
+.game_setting_button_style {
+  margin-top: 10px;
+  font-family: paybooc-Bold;
+  background-color: white;
+  border-radius: 5px;
+  font-size: 12px;
+  padding: 3px 10px;
+  cursor: pointer;
+  margin-left: 15px;
+}
+
 #game_setting_contents_div {
   margin-top: 40px;
   min-height: 350px;
@@ -139,7 +157,7 @@ body #notice_div {
   grid-template-columns: 10% 80% 10%;
 }
 #game_setting_contents_div #game_setting_contents .game_setting_arrow_divs {
-  line-height: 10;
+  line-height: 18;
 }
 #game_setting_contents_div #game_setting_contents .game_setting_arrow_divs .game_setting_move_arrows {
   width: 20px;
@@ -175,16 +193,6 @@ body #notice_div {
 }
 #game_setting_contents_div #game_setting_contents #game_info_setting_div #game_setting_complate_div div {
   float: right;
-}
-#game_setting_contents_div #game_setting_contents #game_info_setting_div #game_setting_complate_div div input[type=button] {
-  margin-top: 10px;
-  font-family: paybooc-Bold;
-  background-color: white;
-  border-radius: 5px;
-  font-size: 12px;
-  padding: 3px 10px;
-  cursor: pointer;
-  margin-left: 15px;
 }
 #game_setting_contents_div .notice_icon {
   width: 15px;
@@ -268,6 +276,78 @@ body #notice_div {
   width: 25px;
   position: absolute;
   margin: -26px 25px;
+}
+#game_setting_contents_div #game_setting_player_div #game_character_select_start_div {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  margin-top: 40px;
+}
+#game_setting_contents_div #game_setting_start_div .game_setting_result_divs {
+  margin-bottom: 20px;
+}
+#game_setting_contents_div #game_setting_start_div .game_setting_result_divs p {
+  font-size: 12px;
+  font-family: paybooc-Bold;
+  color: #52bfff;
+  display: inline-block !important;
+  margin: 0px 0px;
+  cursor: pointer;
+}
+#game_setting_contents_div #game_setting_start_div .game_setting_result_divs p img {
+  width: 15px;
+  position: absolute;
+  margin: 0px 8px;
+}
+#game_setting_contents_div #game_setting_start_div .game_setting_result_divs .game_setting_result_border {
+  padding: 15px;
+}
+#game_setting_contents_div #game_setting_start_div .game_setting_result_divs .game_setting_result_grid_div {
+  display: grid;
+  grid-template-columns: 35% auto;
+  font-size: 13px;
+  line-height: 20px;
+  border-bottom: dotted 1px #ababab;
+}
+#game_setting_contents_div #game_setting_start_div .game_setting_result_divs .game_setting_result_grid_div .game_setting_result_title_div {
+  text-align: right;
+  border-right: solid 1px #ababab;
+  padding: 2px 10px;
+}
+#game_setting_contents_div #game_setting_start_div .game_setting_result_divs .game_setting_result_grid_div .game_setting_result_contents_div {
+  padding-left: 15px;
+  font-size: 12px;
+  line-height: 2;
+  color: #ababab;
+}
+#game_setting_contents_div #game_setting_start_div .game_setting_result_divs #game_player_setting_result_div {
+  display: grid;
+  grid-template-columns: repeat(4, 25%);
+}
+#game_setting_contents_div #game_setting_start_div .game_setting_result_divs #game_player_setting_result_div .game_setting_character_result_div {
+  border: solid 1px #ababab;
+}
+#game_setting_contents_div #game_setting_start_div .game_setting_result_divs #game_player_setting_result_div .game_setting_character_result_div div {
+  min-height: 100px;
+}
+#game_setting_contents_div #game_setting_start_div .game_setting_result_divs #game_player_setting_result_div .game_setting_character_result_div p {
+  border-top: solid 1px #ababab;
+  display: block !important;
+  text-align: center;
+  padding: 3px 0px;
+  color: black;
+  font-family: paybooc-Bold;
+}
+#game_setting_contents_div #game_setting_start_div #game_start_button {
+  margin-top: 20px;
+  width: 100%;
+  padding: 5px;
+  line-height: 2;
+  background-color: black;
+  color: white;
+  border-radius: 5px;
+  font-size: 15px;
+  cursor: pointer;
+  font-family: Recipekorea;
 }
 
 /*# sourceMappingURL=config.css.map */

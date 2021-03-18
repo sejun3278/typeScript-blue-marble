@@ -81,10 +81,9 @@ body {
     }
 }
 
-#game_start_home_div { 
-    text-align: $aCenter;
-
+#game_home_div {
     #game_title_div { 
+        text-align: $aCenter;
         margin-top: 100px;
         font-family: $paybook_bold;
 
@@ -98,8 +97,18 @@ body {
         }
     }
 
+    #game_loading_div { 
+        text-align: $aCenter;
+        margin-top: 70px;
+        font-family: $recipe_korea;
+    }
+}
+
+#game_start_home_div { 
+    text-align: $aCenter;
+
     #game_select_div { 
-        margin-top: 80px;
+        margin-top: 50px;
 
         div {
             font-family: $paybook_bold;
@@ -156,6 +165,17 @@ body {
     }
 }
 
+.game_setting_button_style {
+    margin-top: $margin_10;
+    font-family: $paybook_bold;
+    background-color: white;
+    border-radius: 5px;
+    font-size: $font_12;
+    padding: 3px 10px;
+    cursor: $pointer;
+    margin-left: 15px;
+}
+
 #game_setting_contents_div { 
     margin-top: $margin_40;
     min-height: 350px;
@@ -166,7 +186,7 @@ body {
         grid-template-columns: 10% 80% 10%;
 
         .game_setting_arrow_divs { 
-            line-height: 10;
+            line-height: 18;
 
             .game_setting_move_arrows {
                 width: 20px;
@@ -219,17 +239,6 @@ body {
 
                 div {
                     float: right;
-
-                    input[type=button] {
-                        margin-top: $margin_10;
-                        font-family: $paybook_bold;
-                        background-color: white;
-                        border-radius: 5px;
-                        font-size: $font_12;
-                        padding: 3px 10px;
-                        cursor: $pointer;
-                        margin-left: 15px;
-                    }
                 }
             }
         }
@@ -339,7 +348,96 @@ body {
                     margin: -26px 25px;
                 }
             }
+        }
 
+        #game_character_select_start_div {
+            display: $grid;
+            grid-template-columns: 50% 50%;
+            margin-top: 40px;
+
+        }
+    }
+
+    #game_setting_start_div {
+
+        .game_setting_result_divs {
+            margin-bottom: 20px;
+
+            p {
+                font-size: 12px;
+                font-family: $paybook_bold;
+                color: #52bfff;
+                display: inline-block !important;
+                margin: 0px 0px;
+                cursor: pointer;
+
+                img {
+                    width: 15px;
+                    position: absolute;
+                    margin: 0px 8px;
+                }
+            }
+
+            .game_setting_result_border {
+                // border: solid 1px #ababab;
+                padding: 15px;
+            }
+
+            .game_setting_result_grid_div {
+                display: grid;
+                grid-template-columns: 35% auto;
+                font-size: 13px;
+                line-height: 20px;
+                border-bottom: dotted 1px #ababab;
+
+                .game_setting_result_title_div {
+                    text-align: right;
+                    border-right: solid 1px #ababab;
+                    padding: 2px 10px;
+                }
+
+                .game_setting_result_contents_div {
+                    padding-left : 15px;
+                    font-size: 12px;
+                    line-height: 2;
+                    color: #ababab;
+                }
+            }
+
+            #game_player_setting_result_div {
+                display: grid;
+                grid-template-columns: repeat(4, 25%);
+
+                .game_setting_character_result_div {
+                    border: solid 1px #ababab;
+
+                    div {
+                        min-height: 100px;
+                    }
+
+                    p {
+                        border-top: solid 1px #ababab;
+                        display: block !important;
+                        text-align: center;
+                        padding: 3px 0px;
+                        color: black;
+                        font-family: $paybook_bold;
+                    }
+                }
+            }
+        }
+
+        #game_start_button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 5px;
+            line-height: 2;
+            background-color: black;
+            color: white;
+            border-radius: 5px;
+            font-size: 15px;
+            cursor: pointer;
+            font-family: $recipe_korea;
         }
     }
 }

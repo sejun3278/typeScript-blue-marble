@@ -1,17 +1,17 @@
 import * as React from 'react';
 
 import { actionCreators as initActions } from '../../Store/modules/init';
+import { actionCreators as gameActions } from '../../Store/modules/game';
 
 import { connect } from 'react-redux'; 
 import { bindActionCreators } from 'redux'; 
 import { StoreState } from '../../Store/modules';
 
-// import icon from '../../source/icon.json'; 
 import init_player from '../../source/player.json';
-import notice_ment from '../../source/notice_ment.json';
 
 export interface AllProps {
   initActions : any,
+  gameActions : any,
   setting_stage : number,
   start_price : number,
   round_timer : number,
@@ -24,7 +24,9 @@ export interface AllProps {
   card_limit : number,
   select_character : boolean,
   select_info : string,
-  select_character_list : string
+  select_character_list : string,
+  _flash : Function,
+  setting_able : boolean
 };
 
 class Setting extends React.Component<AllProps> {
@@ -41,7 +43,6 @@ class Setting extends React.Component<AllProps> {
             "4" : false
         };
 
-
         initActions.set_player_info({ 
             'player_list' : JSON.stringify(init_player.list),
             'select_character_list' : JSON.stringify(select_character_obj)
@@ -49,19 +50,35 @@ class Setting extends React.Component<AllProps> {
     }
 
     _moveStage = (stage : number) => {
-        const { initActions } = this.props;
+        const { initActions, setting_stage, setting_able } = this.props;
+        const player_list = JSON.parse(this.props.player_list)
 
-        initActions.set_setting_state({ "stage" : stage });
+        if(setting_able === true) {
+            if(setting_stage === 2) {
+                for(let i = 0; i < player_list.length; i++) {
+                    player_list[i].select = false;
+                }
+
+                initActions.set_player_info({
+                    'select_character' : false,
+                    'select_info' : JSON.stringify({}),
+                    'player_list' : JSON.stringify(player_list)
+                })
+            }
+            
+
+            initActions.set_setting_state({ 'stage' : stage });
+        }
     }
 
     _setGameInfo = (event : any, type : string, bool : boolean | number | null) => {
         const { initActions } = this.props;
         let value : any = event.target.value
 
-        if(type === 'price' || type === 'round_timer' || type === 'round_limit') {
+        if(type === 'start_price' || type === 'round_timer' || type === 'round_limit') {
             value = Number(value);
 
-        } else if(type === 'event' || type === 'card_limit') {
+        } else if(type === 'game_event' || type === 'card_limit') {
             value = bool;
         }
 
@@ -77,17 +94,15 @@ class Setting extends React.Component<AllProps> {
             const { initActions } = this.props;
 
             const save_obj : any = {}
-            save_obj['price'] = 100;
+            save_obj['start_price'] = 100;
             save_obj['round_timer'] = 60;
             save_obj['round_limit'] = 0;
-            save_obj['event'] = true;
+            save_obj['game_event'] = true;
             save_obj['modify'] = false;
             save_obj['pass_price'] = 1;
             save_obj['card_limit'] = 1;
 
             return initActions.set_setting_state(save_obj);
-
-            // return alert('초기화 되었습니다.');
 
         } else {
             return;
@@ -95,11 +110,8 @@ class Setting extends React.Component<AllProps> {
     }
 
     // 안내문 띄우기
-    _setNotice = (event : any | null, on : boolean, type : string) => {
+    _setNotice = (event : any | null, on : boolean, notice : string) => {
         let target = event.target.parentNode.parentNode;
-        
-        let notice : any = notice_ment.notice;
-        notice = notice[type];
 
         let html : any = `<div id="notice_div"> ${notice} </div>`
         html = new DOMParser().parseFromString(html, "text/html");
@@ -134,9 +146,6 @@ class Setting extends React.Component<AllProps> {
             } else if(type === 'off') {
                 target.style.backgroundImage = `url(${null})`;
             }
-
-        } else {
-
         }
 
         if(type === 'click') {
@@ -248,8 +257,6 @@ class Setting extends React.Component<AllProps> {
                 } else {
                     // 새로 고른 캐릭터가 중복될 경우에는
                     // 선택되지 않는 캐릭터를 찾아서 설정해준다.
-                    let new_select : null | any = null;
-                    
                     for(const key in select_character_list) {
                         const idx : number = Number(key);
 
@@ -274,12 +281,28 @@ class Setting extends React.Component<AllProps> {
         return initActions.set_player_info(save_obj)
     }
 
+    // 게임 시작하기
+    _gameStart = () => {
+        const { _flash, initActions, gameActions } = this.props;
+
+        initActions.toggle_setting_modal({ 'able' : false });
+        gameActions.game_loading({ 'loading' : true })
+
+        return window.setTimeout( () => {
+            _flash('.ReactModal__Content', false, 1.4, false, 40);
+
+            return window.setTimeout( () => {
+                initActions.toggle_setting_modal({ 'modal' : false });
+            }, 500)
+
+        }, 200)
+    }
+
     render() {
         const { 
-            setting_stage, start_price, round_timer, game_event, setting_modify, 
-            round_limit, pass_price, able_player, card_limit, select_character
+            setting_stage, setting_modify, able_player, select_character, setting_able
         } = this.props;
-        const { _moveStage, _setGameInfo, _resetSetting, _setNotice, _setPlayerList, _selectCharacter } = this;
+        const { _moveStage, _setGameInfo, _resetSetting, _setNotice, _setPlayerList, _selectCharacter, _gameStart } = this;
 
         const player_list : any = JSON.parse(this.props.player_list);
         const select_info : any = JSON.parse(this.props.select_info);
@@ -287,6 +310,7 @@ class Setting extends React.Component<AllProps> {
         const setting_opt_arr = ['1. 게임 설정', '2. 플레이어 설정', '3. 게임 시작'];
 
         const icon : any = require('../../source/icon.json');
+        const setting_json : any = require('./setting.json');
 
         return(
         <div id='game_setting_div'>
@@ -319,11 +343,11 @@ class Setting extends React.Component<AllProps> {
 
                 <div id='game_setting_contents'>
                     <div className='game_setting_arrow_divs'>
-                        {setting_stage !== 3
+                        {setting_stage !== 1
                             ? <img alt='' id='game_setting_move_prev_page_icon' 
                                 className='game_setting_move_arrows'
                                 src={setting_stage > 1 ? icon.icon.left_arrow : icon.icon.left_gray_arrow}
-                                onClick={() => setting_stage === 2 ? _moveStage(1) : undefined}
+                                onClick={() => setting_stage >= 2 ? _moveStage(setting_stage - 1) : undefined}
                             />
 
                             : undefined
@@ -333,167 +357,88 @@ class Setting extends React.Component<AllProps> {
                     {setting_stage === 1
                         ? <div id='game_info_setting_div'>
                             <ul>
-                                <li>
-                                    <div className='game_setting_title_div'>
-                                        시작 자금 설정　
-                                    </div>
+                                {setting_json.setting.map( (el : any, key : number) => {
+                                    const props : any = this.props;
 
-                                    <div className='game_setting_info_div'>
-                                        <select value={start_price}
-                                                onChange={(event : any) => _setGameInfo(event, 'price', null)}
-                                        >
-                                            <option value={100}> 100 만원 </option>
-                                            <option value={200}> 200 만원 </option>
-                                            <option value={300}> 300 만원 </option>
-                                            <option value={400}> 400 만원 </option>
-                                            <option value={500}> 500 만원 </option>
-                                        </select>
+                                    return(
+                                        <li key={key}>
+                                            <div className='game_setting_title_div'>
+                                                {el.name}
 
-                                        <img src={icon.icon.notice} className='notice_icon' alt='' 
-                                            onMouseEnter={(event) => _setNotice(event, true, 'price')}
-                                            onMouseLeave={(event) => _setNotice(event, false, 'price')}
-                                        />
-                                    </div>
-                                </li>
+                                                {el.type === 'radio'
+                                                    ?   <img src={icon.icon.notice} className='notice_icon' alt=''
+                                                            onMouseEnter={(event) => _setNotice(event, true, el.notice)}
+                                                            onMouseLeave={(event) => _setNotice(event, false, el.notice)}
+                                                        />
 
-                                <li> 
-                                    <div className='game_setting_title_div'>
-                                        라운드 시간 제한 설정
-                                    </div>
-
-                                    <div className='game_setting_info_div'>
-                                        <select value={round_timer}
-                                                onChange={(event : any) => _setGameInfo(event, 'round_timer', null)}
-                                        >
-                                            <option value={60}> 60 초 </option>
-                                            <option value={50}> 50 초 </option>
-                                            <option value={40}> 40 초 </option>
-                                            <option value={30}> 30 초 </option>
-                                            <option value={0}> 시간 제한 없음 </option>
-                                        </select>
-
-                                        <img src={icon.icon.notice} className='notice_icon' alt='' 
-                                            onMouseEnter={(event) => _setNotice(event, true, 'round_timer')}
-                                            onMouseLeave={(event) => _setNotice(event, false, 'round_timer')}
-                                        />
-                                    </div>
-                                </li>
-
-                                <li> 
-                                    <div className='game_setting_title_div'>
-                                        총 라운드 제한
-                                    </div>
-
-                                    <div className='game_setting_info_div'>
-                                        <select value={round_limit}
-                                                onChange={(event : any) => _setGameInfo(event, 'round_limit', null)}
-                                        >
-                                            <option value={0}> 제한 없음 </option>
-                                            <option value={20}> 20 라운드 </option>
-                                            <option value={30}> 30 라운드 </option>
-                                            <option value={40}> 40 라운드 </option>
-                                        </select>
-
-                                        <img src={icon.icon.notice} className='notice_icon' alt='' 
-                                            onMouseEnter={(event) => _setNotice(event, true, 'round_limit')}
-                                            onMouseLeave={(event) => _setNotice(event, false, 'round_limit')}
-                                        />
-                                    </div>
-                                </li>
-
-                                <li> 
-                                    <div className='game_setting_title_div'>
-                                        통행료 배율
-                                    </div>
-
-                                    <div className='game_setting_info_div'>
-                                        <select value={pass_price}
-                                                onChange={(event : any) => _setGameInfo(event, 'pass_price', null)}
-                                        >
-                                            <option value={1}> X 1배 </option>
-                                            <option value={2}> X 2배 </option>
-                                            <option value={3}> X 3배 </option>
-                                        </select>
-
-                                        <img src={icon.icon.notice} className='notice_icon' alt=''
-                                            onMouseEnter={(event) => _setNotice(event, true, 'pass_price')}
-                                            onMouseLeave={(event) => _setNotice(event, false, 'pass_price')}
-                                        />
-                                    </div>
-                                </li>
-
-                                <li>
-                                    <div className='game_setting_title_div'>
-                                        통행 카드 갯수
-
-                                        <img src={icon.icon.notice} className='notice_icon' alt=''
-                                            onMouseEnter={(event) => _setNotice(event, true, 'card_limit')}
-                                            onMouseLeave={(event) => _setNotice(event, false, 'card_limit')}
-                                        />
-                                    </div>
-
-                                    <div className='game_setting_info_div'>
-                                        <div className='game_setting_radio_div'>
-                                            <div> 
-                                                <input type='radio' name='card_limit' className='setting_radio' id='card_limit_1' 
-                                                        checked={card_limit === 1}
-                                                        onChange={(event : any) => _setGameInfo(event, 'card_limit', 1)}
-                                                /> 
-                                                <label htmlFor='card_limit_1'> 1 장 </label>
+                                                    : undefined
+                                                }
                                             </div>
 
-                                            <div> 
-                                                <input type='radio' name='card_limit' className='setting_radio' id='card_limit_2'
-                                                        checked={card_limit === 2}
-                                                        onChange={(event : any) => _setGameInfo(event, 'card_limit', 2)}
-                                                /> 
-                                                <label htmlFor='card_limit_2'> 2 장 </label>
+                                            <div className='game_setting_info_div'>
+                                                {el.type === 'select'
+                                                    ? <div>
+                                                        <select value={props[el.state]}
+                                                            onChange={(event : any) => _setGameInfo(event, el.state, null)}
+                                                        >
+                                                            {el.type_info.map( (cu : any, key_2 : number) => {
+                                                                return(
+                                                                    <option key={key_2} value={cu.value}>
+                                                                        {cu.name}
+                                                                    </option>
+                                                                )
+                                                            })}
+
+                                                        </select>
+
+                                                        {el.type === 'select'
+                                                            ?   <img src={icon.icon.notice} className='notice_icon' alt=''
+                                                                    onMouseEnter={(event) => _setNotice(event, true, el.notice)}
+                                                                    onMouseLeave={(event) => _setNotice(event, false, el.notice)}
+                                                                />
+
+                                                            : undefined
+                                                        }
+                                                      </div>
+
+
+                                                : el.type === 'radio'
+
+                                                    ? <div className='game_setting_radio_div'>
+                                                        {el.type_info.map( (cu : any, key_2 : number) => {
+                                                            const checked_info = props[el.state];
+
+                                                            return(
+                                                                <div key={key_2}>
+                                                                    <input type='radio' name={el.state} className='setting_radio' id={cu.id} 
+                                                                            onChange={(event : any) => _setGameInfo(event, el.state, cu.value)}
+                                                                            checked={checked_info === cu.value}
+                                                                    />
+                                                                    <label htmlFor={cu.id}> {cu.name} </label>
+                                                                </div>
+                                                            )
+                                                        })}
+                                                      </div>
+
+                                                    : undefined
+                                                }
                                             </div>
-                                        </div>
-                                    </div>
-                                </li>
-
-                                <li>
-                                    <div className='game_setting_title_div'>
-                                        이벤트 영향
-
-                                        <img src={icon.icon.notice} className='notice_icon' alt=''
-                                            onMouseEnter={(event) => _setNotice(event, true, 'event')}
-                                            onMouseLeave={(event) => _setNotice(event, false, 'event')}
-                                        />
-                                    </div>
-
-                                    <div className='game_setting_info_div'>
-                                        <div className='game_setting_radio_div'>
-                                            <div> 
-                                                <input type='radio' name='event' className='setting_radio' id='event_on' 
-                                                        checked={game_event === true}
-                                                        onChange={(event : any) => _setGameInfo(event, 'event', true)}
-                                                /> 
-                                                <label htmlFor='event_on'> ON </label>
-                                            </div>
-
-                                            <div> 
-                                                <input type='radio' name='event' className='setting_radio' id='event_off'
-                                                        checked={game_event === false}
-                                                        onChange={(event : any) => _setGameInfo(event, 'event', false)}
-                                                /> 
-                                                <label htmlFor='event_off'> OFF </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
+                                        </li>
+                                    )
+                                })}
                             </ul>
 
                             <div id='game_setting_complate_div' className='aRight'>
                                 <div className='game_setting_next_game_div'>
-                                    <input type='button' value='다음 >>' 
+                                    <input type='button' value='플레이어 설정　>>' 
+                                        className='game_setting_button_style'
                                         onClick={() => _moveStage(2)}
                                     />
                                 </div>
 
                                 <div> 
                                     <input type='button' value='초기화' title='설정들을 기본 설정으로 바꿉니다.' 
+                                            className='game_setting_button_style'
                                             id='game_setting_reset_button' onClick={() => setting_modify === true ? _resetSetting() : undefined}
                                             style={setting_modify === false ? { 'backgroundColor' : '#ababab', 'color' : 'white' } : undefined}
                                     /> 
@@ -646,13 +591,120 @@ class Setting extends React.Component<AllProps> {
 
                                 : undefined
                             }
+
+                            <div id='game_character_select_start_div'>
+                                <div> 
+                                    <input type='button' value='<<　게임 설정'
+                                        className='game_setting_button_style'
+                                        onClick={() => _moveStage(1)}
+                                    />
+                                </div>
+
+                                <div className='aRight'>
+                                    <input type='button' value='게임 시작　>>'
+                                        className='game_setting_button_style'
+                                        onClick={() => _moveStage(3)}
+                                    />
+                                </div>
+                            </div>
                           </div>
 
                         : setting_stage === 3
 
-                        ? <div>
-                            56
-                        </div>
+                        ? <div id='game_setting_start_div'>
+
+                            <div className='game_setting_result_divs'>
+                                <p onClick={() => _moveStage(1)}> 
+                                    게임 설정 
+                                    <img alt='' src={icon.icon.modify} title='[ 게임 설정 ] 탭으로 이동' /> 
+                                </p>
+
+                                <div id='game_setting_result_div' className='game_setting_result_border'>
+                                    {setting_json.setting.map( (el : any, key : number) => {
+                                        const props : any = this.props;
+                                        let values : any = props[el.state];
+
+                                        let contents : string = values + el.type_name;
+                                        if(el.state === 'round_timer') {
+                                            if(values === 0) {
+                                                contents = '시간 제한 없음';
+                                            }
+
+                                        } else if(el.state === 'round_limit') {
+                                            if(values === 0) {
+                                                contents = '제한 없음';
+                                            }
+
+                                        } else if(el.state === 'game_event') {
+                                            if(values === true) {
+                                                contents = 'ON';
+                                            } else {
+                                                contents = 'OFF';
+                                            }
+                                        }
+
+                                        let change : string = '';
+                                        if(values !== el.default) {
+                                            change = '( 변경 )'
+                                        }
+
+                                        return(
+                                            <div key={key} className='game_setting_result_grid_div'>
+                                                <div className='game_setting_result_title_div'> {el.name} </div>
+                                                <div className='game_setting_result_contents_div'>
+                                                    {contents}　{change}
+                                                </div>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            </div>
+
+                            <div className='game_setting_result_divs'>
+                                <p onClick={() => _moveStage(2)}> 
+                                    플레이어 설정 ( {able_player} / 4 ) 
+                                    <img alt='' src={icon.icon.modify} title='[ 플레이어 설정 ] 탭으로 이동' />
+                                </p>
+
+                                <div id='game_player_setting_result_div' className='game_setting_result_border'>
+                                    {player_list.map( (el : any, key : number) => {
+                                        let img : string = '';
+
+                                        let style_col : any = {};
+
+                                        if(el.able === true) {
+                                            img = icon.img.character.stop[el.character];
+
+                                        } else {
+                                            style_col['backgroundColor'] = '#bbbbbb';
+                                            style_col['minHeight'] = '128px';
+                                        }
+
+                                        return(
+                                            <div className='game_setting_character_result_div' key={key}>
+                                                <div
+                                                    style={style_col}
+                                                    // style={el.able === false ? { 'backgroundColor' : '#bbbbbb' } : undefined}
+                                                >
+                                                    <img alt='' src={img} />
+                                                </div>
+
+                                                {el.able === true
+                                                    ? <p> {el.name} </p>
+                                                    : undefined
+                                                }
+
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            </div>
+
+                            <input type='button' id='game_start_button'
+                                    className='pointer'
+                                    value='게임 시작' onClick={setting_able === true ? _gameStart : undefined}
+                            />
+                          </div>
 
                         : undefined
                     }
@@ -689,9 +741,11 @@ class Setting extends React.Component<AllProps> {
         card_limit : init.card_limit,
         select_character : init.select_character,
         select_info : init.select_info,
-        select_character_list : init.select_character_list
+        select_character_list : init.select_character_list,
+        setting_able : init.setting_able
     }), 
         (dispatch) => ({ 
-        initActions: bindActionCreators(initActions, dispatch) 
+        initActions: bindActionCreators(initActions, dispatch),
+        gameActions: bindActionCreators(gameActions, dispatch)
     }) 
     )(Setting);
