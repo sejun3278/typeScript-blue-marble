@@ -17,6 +17,8 @@
 
     "img" : {
         "character" : {
+            "설명" : "캐릭터 이미지",
+
             "stop" : {
                 "1" : "https://reactclubon.s3.ap-northeast-2.amazonaws.com/1-0-0-0.png",
                 "2" : "https://reactclubon.s3.ap-northeast-2.amazonaws.com/2-0-0-0.png",
@@ -29,6 +31,17 @@
                 "2" : "https://reactclubon.s3.ap-northeast-2.amazonaws.com/2-0-0-1.gif",
                 "3" : "https://reactclubon.s3.ap-northeast-2.amazonaws.com/3-0-0-1.gif",
                 "4" : "https://reactclubon.s3.ap-northeast-2.amazonaws.com/4-0-0-1.gif"
+            }
+        },
+
+        "reverse" : {
+            "설명" : "반전된 캐릭터 이미지",
+
+            "stop" : {
+                "1" : "https://reactcardrps.s3.ap-northeast-2.amazonaws.com/source/1-0.png",
+                "2" : "https://reactcardrps.s3.ap-northeast-2.amazonaws.com/source/2-0.png",
+                "3" : "https://reactcardrps.s3.ap-northeast-2.amazonaws.com/source/3-0.png",
+                "4" : "https://reactcardrps.s3.ap-northeast-2.amazonaws.com/source/4-0.png"
             }
         }
     }

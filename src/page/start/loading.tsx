@@ -9,6 +9,7 @@ import { StoreState } from '../../Store/modules';
 
 export interface AllProps {
   initActions : any,
+  gameActions : any,
   _flash : Function
 };
 
@@ -16,7 +17,7 @@ let twinkle_flash : any = null;
 class Loading extends React.Component<AllProps> {
 
      componentDidMount() {
-        const { _flash } = this.props;
+        const { _flash, gameActions } = this.props;
 
         _flash('#game_loading_div', false, 1.4, true, 60, 4000);
 
@@ -26,7 +27,21 @@ class Loading extends React.Component<AllProps> {
 
             _flash('#game_loading_div', true, 0.2, false, 60);
             target.innerText = '로딩 완료';
-            
+
+            window.setTimeout( () => {
+                _flash('#game_loading_div', false, 1.4, false, 60);
+                _flash('#game_title_div', false, 1.4, false, 60);
+
+                window.setTimeout( () => {
+                    gameActions.game_loading({ 'start' : true })
+
+                    window.setTimeout( () => {
+                        _flash('#game_div', true, 0, false, 60);
+                    }, 100)
+                }, 500)
+                
+            }, 1000)
+
         }, 4300)
 
     }

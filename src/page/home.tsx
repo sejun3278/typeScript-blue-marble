@@ -12,6 +12,7 @@ import StartHome from './start/start_home';
 import Setting from './start/setting';
 import Notice from './start/notice';
 import Loading from './start/loading';
+import Game from './game/game';
 
 import icon from '../source/icon.json';
 
@@ -22,7 +23,7 @@ export interface AllProps {
   initActions : any,
   setting_able : boolean,
   loading : boolean,
-  main_start : boolean
+  main_start : boolean,
 };
 
 const modalCustomStyles = {
@@ -105,10 +106,15 @@ class Home extends React.Component<AllProps> {
 
     return(
       <div id='game_home_div'>
-          <div id='game_title_div'>
-            <h2> 대한의 마블 </h2>
-            <p> Blue Marble Of Korea </p>
-          </div>
+        {main_start === false
+          ?
+            <div id='game_title_div'>
+              <h2> 대한의 마블 </h2>
+              <p> Blue Marble Of Korea </p>
+            </div>
+
+          : undefined
+        }
 
         {game_start === false && main_start === false
           ? loading === false 
@@ -117,9 +123,7 @@ class Home extends React.Component<AllProps> {
             : <Loading {...this} />
 
           : main_start === true
-            ? <div>
-
-              </div>
+            ? <Game />
 
             : null
         }
@@ -165,7 +169,7 @@ export default connect(
     setting_type : init.setting_type,
     setting_able : init.setting_able,
     loading : game.loading,
-    main_start : game.main_start
+    main_start : game.main_start,
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

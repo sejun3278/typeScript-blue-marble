@@ -34,19 +34,24 @@ class Setting extends React.Component<AllProps> {
     componentDidMount() {
         // 초기 플레이어 설정하기
         const { initActions } = this.props;
+        const player_list = JSON.parse(this.props.player_list);
 
-        // "캐릭터 번호" : "플레이어 ID"
-        const select_character_obj = {
-            "1" : 1,
-            "2" : 2,
-            "3" : false,
-            "4" : false
-        };
+        const save_obj : any = {};
 
-        initActions.set_player_info({ 
-            'player_list' : JSON.stringify(init_player.list),
-            'select_character_list' : JSON.stringify(select_character_obj)
-        })
+        if(player_list.length === 0) {
+            save_obj['player_list'] = JSON.stringify(init_player.list);
+        }
+            // "캐릭터 번호" : "플레이어 ID"
+            const select_character_obj = {
+                "1" : 1,
+                "2" : 2,
+                "3" : false,
+                "4" : false
+            };
+
+        save_obj['select_character_list'] = JSON.stringify(select_character_obj);
+
+        initActions.set_player_info(save_obj)
     }
 
     _moveStage = (stage : number) => {
@@ -453,6 +458,7 @@ class Setting extends React.Component<AllProps> {
 
                             <div id='game_player_select_div'>
                                 {player_list.map( (el : any, key : number) => {
+
                                     let profile_img : object | string = '';
                                     let title_ment : undefined | string = undefined;
 

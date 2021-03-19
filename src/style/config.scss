@@ -26,6 +26,10 @@ $margin_60 : 60px;
 $gray : #ababab; .gray { color : $gray }
 $black : black; .black { color : $black }
 
+/* float */
+$float_left : left; .float_left { float : left };
+$float_right : right; .float_right { float : right };
+
 /* font style */
 @font-face {
   font-family: 'TmoneyRoundWindExtraBold';
@@ -438,6 +442,101 @@ body {
             font-size: 15px;
             cursor: pointer;
             font-family: $recipe_korea;
+        }
+    }
+}
+
+#game_div {
+    // opacity: 0;
+
+    #game_other_div { 
+        display: grid;
+        grid-template-columns: 50% 50%;
+
+        div {
+            margin: 5px 20px;
+        }
+
+        #game_title_div {
+            text-align: left;
+            
+            h2 { font-size: 17px; }
+            p { font-size: 10px; }
+        }
+
+        #game_other_funtion_div {
+            text-align: right;
+            line-height: 3.5;
+
+            div {
+                display: inline-block;
+                cursor: pointer;
+                font-size: 12px;
+                font-family: $t_money_font;
+            }
+        }
+    }
+
+    #game_contents_div {
+        margin-top: 15px;
+        padding: 10px 20px;
+
+        #game_main_contents_div {
+            min-height: 500px;
+            border: solid 1px #ababab;
+            margin: 10px 0px;
+        }
+    
+        .game_contents_player_div {
+            display: grid;
+            grid-template-columns: 50% 50%;
+
+            .game_contents_player_profile_div {
+
+                .empty_player_thumb {
+                    background-color: #bbbbbb;
+                }
+
+                .game_contents_player_thumbnail_div {
+                    width: 84px;
+                    height: 110px;
+
+                    div {
+                        border: solid 1px #ababab;
+                        width: 80px;
+                    }
+
+                    .game_contents_player_thumbnail {
+                        height: 80px;
+                        background-size: contain;
+                        background-position-y: -5px;
+                        background-repeat: no-repeat;
+                        background-position-x: center;
+                    }
+
+                    .game_contents_player_name {
+                        text-align: center;
+                        font-size: 12px;
+                        font-family: $paybook_bold;
+                        padding: 4px 0px;
+                    }
+                }
+            }
+
+            .game_contents_player_info_div {
+                min-height: 105px;
+                border: solid 1px #ababab;
+
+                min-width: 300px;
+                max-width: 400px;
+            }
+
+            .game_contents_player_info_margin {
+                margin: 0px -2px;
+            }
+            // .game_player_profile_divs {
+            //     display: $inline_block;
+            // }
         }
     }
 }
