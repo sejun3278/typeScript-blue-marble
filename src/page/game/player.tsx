@@ -21,8 +21,11 @@ class Player extends React.Component<AllProps> {
     const { float_style } = this.props;
     const info : any = JSON.parse(this.props.info);
 
+    console.log(info)
+
     let img_list : any = img.img.character.stop;
     let my_thumb : string = img_list[info.character];
+    const name_style : object | any = {};
 
     let thumb_class = 'game_contents_player_thumbnail';
     let contents_class = 'game_contents_player_info_div';
@@ -32,6 +35,11 @@ class Player extends React.Component<AllProps> {
         contents_class += ' empty_player_contents'
 
         my_thumb = img.img.character.empty;
+        name_style["color"] = '#ababab';
+
+    } else {
+        name_style["backgroundColor"] = info.color;
+        name_style["color"] = 'white';
     }
 
     if(info.number === 2 || info.number === 4) {
@@ -53,7 +61,7 @@ class Player extends React.Component<AllProps> {
                 style={my_thumb !== undefined ? { 'backgroundImage' : `url(${my_thumb})` } : undefined}
             />
             <div className='game_contents_player_name'
-                style={info.able === false ? { 'color' : '#ababab' } : undefined}
+                style={name_style}
                 dangerouslySetInnerHTML={{ __html : info.name }}
             />
         </div>

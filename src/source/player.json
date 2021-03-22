@@ -7,7 +7,8 @@
             "character" : 1,
             "plus" : true,
             "minus" : false,
-            "select" : false
+            "select" : false,
+            "color" : "#28527a"
         },
 
         {
@@ -17,7 +18,8 @@
             "character" : 2,
             "plus" : true,
             "minus" : false,
-            "select" : false
+            "select" : false,
+            "color" : "#ad6c80"
         },
 
         {
@@ -27,7 +29,8 @@
             "character" : 0,
             "plus" : false,
             "minus" : false,
-            "select" : false
+            "select" : false,
+            "color" : "#487e95"
         },
 
         {
@@ -37,7 +40,8 @@
             "character" : 0,
             "plus" : false,
             "minus" : false,
-            "select" : false
+            "select" : false,
+            "color" : "#f8dc81"
         }
     ],
 

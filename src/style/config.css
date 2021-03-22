@@ -29,6 +29,10 @@
   color: black;
 }
 
+.white {
+  color: white;
+}
+
 /* float */
 .float_left {
   float: left;
@@ -367,6 +371,9 @@ body #notice_div {
   font-family: Recipekorea;
 }
 
+#game_div {
+  opacity: 0;
+}
 #game_div #game_other_div {
   display: grid;
   grid-template-columns: 50% 50%;

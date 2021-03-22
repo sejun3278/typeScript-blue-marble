@@ -25,6 +25,7 @@ $margin_60 : 60px;
 /* Color */
 $gray : #ababab; .gray { color : $gray }
 $black : black; .black { color : $black }
+$white : white; .white { color : $white }
 
 /* float */
 $float_left : left; .float_left { float : left };
@@ -452,7 +453,7 @@ body {
 }
 
 #game_div {
-    // opacity: 0;
+    opacity: 0;
 
     #game_other_div { 
         display: grid;

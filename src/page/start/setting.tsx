@@ -701,7 +701,6 @@ class Setting extends React.Component<AllProps> {
                                                 <div
                                                     style={style_col}
                                                     className='aCenter'
-                                                    // style={el.able === false ? { 'backgroundColor' : '#bbbbbb' } : undefined}
                                                 >
                                                     <img alt='' src={img}
                                                         className={el.able === false ? 'setting_character_result_empty' : undefined}
@@ -709,7 +708,10 @@ class Setting extends React.Component<AllProps> {
                                                 </div>
 
                                                 {el.able === true
-                                                    ? <p> {el.name} </p>
+                                                    ? <p style={el.able ? { 'backgroundColor' : el.color, 'color' : 'white' } : undefined}> 
+                                                        {el.name} 
+                                                      </p>
+
                                                     : undefined
                                                 }
 
