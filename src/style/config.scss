@@ -10,7 +10,7 @@ $absolute : absolute;
 $pointer : pointer;
 
 /* display */
-$inline_block : inline-block;
+$inline_block : inline-block; .inline_block { display: inline-block; }
 $grid : grid;
 
 /* margin */
@@ -66,7 +66,7 @@ $font_12 : 12px;
 
 body {
     cursor: default !important;
-    min-width : 1000px;
+    min-width : 1500px;
 
     #notice_div { 
         position: $absolute !important;
@@ -427,6 +427,11 @@ body {
                         color: black;
                         font-family: $paybook_bold;
                     }
+
+                    .setting_character_result_empty {
+                        width: 80px;
+                        margin-top: 15px;
+                    }
                 }
             }
         }
@@ -483,8 +488,77 @@ body {
 
         #game_main_contents_div {
             min-height: 500px;
-            border: solid 1px #ababab;
-            margin: 10px 0px;
+            padding-bottom: 10px;
+
+            #game_main_map_div { 
+                position: $absolute;
+                width: 620px;
+                height: 720px;
+                border: solid 2px #ababab;
+                // transform: rotate(405deg);
+                margin-left: 28% !important;
+                margin-top: -109px !important;
+
+                .game_main_map_divs {
+                    font-size: $font_12;
+                    font-family: $paybook_bold;
+
+                    .game_top_and_bottom_map_div {
+                        max-height: 81px !important;
+                        line-height: 1.8 !important;
+
+                        div {
+                            float: left;
+                            width: 88.5px;
+                            height: 79px;
+                            max-height: 79px !important;
+                            text-align: $aCenter;
+                            cursor: pointer;
+                        }
+                    }
+
+                    #game_middle_main_map_div {
+                        display: grid;
+                        grid-template-columns: 90px 441px 90px;
+                        height: 560px;
+
+                        .game_middle_map_divs {
+                            line-height: 1.8 !important;
+                            .game_map_rows_divs {
+                                height: 79px;
+                                width: 100%;
+                                text-align: $aCenter;
+                                cursor: pointer;
+                            }
+                        }
+                    }
+
+                    #game_middle_left_divs { border-right: solid 2px #ababab; }
+                    #game_middle_right_divs { border-left: solid 2px #ababab; }
+
+                    .map_name_div {
+                        b {
+                            display: block;
+                            border-bottom: solid 1px #ababab;
+                            width: 100%;
+                            // padding : 3px 0px;
+                        }
+
+                    }
+
+                    .map_event_div {
+                        // background-color: #e4d3cf;
+                        font-family: $recipe_korea;
+                        line-height: 3;
+                        height: 20px !important;
+                    }
+
+                    .event_map_icon {
+                        width: 35px !important;
+                        margin-top: 10px;
+                    }
+                }
+            }
         }
     
         .game_contents_player_div {
@@ -495,6 +569,16 @@ body {
 
                 .empty_player_thumb {
                     background-color: #bbbbbb;
+                }
+
+                .empty_player_contents {
+                    // background-color: #BFBDBE;
+
+                    .empty_player_title {
+                        text-align: $aCenter;
+                        color: #ababab;
+                        line-height: 3.5;
+                    }
                 }
 
                 .game_contents_player_thumbnail_div {
@@ -527,7 +611,7 @@ body {
                 min-height: 105px;
                 border: solid 1px #ababab;
 
-                min-width: 300px;
+                min-width: 250px;
                 max-width: 400px;
             }
 

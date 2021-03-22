@@ -33,6 +33,7 @@ export interface initState {
     select_character : boolean;
     select_info : string;
     select_character_list : string;
+    overlap_card : boolean;
 }
 
 const initialState : initState = {
@@ -53,7 +54,8 @@ const initialState : initState = {
     card_limit : 1,
     select_character : false,
     select_info : JSON.stringify({}),
-    select_character_list : JSON.stringify({})
+    select_character_list : JSON.stringify({}),
+    overlap_card : true
 }
 
 // const initialState = {
@@ -89,7 +91,8 @@ export default handleActions<initState> ({
             game_event : data.payload.game_event !== undefined ? data.payload.game_event : state.game_event,
             round_limit : data.payload.round_limit !== undefined ? data.payload.round_limit : state.round_limit,
             pass_price : data.payload.pass_price !== undefined ? data.payload.pass_price : state.pass_price,
-            card_limit : data.payload.card_limit !== undefined ? data.payload.card_limit : state.card_limit
+            card_limit : data.payload.card_limit !== undefined ? data.payload.card_limit : state.card_limit,
+            overlap_card : data.payload.overlap_card !== undefined ? data.payload.overlap_card : state.overlap_card
         }
     },
 

@@ -15,6 +15,10 @@
 /* position */
 /* cursor */
 /* display */
+.inline_block {
+  display: inline-block;
+}
+
 /* margin */
 /* Color */
 .gray {
@@ -57,7 +61,7 @@
 /* font-size */
 body {
   cursor: default !important;
-  min-width: 1000px;
+  min-width: 1500px;
 }
 body #notice_div {
   position: absolute !important;
@@ -346,6 +350,10 @@ body #notice_div {
   color: black;
   font-family: paybooc-Bold;
 }
+#game_setting_contents_div #game_setting_start_div .game_setting_result_divs #game_player_setting_result_div .game_setting_character_result_div .setting_character_result_empty {
+  width: 80px;
+  margin-top: 15px;
+}
 #game_setting_contents_div #game_setting_start_div #game_start_button {
   margin-top: 20px;
   width: 100%;
@@ -391,8 +399,65 @@ body #notice_div {
 }
 #game_div #game_contents_div #game_main_contents_div {
   min-height: 500px;
-  border: solid 1px #ababab;
-  margin: 10px 0px;
+  padding-bottom: 10px;
+}
+#game_div #game_contents_div #game_main_contents_div #game_main_map_div {
+  position: absolute;
+  width: 620px;
+  height: 720px;
+  border: solid 2px #ababab;
+  margin-left: 28% !important;
+  margin-top: -109px !important;
+}
+#game_div #game_contents_div #game_main_contents_div #game_main_map_div .game_main_map_divs {
+  font-size: 12px;
+  font-family: paybooc-Bold;
+}
+#game_div #game_contents_div #game_main_contents_div #game_main_map_div .game_main_map_divs .game_top_and_bottom_map_div {
+  max-height: 81px !important;
+  line-height: 1.8 !important;
+}
+#game_div #game_contents_div #game_main_contents_div #game_main_map_div .game_main_map_divs .game_top_and_bottom_map_div div {
+  float: left;
+  width: 88.5px;
+  height: 79px;
+  max-height: 79px !important;
+  text-align: center;
+  cursor: pointer;
+}
+#game_div #game_contents_div #game_main_contents_div #game_main_map_div .game_main_map_divs #game_middle_main_map_div {
+  display: grid;
+  grid-template-columns: 90px 441px 90px;
+  height: 560px;
+}
+#game_div #game_contents_div #game_main_contents_div #game_main_map_div .game_main_map_divs #game_middle_main_map_div .game_middle_map_divs {
+  line-height: 1.8 !important;
+}
+#game_div #game_contents_div #game_main_contents_div #game_main_map_div .game_main_map_divs #game_middle_main_map_div .game_middle_map_divs .game_map_rows_divs {
+  height: 79px;
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+}
+#game_div #game_contents_div #game_main_contents_div #game_main_map_div .game_main_map_divs #game_middle_left_divs {
+  border-right: solid 2px #ababab;
+}
+#game_div #game_contents_div #game_main_contents_div #game_main_map_div .game_main_map_divs #game_middle_right_divs {
+  border-left: solid 2px #ababab;
+}
+#game_div #game_contents_div #game_main_contents_div #game_main_map_div .game_main_map_divs .map_name_div b {
+  display: block;
+  border-bottom: solid 1px #ababab;
+  width: 100%;
+}
+#game_div #game_contents_div #game_main_contents_div #game_main_map_div .game_main_map_divs .map_event_div {
+  font-family: Recipekorea;
+  line-height: 3;
+  height: 20px !important;
+}
+#game_div #game_contents_div #game_main_contents_div #game_main_map_div .game_main_map_divs .event_map_icon {
+  width: 35px !important;
+  margin-top: 10px;
 }
 #game_div #game_contents_div .game_contents_player_div {
   display: grid;
@@ -400,6 +465,11 @@ body #notice_div {
 }
 #game_div #game_contents_div .game_contents_player_div .game_contents_player_profile_div .empty_player_thumb {
   background-color: #bbbbbb;
+}
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_profile_div .empty_player_contents .empty_player_title {
+  text-align: center;
+  color: #ababab;
+  line-height: 3.5;
 }
 #game_div #game_contents_div .game_contents_player_div .game_contents_player_profile_div .game_contents_player_thumbnail_div {
   width: 84px;
@@ -425,7 +495,7 @@ body #notice_div {
 #game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div {
   min-height: 105px;
   border: solid 1px #ababab;
-  min-width: 300px;
+  min-width: 250px;
   max-width: 400px;
 }
 #game_div #game_contents_div .game_contents_player_div .game_contents_player_info_margin {

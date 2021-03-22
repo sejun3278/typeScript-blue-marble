@@ -15,9 +15,18 @@
         "modify" : "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2013/png/iconmonstr-wrench-4.png&r=82&g=191&b=255"
     },
 
+    "map_icon" : {
+        "gold_key" : "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2012/png/iconmonstr-key-2.png&r=255&g=215&b=0",
+        "move" : "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2017/png/iconmonstr-airport-2.png&r=0&g=0&b=0",
+        "stop" : "https://cdn2.iconfinder.com/data/icons/travel-solid-world-is-beautiful/512/Island-256.png",
+        "start" : "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2018/png/iconmonstr-arrow-left-circle-thin.png&r=0&g=0&b=0"
+    },
+
     "img" : {
         "character" : {
             "설명" : "캐릭터 이미지",
+
+            "empty" : "https://reactclubon.s3.ap-northeast-2.amazonaws.com/empty.png",
 
             "stop" : {
                 "1" : "https://reactclubon.s3.ap-northeast-2.amazonaws.com/1-0-0-0.png",

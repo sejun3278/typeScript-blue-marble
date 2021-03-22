@@ -1,0 +1,218 @@
+{
+    "maps" : [
+        {
+            "where" : "top",
+            "id" : "game_top_main_map_div",
+            "class" : "game_top_and_bottom_map_div",
+            "info" : [
+                {
+                    "name" : "카지노",
+                    "type" : "event",
+                    "type_name" : "gold_key",
+                    "value" : "gold_key",
+                    "number" : 14
+                },
+
+                {
+                    "name" : "강릉",
+                    "value" : "kangnung",
+                    "number" : 15
+                },
+
+                {
+                    "name" : "서울",
+                    "value" : "seoul",
+                    "number" : 16
+                },
+
+                {
+                    "name" : "청주",
+                    "value" : "cheongju",
+                    "number" : 17
+                },
+
+                {
+                    "name" : "울산",
+                    "value" : "ulsan",
+                    "number" : 18
+                },
+
+                {
+                    "name" : "인천",
+                    "value" : "incheon",
+                    "number" : 19
+                },
+
+                {
+                    "name" : "인천 공항",
+                    "type" : "event",
+                    "type_name" : "move",
+                    "value" : "move",
+                    "number" : 20
+                }
+            ]
+        },
+
+        {
+            "where" : "middle",
+            "id" : "game_middle_main_map_div",
+            "class" : "game_middle_map_div",
+            "info" : [
+                {
+                    "type" : "contents",
+                    "id" : "game_middle_left_divs",
+                    "info" : [
+                        {
+                            "name" : "경기 광명",
+                            "value" : "gwangmeong",
+                            "number" : 13
+                        },
+        
+                        {
+                            "name" : "대구",
+                            "value" : "deagu",
+                            "number" : 12
+                        },
+        
+                        {
+                            "name" : "춘천",
+                            "value" : "chuncheon",
+                            "number" : 11
+                        },
+        
+                        {
+                            "name" : "논산",
+                            "value" : "nonsan",
+                            "number" : 10
+                        },
+        
+                        {
+                            "name" : "광주",
+                            "value" : "gwangju",
+                            "number" : 9
+                        },
+        
+                        {
+                            "name" : "천안",
+                            "value" : "cheonan",
+                            "number" : 8
+                        },
+        
+                        {
+                            "name" : "독도",
+                            "value" : "dokdo",
+                            "number" : 7
+                        }
+                    ]
+                },
+
+                {
+                    "type" : "notice",
+                    "id" : "game_middle_notice_div"
+
+                },
+
+                {
+                    "type" : "contents",
+                    "id" : "game_middle_right_divs",
+                    "info" : [
+                        {
+                            "name" : "경기",
+                            "value" : "gyeonggi",
+                            "number" : 21
+                        },
+        
+                        {
+                            "name" : "전주",
+                            "value" : "jeonju",
+                            "number" : 22
+                        },
+        
+                        {
+                            "name" : "포항",
+                            "value" : "pohang",
+                            "number" : 23
+                        },
+        
+                        {
+                            "name" : "세종",
+                            "value" : "sejong",
+                            "number" : 24
+                        },
+        
+                        {
+                            "name" : "목포",
+                            "value" : "mokpo",
+                            "number" : 25
+                        },
+        
+                        {
+                            "name" : "대전",
+                            "value" : "deajeon",
+                            "number" : 26
+                        },
+        
+                        {
+                            "name" : "경주",
+                            "value" : "gyeonju",
+                            "number" : 27
+                        }
+                    ]
+                }
+            ]
+        },
+
+        {
+            "where" : "bottom",
+            "id" : "game_bottom_main_map_div",
+            "class" : "game_top_and_bottom_map_div",
+            "info" : [
+                {
+                    "name" : "무인도",
+                    "type" : "event",
+                    "type_name" : "stop",
+                    "value" : "stop",
+                    "number" : 6
+                },
+
+                {
+                    "name" : "제주",
+                    "value" : "jeju",
+                    "number" : 5
+                },
+
+                {
+                    "name" : "여수",
+                    "value" : "yeosu",
+                    "number" : 4
+                },
+
+                {
+                    "name" : "부산",
+                    "value" : "busan",
+                    "number" : 3
+                },
+
+                {
+                    "name" : "평창",
+                    "value" : "pyeonchang",
+                    "number" : 2
+                },
+
+                {
+                    "name" : "안동",
+                    "value" : "andong",
+                    "number" : 1
+                },
+
+                {
+                    "name" : "출발",
+                    "type" : "event",
+                    "type_name" : "start",
+                    "value" : "start",
+                    "number" : 0
+                }
+            ]
+        }
+    ]
+}

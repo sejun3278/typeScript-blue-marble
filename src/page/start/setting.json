@@ -145,6 +145,29 @@
         },
 
         {
+            "name" : "카드 중복 출력",
+            "default" : true,
+            "state" : "overlap_card",
+            "type" : "radio",
+            "type_name" : "",
+            "type_info" : [
+                {
+                    "id" : "overlap_card_1",
+                    "value" : true,
+                    "name" : "ON"
+                },
+
+                {
+                    "id" : "overlap_card_2",
+                    "value" : false,
+                    "name" : "OFF"
+
+                }
+            ],
+            "notice" : "이미 사용된 통행 카드를 중복으로 사용할지 선택합니다. <br /> OFF 상태면, 사용된 통행카드는 다음 라운드까지 다시 출력되지 않습니다."
+        },
+
+        {
             "name" : "이벤트 영향",
             "default" : true,
             "state" : "game_event",

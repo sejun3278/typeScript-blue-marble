@@ -40,64 +40,85 @@ const modalCustomStyles = {
 
 class Home extends React.Component<AllProps> {
 
-  _flash = (target : string, type : boolean, start : number, twinkle : boolean | undefined | null, timer : number, stop : number | null | undefined) => {
-    // type = true : 나타내기, false : 사라지기
-    // start : 초기 투명도
-    // twinkle = true : 깜빡임 효과, falsy : 효과 없음
-    // timer : 시간
-    const el_target = document.querySelectorAll(target);
+  _flash = (
+      target : string, 
+      type : boolean,  // type = true : 나타내기, false : 사라지기
+      start : number,  // start : 초기 투명도
+      twinkle : boolean | undefined | null, // twinkle = true : 깜빡임 효과, falsy : 효과 없음
+      timer : number, // timer : 시간
+      stop : number | null | undefined, // 정지
+      limit : number | null | undefined // limit : 횟수
+    ) => {
 
-    let opa : number = start;
-    let _limit : number = type === true ? 1.4 : 0.2
+      const el_target = document.querySelectorAll(target);
 
-    let all_timer = 0;
-    const recursion : Function = (_type : boolean) => {
-      all_timer += timer;
+      let opa : number = start;
+      let _limit : number = type === true ? 1.4 : 0.2
 
-      if(stop) {
-        if(all_timer > stop) {
-          return true;
-        }
-      }
+      let all_timer = 0;
+      let limit_number = 0;
 
-      if(_type === true) {
-        // 나타내기
-        if(opa >= _limit) {
-          if(twinkle === true) {
-            _type = false;
-            _limit = 0.2;
+      const recursion : Function = (_type : boolean) => {
+        all_timer += timer;
 
-          } else {
-            return true;
-          }
-        }
-        opa = opa + 0.2;
-
-      } else if(_type === false) {
-        // 사라지기
-        if(opa <= _limit) {
-          if(twinkle === true) {
-            _type = true;
-            _limit = 1.4;
-
-          } else {
+        if(stop) {
+          if(all_timer > stop) {
             return true;
           }
         }
 
-        opa = opa - 0.2;
-      }
-      
-      el_target.forEach( (el : any) => {
-        el.style.opacity = opa;
-      })
-      
-      setTimeout( () => {
-        return recursion(_type);
-      }, timer)
-    };  
+        if(limit) {
+          if(limit_number >= limit) {
+            return true;
+          }
+        }
 
-    recursion(type);
+        if(_type === true) {
+          // 나타내기
+          if(opa >= _limit) {
+            if(twinkle === true) {
+              _type = false;
+              _limit = 0.2;
+
+              if(type === false) {
+                limit_number += 1;
+              }
+
+            } else {
+              return true;
+            }
+          }
+          opa = opa + 0.2;
+
+        } else if(_type === false) {
+          // 사라지기
+          if(opa <= _limit) {
+            if(twinkle === true) {
+              _type = true;
+              _limit = 1.4;
+
+              if(type === true) {
+                limit_number += 1;
+              }
+
+            } else {
+              return true;
+            }
+          }
+
+          opa = opa - 0.2;
+        }
+        
+        el_target.forEach( (el : any) => {
+          el.style.opacity = opa;
+        })
+        
+        setTimeout( () => {
+          return recursion(_type);
+        }, timer)
+      };  
+
+      recursion(type);
   }
 
   render() {

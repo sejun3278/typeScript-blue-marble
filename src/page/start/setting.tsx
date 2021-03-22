@@ -26,7 +26,8 @@ export interface AllProps {
   select_info : string,
   select_character_list : string,
   _flash : Function,
-  setting_able : boolean
+  setting_able : boolean,
+  overlap_card : boolean
 };
 
 class Setting extends React.Component<AllProps> {
@@ -83,7 +84,7 @@ class Setting extends React.Component<AllProps> {
         if(type === 'start_price' || type === 'round_timer' || type === 'round_limit') {
             value = Number(value);
 
-        } else if(type === 'game_event' || type === 'card_limit') {
+        } else if(type === 'game_event' || type === 'card_limit' || type === 'overlap_card') {
             value = bool;
         }
 
@@ -96,18 +97,25 @@ class Setting extends React.Component<AllProps> {
 
     _resetSetting = () => {
         if(window.confirm('설정한 부분들을 모두 초기화 하시겠습니까?')) {
-            const { initActions } = this.props;
+            const { initActions, _flash } = this.props;
+
+            initActions.set_setting_state({ 'modify' : false });
 
             const save_obj : any = {}
             save_obj['start_price'] = 100;
             save_obj['round_timer'] = 60;
             save_obj['round_limit'] = 0;
             save_obj['game_event'] = true;
-            save_obj['modify'] = false;
+            // save_obj['modify'] = false;
             save_obj['pass_price'] = 1;
             save_obj['card_limit'] = 1;
+            save_obj['overlap_card'] = true;
 
-            return initActions.set_setting_state(save_obj);
+            _flash('#game_info_setting_list_ul', false, 1.4, true, 30, null, 1)
+
+            window.setTimeout( () => {
+                return initActions.set_setting_state(save_obj);
+            }, 300)
 
         } else {
             return;
@@ -361,7 +369,7 @@ class Setting extends React.Component<AllProps> {
 
                     {setting_stage === 1
                         ? <div id='game_info_setting_div'>
-                            <ul>
+                            <ul id='game_info_setting_list_ul'>
                                 {setting_json.setting.map( (el : any, key : number) => {
                                     const props : any = this.props;
 
@@ -641,7 +649,7 @@ class Setting extends React.Component<AllProps> {
                                                 contents = '제한 없음';
                                             }
 
-                                        } else if(el.state === 'game_event') {
+                                        } else if(el.state === 'game_event' || el.state === 'overlap_card') {
                                             if(values === true) {
                                                 contents = 'ON';
                                             } else {
@@ -682,6 +690,8 @@ class Setting extends React.Component<AllProps> {
                                             img = icon.img.character.stop[el.character];
 
                                         } else {
+                                            img = icon.img.character.empty
+
                                             style_col['backgroundColor'] = '#bbbbbb';
                                             style_col['minHeight'] = '128px';
                                         }
@@ -690,9 +700,12 @@ class Setting extends React.Component<AllProps> {
                                             <div className='game_setting_character_result_div' key={key}>
                                                 <div
                                                     style={style_col}
+                                                    className='aCenter'
                                                     // style={el.able === false ? { 'backgroundColor' : '#bbbbbb' } : undefined}
                                                 >
-                                                    <img alt='' src={img} />
+                                                    <img alt='' src={img}
+                                                        className={el.able === false ? 'setting_character_result_empty' : undefined}
+                                                    />
                                                 </div>
 
                                                 {el.able === true
@@ -748,7 +761,8 @@ class Setting extends React.Component<AllProps> {
         select_character : init.select_character,
         select_info : init.select_info,
         select_character_list : init.select_character_list,
-        setting_able : init.setting_able
+        setting_able : init.setting_able,
+        overlap_card : init.overlap_card
     }), 
         (dispatch) => ({ 
         initActions: bindActionCreators(initActions, dispatch),

@@ -24,21 +24,25 @@ class Player extends React.Component<AllProps> {
     let img_list : any = img.img.character.stop;
     let my_thumb : string = img_list[info.character];
 
-    let thumb_class = 'game_contents_player_thumbnail ';
-    let contents_class = 'game_contents_player_info_div ';
+    let thumb_class = 'game_contents_player_thumbnail';
+    let contents_class = 'game_contents_player_info_div';
 
     if(info.able === false) {
-        thumb_class += 'empty_player_thumb';
+        thumb_class += ' empty_player_thumb';
+        contents_class += ' empty_player_contents'
+
+        my_thumb = img.img.character.empty;
     }
 
     if(info.number === 2 || info.number === 4) {
-        img_list = img.img.reverse.stop;
-        my_thumb = img_list[info.character];
+        if(info.able === true) {
+            img_list = img.img.reverse.stop;
+            my_thumb = img_list[info.character];
 
-        contents_class += 'aRight';
-
+            contents_class += ' aRight';
+        }
     } else {
-        contents_class += 'game_contents_player_info_margin '
+        contents_class += ' game_contents_player_info_margin'
     }
 
 
@@ -55,7 +59,11 @@ class Player extends React.Component<AllProps> {
         </div>
 
         <div style={float_style} className={contents_class}> 
-            2 
+            {info.able === false
+                ? <h4 className='empty_player_title'> Empty Player </h4>
+
+                : undefined
+            }
         </div>
       </div>
     )
