@@ -400,9 +400,26 @@ body #notice_div {
   font-size: 12px;
   font-family: TmoneyRoundWindExtraBold;
 }
+#game_div #game_main_start_ready_div {
+  border: solid 2px #ababab;
+  width: 620px;
+  height: 720px;
+  position: absolute;
+  margin: -2px -2px;
+  background-color: black;
+  opacity: 0.5;
+  cursor: pointer;
+}
+#game_div #game_main_start_ready_div h2 {
+  color: white;
+  width: 100%;
+  text-align: center;
+  line-height: 25;
+  font-family: TmoneyRoundWindExtraBold;
+}
 #game_div #game_contents_div {
   margin-top: 15px;
-  padding: 10px 20px;
+  padding: 12px 20px;
 }
 #game_div #game_contents_div #game_main_contents_div {
   min-height: 500px;
@@ -504,6 +521,17 @@ body #notice_div {
   border: solid 1px #ababab;
   min-width: 250px;
   max-width: 400px;
+  text-align: left;
+}
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div {
+  font-size: 14px;
+  padding: 10px;
+}
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_have_money_div {
+  padding: 5px;
+  font-size: 13px;
+  font-family: Recipekorea;
+  border-bottom: solid 1px #ababab;
 }
 #game_div #game_contents_div .game_contents_player_div .game_contents_player_info_margin {
   margin: 0px -2px;

@@ -12,16 +12,15 @@ export interface AllProps {
   initActions : any,
   info : string,
   float_style : object,
-  key : number
+  key : number,
+  _commaMoney : Function
 };
 
 class Player extends React.Component<AllProps> {
 
   render() {
-    const { float_style } = this.props;
+    const { float_style, _commaMoney } = this.props;
     const info : any = JSON.parse(this.props.info);
-
-    console.log(info)
 
     let img_list : any = img.img.character.stop;
     let my_thumb : string = img_list[info.character];
@@ -29,6 +28,8 @@ class Player extends React.Component<AllProps> {
 
     let thumb_class = 'game_contents_player_thumbnail';
     let contents_class = 'game_contents_player_info_div';
+
+    let money : string = '';
 
     if(info.able === false) {
         thumb_class += ' empty_player_thumb';
@@ -40,6 +41,8 @@ class Player extends React.Component<AllProps> {
     } else {
         name_style["backgroundColor"] = info.color;
         name_style["color"] = 'white';
+
+        money = _commaMoney(info.money);
     }
 
     if(info.number === 2 || info.number === 4) {
@@ -52,7 +55,6 @@ class Player extends React.Component<AllProps> {
     } else {
         contents_class += ' game_contents_player_info_margin'
     }
-
 
     return(
       <div className='game_contents_player_profile_div'>
@@ -70,7 +72,9 @@ class Player extends React.Component<AllProps> {
             {info.able === false
                 ? <h4 className='empty_player_title'> Empty Player </h4>
 
-                : undefined
+                : <div className='game_contents_user_info_div'>
+                    <div className='game_user_have_money_div'> 보유 자산　|　{money} 만원 </div>
+                  </div>
             }
         </div>
       </div>

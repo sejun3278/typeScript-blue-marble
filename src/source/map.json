@@ -44,7 +44,7 @@
                 },
 
                 {
-                    "name" : "인천 공항",
+                    "name" : "김포 공항",
                     "type" : "event",
                     "type_name" : "move",
                     "value" : "move",
@@ -63,8 +63,8 @@
                     "id" : "game_middle_left_divs",
                     "info" : [
                         {
-                            "name" : "경기 광명",
-                            "value" : "gwangmeong",
+                            "name" : "천안",
+                            "value" : "cheonan",
                             "number" : 13
                         },
         
@@ -93,8 +93,8 @@
                         },
         
                         {
-                            "name" : "천안",
-                            "value" : "cheonan",
+                            "name" : "경기 광명",
+                            "value" : "gwangmeong",
                             "number" : 8
                         },
         

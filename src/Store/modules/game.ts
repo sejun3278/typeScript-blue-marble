@@ -8,12 +8,14 @@ export const actionCreators = {
 
 export interface gameState {
     loading : boolean,
-    main_start : boolean
+    main_start : boolean,
+    playing : boolean
 }
 
 const initialState : gameState = {
     loading : false,
-    main_start : false
+    main_start : false,
+    playing : false
 }
 
 export default handleActions<gameState> ({
@@ -21,7 +23,8 @@ export default handleActions<gameState> ({
       return {
         ...state,
         loading : data.payload.loading !== undefined ? data.payload.loading : state.loading,
-        main_start : data.payload.start !== undefined ? data.payload.start : state.main_start
+        main_start : data.payload.start !== undefined ? data.payload.start : state.main_start,
+        playing : data.payload.playing !== undefined ? data.payload.playing : state.playing
       };
     }
 

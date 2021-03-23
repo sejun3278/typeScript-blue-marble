@@ -144,7 +144,7 @@ class Home extends React.Component<AllProps> {
             : <Loading {...this} />
 
           : main_start === true
-            ? <Game />
+            ? <Game {...this} />
 
             : null
         }

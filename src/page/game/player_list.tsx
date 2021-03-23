@@ -10,12 +10,14 @@ import Player from './player';
 
 export interface AllProps {
   initActions : any,
-  list : string
+  list : string,
+  _commaMoney : Function
 };
 
 class PlayerList extends React.Component<AllProps> {
 
   render() {
+      const props : any = this.props;
       const list = JSON.parse(this.props.list);
 
     return(
@@ -32,6 +34,7 @@ class PlayerList extends React.Component<AllProps> {
                   key={key}
                   float_style={float_style}
                   info={JSON.stringify(el)}
+                  {...props}
                 />
               )
             })}

@@ -10,15 +10,17 @@ import { StoreState } from '../../Store/modules';
 export interface AllProps {
   initActions : any,
   gameActions : any,
-  _flash : Function
+  _flash : Function,
+  player_list : string,
+  start_price : number
 };
 
-let twinkle_flash : any = null;
 class Loading extends React.Component<AllProps> {
 
-     componentDidMount() {
+    componentDidMount() {
         const { _flash, gameActions } = this.props;
 
+        this._initGameInfo();
         _flash('#game_loading_div', false, 1.4, true, 60, 4000);
 
         window.setTimeout( () => {
@@ -46,6 +48,31 @@ class Loading extends React.Component<AllProps> {
 
     }
 
+    // 게임 초기 설정하기
+    _initGameInfo = () => {
+      const { start_price, initActions } = this.props;
+      const player_list = JSON.parse(this.props.player_list);
+      const Map = require('../../source/map.json').maps;
+
+      // 플레이어 설정하기
+      for(let i = 0; i < player_list.length; i++) {
+        // 초기 시작 자금 설정
+        if(player_list[i]['able'] === true) {
+          player_list[i]['money'] = start_price;
+          player_list[i]['maps'] = [];
+        }
+      }
+
+      // 맵 저장하기
+      initActions.set_setting_state({ 
+        'map_info' : JSON.stringify(Map), 
+      })
+
+      initActions.set_player_info({
+        'player_list' : JSON.stringify(player_list)
+      })
+    }
+
   render() {
     return(
       <div id='game_loading_div'>
@@ -56,7 +83,9 @@ class Loading extends React.Component<AllProps> {
 }
 
 export default connect( 
-  ( { init, game } : StoreState  ) => ({
+  ( { init } : StoreState  ) => ({
+    player_list : init.player_list,
+    start_price : init.start_price
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),
