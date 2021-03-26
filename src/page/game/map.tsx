@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'; 
 import { StoreState } from '../../Store/modules';
 
-
 export interface AllProps {
     class_col : string,
     style : object,

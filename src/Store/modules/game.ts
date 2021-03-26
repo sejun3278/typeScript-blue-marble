@@ -4,12 +4,14 @@ const GAMELOADING = 'game/game_loading';
 const ROUNDSTART = 'game/round_start';
 const SETGAMENOTICEMENT = 'game/set_game_notice_ment';
 const SETTIMER = 'game/set_timer';
+const SELECTTYPE = 'game/select_type';
 
 export const actionCreators = {
     game_loading : createAction(GAMELOADING),
     round_start : createAction(ROUNDSTART),
     set_game_notice_ment : createAction(SETGAMENOTICEMENT),
-    set_timer : createAction(SETTIMER)
+    set_timer : createAction(SETTIMER),
+    select_type : createAction(SELECTTYPE)
 }
 
 export interface gameState {
@@ -22,6 +24,7 @@ export interface gameState {
     alert_ment : string,
     round : number,
     timer : string,
+    select_type : string | null,
 }
 
 const initialState : gameState = {
@@ -34,6 +37,7 @@ const initialState : gameState = {
     alert_ment : "",
     round : 0,
     timer : "-",
+    select_type : null
 }
 
 export default handleActions<gameState> ({
@@ -67,6 +71,13 @@ export default handleActions<gameState> ({
         return {
             ...state,
             timer : data.payload.timer !== undefined ? data.payload.timer : state.timer
+        }
+    },
+
+    [SELECTTYPE] : (state : any, data : any) => {
+        return {
+            ...state,
+            select_type : data.payload.select_type !== undefined ? data.payload.select_type : state.select_type
         }
     }
 

@@ -90,6 +90,12 @@
   font-weight: normal;
   font-style: normal;
 }
+@font-face {
+  font-family: "Y_Spotlight";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts-20-12@1.0/Y_Spotlight.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
 /* font */
 /* font-size */
 body {
@@ -547,6 +553,11 @@ body #notice_div {
   font-family: paybooc-Bold;
   padding: 4px 0px;
 }
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_profile_div .player_my_turn_icon h3 {
+  font-family: SDSamliphopangche_Outline;
+  color: orange;
+  font-size: 22px;
+}
 #game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div {
   min-height: 103px;
   min-width: 250px;
@@ -594,17 +605,19 @@ body #notice_div {
 }
 #play_game_divs #playing_timer_div {
   text-align: center;
+  line-height: 0;
 }
 #play_game_divs #playing_timer_div div {
-  float: left;
+  display: inline-block;
 }
 #play_game_divs #playing_timer_div #timer_div, #play_game_divs #playing_timer_div #timer_slide_div {
   width: 360px;
   border: solid 2px #ababab;
   border-radius: 5px;
-  margin: 0px 0px 0px 35px;
   height: 20px;
+  margin-left: -5px;
   background-color: #f8f1f1;
+  text-align: left !important;
 }
 #play_game_divs #playing_timer_div #timer_slide_div {
   width: 0px;
@@ -614,9 +627,38 @@ body #notice_div {
   background-color: #214151;
 }
 #play_game_divs #playing_timer_div #timer_notice_div {
-  width: 40px;
+  position: absolute;
+  margin-top: 12px;
+  margin-left: 10px !important;
   text-align: center;
   font-family: TmoneyRoundWindExtraBold;
+}
+#play_game_divs #playing_action_div {
+  margin-top: 30px;
+  border: solid 1px #ababab;
+  border-radius: 5px;
+  display: inline-block;
+  width: 85%;
+  height: 230px;
+}
+#play_game_divs #playing_action_div #playing_select_div {
+  margin-top: 15px;
+  font-size: 13px;
+  font-family: Recipekorea;
+  color: #046582;
+}
+
+#end_turn_button {
+  margin: 0px;
+  background-color: black;
+  display: inline-block;
+  width: 85%;
+  color: white;
+  padding: 5px 0px;
+  font-size: 13px !important;
+  border-radius: 5px;
+  font-family: Y_Spotlight;
+  cursor: pointer;
 }
 
 /*# sourceMappingURL=config.css.map */

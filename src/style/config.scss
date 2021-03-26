@@ -72,6 +72,13 @@ $float_right : right; .float_right { float : right };
     font-weight: normal;
     font-style: normal;
 }
+
+@font-face {
+    font-family: 'Y_Spotlight';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts-20-12@1.0/Y_Spotlight.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
   
 /* font */
 $t_money_font : TmoneyRoundWindExtraBold;
@@ -79,6 +86,7 @@ $recipe_korea : Recipekorea;
 $paybook_bold : paybooc-Bold;
 $SDSamliphopangche_Outline : SDSamliphopangche_Outline;
 $HangeulNuri-Bold : HangeulNuri-Bold;
+$Y_Spotlight : Y_Spotlight;
 
 /* font-size */
 $font_16 : 16px;
@@ -636,11 +644,6 @@ body {
                     width: 85px;
                     height: 103px;
 
-                    div {
-                        // border: solid 1px #ababab;
-                        // width: 85px;
-                    }
-
                     .game_contents_player_thumbnail {
                         height: 80px;
                         background-size: contain;
@@ -654,6 +657,14 @@ body {
                         font-size: 12px;
                         font-family: $paybook_bold;
                         padding: 4px 0px;
+                    }
+                }
+
+                .player_my_turn_icon {
+                    h3 {
+                        font-family: $SDSamliphopangche_Outline;
+                        color: orange;
+                        font-size: 22px;
                     }
                 }
             }
@@ -732,18 +743,20 @@ body {
 
     #playing_timer_div {
         text-align: center;
+        line-height: 0;
 
         div {
-            float: left;
+            display: inline-block;
         }
 
         #timer_div, #timer_slide_div {
             width: 360px;
             border: solid 2px #ababab;
             border-radius: 5px;
-            margin: 0px 0px 0px 35px;
             height: 20px;
+            margin-left: -5px;
             background-color: #f8f1f1;
+            text-align: left !important;
         }
 
         #timer_slide_div {
@@ -755,9 +768,40 @@ body {
         }
 
         #timer_notice_div {
-            width: 40px;
+            position: absolute;
+            margin-top: 12px;
+            margin-left: 10px !important;
             text-align: $aCenter;
             font-family: $t_money_font;
         }
     }
+
+    #playing_action_div {
+        margin-top: 30px;
+        border: solid 1px #ababab;
+        border-radius: 5px;
+        display: inline-block;
+        width: 85%;
+        height: 230px;
+
+        #playing_select_div {
+            margin-top: 15px;
+            font-size: 13px;
+            font-family: $recipe_korea;
+            color: #046582;
+        }
+    }
+}
+
+#end_turn_button {
+    margin: 0px;
+    background-color: black;
+    display: inline-block;
+    width: 85%;
+    color: white;
+    padding: 5px 0px;
+    font-size: 13px !important;
+    border-radius: 5px;
+    font-family:$Y_Spotlight;
+    cursor: pointer;
 }

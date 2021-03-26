@@ -38,8 +38,10 @@ class Player extends React.Component<AllProps> {
     const contents_style : any = JSON.parse(JSON.stringify(float_style));
     
     let money : string = '';
+    let my_turn_style : any = {};
 
     let my_location : string = '';
+
     if(info.able === false) {
         thumb_class += ' empty_player_thumb';
         contents_class += ' empty_player_contents'
@@ -53,13 +55,6 @@ class Player extends React.Component<AllProps> {
 
         my_location = MapInfo[info.location].name;
 
-        // if(round_start === true) {
-          if(turn === Number(info.number)) {
-            my_thumb = img_list.action[info.character];
-          }
-        // }
-
-
         money = _commaMoney(info.money);
     }
 
@@ -71,6 +66,8 @@ class Player extends React.Component<AllProps> {
             my_thumb = img_list[info.character];
 
             contents_class += ' aRight';
+
+            my_turn_style['textAlign'] = 'right';
         }
 
     } else {
@@ -78,11 +75,20 @@ class Player extends React.Component<AllProps> {
       contents_class += ' game_contents_player_info_margin'
     }
 
+    if(info.able === true) {
+      if(round_start === true) {
+        if(turn === Number(info.number) && info) {
+          img_list = img.img.character;
+          my_thumb = img_list.action[info.character];
+        }
+      }
+    }
+
     // let my_location : string = MapInfo[info.location].name;
 
     return(
       <div className='game_contents_player_profile_div' key={number}
-             id={number + '_player_info_div'}
+             id={info.number + '_player_info_div'}
              style={float_style} 
         >
         <div style={float_style} className='game_contents_player_thumbnail_div'> 
@@ -105,6 +111,16 @@ class Player extends React.Component<AllProps> {
                   </div>
             }
         </div>
+
+        {info.number === turn 
+        ?
+          <div className='player_my_turn_icon'
+              style={my_turn_style}>
+            <h3> My Turn </h3>
+          </div>
+
+          : undefined
+        }
       </div>
     )
   }

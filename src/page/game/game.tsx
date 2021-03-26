@@ -22,7 +22,8 @@ export interface AllProps {
   turn : number,
   round : number,
   round_timer : number,
-  timer : string
+  timer : string,
+  able_player : number
 };
 
 const flash_info : any = {
@@ -99,7 +100,7 @@ class Game extends React.Component<AllProps> {
         ment = '<div> 통행 카드를 뽑아주세요. </div>';
 
       } else {
-        ment = `<div> <b class=${'player_color_' + turn}> ${turn} 플레이어의 턴입니다. </b> </div>`;
+        ment = `<div> <b class=${'color_player_' + turn}> 플레이어 ${turn} </b>의 턴입니다. </div>`;
       }
 
       // 타이머 지정하기
@@ -118,6 +119,7 @@ class Game extends React.Component<AllProps> {
       }      
 
       gameActions.set_game_notice_ment({ 'main_ment' : ment })
+      gameActions.round_start({ 'round_start' : true })
     }
   }
 
@@ -133,12 +135,21 @@ class Game extends React.Component<AllProps> {
       timer_el.style.width = String(6 * (Number(timer) - 1)) + 'px';
 
       if((Number(timer) - 1) <= 0) {
+        // 턴 종료
         window.clearInterval(timer_play);
+
         _flash('#timer_slide_div', false, 1.4, false, 30);
+        _flash('#playing_action_div', false, 1.4, false, 30);
+        _flash('#play_main_notice_div', false, 1.4, false, 30);
 
         _target.style.border = 'solid 1px #ababab';
 
         gameActions.set_timer({ 'timer' : '-' })
+
+        window.setTimeout( () => {
+          gameActions.round_start({ 'round_start' : false })
+          gameActions.set_game_notice_ment({ 'main_ment' : '' })
+        }, 300)
 
         let next_turn = turn + 1;
         return this._nextGames(next_turn);
@@ -148,9 +159,24 @@ class Game extends React.Component<AllProps> {
 
   // 다음 라운드 (턴 준비)
   _nextGames = (turn : number) => {
-    const { gameActions } = this.props;
+    const { gameActions, able_player, _flash } = this.props;
 
-    gameActions.round_start({ 'turn' : turn });
+    if(turn <= able_player) {
+      gameActions.round_start({ 'turn' : turn });
+
+      return window.setTimeout( () => {
+        this._roundStart('turn');
+
+        _flash('#playing_action_div', true, 0, false, 30);
+        _flash('#play_main_notice_div', true, 0, false, 30);
+      }, 500)
+
+    } else {
+      // 턴이 모두 돈 후, 다음 라운드 시작
+      gameActions.round_start({ 'turn' : 0 });
+
+    }
+
   }
 
   // 무한 플래쉬 효과
@@ -324,7 +350,8 @@ export default connect(
     turn : game.turn,
     round : game.round,
     round_timer : init.round_timer,
-    timer : game.timer
+    timer : game.timer,
+    able_player : init.able_player
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),
