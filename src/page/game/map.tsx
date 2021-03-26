@@ -10,7 +10,8 @@ import { StoreState } from '../../Store/modules';
 export interface AllProps {
     class_col : string,
     style : object,
-    info : string
+    info : string,
+    map_info : string
 };
 
 class Map extends React.Component<AllProps> {
@@ -18,6 +19,7 @@ class Map extends React.Component<AllProps> {
   render() {
     const { class_col, style } = this.props;
     const info = JSON.parse(this.props.info);
+    const city_info = JSON.parse(this.props.map_info)
 
     const map_class_col : string = info.type === 'event' ? 'map_event_div' : 'map_name_div'
     let map_icon : string = '';
@@ -26,6 +28,13 @@ class Map extends React.Component<AllProps> {
 
     if(info.type === 'event') {
         map_icon = icon.map_icon[info.value];
+    }
+
+    let city_price : number = 0;
+    if(city_info[info.number]) {
+      if(city_info[info.number].type === 'map') {
+        city_price = city_info[info.number].price;
+      }
     }
 
     return(
@@ -39,10 +48,12 @@ class Map extends React.Component<AllProps> {
                             src={map_icon}
                         />
 
-                    : undefined
+                    : <div>
+                        <div className='city_price_div'>
+                          {city_price} 만원
+                        </div>
+                      </div>
                 }
-
-
         </div>
     )
   }
@@ -50,6 +61,7 @@ class Map extends React.Component<AllProps> {
 
 export default connect( 
   ( { init } : StoreState  ) => ({
+    map_info : init.map_info
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch) 

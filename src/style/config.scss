@@ -31,6 +31,12 @@ $white : white; .white { color : $white }
 $float_left : left; .float_left { float : left };
 $float_right : right; .float_right { float : right };
 
+/* player color */
+.color_player_1 { color : #28527a };
+.color_player_2 { color : #ad6c80 };
+.color_player_3 { color : #007965 };
+.color_player_4 { color : #f8dc81 };
+
 /* font style */
 @font-face {
   font-family: 'TmoneyRoundWindExtraBold';
@@ -52,11 +58,27 @@ $float_right : right; .float_right { float : right };
   font-weight: normal;
   font-style: normal;
 }
+
+@font-face {
+    font-family: 'SDSamliphopangche_Outline';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts-20-12@1.0/SDSamliphopangche_Outline.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'HangeulNuri-Bold';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_three@1.0/HangeulNuri-Bold.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
   
 /* font */
 $t_money_font : TmoneyRoundWindExtraBold;
 $recipe_korea : Recipekorea;
 $paybook_bold : paybooc-Bold;
+$SDSamliphopangche_Outline : SDSamliphopangche_Outline;
+$HangeulNuri-Bold : HangeulNuri-Bold;
 
 /* font-size */
 $font_16 : 16px;
@@ -453,7 +475,7 @@ body {
 }
 
 #game_div {
-    opacity: 0;
+    // opacity: 0;
 
     #game_other_div { 
         display: grid;
@@ -503,12 +525,17 @@ body {
     }
 
     #game_contents_div {
+        height: 730px;
         margin-top: 15px;
         padding: 12px 20px;
 
         #game_main_contents_div {
-            min-height: 500px;
-            padding-bottom: 10px;
+            min-height: 587px;
+            padding-bottom: 30px;
+
+            .game_map_columns_divs {
+                height: 77px;
+            }
 
             #game_main_map_div { 
                 position: $absolute;
@@ -517,7 +544,7 @@ body {
                 border: solid 2px #ababab;
                 // transform: rotate(405deg);
                 margin-left: 28% !important;
-                margin-top: -109px !important;
+                // margin-top: -109px !important;
 
                 .game_main_map_divs {
                     font-size: $font_12;
@@ -530,7 +557,7 @@ body {
                         div {
                             float: left;
                             width: 88.5px;
-                            height: 79px;
+                            // height: 79px;
                             max-height: 79px !important;
                             text-align: $aCenter;
                             cursor: pointer;
@@ -563,7 +590,13 @@ body {
                             width: 100%;
                             // padding : 3px 0px;
                         }
+                    }
 
+                    .city_price_div {
+                        font-size: 14px !important;
+                        margin-top: 15px;
+                        color: #ababab;
+                        font-family: $paybook_bold;
                     }
 
                     .map_event_div {
@@ -582,18 +615,16 @@ body {
         }
     
         .game_contents_player_div {
-            display: grid;
-            grid-template-columns: 50% 50%;
-
             .game_contents_player_profile_div {
-
+                border: solid 1px #ababab;
+                max-width: 340px;
+                height: 103px;
+                
                 .empty_player_thumb {
                     background-color: #bbbbbb;
                 }
 
                 .empty_player_contents {
-                    // background-color: #BFBDBE;
-
                     .empty_player_title {
                         text-align: $aCenter;
                         color: #ababab;
@@ -602,12 +633,12 @@ body {
                 }
 
                 .game_contents_player_thumbnail_div {
-                    width: 84px;
-                    height: 110px;
+                    width: 85px;
+                    height: 103px;
 
                     div {
-                        border: solid 1px #ababab;
-                        width: 80px;
+                        // border: solid 1px #ababab;
+                        // width: 85px;
                     }
 
                     .game_contents_player_thumbnail {
@@ -628,8 +659,8 @@ body {
             }
 
             .game_contents_player_info_div {
-                min-height: 105px;
-                border: solid 1px #ababab;
+                min-height: 103px;
+                // border: solid 1px #ababab;
 
                 min-width: 250px;
                 max-width: 400px;
@@ -639,22 +670,94 @@ body {
                     font-size: $font_14;
                     padding: 10px;
 
-                    .game_user_have_money_div {
+                    .game_user_have_money_div, .game_user_my_location {
                         padding: 5px;
                         font-size: 13px;
+                    }
+
+                    .game_user_have_money_div {
                         font-family: $recipe_korea;
                         border-bottom: solid 1px #ababab;
+                    }
+
+                    .game_user_my_location {
+                        margin-top: 5px;
+                        color: #ababab;
                     }
                 }
             }
 
             .game_contents_player_info_margin {
-                margin: 0px -2px;
+                // margin: 0px -2px;
 
             }
             // .game_player_profile_divs {
             //     display: $inline_block;
             // }
+        }
+    }
+}
+
+#play_game_divs {
+    // opacity: 0;
+
+    #play_game_main_div {
+        padding: 10px 0px;
+
+        #play_round_notice_div {
+            height: 50px;
+            margin-top: 30px;
+
+            h2 {
+                font-size: 30px;
+                font-family: $SDSamliphopangche_Outline;
+                color: #214151;
+                margin: 15px 0px 0px 0px;
+                word-spacing: 10px;
+            }
+        }
+
+        #play_game_notice_div {
+            min-height: 100px;
+
+            text-align: center;
+            margin-top: 30px;
+
+            #play_main_notice_div {
+                font-size: 15px;
+                font-family: $recipe_korea;
+            }
+        }
+    }
+
+    #playing_timer_div {
+        text-align: center;
+
+        div {
+            float: left;
+        }
+
+        #timer_div, #timer_slide_div {
+            width: 360px;
+            border: solid 2px #ababab;
+            border-radius: 5px;
+            margin: 0px 0px 0px 35px;
+            height: 20px;
+            background-color: #f8f1f1;
+        }
+
+        #timer_slide_div {
+            width: 0px;
+            max-width: 360px !important;
+            opacity: 0;
+            margin: -2px -2px !important;
+            background-color: #214151;
+        }
+
+        #timer_notice_div {
+            width: 40px;
+            text-align: $aCenter;
+            font-family: $t_money_font;
         }
     }
 }

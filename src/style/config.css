@@ -42,6 +42,23 @@
   float: right;
 }
 
+/* player color */
+.color_player_1 {
+  color: #28527a;
+}
+
+.color_player_2 {
+  color: #ad6c80;
+}
+
+.color_player_3 {
+  color: #007965;
+}
+
+.color_player_4 {
+  color: #f8dc81;
+}
+
 /* font style */
 @font-face {
   font-family: "TmoneyRoundWindExtraBold";
@@ -58,6 +75,18 @@
 @font-face {
   font-family: "paybooc-Bold";
   src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/paybooc-Bold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "SDSamliphopangche_Outline";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts-20-12@1.0/SDSamliphopangche_Outline.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "HangeulNuri-Bold";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_three@1.0/HangeulNuri-Bold.woff") format("woff");
   font-weight: normal;
   font-style: normal;
 }
@@ -371,9 +400,6 @@ body #notice_div {
   font-family: Recipekorea;
 }
 
-#game_div {
-  opacity: 0;
-}
 #game_div #game_other_div {
   display: grid;
   grid-template-columns: 50% 50%;
@@ -418,12 +444,16 @@ body #notice_div {
   font-family: TmoneyRoundWindExtraBold;
 }
 #game_div #game_contents_div {
+  height: 730px;
   margin-top: 15px;
   padding: 12px 20px;
 }
 #game_div #game_contents_div #game_main_contents_div {
-  min-height: 500px;
-  padding-bottom: 10px;
+  min-height: 587px;
+  padding-bottom: 30px;
+}
+#game_div #game_contents_div #game_main_contents_div .game_map_columns_divs {
+  height: 77px;
 }
 #game_div #game_contents_div #game_main_contents_div #game_main_map_div {
   position: absolute;
@@ -431,7 +461,6 @@ body #notice_div {
   height: 720px;
   border: solid 2px #ababab;
   margin-left: 28% !important;
-  margin-top: -109px !important;
 }
 #game_div #game_contents_div #game_main_contents_div #game_main_map_div .game_main_map_divs {
   font-size: 12px;
@@ -444,7 +473,6 @@ body #notice_div {
 #game_div #game_contents_div #game_main_contents_div #game_main_map_div .game_main_map_divs .game_top_and_bottom_map_div div {
   float: left;
   width: 88.5px;
-  height: 79px;
   max-height: 79px !important;
   text-align: center;
   cursor: pointer;
@@ -474,6 +502,12 @@ body #notice_div {
   border-bottom: solid 1px #ababab;
   width: 100%;
 }
+#game_div #game_contents_div #game_main_contents_div #game_main_map_div .game_main_map_divs .city_price_div {
+  font-size: 14px !important;
+  margin-top: 15px;
+  color: #ababab;
+  font-family: paybooc-Bold;
+}
 #game_div #game_contents_div #game_main_contents_div #game_main_map_div .game_main_map_divs .map_event_div {
   font-family: Recipekorea;
   line-height: 3;
@@ -483,9 +517,10 @@ body #notice_div {
   width: 35px !important;
   margin-top: 10px;
 }
-#game_div #game_contents_div .game_contents_player_div {
-  display: grid;
-  grid-template-columns: 50% 50%;
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_profile_div {
+  border: solid 1px #ababab;
+  max-width: 340px;
+  height: 103px;
 }
 #game_div #game_contents_div .game_contents_player_div .game_contents_player_profile_div .empty_player_thumb {
   background-color: #bbbbbb;
@@ -496,12 +531,8 @@ body #notice_div {
   line-height: 3.5;
 }
 #game_div #game_contents_div .game_contents_player_div .game_contents_player_profile_div .game_contents_player_thumbnail_div {
-  width: 84px;
-  height: 110px;
-}
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_profile_div .game_contents_player_thumbnail_div div {
-  border: solid 1px #ababab;
-  width: 80px;
+  width: 85px;
+  height: 103px;
 }
 #game_div #game_contents_div .game_contents_player_div .game_contents_player_profile_div .game_contents_player_thumbnail_div .game_contents_player_thumbnail {
   height: 80px;
@@ -517,8 +548,7 @@ body #notice_div {
   padding: 4px 0px;
 }
 #game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div {
-  min-height: 105px;
-  border: solid 1px #ababab;
+  min-height: 103px;
   min-width: 250px;
   max-width: 400px;
   text-align: left;
@@ -527,14 +557,66 @@ body #notice_div {
   font-size: 14px;
   padding: 10px;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_have_money_div {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_have_money_div, #game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_my_location {
   padding: 5px;
   font-size: 13px;
+}
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_have_money_div {
   font-family: Recipekorea;
   border-bottom: solid 1px #ababab;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_margin {
-  margin: 0px -2px;
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_my_location {
+  margin-top: 5px;
+  color: #ababab;
+}
+#play_game_divs #play_game_main_div {
+  padding: 10px 0px;
+}
+#play_game_divs #play_game_main_div #play_round_notice_div {
+  height: 50px;
+  margin-top: 30px;
+}
+#play_game_divs #play_game_main_div #play_round_notice_div h2 {
+  font-size: 30px;
+  font-family: SDSamliphopangche_Outline;
+  color: #214151;
+  margin: 15px 0px 0px 0px;
+  word-spacing: 10px;
+}
+#play_game_divs #play_game_main_div #play_game_notice_div {
+  min-height: 100px;
+  text-align: center;
+  margin-top: 30px;
+}
+#play_game_divs #play_game_main_div #play_game_notice_div #play_main_notice_div {
+  font-size: 15px;
+  font-family: Recipekorea;
+}
+#play_game_divs #playing_timer_div {
+  text-align: center;
+}
+#play_game_divs #playing_timer_div div {
+  float: left;
+}
+#play_game_divs #playing_timer_div #timer_div, #play_game_divs #playing_timer_div #timer_slide_div {
+  width: 360px;
+  border: solid 2px #ababab;
+  border-radius: 5px;
+  margin: 0px 0px 0px 35px;
+  height: 20px;
+  background-color: #f8f1f1;
+}
+#play_game_divs #playing_timer_div #timer_slide_div {
+  width: 0px;
+  max-width: 360px !important;
+  opacity: 0;
+  margin: -2px -2px !important;
+  background-color: #214151;
+}
+#play_game_divs #playing_timer_div #timer_notice_div {
+  width: 40px;
+  text-align: center;
+  font-family: TmoneyRoundWindExtraBold;
 }
 
 /*# sourceMappingURL=config.css.map */

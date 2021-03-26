@@ -12,7 +12,8 @@ export interface AllProps {
   gameActions : any,
   _flash : Function,
   player_list : string,
-  start_price : number
+  start_price : number,
+  round_timer : number
 };
 
 class Loading extends React.Component<AllProps> {
@@ -50,9 +51,9 @@ class Loading extends React.Component<AllProps> {
 
     // 게임 초기 설정하기
     _initGameInfo = () => {
-      const { start_price, initActions } = this.props;
+      const { start_price, initActions, gameActions } = this.props;
       const player_list = JSON.parse(this.props.player_list);
-      const Map = require('../../source/map.json').maps;
+      const Map = require('../game/city_info.json');
 
       // 플레이어 설정하기
       for(let i = 0; i < player_list.length; i++) {
@@ -60,8 +61,12 @@ class Loading extends React.Component<AllProps> {
         if(player_list[i]['able'] === true) {
           player_list[i]['money'] = start_price;
           player_list[i]['maps'] = [];
+          player_list[i]['location'] = 0;
         }
       }
+
+      // 타이머 관련
+      gameActions.set_timer({ 'timer' : '-' });
 
       // 맵 저장하기
       initActions.set_setting_state({ 
@@ -85,7 +90,8 @@ class Loading extends React.Component<AllProps> {
 export default connect( 
   ( { init } : StoreState  ) => ({
     player_list : init.player_list,
-    start_price : init.start_price
+    start_price : init.start_price,
+    round_timer : init.round_timer
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

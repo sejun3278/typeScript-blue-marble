@@ -8,6 +8,8 @@ import { bindActionCreators } from 'redux';
 import { StoreState } from '../../Store/modules';
 
 import PlayerList from './player_list';
+import PlayGame from './play_games';
+
 import MapList from '../../source/map.json';
 import Map from './map';
 
@@ -16,7 +18,11 @@ export interface AllProps {
   gameActions : any,
   player_list : string,
   playing : boolean,
-  _flash : Function
+  _flash : Function,
+  turn : number,
+  round : number,
+  round_timer : number,
+  timer : string
 };
 
 const flash_info : any = {
@@ -24,7 +30,9 @@ const flash_info : any = {
   "opacity" : 1.4,
   "on" : false
 };
+
 let game_start_button = false;
+let timer_play : any = false;
 
 class Game extends React.Component<AllProps> {
 
@@ -52,44 +60,133 @@ class Game extends React.Component<AllProps> {
         _flash('#game_main_start_ready_div', false, 1.4, false, 40);
         
         return window.setTimeout( () => {
-          gameActions.game_loading({ 'playing' : true })
+        gameActions.game_loading({ 'playing' : true })
+
+          return window.setTimeout( () => {
+            _flash('#play_game_divs', true, 0, false, 40);
+
+            gameActions.round_start({ 'round' : 1, 'turn' : 1 })
+            gameActions.set_game_notice_ment({ "main_ment" : "<div> <b class='color_player_1'> 플레이어 1 (나) </b> 부터 시작합니다. </div>" })
+  
+            return window.setTimeout( () => {
+              return this._roundStart('turn');
+  
+            }, 1000);
+          }, 300)
         }, 300);
 
       }, 300)
     }
   }
 
+  // 라운드 (턴) 시작하기
+  _roundStart = (type : string) => {
+    const { gameActions, round, turn, _flash, round_timer } = this.props;
+    const ment_info = require('../../source/ment.json');
+    const player_info = require('../../source/player.json');
+
+    let ment : string = '';
+    if(type === 'round') {
+      
+
+    } else if(type === 'turn') {
+      _flash('#play_main_notice_div', false, 1.4, true, 30, null, 1);
+
+      const player_target : any = document.getElementById(String(turn) + '_player_info_div');
+      player_target.style.border = 'solid 3px black';
+
+      if(turn === 1) {
+        ment = '<div> 통행 카드를 뽑아주세요. </div>';
+
+      } else {
+        ment = `<div> <b class=${'player_color_' + turn}> ${turn} 플레이어의 턴입니다. </b> </div>`;
+      }
+
+      // 타이머 지정하기
+      if(round_timer !== 0) {
+        const timer_el : any = document.getElementById('timer_slide_div');
+
+        timer_el.style.opacity = 1.4;
+        timer_el.style.width = String(6 * round_timer) + 'px';
+
+        gameActions.set_timer({ 'timer' : String(round_timer) })
+
+        // 타이머 가동하기
+        timer_play = window.setInterval( () => {
+          return this._timer(player_target);
+        }, 1000)
+      }      
+
+      gameActions.set_game_notice_ment({ 'main_ment' : ment })
+    }
+  }
+
+  // 타이머 시작 / 종료
+  _timer = (_target : any) => {
+    const { gameActions, _flash, timer, turn } = this.props;
+
+    if(timer !== '-') {
+      gameActions.set_timer({ 'timer' : String(Number(timer) - 1) })
+      _flash('#timer_notice_div', false, 1.4, true, 25, null, 1);
+
+      const timer_el : any = document.getElementById('timer_slide_div');
+      timer_el.style.width = String(6 * (Number(timer) - 1)) + 'px';
+
+      if((Number(timer) - 1) <= 0) {
+        window.clearInterval(timer_play);
+        _flash('#timer_slide_div', false, 1.4, false, 30);
+
+        _target.style.border = 'solid 1px #ababab';
+
+        gameActions.set_timer({ 'timer' : '-' })
+
+        let next_turn = turn + 1;
+        return this._nextGames(next_turn);
+      }
+    }
+  }
+
+  // 다음 라운드 (턴 준비)
+  _nextGames = (turn : number) => {
+    const { gameActions } = this.props;
+
+    gameActions.round_start({ 'turn' : turn });
+  }
+
   // 무한 플래쉬 효과
   _infiniteFlash = (target : string, timer : number, on : boolean) => {
     const _target : any = document.getElementById(target);
 
-    if(on === true) {
-      flash_info['flash'] = window.setInterval( () => {
-        _target.style.opacity = flash_info['opacity'];
+    if(_target) { 
+      if(on === true) {
+        flash_info['flash'] = window.setInterval( () => {
+            _target.style.opacity = flash_info['opacity'];
 
-        if(flash_info['on'] === false) {
-          flash_info['opacity'] = flash_info['opacity'] - 0.2;
+            if(flash_info['on'] === false) {
+              flash_info['opacity'] = flash_info['opacity'] - 0.2;
 
-          if(flash_info['opacity'] <= 0) {
-            flash_info['opacity'] = 0;
-            flash_info['on'] = true;
-          }
-        
-        } else if(flash_info['on'] === true) {
-          flash_info['opacity'] = flash_info['opacity'] + 0.2;
+              if(flash_info['opacity'] <= 0) {
+                flash_info['opacity'] = 0;
+                flash_info['on'] = true;
+              }
+            
+            } else if(flash_info['on'] === true) {
+              flash_info['opacity'] = flash_info['opacity'] + 0.2;
 
-          if(flash_info['opacity'] >= 1.4) {
-            flash_info['opacity'] = 1.4;
-            flash_info['on'] = false;
-          }
-        }
-      }, timer)
+              if(flash_info['opacity'] >= 1.4) {
+                flash_info['opacity'] = 1.4;
+                flash_info['on'] = false;
+              }
+            }
+        }, timer)
 
-    } else if(on === false) {
-      _target.style.opacity = 0;
+      } else if(on === false) {
+        _target.style.opacity = 0;
 
-      return clearInterval(flash_info['flash']);
+        return clearInterval(flash_info['flash']);
+      }
     }
+
   }
 
   render() {
@@ -124,7 +221,9 @@ class Game extends React.Component<AllProps> {
             <div id='game_main_map_div'>
                 {playing === false 
                 ? <div id='game_main_start_ready_div'>
-                    <h2 id='game_main_start_title' onClick={game_start_button === false ? _realGameStart : undefined}> 클릭하면 게임이 시작됩니다. </h2>
+                    <h2 id='game_main_start_title' onClick={game_start_button === false ? _realGameStart : undefined}> 
+                      클릭해서 게임을 시작해주세요.
+                    </h2>
                   </div>
 
                 : undefined
@@ -161,7 +260,7 @@ class Game extends React.Component<AllProps> {
                                style={style}
                           >
                             {el.where !== 'middle'
-                              ? <div>
+                              ? <div className='game_top_and_bottom_maps_divs'>
                                   <Map 
                                     class_col={'game_map_columns_divs'}
                                     style={border_style}
@@ -182,6 +281,7 @@ class Game extends React.Component<AllProps> {
 
                                         return(
                                             <Map 
+                                              key={key_3}
                                               class_col={'game_map_rows_divs'}
                                               style={border_style}
                                               info={JSON.stringify(val)}
@@ -189,9 +289,7 @@ class Game extends React.Component<AllProps> {
                                         )
                                     })
 
-                                    : <div>
-
-                                      </div>
+                                    : <PlayGame />
                                   }
                                 </div>
                             }
@@ -222,7 +320,11 @@ class Game extends React.Component<AllProps> {
 export default connect( 
   ( { init, game } : StoreState  ) => ({
     player_list : init.player_list,
-    playing : game.playing
+    playing : game.playing,
+    turn : game.turn,
+    round : game.round,
+    round_timer : init.round_timer,
+    timer : game.timer
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

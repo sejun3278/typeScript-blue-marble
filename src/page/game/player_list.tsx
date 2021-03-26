@@ -25,12 +25,13 @@ class PlayerList extends React.Component<AllProps> {
             {list.map( (el : any, key : number) => {
               let float_style : object = { 'float' : 'left' };
 
-              if(key === 1) {
+              if(key % 2 !== 0) {
                 float_style = { 'float' : 'right' };
               }
 
               return(
                 <Player
+                  number={key + 1}
                   key={key}
                   float_style={float_style}
                   info={JSON.stringify(el)}

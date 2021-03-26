@@ -1,5 +1,799 @@
 {
-    "city" : {
-        
+    "0" : {
+        "name" : "출발점",
+        "type" : "event",
+        "key" : "start"
+    },
+
+    "1" : {
+        "name" : "안동",
+        "type" : "map",
+        "key" : "andong",
+        "price" : 30,
+        "build" : [
+            {
+                "level" : 1,
+                "name" : "주택",
+                "price" : 20
+            },
+
+            {
+                "level" : 2,
+                "name" : "아파트",
+                "price" : 50
+            },
+
+            {
+                "level" : 3,
+                "name" : "호텔",
+                "price" : 100
+            },
+
+            {
+                "level" : 4,
+                "name" : "안동 하회마을",
+                "price" : 150
+            }
+        ],
+        "host" : null
+    },
+
+    "2" : {
+        "name" : "평창",
+        "type" : "map",
+        "key" : "pyeonchang",
+        "price" : 20,
+        "build" : [
+            {
+                "level" : 1,
+                "name" : "주택",
+                "price" : 10
+            },
+
+            {
+                "level" : 2,
+                "name" : "아파트",
+                "price" : 30
+            },
+
+            {
+                "level" : 3,
+                "name" : "호텔",
+                "price" : 80
+            },
+
+            {
+                "level" : 4,
+                "name" : "동계 올림픽 경기장",
+                "price" : 210
+            }
+        ],
+        "host" : null
+    },
+
+    "3" : {
+        "name" : "부산",
+        "type" : "map",
+        "key" : "busan",
+        "price" : 150,
+        "build" : [
+            {
+                "level" : 1,
+                "name" : "주택",
+                "price" : 45
+            },
+
+            {
+                "level" : 2,
+                "name" : "아파트",
+                "price" : 95
+            },
+
+            {
+                "level" : 3,
+                "name" : "호텔",
+                "price" : 150
+            },
+
+            {
+                "level" : 4,
+                "name" : "해운대 해수욕장",
+                "price" : 230
+            }
+        ],
+        "host" : null
+    },
+
+    "4" : {
+        "name" : "여수",
+        "type" : "map",
+        "key" : "yeosu",
+        "price" : 50,
+        "build" : [
+            {
+                "level" : 1,
+                "name" : "주택",
+                "price" : 30
+            },
+
+            {
+                "level" : 2,
+                "name" : "아파트",
+                "price" : 60
+            },
+
+            {
+                "level" : 3,
+                "name" : "호텔",
+                "price" : 120
+            },
+
+            {
+                "level" : 4,
+                "name" : "여수 엑스포",
+                "price" : 150
+            }
+        ],
+        "host" : null
+    },
+
+    "5" : {
+        "name" : "제주",
+        "type" : "map",
+        "key" : "jeju",
+        "price" : 85,
+        "build" : [
+            {
+                "level" : 1,
+                "name" : "주택",
+                "price" : 45
+            },
+
+            {
+                "level" : 2,
+                "name" : "아파트",
+                "price" : 80
+            },
+
+            {
+                "level" : 3,
+                "name" : "호텔",
+                "price" : 170
+            },
+
+            {
+                "level" : 4,
+                "name" : "한라산",
+                "price" : 220
+            }
+        ],
+        "host" : null
+    },
+
+    "7" : {
+        "name" : "독도",
+        "type" : "map",
+        "key" : "dokdo",
+        "price" : 15,
+        "build" : [
+            {
+                "level" : 1,
+                "name" : "주택",
+                "price" : 20
+            },
+
+            {
+                "level" : 2,
+                "name" : "아파트",
+                "price" : 40
+            },
+
+            {
+                "level" : 3,
+                "name" : "호텔",
+                "price" : 100
+            },
+
+            {
+                "level" : 4,
+                "name" : "태극기",
+                "price" : 150
+            }
+        ],
+        "host" : null
+    },
+
+    "8" : {
+        "name" : "경기 광명",
+        "type" : "map",
+        "key" : "gwangmeong",
+        "price" : 55,
+        "build" : [
+            {
+                "level" : 1,
+                "name" : "주택",
+                "price" : 45
+            },
+
+            {
+                "level" : 2,
+                "name" : "아파트",
+                "price" : 90
+            },
+
+            {
+                "level" : 3,
+                "name" : "호텔",
+                "price" : 160
+            },
+
+            {
+                "level" : 4,
+                "name" : "광명 동굴",
+                "price" : 200
+            }
+        ],
+        "host" : null
+    },
+
+    "9" : {
+        "name" : "광주",
+        "type" : "map",
+        "key" : "gwangju",
+        "price" : 90,
+        "build" : [
+            {
+                "level" : 1,
+                "name" : "주택",
+                "price" : 60
+            },
+
+            {
+                "level" : 2,
+                "name" : "아파트",
+                "price" : 120
+            },
+
+            {
+                "level" : 3,
+                "name" : "호텔",
+                "price" : 190
+            },
+
+            {
+                "level" : 4,
+                "name" : "무등산 국립공원",
+                "price" : 230
+            }
+        ],
+        "host" : null
+    },
+
+    "10" : {
+        "name" : "논산",
+        "type" : "map",
+        "key" : "nonsan",
+        "price" : 35,
+        "build" : [
+            {
+                "level" : 1,
+                "name" : "주택",
+                "price" : 30
+            },
+
+            {
+                "level" : 2,
+                "name" : "아파트",
+                "price" : 50
+            },
+
+            {
+                "level" : 3,
+                "name" : "호텔",
+                "price" : 90
+            },
+
+            {
+                "level" : 4,
+                "name" : "육군 육련소",
+                "price" : 150
+            }
+        ],
+        "host" : null
+    },
+
+    "11" : {
+        "name" : "춘천",
+        "type" : "map",
+        "key" : "chuncheon",
+        "price" : 40,
+        "build" : [
+            {
+                "level" : 1,
+                "name" : "주택",
+                "price" : 30
+            },
+
+            {
+                "level" : 2,
+                "name" : "아파트",
+                "price" : 75
+            },
+
+            {
+                "level" : 3,
+                "name" : "호텔",
+                "price" : 120
+            },
+
+            {
+                "level" : 4,
+                "name" : "춘천 레고랜드",
+                "price" : 180
+            }
+        ],
+        "host" : null
+    },
+
+    "12" : {
+        "name" : "대구",
+        "type" : "map",
+        "key" : "daegu",
+        "price" : 110,
+        "build" : [
+            {
+                "level" : 1,
+                "name" : "주택",
+                "price" : 50
+            },
+
+            {
+                "level" : 2,
+                "name" : "아파트",
+                "price" : 90
+            },
+
+            {
+                "level" : 3,
+                "name" : "호텔",
+                "price" : 140
+            },
+
+            {
+                "level" : 4,
+                "name" : "83 타워",
+                "price" : 200
+            }
+        ],
+        "host" : null
+    },
+
+    "13" : {
+        "name" : "천안",
+        "type" : "map",
+        "key" : "cheonan",
+        "price" : 45,
+        "build" : [
+            {
+                "level" : 1,
+                "name" : "주택",
+                "price" : 30
+            },
+
+            {
+                "level" : 2,
+                "name" : "아파트",
+                "price" : 60
+            },
+
+            {
+                "level" : 3,
+                "name" : "호텔",
+                "price" : 100
+            },
+
+            {
+                "level" : 4,
+                "name" : "독립 기념관",
+                "price" : 150
+            }
+        ],
+        "host" : null
+    },
+
+    "15" : {
+        "name" : "강릉",
+        "type" : "map",
+        "key" : "kangnung",
+        "price" : 30,
+        "build" : [
+            {
+                "level" : 1,
+                "name" : "주택",
+                "price" : 20
+            },
+
+            {
+                "level" : 2,
+                "name" : "아파트",
+                "price" : 55
+            },
+
+            {
+                "level" : 3,
+                "name" : "호텔",
+                "price" : 140
+            },
+
+            {
+                "level" : 4,
+                "name" : "경포 해변",
+                "price" : 170
+            }
+        ],
+        "host" : null
+    },
+
+    "16" : {
+        "name" : "서울",
+        "type" : "map",
+        "key" : "seoul",
+        "price" : 230,
+        "build" : [
+            {
+                "level" : 1,
+                "name" : "주택",
+                "price" : 100
+            },
+
+            {
+                "level" : 2,
+                "name" : "아파트",
+                "price" : 220
+            },
+
+            {
+                "level" : 3,
+                "name" : "호텔",
+                "price" : 380
+            },
+
+            {
+                "level" : 4,
+                "name" : "경복궁",
+                "price" : 500
+            }
+        ],
+        "host" : null
+    },
+
+    "17" : {
+        "name" : "청주",
+        "type" : "map",
+        "key" : "cheonju",
+        "price" : 40,
+        "build" : [
+            {
+                "level" : 1,
+                "name" : "주택",
+                "price" : 30
+            },
+
+            {
+                "level" : 2,
+                "name" : "아파트",
+                "price" : 65
+            },
+
+            {
+                "level" : 3,
+                "name" : "호텔",
+                "price" : 95
+            },
+
+            {
+                "level" : 4,
+                "name" : "상당산성",
+                "price" : 160
+            }
+        ],
+        "host" : null
+    },
+
+    "18" : {
+        "name" : "울산",
+        "type" : "map",
+        "key" : "ulsan",
+        "price" : 120,
+        "build" : [
+            {
+                "level" : 1,
+                "name" : "주택",
+                "price" : 40
+            },
+
+            {
+                "level" : 2,
+                "name" : "아파트",
+                "price" : 75
+            },
+
+            {
+                "level" : 3,
+                "name" : "호텔",
+                "price" : 120
+            },
+
+            {
+                "level" : 4,
+                "name" : "대왕암공원",
+                "price" : 180
+            }
+        ],
+        "host" : null
+    },
+
+    "19" : {
+        "name" : "인천",
+        "type" : "map",
+        "key" : "incheon",
+        "price" : 140,
+        "build" : [
+            {
+                "level" : 1,
+                "name" : "주택",
+                "price" : 50
+            },
+
+            {
+                "level" : 2,
+                "name" : "아파트",
+                "price" : 105
+            },
+
+            {
+                "level" : 3,
+                "name" : "호텔",
+                "price" : 180
+            },
+
+            {
+                "level" : 4,
+                "name" : "월미도",
+                "price" : 220
+            }
+        ],
+        "host" : null
+    },
+
+    "21" : {
+        "name" : "경기",
+        "type" : "map",
+        "key" : "gyeonggi",
+        "price" : 110,
+        "build" : [
+            {
+                "level" : 1,
+                "name" : "주택",
+                "price" : 35
+            },
+
+            {
+                "level" : 2,
+                "name" : "아파트",
+                "price" : 75
+            },
+
+            {
+                "level" : 3,
+                "name" : "호텔",
+                "price" : 140
+            },
+
+            {
+                "level" : 4,
+                "name" : "수원 화성",
+                "price" : 250
+            }
+        ],
+        "host" : null
+    },
+
+    "22" : {
+        "name" : "전주",
+        "type" : "map",
+        "key" : "jeonju",
+        "price" : 40,
+        "build" : [
+            {
+                "level" : 1,
+                "name" : "주택",
+                "price" : 25
+            },
+
+            {
+                "level" : 2,
+                "name" : "아파트",
+                "price" : 60
+            },
+
+            {
+                "level" : 3,
+                "name" : "호텔",
+                "price" : 130
+            },
+
+            {
+                "level" : 4,
+                "name" : "전주 한옥마을",
+                "price" : 230
+            }
+        ],
+        "host" : null
+    },
+
+    "23" : {
+        "name" : "포항",
+        "type" : "map",
+        "key" : "pohang",
+        "price" : 60,
+        "build" : [
+            {
+                "level" : 1,
+                "name" : "주택",
+                "price" : 45
+            },
+
+            {
+                "level" : 2,
+                "name" : "아파트",
+                "price" : 100
+            },
+
+            {
+                "level" : 3,
+                "name" : "호텔",
+                "price" : 140
+            },
+
+            {
+                "level" : 4,
+                "name" : "보경사",
+                "price" : 180
+            }
+        ],
+        "host" : null
+    },
+
+    "24" : {
+        "name" : "세종",
+        "type" : "map",
+        "key" : "sejong",
+        "price" : 90,
+        "build" : [
+            {
+                "level" : 1,
+                "name" : "주택",
+                "price" : 60
+            },
+
+            {
+                "level" : 2,
+                "name" : "아파트",
+                "price" : 110
+            },
+
+            {
+                "level" : 3,
+                "name" : "호텔",
+                "price" : 150
+            },
+
+            {
+                "level" : 4,
+                "name" : "정부 세종 청사",
+                "price" : 220
+            }
+        ],
+        "host" : null
+    },
+
+    "25" : {
+        "name" : "목포",
+        "type" : "map",
+        "key" : "mokpo",
+        "price" : 45,
+        "build" : [
+            {
+                "level" : 1,
+                "name" : "주택",
+                "price" : 30
+            },
+
+            {
+                "level" : 2,
+                "name" : "아파트",
+                "price" : 70
+            },
+
+            {
+                "level" : 3,
+                "name" : "호텔",
+                "price" : 110
+            },
+
+            {
+                "level" : 4,
+                "name" : "유달산",
+                "price" : 160
+            }
+        ],
+        "host" : null
+    },
+
+    "26" : {
+        "name" : "대전",
+        "type" : "map",
+        "key" : "deajeon",
+        "price" : 115,
+        "build" : [
+            {
+                "level" : 1,
+                "name" : "주택",
+                "price" : 70
+            },
+
+            {
+                "level" : 2,
+                "name" : "아파트",
+                "price" : 130
+            },
+
+            {
+                "level" : 3,
+                "name" : "호텔",
+                "price" : 190
+            },
+
+            {
+                "level" : 4,
+                "name" : "성심당",
+                "price" : 220
+            }
+        ],
+        "host" : null
+    },
+
+    "27" : {
+        "name" : "경주",
+        "type" : "map",
+        "key" : "gyeonju",
+        "price" : 50,
+        "build" : [
+            {
+                "level" : 1,
+                "name" : "주택",
+                "price" : 45
+            },
+
+            {
+                "level" : 2,
+                "name" : "아파트",
+                "price" : 100
+            },
+
+            {
+                "level" : 3,
+                "name" : "호텔",
+                "price" : 160
+            },
+
+            {
+                "level" : 4,
+                "name" : "불국사",
+                "price" : 280
+            }
+        ],
+        "host" : null
     }
 }
