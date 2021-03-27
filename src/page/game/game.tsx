@@ -1,4 +1,5 @@
 import * as React from 'react';
+import $ from 'jquery';
 
 import { actionCreators as initActions } from '../../Store/modules/init';
 import { actionCreators as gameActions } from '../../Store/modules/game';
@@ -23,7 +24,9 @@ export interface AllProps {
   round : number,
   round_timer : number,
   timer : string,
-  able_player : number
+  able_player : number,
+  overlap_card : boolean,
+  _setCardDeck : Function,
 };
 
 const flash_info : any = {
@@ -82,26 +85,41 @@ class Game extends React.Component<AllProps> {
 
   // 라운드 (턴) 시작하기
   _roundStart = (type : string) => {
-    const { gameActions, round, turn, _flash, round_timer } = this.props;
+    const { gameActions, round, turn, _flash, round_timer, _setCardDeck } = this.props;
     const ment_info = require('../../source/ment.json');
     const player_info = require('../../source/player.json');
 
     let ment : string = '';
     if(type === 'round') {
+      // 라운드 올리기
+      gameActions.round_start({ 'round' : round + 1, 'turn' : 1 });
       
+      // 카드댁 초기화
+      _setCardDeck('init');
+
+      return window.setTimeout( () => {
+        return this._roundStart('turn');
+
+      }, 1000);
 
     } else if(type === 'turn') {
       _flash('#play_main_notice_div', false, 1.4, true, 30, null, 1);
+      _flash('#playing_action_div', true, 0, false, 30);
 
       const player_target : any = document.getElementById(String(turn) + '_player_info_div');
-      player_target.style.border = 'solid 3px black';
+      player_target.style.border = 'solid 3px black';      
 
+      const save_card_info : any = {};
       if(turn === 1) {
-        ment = '<div> 통행 카드를 뽑아주세요. </div>';
+        ment = '<div> 내 턴입니다. </div>';
+        save_card_info['card_select_able'] = true;
 
       } else {
         ment = `<div> <b class=${'color_player_' + turn}> 플레이어 ${turn} </b>의 턴입니다. </div>`;
       }
+
+      save_card_info['card_notice_ment'] = "첫번째 통행 카드를 뽑아주세요.";
+      gameActions.select_card_info(save_card_info);
 
       // 타이머 지정하기
       if(round_timer !== 0) {
@@ -114,7 +132,7 @@ class Game extends React.Component<AllProps> {
 
         // 타이머 가동하기
         timer_play = window.setInterval( () => {
-          return this._timer(player_target);
+          return this._timer();
         }, 1000)
       }      
 
@@ -124,8 +142,8 @@ class Game extends React.Component<AllProps> {
   }
 
   // 타이머 시작 / 종료
-  _timer = (_target : any) => {
-    const { gameActions, _flash, timer, turn } = this.props;
+  _timer = () => {
+    const { gameActions, _flash, timer } = this.props;
 
     if(timer !== '-') {
       gameActions.set_timer({ 'timer' : String(Number(timer) - 1) })
@@ -135,34 +153,26 @@ class Game extends React.Component<AllProps> {
       timer_el.style.width = String(6 * (Number(timer) - 1)) + 'px';
 
       if((Number(timer) - 1) <= 0) {
-        // 턴 종료
-        window.clearInterval(timer_play);
-
-        _flash('#timer_slide_div', false, 1.4, false, 30);
-        _flash('#playing_action_div', false, 1.4, false, 30);
-        _flash('#play_main_notice_div', false, 1.4, false, 30);
-
-        _target.style.border = 'solid 1px #ababab';
-
-        gameActions.set_timer({ 'timer' : '-' })
-
-        window.setTimeout( () => {
-          gameActions.round_start({ 'round_start' : false })
-          gameActions.set_game_notice_ment({ 'main_ment' : '' })
-        }, 300)
-
-        let next_turn = turn + 1;
-        return this._nextGames(next_turn);
+        return this._turnEnd();
       }
     }
   }
 
   // 다음 라운드 (턴 준비)
   _nextGames = (turn : number) => {
-    const { gameActions, able_player, _flash } = this.props;
+    const { gameActions, able_player, _flash, overlap_card, _setCardDeck } = this.props;
 
     if(turn <= able_player) {
       gameActions.round_start({ 'turn' : turn });
+
+      // 카드 초기화하기
+      if(overlap_card === true) {
+        _setCardDeck('init')
+
+      } else {
+        // 사용한 카드는 제외하기
+        _setCardDeck('reset')
+      }
 
       return window.setTimeout( () => {
         this._roundStart('turn');
@@ -175,8 +185,8 @@ class Game extends React.Component<AllProps> {
       // 턴이 모두 돈 후, 다음 라운드 시작
       gameActions.round_start({ 'turn' : 0 });
 
+      this._roundStart('round');
     }
-
   }
 
   // 무한 플래쉬 효과
@@ -212,7 +222,48 @@ class Game extends React.Component<AllProps> {
         return clearInterval(flash_info['flash']);
       }
     }
+  }
 
+  // 턴 끝내기
+  _turnEnd = () => {
+    const { turn, _flash, gameActions } = this.props;
+    const _target : any = document.getElementById(String(turn) + '_player_info_div')
+
+    // 턴 종료
+    window.clearInterval(timer_play);
+
+    // 카드 섞기
+    gameActions.select_card_info({
+      'card_select_able' : false,
+      'select_first_card' : 0,
+      'select_last_card' : 0
+    })
+
+    $('.each_cards_div').animate({
+      'marginLeft' : '0px'
+    }, 200)
+
+    return window.setTimeout( () => {
+      _flash('#card_list_div', false, 1.4, false, 30);
+
+      return window.setTimeout( () => {
+        _flash('#timer_slide_div', false, 1.4, false, 30);
+        _flash('#playing_action_div', false, 1.4, false, 30);
+        _flash('#play_main_notice_div', false, 1.4, false, 30);
+    
+        _target.style.border = 'solid 1px #ababab';
+    
+        gameActions.set_timer({ 'timer' : '-' })
+    
+          window.setTimeout( () => {
+            gameActions.round_start({ 'round_start' : false })
+            gameActions.set_game_notice_ment({ 'main_ment' : '' })
+          }, 300)
+    
+        const next_turn = turn + 1;
+        return this._nextGames(next_turn);
+      }, 200)
+    }, 200)
   }
 
   render() {
@@ -315,7 +366,9 @@ class Game extends React.Component<AllProps> {
                                         )
                                     })
 
-                                    : <PlayGame />
+                                    : <PlayGame 
+                                        {...this}
+                                    />
                                   }
                                 </div>
                             }
@@ -351,7 +404,8 @@ export default connect(
     round : game.round,
     round_timer : init.round_timer,
     timer : game.timer,
-    able_player : init.able_player
+    able_player : init.able_player,
+    overlap_card : init.overlap_card
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

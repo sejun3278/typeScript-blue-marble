@@ -789,9 +789,74 @@ body {
             font-size: 13px;
             font-family: $recipe_korea;
             color: #046582;
+
+            div {
+                display: inline-block;
+                margin: 0px 5px;
+            }
+        }
+
+        #card_select_div {
+            #card_notice_div {
+                height: 40px;
+
+                #card_notice_ment_div {
+                    text-align: center;
+                    font-family: $Y_Spotlight;
+                    margin-top: 5px;
+                }
+            }
+
+            #card_grid_div {
+                display: grid;
+                grid-template-columns: 280px auto;
+                height: 140px;
+
+                #card_list_div {
+                    margin : 20px 20px;
+
+                    .each_cards_div {
+                        display: inline-block;
+                        width: 80px;
+                        height: 100px;
+                        border: dotted 3px #ababab;
+                        background-color: white;
+                        position: absolute;
+                        cursor: pointer;
+                        font-size: 25px;
+                        text-align: center;
+                        color: #bbbbbb;
+                        line-height: 4;
+                        font-family: $Y_Spotlight;
+                    }
+                }
+
+                #card_result_div {
+                    text-align: center;
+                    margin-top: 20px;
+                    font-size: 12px;
+
+                    #last_select_card_div {
+                        margin-top: 16px;
+                    }
+
+                    .card_result_divs {
+                        text-align: center;
+
+                        div {
+                            display: inline-block;
+                            border: dotted 1px #ababab;
+                            width: 50px;
+                            
+                        }
+                    }
+                }
+            }
         }
     }
 }
+
+
 
 #end_turn_button {
     margin: 0px;

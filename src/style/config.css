@@ -647,6 +647,56 @@ body #notice_div {
   font-family: Recipekorea;
   color: #046582;
 }
+#play_game_divs #playing_action_div #playing_select_div div {
+  display: inline-block;
+  margin: 0px 5px;
+}
+#play_game_divs #playing_action_div #card_select_div #card_notice_div {
+  height: 40px;
+}
+#play_game_divs #playing_action_div #card_select_div #card_notice_div #card_notice_ment_div {
+  text-align: center;
+  font-family: Y_Spotlight;
+  margin-top: 5px;
+}
+#play_game_divs #playing_action_div #card_select_div #card_grid_div {
+  display: grid;
+  grid-template-columns: 280px auto;
+  height: 140px;
+}
+#play_game_divs #playing_action_div #card_select_div #card_grid_div #card_list_div {
+  margin: 20px 20px;
+}
+#play_game_divs #playing_action_div #card_select_div #card_grid_div #card_list_div .each_cards_div {
+  display: inline-block;
+  width: 80px;
+  height: 100px;
+  border: dotted 3px #ababab;
+  background-color: white;
+  position: absolute;
+  cursor: pointer;
+  font-size: 25px;
+  text-align: center;
+  color: #bbbbbb;
+  line-height: 4;
+  font-family: Y_Spotlight;
+}
+#play_game_divs #playing_action_div #card_select_div #card_grid_div #card_result_div {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 12px;
+}
+#play_game_divs #playing_action_div #card_select_div #card_grid_div #card_result_div #last_select_card_div {
+  margin-top: 16px;
+}
+#play_game_divs #playing_action_div #card_select_div #card_grid_div #card_result_div .card_result_divs {
+  text-align: center;
+}
+#play_game_divs #playing_action_div #card_select_div #card_grid_div #card_result_div .card_result_divs div {
+  display: inline-block;
+  border: dotted 1px #ababab;
+  width: 50px;
+}
 
 #end_turn_button {
   margin: 0px;

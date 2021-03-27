@@ -8,7 +8,6 @@ import { bindActionCreators } from 'redux';
 import { StoreState } from '../../Store/modules';
 
 import Card from './card';
-import { info } from 'node:console';
 
 export interface AllProps {
   playing : boolean,
@@ -19,20 +18,25 @@ export interface AllProps {
   round_timer : number,
   round_limit : number,
   round_start : boolean
-  turn : number
+  turn : number,
+  _turnEnd : Function,
+  select_type : string | null
 };
 
 class PlayGame extends React.Component<AllProps> {
 
+  
+
   render() {
     const { 
-      playing, round, main_ment, alert_ment, timer, round_timer, round_limit, round_start, turn 
+      playing, round, main_ment, alert_ment, timer, round_timer, round_limit, round_start, turn, _turnEnd, select_type
     } = this.props;
+
+    const build_name = '<　건설';
 
     return(
       <div id='play_game_divs'>
-          {playing === true
-          ? <div id='play_game_main_div' className='aCenter'>
+        <div id='play_game_main_div' className='aCenter'>
 
               <div id='play_round_notice_div'>
                 {round > 0
@@ -65,38 +69,42 @@ class PlayGame extends React.Component<AllProps> {
 
                 <div id='timer_notice_div' dangerouslySetInnerHTML={{ __html : timer }}/>
               </div>
-              
+{/*               
               {round_start === true 
-              ?
+              ? */}
               <div>
                 <div id='playing_action_div'>
 
-                  <div>
-                    <div id='playing_select_div'>
-                      <div> 통행 카드 뽑기 </div>
-                      {/* <div> 건설 <?/div> */}
+                  {round_start === true
+                  ?
+                    <div>
+                      <div id='playing_select_div'>
+                        <div> 통행 카드 뽑기 </div>
+                        {select_type !== null
+                          ? <div> {build_name} </div>
+                          : undefined
+                        }
+                      </div>
+
+                      <Card />
                     </div>
-
-                    <Card />
-                  </div>
-
+                  : undefined}
                 </div>
 
                 {turn === 1
                 ?
-                <h3 id='end_turn_button'> 
+                <h3 id='end_turn_button'
+                    onClick={() => turn === 1 && round_start === true ? _turnEnd() : undefined}
+                > 
                   턴 종료 
                 </h3>
 
                 : undefined}
               </div>
 
-            : undefined}
+            {/* : undefined} */}
 
             </div>
-            
-
-          : undefined}
       </div>
     )
   }
@@ -112,7 +120,8 @@ export default connect(
     round_timer : init.round_timer,
     round_limit : init.round_limit,
     round_start : game.round_start,
-    turn : game.turn
+    turn : game.turn,
+    select_type : game.select_type
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

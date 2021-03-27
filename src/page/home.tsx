@@ -24,6 +24,8 @@ export interface AllProps {
   setting_able : boolean,
   loading : boolean,
   main_start : boolean,
+  card_deck : string,
+  overlap_card_check : string
 };
 
 const modalCustomStyles = {
@@ -121,6 +123,62 @@ class Home extends React.Component<AllProps> {
       recursion(type);
   }
 
+  // 카드댁 구성하기
+  _setCardDeck = (type : string) => {
+    // type : init = 처음 카드댁 구성하기
+    //        reset = 사용한 카드댁 제외하기
+    let card_deck = JSON.parse(this.props.card_deck);
+    if(type === 'init') {
+      card_deck = [];
+    }
+
+    const { initActions } = this.props;
+
+    const overlap_check : any = {};
+    // 카드 구성 Recursion 함수
+    const _setCardDeck : Function = (num : number) => {
+      if(num > 9) {
+        return card_deck;
+      }
+
+      const random = Math.trunc(Math.random() * (10 - 1) + 1);
+      if(type === 'init') {
+        if(overlap_check[random] === undefined) {
+          overlap_check[random] = true;
+          card_deck.push({ 'number' : random, 'use' : false, 'select' : false })
+
+        } else {
+          return _setCardDeck(num);
+        }
+
+      }
+
+      num += 1;
+      return _setCardDeck(num);
+    }
+
+    if(type === 'init') {
+      card_deck = _setCardDeck(1);
+
+    } else if(type === 'reset') {
+      for(let i = 0; i < card_deck.length; i++) {
+        if(card_deck[i].use === true) {
+          card_deck[i] = false;
+        }
+      }
+
+      card_deck = card_deck.filter( (el : any) => {
+        return el !== false;
+      })
+    }
+
+    initActions.set_setting_state({
+      'card_deck' : JSON.stringify(card_deck)
+    })
+
+    return;
+  }
+
   render() {
     const { game_start, setting_modal, setting_type, initActions, setting_able, loading, main_start } = this.props;
     const modal_title = setting_type === 'setting' ? '게임 셋팅' : '게임 방법';
@@ -191,6 +249,8 @@ export default connect(
     setting_able : init.setting_able,
     loading : game.loading,
     main_start : game.main_start,
+    card_deck : init.card_deck,
+    overlap_card_check : game.overlap_card_check
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

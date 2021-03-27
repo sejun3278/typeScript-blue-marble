@@ -10,15 +10,19 @@ export interface AllProps {
     class_col : string,
     style : object,
     info : string,
-    map_info : string
+    map_info : string,
+    player_list : string
 };
 
 class Map extends React.Component<AllProps> {
 
   render() {
     const { class_col, style } = this.props;
+
     const info = JSON.parse(this.props.info);
     const city_info = JSON.parse(this.props.map_info)
+
+    const player_list = JSON.parse(this.props.player_list);
 
     const map_class_col : string = info.type === 'event' ? 'map_event_div' : 'map_name_div'
     let map_icon : string = '';
@@ -35,6 +39,8 @@ class Map extends React.Component<AllProps> {
         city_price = city_info[info.number].price;
       }
     }
+
+    // console.log(info)
 
     return(
         <div className={class_col} style={style}>
@@ -53,6 +59,20 @@ class Map extends React.Component<AllProps> {
                         </div>
                       </div>
                 }
+
+            {info.number === 0 
+              ? player_list.map( (el : any, key : number) => {
+
+                  if(el.able === true) {
+                    return(
+                      <div key={key} className='player_mini_character'>
+                        1
+                      </div>
+                    )
+                  }
+                })
+
+              : undefined}
         </div>
     )
   }
@@ -60,7 +80,8 @@ class Map extends React.Component<AllProps> {
 
 export default connect( 
   ( { init } : StoreState  ) => ({
-    map_info : init.map_info
+    map_info : init.map_info,
+    player_list : init.player_list
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch) 

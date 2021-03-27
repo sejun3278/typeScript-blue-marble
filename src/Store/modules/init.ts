@@ -35,6 +35,7 @@ export interface initState {
     select_character_list : string;
     overlap_card : boolean;
     map_info : string;
+    card_deck : string;
 }
 
 const initialState : initState = {
@@ -57,7 +58,8 @@ const initialState : initState = {
     select_info : JSON.stringify({}),
     select_character_list : JSON.stringify({}),
     overlap_card : true,
-    map_info : JSON.stringify([])
+    map_info : JSON.stringify([]),
+    card_deck : JSON.stringify([])
 }
 
 // const initialState = {
@@ -95,7 +97,8 @@ export default handleActions<initState> ({
             pass_price : data.payload.pass_price !== undefined ? data.payload.pass_price : state.pass_price,
             card_limit : data.payload.card_limit !== undefined ? data.payload.card_limit : state.card_limit,
             overlap_card : data.payload.overlap_card !== undefined ? data.payload.overlap_card : state.overlap_card,
-            map_info : data.payload.map_info !== undefined ? data.payload.map_info : state.map_info
+            map_info : data.payload.map_info !== undefined ? data.payload.map_info : state.map_info,
+            card_deck : data.payload.card_deck !== undefined ? data.payload.card_deck : state.card_deck
         }
     },
 

@@ -13,7 +13,8 @@ export interface AllProps {
   _flash : Function,
   player_list : string,
   start_price : number,
-  round_timer : number
+  round_timer : number,
+  _setCardDeck : Function
 };
 
 class Loading extends React.Component<AllProps> {
@@ -51,7 +52,7 @@ class Loading extends React.Component<AllProps> {
 
     // 게임 초기 설정하기
     _initGameInfo = () => {
-      const { start_price, initActions, gameActions } = this.props;
+      const { start_price, initActions, gameActions, _setCardDeck } = this.props;
       const player_list = JSON.parse(this.props.player_list);
       const Map = require('../game/city_info.json');
 
@@ -68,9 +69,13 @@ class Loading extends React.Component<AllProps> {
       // 타이머 관련
       gameActions.set_timer({ 'timer' : '-' });
 
+      // 카드댁 설정
+      _setCardDeck('init');
+
       // 맵 저장하기
       initActions.set_setting_state({ 
-        'map_info' : JSON.stringify(Map), 
+        'map_info' : JSON.stringify(Map),
+        // 'card_deck' : JSON.stringify(save_card_deck)
       })
 
       initActions.set_player_info({

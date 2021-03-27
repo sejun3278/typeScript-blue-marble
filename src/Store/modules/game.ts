@@ -5,13 +5,15 @@ const ROUNDSTART = 'game/round_start';
 const SETGAMENOTICEMENT = 'game/set_game_notice_ment';
 const SETTIMER = 'game/set_timer';
 const SELECTTYPE = 'game/select_type';
+const SELECTCARDINFO = 'game/select_card_info';
 
 export const actionCreators = {
     game_loading : createAction(GAMELOADING),
     round_start : createAction(ROUNDSTART),
     set_game_notice_ment : createAction(SETGAMENOTICEMENT),
     set_timer : createAction(SETTIMER),
-    select_type : createAction(SELECTTYPE)
+    select_type : createAction(SELECTTYPE),
+    select_card_info : createAction(SELECTCARDINFO)
 }
 
 export interface gameState {
@@ -25,6 +27,12 @@ export interface gameState {
     round : number,
     timer : string,
     select_type : string | null,
+    card_select_able : boolean,
+    card_notice_ment : string,
+    select_first_card : number,
+    select_last_card : number,
+    all_card_num : number,
+    overlap_card_check : string
 }
 
 const initialState : gameState = {
@@ -37,7 +45,13 @@ const initialState : gameState = {
     alert_ment : "",
     round : 0,
     timer : "-",
-    select_type : null
+    select_type : null,
+    card_select_able : false,
+    card_notice_ment : "",
+    select_first_card : 0,
+    select_last_card : 0,
+    all_card_num : 0,
+    overlap_card_check : JSON.stringify({})
 }
 
 export default handleActions<gameState> ({
@@ -46,7 +60,7 @@ export default handleActions<gameState> ({
         ...state,
         loading : data.payload.loading !== undefined ? data.payload.loading : state.loading,
         main_start : data.payload.start !== undefined ? data.payload.start : state.main_start,
-        playing : data.payload.playing !== undefined ? data.payload.playing : state.playing
+        playing : data.payload.playing !== undefined ? data.payload.playing : state.playing,
       };
     },
 
@@ -63,7 +77,7 @@ export default handleActions<gameState> ({
         return {
             ...state,
             main_ment : data.payload.main_ment !== undefined ? data.payload.main_ment : state.main_ment,
-            alert_ment : data.payload.alert_ment !== undefined ? data.payload.alert_ment : state.alert_ment
+            alert_ment : data.payload.alert_ment !== undefined ? data.payload.alert_ment : state.alert_ment,
         }
     },
 
@@ -78,6 +92,18 @@ export default handleActions<gameState> ({
         return {
             ...state,
             select_type : data.payload.select_type !== undefined ? data.payload.select_type : state.select_type
+        }
+    },
+
+    [SELECTCARDINFO] : (state : any, data : any) => {
+        return {
+            ...state,
+            card_select_able : data.payload.card_select_able !== undefined ? data.payload.card_select_able : state.card_select_able,
+            card_notice_ment : data.payload.card_notice_ment !== undefined ? data.payload.card_notice_ment : state.card_notice_ment,
+            select_first_card : data.payload.select_first_card !== undefined ? data.payload.select_first_card : state.select_first_card,
+            select_last_card : data.payload.select_last_card !== undefined ? data.payload.select_last_card : state.select_last_card,
+            all_card_num : data.payload.all_card_num !== undefined ? data.payload.all_card_num : state.all_card_num,
+            overlap_card_check : data.payload.overlap_card_check !== undefined ? data.payload.overlap_card_check : state.overlap_card_check
         }
     }
 
