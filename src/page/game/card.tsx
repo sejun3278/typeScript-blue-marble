@@ -8,6 +8,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'; 
 import { StoreState } from '../../Store/modules';
 
+import CityInfo from './city_info.json';
+
 export interface AllProps {
   initActions : any,
   gameActions : any,
@@ -20,7 +22,9 @@ export interface AllProps {
   card_select_able : boolean
   card_limit : number,
   overlap_card : boolean,
-  all_card_num : number
+  all_card_num : number,
+  player_list : string,
+  map_info : string
 };
 
 class Card extends React.Component<AllProps> {
@@ -41,7 +45,7 @@ class Card extends React.Component<AllProps> {
                 target.style.color = '#bbbbbb';
 
             } else if(type === 'click') {
-                const { card_limit, overlap_card, select_first_card, select_last_card, all_card_num, initActions, gameActions } = this.props;
+                const { card_limit, overlap_card, select_first_card, all_card_num, initActions, gameActions } = this.props;
 
                 let select_num : number | null = null;
                 const save_obj : any = { 'all_card_num' : all_card_num };
@@ -84,6 +88,8 @@ class Card extends React.Component<AllProps> {
 
                 if(save_obj['card_select_able'] === false) {
                     save_obj['card_notice_ment'] = save_obj['all_card_num'] + ' 칸을 이동합니다.';
+
+                    this._moveCharacter(8);
                 }
 
                 initActions.set_setting_state({ 'card_deck' : JSON.stringify(card_deck) })
@@ -99,6 +105,172 @@ class Card extends React.Component<AllProps> {
             }
         }
     }
+
+    // 캐릭터 움직이기
+    _moveCharacter = (move : number) => {
+        const { turn, gameActions } = this.props;
+        const player_list = JSON.parse(this.props.player_list);
+
+        const target : any = document.getElementById('player_main_character_' + turn);
+        const my_location : number = player_list[Number(turn) - 1].location;
+
+        // 캐릭터의 현재 위치 + 이동할 위치
+        let move_location = my_location + move;
+        let cover_move_location = move_location;
+
+        if(move_location > 27) {
+            move_location = move_location - 27;
+        }
+
+        gameActions.move({ 'move_location' : move_location });
+
+        let circle : boolean = false;
+        // 이동하기
+        const _moveAction = (location : number) => {
+            // 최종 목적지 = move_location; ex ) 5 (0 + 5)
+            // 현재 위치 = location; ex ) 0
+            // 이동할 거리 = move; ex ) 5
+            let extra : number = 0;
+            let _next : boolean = false;
+            
+            if( (location < 28 && location >= 21) ) {
+
+                let _move : number = 0;
+                if(cover_move_location > 27) {
+                    extra = -7;
+                    _next = true;
+                    location = 0;
+
+                    cover_move_location = move_location;
+                    circle = true;
+
+                } else if(cover_move_location <= 27) {
+                    extra = location - cover_move_location;
+                }
+
+                if(extra === 0) {
+                    _move = -590;
+                } else if(extra === -1) {
+                    _move = -510;
+                } else if(extra === -2) {
+                    _move = -430;
+                } else if(extra === -3) {
+                    _move = -350;
+                } else if(extra === -4) {
+                    _move = -265;
+                } else if(extra === -5) {
+                    _move = -185;
+                } else if(extra === -6) {
+                    _move = -105;
+                } else {
+                    _move = -35;
+                }
+
+                $(target).animate({ 'marginTop' : _move + 'px' });
+
+
+            } else if( (location < 21 && location >= 14) ) {
+                // 14 ~ 21 사이일 때
+
+                let _move : number = 0;
+                if(cover_move_location > 21) {
+                    extra = -6;
+                    _next = true;
+                    location = 21;
+
+                } else if(cover_move_location <= 21) {
+                    extra = location - cover_move_location;
+                }
+
+                if(extra > 0) {
+                    extra = -extra;
+                }
+
+                if(extra === -1) {
+                    _move = -435;
+                } else if(extra === -2) {
+                    _move = -345;
+                } else if(extra === -3) {
+                    _move = -260;
+                } else if(extra === -4) {
+                    _move = -175;
+                } else if(extra === -5) {
+                    _move = -85;
+                } else if(extra === -6) {
+                    _move = 5;
+                }
+
+                $(target).animate({ 'marginLeft' : _move + 'px' });
+
+            } else if( (location < 14 && location >= 6)) {
+                // 6 ~ 14 사이일 때
+
+                if(cover_move_location > 14) {
+                    extra = -8;
+                    _next = true;
+                    location = 14;
+
+                } else if(cover_move_location <= 14) {
+                    extra = location - cover_move_location;
+                }
+
+                $(target).animate({ 'marginTop' : extra * 85 + 'px' });
+
+            } else if(location < 7 && location >= 0) {
+                // 0 ~ 6 사이일 때
+
+                console.log(cover_move_location)
+                if( cover_move_location > 6 ) {
+                    extra = 6;
+                    _next = true;
+                    location = 6;
+
+                } else {
+                    if(circle === false) {
+                        extra = move + my_location;
+
+                    } else {
+                        extra = cover_move_location;
+                    }
+                }
+                $(target).animate({ 'marginLeft' : extra * -85 + 'px' });
+            }
+
+            if(_next === true) {
+                window.setTimeout( () => {
+                    _moveAction(location);
+
+                }, 300);
+
+            } else {
+                return window.setTimeout( () => {
+                    return this._action(cover_move_location);
+
+                }, 300);
+            }
+        }
+
+        return _moveAction(my_location);
+    }
+
+    // 이동 후 액션취하기
+    _action = (arrive : number) => {
+        const { turn, initActions, gameActions } = this.props;
+        const player_list : any = JSON.parse(this.props.player_list);
+
+        const city : any = JSON.parse(this.props.map_info);
+        const city_info = city[String(arrive)];
+
+        let select_type : string = city_info.type;
+
+        player_list[Number(turn) - 1].location = arrive;
+
+        gameActions.move({ 'move_able' : false });;
+        gameActions.select_type({ 'select_type' : select_type, 'select_info' : JSON.stringify(city_info), "select_tap" : 1 })
+        initActions.set_player_info({ 'player_list' : JSON.stringify(player_list) })
+    }
+
+
 
   render() {
       const { 
@@ -177,7 +349,9 @@ export default connect(
     card_select_able : game.card_select_able,
     card_limit : init.card_limit,
     overlap_card : init.overlap_card,
-    all_card_num : game.all_card_num
+    all_card_num : game.all_card_num,
+    player_list : init.player_list,
+    map_info : init.map_info
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

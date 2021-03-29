@@ -6,6 +6,7 @@ const SETGAMENOTICEMENT = 'game/set_game_notice_ment';
 const SETTIMER = 'game/set_timer';
 const SELECTTYPE = 'game/select_type';
 const SELECTCARDINFO = 'game/select_card_info';
+const MOVE = 'game/move';
 
 export const actionCreators = {
     game_loading : createAction(GAMELOADING),
@@ -13,7 +14,8 @@ export const actionCreators = {
     set_game_notice_ment : createAction(SETGAMENOTICEMENT),
     set_timer : createAction(SETTIMER),
     select_type : createAction(SELECTTYPE),
-    select_card_info : createAction(SELECTCARDINFO)
+    select_card_info : createAction(SELECTCARDINFO),
+    move : createAction(MOVE)
 }
 
 export interface gameState {
@@ -27,12 +29,16 @@ export interface gameState {
     round : number,
     timer : string,
     select_type : string | null,
+    select_info : string,
+    select_tap : number,
     card_select_able : boolean,
     card_notice_ment : string,
     select_first_card : number,
     select_last_card : number,
     all_card_num : number,
-    overlap_card_check : string
+    overlap_card_check : string,
+    move_location : number | null,
+    move_able : boolean
 }
 
 const initialState : gameState = {
@@ -46,12 +52,16 @@ const initialState : gameState = {
     round : 0,
     timer : "-",
     select_type : null,
+    select_info : JSON.stringify({}),
+    select_tap : 0,
     card_select_able : false,
     card_notice_ment : "",
     select_first_card : 0,
     select_last_card : 0,
     all_card_num : 0,
-    overlap_card_check : JSON.stringify({})
+    overlap_card_check : JSON.stringify({}),
+    move_location : null,
+    move_able : true
 }
 
 export default handleActions<gameState> ({
@@ -91,7 +101,9 @@ export default handleActions<gameState> ({
     [SELECTTYPE] : (state : any, data : any) => {
         return {
             ...state,
-            select_type : data.payload.select_type !== undefined ? data.payload.select_type : state.select_type
+            select_type : data.payload.select_type !== undefined ? data.payload.select_type : state.select_type,
+            select_info : data.payload.select_info !== undefined ? data.payload.select_info : state.select_info,
+            select_tap : data.payload.select_tap !== undefined ? data.payload.select_tap : state.select_tap
         }
     },
 
@@ -104,6 +116,14 @@ export default handleActions<gameState> ({
             select_last_card : data.payload.select_last_card !== undefined ? data.payload.select_last_card : state.select_last_card,
             all_card_num : data.payload.all_card_num !== undefined ? data.payload.all_card_num : state.all_card_num,
             overlap_card_check : data.payload.overlap_card_check !== undefined ? data.payload.overlap_card_check : state.overlap_card_check
+        }
+    },
+
+    [MOVE] : (state : any, data : any) => {
+        return {
+            ...state,
+            move_location : data.payload.move_location !== undefined ? data.payload.move_location : state.move_location,
+            move_able : data.payload.move_able !== undefined ? data.payload.move_able : state.move_able
         }
     }
 

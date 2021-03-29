@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { actionCreators as initActions } from '../../Store/modules/init';
+import { actionCreators as gameActions } from '../../Store/modules/game';
 
 import { connect } from 'react-redux'; 
 import { bindActionCreators } from 'redux'; 
@@ -8,16 +9,19 @@ import { StoreState } from '../../Store/modules';
 
 export interface AllProps {
     class_col : string,
-    style : object,
+    style : any,
     info : string,
     map_info : string,
-    player_list : string
+    player_list : string,
+    playing : boolean,
+    able_player : number,
+    move_location : null | number
 };
 
 class Map extends React.Component<AllProps> {
 
   render() {
-    const { class_col, style } = this.props;
+    const { class_col, style, playing, able_player, move_location } = this.props;
 
     const info = JSON.parse(this.props.info);
     const city_info = JSON.parse(this.props.map_info)
@@ -40,14 +44,19 @@ class Map extends React.Component<AllProps> {
       }
     }
 
-    // console.log(info)
+    if(move_location === info.number) {
+      style['backgroundColor'] = '#9fd8df';
+    }
 
     return(
-        <div className={class_col} style={style}>
+        <div className={class_col} style={style}
+            id={'map_number_' + info.number}
+        >
             <div className={map_class_col}>
                 <b> {info.name} </b>
             </div>
 
+            {/* <div id={'map_number_' + info.number}> */}
             {info.type === 'event'
                     ? <img className='event_map_icon' alt='' 
                             src={map_icon}
@@ -59,15 +68,35 @@ class Map extends React.Component<AllProps> {
                         </div>
                       </div>
                 }
+            {/* </div> */}
 
-            {info.number === 0 
+            {info.number === 0 && playing === true
               ? player_list.map( (el : any, key : number) => {
+                  const margin_style : any = { 
+                    'backgroundColor' : el.color
+                  };
+
+                  // 초기 위치 잡기
+                  if(able_player === 2) {
+                    margin_style['marginLeft'] = (key + 1) * 25 + 'px';
+
+                  } else if(able_player === 3) {
+                    margin_style['marginLeft'] = (key + 1) * 20 + 'px';
+
+                  } else if(able_player === 4) {
+                    margin_style['marginLeft'] = (key + 1) * 16 + 'px';
+                  }
+
+
+                  // if(key === 0) {
+                  //   margin_style['marginLeft'] = '1px';
+                  // }
 
                   if(el.able === true) {
                     return(
-                      <div key={key} className='player_mini_character'>
-                        1
-                      </div>
+                      <div key={key} className='player_mini_character' style={margin_style} 
+                           id={'player_main_character_' + el.number} title={'플레이어 ' + el.number}
+                      />
                     )
                   }
                 })
@@ -79,11 +108,15 @@ class Map extends React.Component<AllProps> {
 }
 
 export default connect( 
-  ( { init } : StoreState  ) => ({
+  ( { init, game } : StoreState  ) => ({
     map_info : init.map_info,
-    player_list : init.player_list
+    player_list : init.player_list,
+    playing : game.playing,
+    able_player : init.able_player,
+    move_location : game.move_location
   }), 
     (dispatch) => ({ 
-      initActions: bindActionCreators(initActions, dispatch) 
+      initActions: bindActionCreators(initActions, dispatch),
+      gamections: bindActionCreators(gameActions, dispatch)
   }) 
 )(Map);

@@ -205,6 +205,7 @@
 
     "8" : {
         "name" : "경기 광명",
+        "fullname" : "경기도 광명시",
         "type" : "map",
         "key" : "gwangmeong",
         "price" : 55,

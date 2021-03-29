@@ -791,6 +791,7 @@ body {
             color: #046582;
 
             div {
+                cursor: pointer;
                 display: inline-block;
                 margin: 0px 5px;
             }
@@ -869,4 +870,22 @@ body {
     border-radius: 5px;
     font-family:$Y_Spotlight;
     cursor: pointer;
+}
+
+.player_mini_character {
+    height: 10px !important;
+    width: 10px !important;
+    position: $absolute;
+    margin-top: -30px;
+    margin-right: 20px !important;
+    border: solid 3px white;
+    border-radius: 10px;
+}
+
+#build_div {
+    border-top: solid 2px #ababab;
+
+    h3 {
+        font-family: $Y_Spotlight;
+    }
 }

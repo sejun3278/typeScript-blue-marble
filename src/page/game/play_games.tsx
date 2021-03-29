@@ -8,8 +8,10 @@ import { bindActionCreators } from 'redux';
 import { StoreState } from '../../Store/modules';
 
 import Card from './card';
+import Build from './build';
 
 export interface AllProps {
+  gameActions : any,
   playing : boolean,
   main_ment : string,
   alert_ment : string,
@@ -20,17 +22,20 @@ export interface AllProps {
   round_start : boolean
   turn : number,
   _turnEnd : Function,
-  select_type : string | null
+  select_type : string | null,
+  select_info : string,
+  select_tap : number,
+  move_able : boolean,
+  move_location : number | null
 };
 
 class PlayGame extends React.Component<AllProps> {
 
-  
-
   render() {
     const { 
-      playing, round, main_ment, alert_ment, timer, round_timer, round_limit, round_start, turn, _turnEnd, select_type
+      round, main_ment, alert_ment, timer, round_timer, round_limit, round_start, turn, _turnEnd, select_type, select_tap, gameActions
     } = this.props;
+    const select_info = JSON.parse(this.props.select_info);
 
     const build_name = '<　건설';
 
@@ -79,14 +84,30 @@ class PlayGame extends React.Component<AllProps> {
                   ?
                     <div>
                       <div id='playing_select_div'>
-                        <div> 통행 카드 뽑기 </div>
+                        <div onClick={() => gameActions.select_type({ 'select_tap' : 0 })}
+                            style={select_tap !== 0 ?  { 'color' : '#ababab' } : undefined}
+                        > 
+                          통행 카드 뽑기 
+                        </div>
+
                         {select_type !== null
-                          ? <div> {build_name} </div>
+                          ? <div onClick={() => gameActions.select_type({ 'select_tap' : 1 })}
+                                style={select_tap !== 1 ?  { 'color' : '#ababab' } : undefined}
+                            >
+                              {build_name} 
+                          
+                            </div>
                           : undefined
                         }
                       </div>
 
-                      <Card />
+                      {select_tap === 0
+                        ? <Card />
+
+                        : <Build />
+                      }
+                      
+
                     </div>
                   : undefined}
                 </div>
@@ -121,7 +142,11 @@ export default connect(
     round_limit : init.round_limit,
     round_start : game.round_start,
     turn : game.turn,
-    select_type : game.select_type
+    select_type : game.select_type,
+    select_info : game.select_info,
+    select_tap : game.select_tap,
+    move_able : game.move_able,
+    move_location : game.move_location
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

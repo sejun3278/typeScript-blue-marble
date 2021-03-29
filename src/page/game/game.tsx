@@ -45,7 +45,7 @@ class Game extends React.Component<AllProps> {
     window.scrollTo(0, 80);
 
     // 초기 무한 플래쉬
-    this._infiniteFlash('game_main_start_title', 70, true)
+    this._infiniteFlash('game_main_start_title', 70, true);
   }
 
   // 돈 컴마 표시하기
@@ -116,6 +116,9 @@ class Game extends React.Component<AllProps> {
 
       } else {
         ment = `<div> <b class=${'color_player_' + turn}> 플레이어 ${turn} </b>의 턴입니다. </div>`;
+
+        // 컴퓨터 행동하기
+        this._playingComputerAction();
       }
 
       save_card_info['card_notice_ment'] = "첫번째 통행 카드를 뽑아주세요.";
@@ -130,8 +133,11 @@ class Game extends React.Component<AllProps> {
 
         gameActions.set_timer({ 'timer' : String(round_timer) })
 
+        this._infiniteFlash('player_main_character_' + turn, 60, true);
+
         // 타이머 가동하기
         timer_play = window.setInterval( () => {
+
           return this._timer();
         }, 1000)
       }      
@@ -229,6 +235,13 @@ class Game extends React.Component<AllProps> {
     const { turn, _flash, gameActions } = this.props;
     const _target : any = document.getElementById(String(turn) + '_player_info_div')
 
+    this._infiniteFlash('player_main_character_' + turn, 60, false);
+    _flash('#player_main_character_' + turn, true, 0, false, 30);
+
+    gameActions.move({ 'move_location' : null, 'move_able' : true });
+
+    gameActions.select_type({ 'select_type' : null, 'select_info' : JSON.stringify({}), "select_tap" : 0 })
+
     // 턴 종료
     window.clearInterval(timer_play);
 
@@ -264,6 +277,11 @@ class Game extends React.Component<AllProps> {
         return this._nextGames(next_turn);
       }, 200)
     }, 200)
+  }
+
+  // 컴퓨터 행동 함수
+  _playingComputerAction = () => {
+
   }
 
   render() {
