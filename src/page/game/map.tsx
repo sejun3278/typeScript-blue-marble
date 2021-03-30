@@ -38,21 +38,45 @@ class Map extends React.Component<AllProps> {
     }
 
     let city_price : number = 0;
+    const city_style : any = {};
     if(city_info[info.number]) {
       if(city_info[info.number].type === 'map') {
-        city_price = city_info[info.number].price;
+
+        if(city_info[info.number].host === null) {
+          // 소유주가 없을 경우 토지 매입비로 표시
+          city_price = city_info[info.number].price;
+          
+        } else {
+          // 소유주가 있을 경우 통행료로 표시
+          city_price = city_info[info.number].pass;
+          city_style['color'] = player_list[city_info[info.number].host - 1].color
+        }
       }
     }
 
+    const cover_style : any = JSON.parse(JSON.stringify(style));
     if(move_location === info.number) {
-      style['backgroundColor'] = '#9fd8df';
+      cover_style['backgroundColor'] = '#9fd8df';
     }
 
+    const color_style : any = {};
+    if(city_info[info.number] !== undefined) {
+      if(city_info[info.number].host !== undefined) {
+        if(city_info[info.number].host !== null) {
+          const host = city_info[info.number].host;
+
+          color_style['backgroundColor'] = player_list[host - 1].color;
+          color_style['color'] = 'white'
+        }
+      }
+    }
     return(
-        <div className={class_col} style={style}
+        <div className={class_col} style={cover_style}
             id={'map_number_' + info.number}
         >
-            <div className={map_class_col}>
+            <div className={map_class_col}
+                 style={color_style}
+            >
                 <b> {info.name} </b>
             </div>
 
@@ -63,7 +87,9 @@ class Map extends React.Component<AllProps> {
                         />
 
                     : <div>
-                        <div className='city_price_div'>
+                        <div className='city_price_div'
+                            style={city_style}
+                        >
                           {city_price} 만원
                         </div>
                       </div>
@@ -86,11 +112,6 @@ class Map extends React.Component<AllProps> {
                   } else if(able_player === 4) {
                     margin_style['marginLeft'] = (key + 1) * 16 + 'px';
                   }
-
-
-                  // if(key === 0) {
-                  //   margin_style['marginLeft'] = '1px';
-                  // }
 
                   if(el.able === true) {
                     return(

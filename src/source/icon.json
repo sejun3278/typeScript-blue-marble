@@ -22,6 +22,15 @@
         "start" : "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2018/png/iconmonstr-arrow-left-circle-thin.png&r=0&g=0&b=0"
     },
 
+    "building" : {
+        "house" : "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2012/png/iconmonstr-home-9.png&r=0&g=0&b=0",
+        "house_gray" : "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2012/png/iconmonstr-home-9.png&r=171&g=171&b=171",
+        "apartment" : "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2017/png/iconmonstr-building-20.png&r=0&g=0&b=0",
+        "apartment_gray" : "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2017/png/iconmonstr-building-20.png&r=171&g=171&b=171",
+        "hotel" : "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2017/png/iconmonstr-building-24.png&r=0&g=0&b=0",
+        "hotel_gray" : "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2017/png/iconmonstr-building-24.png&r=171&g=171&b=171"
+    },
+
     "img" : {
         "character" : {
             "설명" : "캐릭터 이미지",

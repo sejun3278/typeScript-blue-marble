@@ -3,16 +3,16 @@ import $ from 'jquery';
 
 import { actionCreators as initActions } from '../../Store/modules/init';
 import { actionCreators as gameActions } from '../../Store/modules/game';
+import { actionCreators as functionsActions } from '../../Store/modules/functions';
 
 import { connect } from 'react-redux'; 
 import { bindActionCreators } from 'redux'; 
 import { StoreState } from '../../Store/modules';
 
-import CityInfo from './city_info.json';
-
 export interface AllProps {
   initActions : any,
   gameActions : any,
+  functionsActions : any,
   card_deck : string,
   card_notice_ment : string,
   select_first_card : number,
@@ -29,8 +29,16 @@ export interface AllProps {
 
 class Card extends React.Component<AllProps> {
 
+    componentDidMount() {
+        const { functionsActions } = this.props;
+
+        functionsActions.save_function({
+            _moveCharacter : this._moveCharacter
+        })
+    }
+
   _toggleCardEvent = (event : any, type : string, key : number) => {
-    const target = event.target;
+    const target = event !== null ? event.target : document.getElementById(event);
     const card_deck : any = JSON.parse(this.props.card_deck);
 
     const able = card_deck[key].select === false && card_deck[key].use === false
@@ -89,7 +97,7 @@ class Card extends React.Component<AllProps> {
                 if(save_obj['card_select_able'] === false) {
                     save_obj['card_notice_ment'] = save_obj['all_card_num'] + ' 칸을 이동합니다.';
 
-                    this._moveCharacter(8);
+                    this._moveCharacter(save_obj['all_card_num']);
                 }
 
                 initActions.set_setting_state({ 'card_deck' : JSON.stringify(card_deck) })
@@ -97,11 +105,6 @@ class Card extends React.Component<AllProps> {
 
                 $(target).animate({ 'marginTop' : '-20px' }, 200);
                 $(target).css({ 'zIndex' : z_idx });
-            }
-
-        } else {
-            if(type === 'click') {
-
             }
         }
     }
@@ -218,8 +221,6 @@ class Card extends React.Component<AllProps> {
 
             } else if(location < 7 && location >= 0) {
                 // 0 ~ 6 사이일 때
-
-                console.log(cover_move_location)
                 if( cover_move_location > 6 ) {
                     extra = 6;
                     _next = true;
@@ -269,8 +270,6 @@ class Card extends React.Component<AllProps> {
         gameActions.select_type({ 'select_type' : select_type, 'select_info' : JSON.stringify(city_info), "select_tap" : 1 })
         initActions.set_player_info({ 'player_list' : JSON.stringify(player_list) })
     }
-
-
 
   render() {
       const { 
@@ -355,6 +354,7 @@ export default connect(
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),
-      gameActions: bindActionCreators(gameActions, dispatch) 
+      gameActions: bindActionCreators(gameActions, dispatch),
+      functionsActions: bindActionCreators(functionsActions, dispatch),
   }) 
 )(Card);

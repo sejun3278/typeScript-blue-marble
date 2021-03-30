@@ -26,17 +26,20 @@ export interface AllProps {
   select_info : string,
   select_tap : number,
   move_able : boolean,
-  move_location : number | null
+  move_location : number | null,
+  _removeAlertMent : Function,
+  map_info : string
 };
 
 class PlayGame extends React.Component<AllProps> {
 
   render() {
     const { 
-      round, main_ment, alert_ment, timer, round_timer, round_limit, round_start, turn, _turnEnd, select_type, select_tap, gameActions
+      round, main_ment, alert_ment, timer, round_timer, round_limit, round_start, turn, _turnEnd, select_type, select_tap, gameActions, move_location
     } = this.props;
+    // const map_info = JSON.parse(this.props.map_info);
     const select_info = JSON.parse(this.props.select_info);
-
+    
     const build_name = '<　건설';
 
     return(
@@ -74,15 +77,13 @@ class PlayGame extends React.Component<AllProps> {
 
                 <div id='timer_notice_div' dangerouslySetInnerHTML={{ __html : timer }}/>
               </div>
-{/*               
-              {round_start === true 
-              ? */}
+
               <div>
                 <div id='playing_action_div'>
 
                   {round_start === true
                   ?
-                    <div>
+                    <div id='playing_contents_div'>
                       <div id='playing_select_div'>
                         <div onClick={() => gameActions.select_type({ 'select_tap' : 0 })}
                             style={select_tap !== 0 ?  { 'color' : '#ababab' } : undefined}
@@ -90,7 +91,7 @@ class PlayGame extends React.Component<AllProps> {
                           통행 카드 뽑기 
                         </div>
 
-                        {select_type !== null
+                        {select_type !== null || (select_info !== null && select_info.type === 'map')
                           ? <div onClick={() => gameActions.select_type({ 'select_tap' : 1 })}
                                 style={select_tap !== 1 ?  { 'color' : '#ababab' } : undefined}
                             >
@@ -100,11 +101,13 @@ class PlayGame extends React.Component<AllProps> {
                           : undefined
                         }
                       </div>
-
+                        
                       {select_tap === 0
                         ? <Card />
 
-                        : <Build />
+                        : select_info.type === 'map' 
+                            ? <Build {...this.props} />
+                            : undefined
                       }
                       
 
@@ -122,8 +125,6 @@ class PlayGame extends React.Component<AllProps> {
 
                 : undefined}
               </div>
-
-            {/* : undefined} */}
 
             </div>
       </div>
@@ -146,7 +147,8 @@ export default connect(
     select_info : game.select_info,
     select_tap : game.select_tap,
     move_able : game.move_able,
-    move_location : game.move_location
+    move_location : game.move_location,
+    map_info : init.map_info
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

@@ -108,6 +108,7 @@ class Player extends React.Component<AllProps> {
                 : <div className='game_contents_user_info_div'>
                     <div className='game_user_have_money_div'> 보유 자산　|　{money} 만원 </div>
                     <div className='game_user_my_location'> 현재 위치　|　{my_location} </div>
+                    <div className='game_user_has_location'> 보유 도시　|　{info.maps.length}　도시 소유 중 </div>
                   </div>
             }
         </div>

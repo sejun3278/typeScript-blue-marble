@@ -38,7 +38,8 @@ export interface gameState {
     all_card_num : number,
     overlap_card_check : string,
     move_location : number | null,
-    move_able : boolean
+    move_able : boolean,
+    alert_able : boolean
 }
 
 const initialState : gameState = {
@@ -61,7 +62,8 @@ const initialState : gameState = {
     all_card_num : 0,
     overlap_card_check : JSON.stringify({}),
     move_location : null,
-    move_able : true
+    move_able : true,
+    alert_able : true
 }
 
 export default handleActions<gameState> ({
@@ -88,6 +90,7 @@ export default handleActions<gameState> ({
             ...state,
             main_ment : data.payload.main_ment !== undefined ? data.payload.main_ment : state.main_ment,
             alert_ment : data.payload.alert_ment !== undefined ? data.payload.alert_ment : state.alert_ment,
+            alert_able : data.payload.alert_able !== undefined ? data.payload.alert_able : state.alert_able
         }
     },
 
@@ -125,6 +128,6 @@ export default handleActions<gameState> ({
             move_location : data.payload.move_location !== undefined ? data.payload.move_location : state.move_location,
             move_able : data.payload.move_able !== undefined ? data.payload.move_able : state.move_able
         }
-    }
+    },
 
 }, initialState);

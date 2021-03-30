@@ -3,6 +3,7 @@ import $ from 'jquery';
 
 import { actionCreators as initActions } from '../../Store/modules/init';
 import { actionCreators as gameActions } from '../../Store/modules/game';
+import { actionCreators as functionsActions } from '../../Store/modules/functions';
 
 import { connect } from 'react-redux'; 
 import { bindActionCreators } from 'redux'; 
@@ -27,6 +28,9 @@ export interface AllProps {
   able_player : number,
   overlap_card : boolean,
   _setCardDeck : Function,
+  alert_able : boolean,
+  map_info : string,
+  _moveCharacter : Function
 };
 
 const flash_info : any = {
@@ -86,8 +90,8 @@ class Game extends React.Component<AllProps> {
   // 라운드 (턴) 시작하기
   _roundStart = (type : string) => {
     const { gameActions, round, turn, _flash, round_timer, _setCardDeck } = this.props;
-    const ment_info = require('../../source/ment.json');
-    const player_info = require('../../source/player.json');
+    const player_list = JSON.parse(this.props.player_list);
+    const map_info = JSON.parse(this.props.map_info);
 
     let ment : string = '';
     if(type === 'round') {
@@ -120,6 +124,12 @@ class Game extends React.Component<AllProps> {
         // 컴퓨터 행동하기
         this._playingComputerAction();
       }
+
+      // 플레이어 현재 위치 파악하기
+      const now_location = player_list[turn - 1].location;
+      gameActions.move({ 'move_location' : now_location })
+
+      gameActions.select_type({ 'select_info' : JSON.stringify( map_info[now_location] )})
 
       save_card_info['card_notice_ment'] = "첫번째 통행 카드를 뽑아주세요.";
       gameActions.select_card_info(save_card_info);
@@ -249,7 +259,8 @@ class Game extends React.Component<AllProps> {
     gameActions.select_card_info({
       'card_select_able' : false,
       'select_first_card' : 0,
-      'select_last_card' : 0
+      'select_last_card' : 0,
+      'all_card_num' : 0
     })
 
     $('.each_cards_div').animate({
@@ -281,7 +292,40 @@ class Game extends React.Component<AllProps> {
 
   // 컴퓨터 행동 함수
   _playingComputerAction = () => {
+    const { _moveCharacter } = this.props;
 
+    window.setTimeout( () => {
+      // _moveCharacter(1)
+      this._turnEnd();
+    }, 2000)
+  }
+
+  // 부가 메세지 삭제하기
+  _removeAlertMent = (ment : string) => {
+    const { gameActions, _flash, alert_able } = this.props;
+
+    if(alert_able === true) {
+      _flash('#play_additional_notice_div', true, 0, false, 40);
+
+      gameActions.set_game_notice_ment({
+        'alert_ment' : ment,
+        'alert_able' : false
+      })
+
+      return window.setTimeout( () => {
+        _flash('#play_additional_notice_div', false, 1.4, false, 40);
+
+        return window.setTimeout( () => {
+          gameActions.set_game_notice_ment({
+            'alert_ment' : "",
+            'alert_able' : true
+          })
+        }, 300)
+
+
+
+      }, 2000)
+    }
   }
 
   render() {
@@ -291,7 +335,7 @@ class Game extends React.Component<AllProps> {
 
     const top_player_list = player_list.slice(0, 2);
     const bottom_player_list = player_list.slice(2, 4);
-    
+
     return(
       <div id='game_div'>
         <div id='game_other_div'>
@@ -415,7 +459,7 @@ class Game extends React.Component<AllProps> {
 }
 
 export default connect( 
-  ( { init, game } : StoreState  ) => ({
+  ( { init, game, functions } : StoreState  ) => ({
     player_list : init.player_list,
     playing : game.playing,
     turn : game.turn,
@@ -423,10 +467,14 @@ export default connect(
     round_timer : init.round_timer,
     timer : game.timer,
     able_player : init.able_player,
-    overlap_card : init.overlap_card
+    overlap_card : init.overlap_card,
+    alert_able : game.alert_able,
+    map_info : init.map_info,
+    _moveCharacter : functions._moveCharacter
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),
-      gameActions: bindActionCreators(gameActions, dispatch)
+      gameActions: bindActionCreators(gameActions, dispatch),
+      functionsActions : bindActionCreators(functionsActions, dispatch)
   }) 
 )(Game);

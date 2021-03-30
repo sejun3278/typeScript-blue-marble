@@ -568,7 +568,7 @@ body #notice_div {
   font-size: 14px;
   padding: 10px;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_have_money_div, #game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_my_location {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_have_money_div, #game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_my_location, #game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_has_location {
   padding: 5px;
   font-size: 13px;
 }
@@ -576,9 +576,13 @@ body #notice_div {
   font-family: Recipekorea;
   border-bottom: solid 1px #ababab;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_my_location {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_my_location, #game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_has_location {
   margin-top: 5px;
   color: #ababab;
+}
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_has_location {
+  margin-top: 0px;
+  padding-bottom: 0px;
 }
 #play_game_divs #play_game_main_div {
   padding: 10px 0px;
@@ -603,7 +607,13 @@ body #notice_div {
   font-size: 15px;
   font-family: Recipekorea;
 }
+#play_game_divs #play_game_main_div #play_game_notice_div #play_additional_notice_div {
+  margin-top: 5px;
+  color: orange;
+  font-family: Y_Spotlight;
+}
 #play_game_divs #playing_timer_div {
+  margin-top: -20px;
   text-align: center;
   line-height: 0;
 }
@@ -639,7 +649,7 @@ body #notice_div {
   border-radius: 5px;
   display: inline-block;
   width: 85%;
-  height: 230px;
+  height: 255px;
 }
 #play_game_divs #playing_action_div #playing_select_div {
   margin-top: 15px;
@@ -661,6 +671,7 @@ body #notice_div {
   margin-top: 5px;
 }
 #play_game_divs #playing_action_div #card_select_div #card_grid_div {
+  margin-top: 30px;
   display: grid;
   grid-template-columns: 280px auto;
   height: 140px;
@@ -725,8 +736,69 @@ body #notice_div {
 #build_div {
   border-top: solid 2px #ababab;
 }
-#build_div h3 {
+#build_div #build_city_contents_div {
+  margin-top: -10px;
+}
+#build_div #build_city_info_div {
   font-family: Y_Spotlight;
+}
+#build_div #build_city_info_div .build_notice_grid_div {
+  display: grid;
+  grid-template-columns: 50% auto;
+}
+#build_div #build_city_info_div .build_notice_grid_div #build_host_notice, #build_div #build_city_info_div .build_notice_grid_div #pass_price_notice_div {
+  text-align: left !important;
+}
+#build_div #buy_map_div {
+  margin-top: 45px;
+}
+#build_div #buy_map_div input {
+  margin-top: -5px;
+  width: 80%;
+  background-color: white;
+  height: 30px;
+  line-height: 30px;
+  font-family: Recipekorea;
+  cursor: pointer;
+}
+#build_div #build_map_div {
+  display: grid;
+  padding: 0px 10px;
+  margin-top: 15px;
+}
+#build_div #build_map_div .build_select_divs {
+  border: solid 1px #ababab;
+  height: 80px;
+  color: #ababab;
+  cursor: pointer;
+}
+#build_div #build_map_div .build_select_divs .build_select_title_div {
+  font-size: 9px !important;
+  height: 25px;
+  line-height: 25px;
+  border-bottom: solid 1px #ababab;
+}
+#build_div #build_map_div .build_select_divs .building_image {
+  width: 30px;
+  height: 30px;
+  margin-top: 5px;
+}
+#build_div #build_map_div .build_select_divs .build_price_div {
+  height: 10px;
+  line-height: 10px;
+}
+#build_div #build_map_div .build_select_divs #build_confirm_div {
+  height: 52px;
+  font-size: 18px;
+  font-family: SDSamliphopangche_Outline;
+  opacity: 0.8;
+  line-height: 52px;
+  border: solid 1px black;
+  background-color: black;
+  color: white;
+  width: 115px;
+  position: absolute;
+  margin: -52px 0px;
 }
 
 /*# sourceMappingURL=config.css.map */

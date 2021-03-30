@@ -681,7 +681,7 @@ body {
                     font-size: $font_14;
                     padding: 10px;
 
-                    .game_user_have_money_div, .game_user_my_location {
+                    .game_user_have_money_div, .game_user_my_location, .game_user_has_location {
                         padding: 5px;
                         font-size: 13px;
                     }
@@ -691,9 +691,14 @@ body {
                         border-bottom: solid 1px #ababab;
                     }
 
-                    .game_user_my_location {
+                    .game_user_my_location, .game_user_has_location {
                         margin-top: 5px;
                         color: #ababab;
+                    }
+
+                    .game_user_has_location {
+                        margin-top: 0px;
+                        padding-bottom: 0px;
                     }
                 }
             }
@@ -738,10 +743,17 @@ body {
                 font-size: 15px;
                 font-family: $recipe_korea;
             }
+
+            #play_additional_notice_div {
+                margin-top: 5px;
+                color: orange;
+                font-family: $Y_Spotlight;
+            }
         }
     }
 
     #playing_timer_div {
+        margin-top: -20px;
         text-align: center;
         line-height: 0;
 
@@ -782,7 +794,10 @@ body {
         border-radius: 5px;
         display: inline-block;
         width: 85%;
-        height: 230px;
+        height: 255px;
+
+        #playing_contents_div {
+        }
 
         #playing_select_div {
             margin-top: 15px;
@@ -809,6 +824,7 @@ body {
             }
 
             #card_grid_div {
+                margin-top: 30px;
                 display: grid;
                 grid-template-columns: 280px auto;
                 height: 140px;
@@ -885,7 +901,95 @@ body {
 #build_div {
     border-top: solid 2px #ababab;
 
-    h3 {
+    #build_city_contents_div {
+        margin-top: -10px;
+    }
+
+    #build_city_info_div {
         font-family: $Y_Spotlight;
+
+        .build_notice_grid_div {
+            display: grid;
+            grid-template-columns: 50% auto;
+
+            #build_host_notice, #pass_price_notice_div {
+                text-align: $aLeft !important;
+            }
+        }
+
+        // h3 { 
+        //     // margin-top: 15px !important; 
+        //     margin-bottom: 0px;
+        // }
+        // p {
+        //     font-family: $Y_Spotlight;
+        //     margin-top: 3px !important;
+        //     color: #ababab;
+        // }
+
+        // #build_host_notice, #pass_price_div {
+        //     margin-top: -15px !important;
+        //     margin-bottom: 10px;
+        // }
+    }
+
+    #buy_map_div {
+        margin-top: 45px;  
+        
+        input {
+            margin-top: -5px;
+            width: 80%;
+            background-color: white;
+            height: 30px;
+            line-height: 30px;
+            font-family: $recipe_korea;
+            cursor: pointer;
+        }
+    }
+
+    #build_map_div {
+        display: grid;
+        // grid-template-columns: repeat(4, 25%);
+        padding: 0px 10px;
+        margin-top: 15px;
+
+        .build_select_divs {
+            border: solid 1px #ababab;
+            height: 80px;
+            color: #ababab;
+            cursor: pointer;
+
+            .build_select_title_div {
+                font-size: 9px !important;
+                height: 25px;
+                line-height: 25px;
+                border-bottom: solid 1px #ababab;
+            }
+
+            .building_image {
+                width: 30px;
+                height: 30px;
+                margin-top: 5px;
+            }
+
+            .build_price_div {
+                height: 10px;
+                line-height: 10px;
+            }
+
+            #build_confirm_div {
+                height: 52px;
+                font-size: 18px;
+                font-family: $SDSamliphopangche_Outline;
+                opacity: 0.8;
+                line-height: 52px;
+                border: solid 1px black;
+                background-color: black;
+                color: white;
+                width: 115px;
+                position: $absolute;
+                margin: -52px 0px;
+            }
+        }
     }
 }

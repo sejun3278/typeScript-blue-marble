@@ -2,11 +2,16 @@
     "0" : {
         "name" : "출발점",
         "type" : "event",
-        "key" : "start"
+        "key" : "start",
+        "number" : 0
     },
 
     "1" : {
         "name" : "안동",
+        "info" : {
+            "fullname" : "경상북도 안동시",
+            "person" : "158,803 명"
+        },
         "type" : "map",
         "key" : "andong",
         "price" : 30,
@@ -14,32 +19,42 @@
             {
                 "level" : 1,
                 "name" : "주택",
-                "price" : 20
+                "price" : 20,
+                "build" : false
             },
 
             {
                 "level" : 2,
                 "name" : "아파트",
-                "price" : 50
+                "price" : 50,
+                "build" : false
             },
 
             {
                 "level" : 3,
                 "name" : "호텔",
-                "price" : 100
+                "price" : 100,
+                "build" : false
             },
 
             {
                 "level" : 4,
                 "name" : "안동 하회마을",
-                "price" : 150
+                "price" : 150,
+                "build" : false
             }
         ],
-        "host" : null
+        "host" : null,
+        "number" : 1,
+        "pass" : 0
     },
 
     "2" : {
         "name" : "평창",
+        "info" : {
+            "fullname" : "강원도 평창군",
+            "person" : "41,587 명"
+        },
         "type" : "map",
         "key" : "pyeonchang",
         "price" : 20,
@@ -47,32 +62,42 @@
             {
                 "level" : 1,
                 "name" : "주택",
-                "price" : 10
+                "price" : 10,
+                "build" : false
             },
 
             {
                 "level" : 2,
                 "name" : "아파트",
-                "price" : 30
+                "price" : 30,
+                "build" : false
             },
 
             {
                 "level" : 3,
                 "name" : "호텔",
-                "price" : 80
+                "price" : 80,
+                "build" : false
             },
 
             {
                 "level" : 4,
                 "name" : "동계 올림픽 경기장",
-                "price" : 210
+                "price" : 210,
+                "build" : false
             }
         ],
-        "host" : null
+        "host" : null,
+        "number" : 2,
+        "pass" : 0
     },
 
     "3" : {
         "name" : "부산",
+        "info" : {
+            "fullname" : "부산광역시",
+            "person" : "3,387,761 명"
+        },
         "type" : "map",
         "key" : "busan",
         "price" : 150,
@@ -80,32 +105,42 @@
             {
                 "level" : 1,
                 "name" : "주택",
-                "price" : 45
+                "price" : 45,
+                "build" : false
             },
 
             {
                 "level" : 2,
                 "name" : "아파트",
-                "price" : 95
+                "price" : 95,
+                "build" : false
             },
 
             {
                 "level" : 3,
                 "name" : "호텔",
-                "price" : 150
+                "price" : 150,
+                "build" : false
             },
 
             {
                 "level" : 4,
                 "name" : "해운대 해수욕장",
-                "price" : 230
+                "price" : 230,
+                "build" : false
             }
         ],
-        "host" : null
+        "host" : null,
+        "number" : 3,
+        "pass" : 0
     },
 
     "4" : {
         "name" : "여수",
+        "info" : {
+            "fullname" : "전라남도 여수시",
+            "person" : "280,213 명"
+        },
         "type" : "map",
         "key" : "yeosu",
         "price" : 50,
@@ -113,32 +148,42 @@
             {
                 "level" : 1,
                 "name" : "주택",
-                "price" : 30
+                "price" : 30,
+                "build" : false
             },
 
             {
                 "level" : 2,
                 "name" : "아파트",
-                "price" : 60
+                "price" : 60,
+                "build" : false
             },
 
             {
                 "level" : 3,
                 "name" : "호텔",
-                "price" : 120
+                "price" : 120,
+                "build" : false
             },
 
             {
                 "level" : 4,
                 "name" : "여수 엑스포",
-                "price" : 150
+                "price" : 150,
+                "build" : false
             }
         ],
-        "host" : null
+        "host" : null,
+        "number" : 4,
+        "pass" : 0
     },
 
     "5" : {
         "name" : "제주",
+        "info" : {
+            "fullname" : "제주특별자치도",
+            "person" : "674,615 명"
+        },
         "type" : "map",
         "key" : "jeju",
         "price" : 85,
@@ -146,66 +191,91 @@
             {
                 "level" : 1,
                 "name" : "주택",
-                "price" : 45
+                "price" : 45,
+                "build" : false
             },
 
             {
                 "level" : 2,
                 "name" : "아파트",
-                "price" : 80
+                "price" : 80,
+                "build" : false
             },
 
             {
                 "level" : 3,
                 "name" : "호텔",
-                "price" : 170
+                "price" : 170,
+                "build" : false
             },
 
             {
                 "level" : 4,
                 "name" : "한라산",
-                "price" : 220
+                "price" : 300,
+                "build" : false
             }
         ],
-        "host" : null
+        "host" : null,
+        "number" : 5,
+        "pass" : 0
+    },
+
+    "6" : {
+        "name" : "무인도",
+        "type" : "event",
+        "key" : "stop",
+        "number" : 6
     },
 
     "7" : {
         "name" : "독도",
+        "info" : {
+            "fullname" : "경상북도 울릉군 울릉읍 독도리",
+            "person" : "약 40 명"
+        },
         "type" : "map",
         "key" : "dokdo",
         "price" : 15,
         "build" : [
             {
                 "level" : 1,
-                "name" : "주택",
-                "price" : 20
+                "name" : "태극기",
+                "price" : 25,
+                "build" : false
             },
 
             {
                 "level" : 2,
-                "name" : "아파트",
-                "price" : 40
+                "name" : "태극기",
+                "price" : 50,
+                "build" : false
             },
 
             {
                 "level" : 3,
-                "name" : "호텔",
-                "price" : 100
+                "name" : "태극기",
+                "price" : 100,
+                "build" : false
             },
 
             {
                 "level" : 4,
                 "name" : "태극기",
-                "price" : 150
+                "price" : 200,
+                "build" : false
             }
         ],
-        "host" : null
+        "host" : null,
+        "number" : 7
     },
 
     "8" : {
         "name" : "경기 광명",
-        "fullname" : "경기도 광명시",
+        "info" : {
+            "fullname" : "경기도 광명시",
+            "person" : "296,785 명"
+        },
         "type" : "map",
         "key" : "gwangmeong",
         "price" : 55,
@@ -213,32 +283,42 @@
             {
                 "level" : 1,
                 "name" : "주택",
-                "price" : 45
+                "price" : 45,
+                "build" : false
             },
 
             {
                 "level" : 2,
                 "name" : "아파트",
-                "price" : 90
+                "price" : 90,
+                "build" : false
             },
 
             {
                 "level" : 3,
                 "name" : "호텔",
-                "price" : 160
+                "price" : 160,
+                "build" : false
             },
 
             {
                 "level" : 4,
                 "name" : "광명 동굴",
-                "price" : 200
+                "price" : 200,
+                "build" : false
             }
         ],
-        "host" : null
+        "host" : null,
+        "number" : 8,
+        "pass" : 0
     },
 
     "9" : {
         "name" : "광주",
+        "info" : {
+            "fullname" : "광주광역시",
+            "person" : "1,447,953 명"
+        },
         "type" : "map",
         "key" : "gwangju",
         "price" : 90,
@@ -246,32 +326,42 @@
             {
                 "level" : 1,
                 "name" : "주택",
-                "price" : 60
+                "price" : 60,
+                "build" : false
             },
 
             {
                 "level" : 2,
                 "name" : "아파트",
-                "price" : 120
+                "price" : 120,
+                "build" : false
             },
 
             {
                 "level" : 3,
                 "name" : "호텔",
-                "price" : 190
+                "price" : 190,
+                "build" : false
             },
 
             {
                 "level" : 4,
                 "name" : "무등산 국립공원",
-                "price" : 230
+                "price" : 240,
+                "build" : false
             }
         ],
-        "host" : null
+        "host" : null,
+        "number" : 9,
+        "pass" : 0
     },
 
     "10" : {
         "name" : "논산",
+        "info" : {
+            "fullname" : "충청남도 논산시",
+            "person" : "116,315 명"
+        },
         "type" : "map",
         "key" : "nonsan",
         "price" : 35,
@@ -279,32 +369,42 @@
             {
                 "level" : 1,
                 "name" : "주택",
-                "price" : 30
+                "price" : 30,
+                "build" : false
             },
 
             {
                 "level" : 2,
                 "name" : "아파트",
-                "price" : 50
+                "price" : 50,
+                "build" : false
             },
 
             {
                 "level" : 3,
                 "name" : "호텔",
-                "price" : 90
+                "price" : 90,
+                "build" : false
             },
 
             {
                 "level" : 4,
                 "name" : "육군 육련소",
-                "price" : 150
+                "price" : 150,
+                "build" : false
             }
         ],
-        "host" : null
+        "host" : null,
+        "number" : 10,
+        "pass" : 0
     },
 
     "11" : {
         "name" : "춘천",
+        "info" : {
+            "fullname" : "강원도 춘천시",
+            "person" : "283,141 명"
+        },
         "type" : "map",
         "key" : "chuncheon",
         "price" : 40,
@@ -312,32 +412,42 @@
             {
                 "level" : 1,
                 "name" : "주택",
-                "price" : 30
+                "price" : 30,
+                "build" : false
             },
 
             {
                 "level" : 2,
                 "name" : "아파트",
-                "price" : 75
+                "price" : 75,
+                "build" : false
             },
 
             {
                 "level" : 3,
                 "name" : "호텔",
-                "price" : 120
+                "price" : 120,
+                "build" : false
             },
 
             {
                 "level" : 4,
                 "name" : "춘천 레고랜드",
-                "price" : 180
+                "price" : 140,
+                "build" : false
             }
         ],
-        "host" : null
+        "host" : null,
+        "number" : 11,
+        "pass" : 0
     },
 
     "12" : {
         "name" : "대구",
+        "info" : {
+            "fullname" : "대구광역시",
+            "person" : "2,413,191 명"
+        },
         "type" : "map",
         "key" : "daegu",
         "price" : 110,
@@ -345,32 +455,49 @@
             {
                 "level" : 1,
                 "name" : "주택",
-                "price" : 50
+                "price" : 50,
+                "build" : false
             },
 
             {
                 "level" : 2,
                 "name" : "아파트",
-                "price" : 90
+                "price" : 90,
+                "build" : false
             },
 
             {
                 "level" : 3,
                 "name" : "호텔",
-                "price" : 140
+                "price" : 140,
+                "build" : false
             },
 
             {
                 "level" : 4,
                 "name" : "83 타워",
-                "price" : 200
+                "price" : 200,
+                "build" : false
             }
         ],
-        "host" : null
+        "host" : null,
+        "number" : 12,
+        "pass" : 0
+    },
+
+    "14" : {
+        "name" : "카지노",
+        "type" : "event",
+        "key" : "gold_key",
+        "number" : 14
     },
 
     "13" : {
         "name" : "천안",
+        "info" : {
+            "fullname" : "충청남도 천안시",
+            "person" : "658,488 명"
+        },
         "type" : "map",
         "key" : "cheonan",
         "price" : 45,
@@ -378,32 +505,42 @@
             {
                 "level" : 1,
                 "name" : "주택",
-                "price" : 30
+                "price" : 30,
+                "build" : false
             },
 
             {
                 "level" : 2,
                 "name" : "아파트",
-                "price" : 60
+                "price" : 60,
+                "build" : false
             },
 
             {
                 "level" : 3,
                 "name" : "호텔",
-                "price" : 100
+                "price" : 100,
+                "build" : false
             },
 
             {
                 "level" : 4,
                 "name" : "독립 기념관",
-                "price" : 150
+                "price" : 190,
+                "build" : false
             }
         ],
-        "host" : null
+        "host" : null,
+        "number" : 13,
+        "pass" : 0
     },
 
     "15" : {
         "name" : "강릉",
+        "info" : {
+            "fullname" : "강원도 강릉시",
+            "person" : "213,412 명"
+        },
         "type" : "map",
         "key" : "kangnung",
         "price" : 30,
@@ -411,32 +548,42 @@
             {
                 "level" : 1,
                 "name" : "주택",
-                "price" : 20
+                "price" : 20,
+                "build" : false
             },
 
             {
                 "level" : 2,
                 "name" : "아파트",
-                "price" : 55
+                "price" : 55,
+                "build" : false
             },
 
             {
                 "level" : 3,
                 "name" : "호텔",
-                "price" : 140
+                "price" : 140,
+                "build" : false
             },
 
             {
                 "level" : 4,
                 "name" : "경포 해변",
-                "price" : 170
+                "price" : 180,
+                "build" : false
             }
         ],
-        "host" : null
+        "host" : null,
+        "number" : 15,
+        "pass" : 0
     },
 
     "16" : {
         "name" : "서울",
+        "info" : {
+            "fullname" : "서울특별시",
+            "person" : "9,648,606 명"
+        },
         "type" : "map",
         "key" : "seoul",
         "price" : 230,
@@ -444,32 +591,42 @@
             {
                 "level" : 1,
                 "name" : "주택",
-                "price" : 100
+                "price" : 100,
+                "build" : false
             },
 
             {
                 "level" : 2,
                 "name" : "아파트",
-                "price" : 220
+                "price" : 220,
+                "build" : false
             },
 
             {
                 "level" : 3,
                 "name" : "호텔",
-                "price" : 380
+                "price" : 380,
+                "build" : false
             },
 
             {
                 "level" : 4,
                 "name" : "경복궁",
-                "price" : 500
+                "price" : 500,
+                "build" : false
             }
         ],
-        "host" : null
+        "host" : null,
+        "number" : 16,
+        "pass" : 0
     },
 
     "17" : {
         "name" : "청주",
+        "info" : {
+            "fullname" : "충청북도 청주시",
+            "person" : "846,204 명"
+        },
         "type" : "map",
         "key" : "cheonju",
         "price" : 40,
@@ -477,32 +634,42 @@
             {
                 "level" : 1,
                 "name" : "주택",
-                "price" : 30
+                "price" : 30,
+                "build" : false
             },
 
             {
                 "level" : 2,
                 "name" : "아파트",
-                "price" : 65
+                "price" : 65,
+                "build" : false
             },
 
             {
                 "level" : 3,
                 "name" : "호텔",
-                "price" : 95
+                "price" : 95,
+                "build" : false
             },
 
             {
                 "level" : 4,
                 "name" : "상당산성",
-                "price" : 160
+                "price" : 160,
+                "build" : false
             }
         ],
-        "host" : null
+        "host" : null,
+        "number" : 17,
+        "pass" : 0
     },
 
     "18" : {
         "name" : "울산",
+        "info" : {
+            "fullname" : "울산광역시",
+            "person" : "1,132,953 명"
+        },
         "type" : "map",
         "key" : "ulsan",
         "price" : 120,
@@ -510,32 +677,42 @@
             {
                 "level" : 1,
                 "name" : "주택",
-                "price" : 40
+                "price" : 40,
+                "build" : false
             },
 
             {
                 "level" : 2,
                 "name" : "아파트",
-                "price" : 75
+                "price" : 75,
+                "build" : false
             },
 
             {
                 "level" : 3,
                 "name" : "호텔",
-                "price" : 120
+                "price" : 120,
+                "build" : false
             },
 
             {
                 "level" : 4,
                 "name" : "대왕암공원",
-                "price" : 180
+                "price" : 180,
+                "build" : false
             }
         ],
-        "host" : null
+        "host" : null,
+        "number" : 18,
+        "pass" : 0
     },
 
     "19" : {
         "name" : "인천",
+        "info" : {
+            "fullname" : "인천광역시",
+            "person" : "2,941,705 명"
+        },
         "type" : "map",
         "key" : "incheon",
         "price" : 140,
@@ -543,32 +720,49 @@
             {
                 "level" : 1,
                 "name" : "주택",
-                "price" : 50
+                "price" : 50,
+                "build" : false
             },
 
             {
                 "level" : 2,
                 "name" : "아파트",
-                "price" : 105
+                "price" : 105,
+                "build" : false
             },
 
             {
                 "level" : 3,
                 "name" : "호텔",
-                "price" : 180
+                "price" : 180,
+                "build" : false
             },
 
             {
                 "level" : 4,
                 "name" : "월미도",
-                "price" : 220
+                "price" : 220,
+                "build" : false
             }
         ],
-        "host" : null
+        "host" : null,
+        "number" : 19,
+        "pass" : 0
+    },
+
+    "20" : {
+        "name" : "김포 공항",
+        "type" : "event",
+        "key" : "go",
+        "number" : 20
     },
 
     "21" : {
         "name" : "경기",
+        "info" : {
+            "fullname" : "경기도",
+            "person" : "13,471,758 명"
+        },
         "type" : "map",
         "key" : "gyeonggi",
         "price" : 110,
@@ -576,32 +770,42 @@
             {
                 "level" : 1,
                 "name" : "주택",
-                "price" : 35
+                "price" : 35,
+                "build" : false
             },
 
             {
                 "level" : 2,
                 "name" : "아파트",
-                "price" : 75
+                "price" : 75,
+                "build" : false
             },
 
             {
                 "level" : 3,
                 "name" : "호텔",
-                "price" : 140
+                "price" : 140,
+                "build" : false
             },
 
             {
                 "level" : 4,
                 "name" : "수원 화성",
-                "price" : 250
+                "price" : 250,
+                "build" : false
             }
         ],
-        "host" : null
+        "host" : null,
+        "number" : 21,
+        "pass" : 0
     },
 
     "22" : {
         "name" : "전주",
+        "info" : {
+            "fullname" : "전라북도 전주시",
+            "person" : "657,998 명"
+        },
         "type" : "map",
         "key" : "jeonju",
         "price" : 40,
@@ -609,32 +813,42 @@
             {
                 "level" : 1,
                 "name" : "주택",
-                "price" : 25
+                "price" : 25,
+                "build" : false
             },
 
             {
                 "level" : 2,
                 "name" : "아파트",
-                "price" : 60
+                "price" : 60,
+                "build" : false
             },
 
             {
                 "level" : 3,
                 "name" : "호텔",
-                "price" : 130
+                "price" : 130,
+                "build" : false
             },
 
             {
                 "level" : 4,
                 "name" : "전주 한옥마을",
-                "price" : 230
+                "price" : 230,
+                "build" : false
             }
         ],
-        "host" : null
+        "host" : null,
+        "number" : 22,
+        "pass" : 0
     },
 
     "23" : {
         "name" : "포항",
+        "info" : {
+            "fullname" : "경상북도 포항",
+            "person" : "503,051 명"
+        },
         "type" : "map",
         "key" : "pohang",
         "price" : 60,
@@ -642,32 +856,42 @@
             {
                 "level" : 1,
                 "name" : "주택",
-                "price" : 45
+                "price" : 45,
+                "build" : false
             },
 
             {
                 "level" : 2,
                 "name" : "아파트",
-                "price" : 100
+                "price" : 100,
+                "build" : false
             },
 
             {
                 "level" : 3,
                 "name" : "호텔",
-                "price" : 140
+                "price" : 140,
+                "build" : false
             },
 
             {
                 "level" : 4,
                 "name" : "보경사",
-                "price" : 180
+                "price" : 180,
+                "build" : false
             }
         ],
-        "host" : null
+        "host" : null,
+        "number" : 23,
+        "pass" : 0
     },
 
     "24" : {
         "name" : "세종",
+        "info" : {
+            "fullname" : "세종특별자치시",
+            "person" : "359,569 명"
+        },
         "type" : "map",
         "key" : "sejong",
         "price" : 90,
@@ -675,32 +899,42 @@
             {
                 "level" : 1,
                 "name" : "주택",
-                "price" : 60
+                "price" : 60,
+                "build" : false
             },
 
             {
                 "level" : 2,
                 "name" : "아파트",
-                "price" : 110
+                "price" : 110,
+                "build" : false
             },
 
             {
                 "level" : 3,
                 "name" : "호텔",
-                "price" : 150
+                "price" : 150,
+                "build" : false
             },
 
             {
                 "level" : 4,
                 "name" : "정부 세종 청사",
-                "price" : 220
+                "price" : 220,
+                "build" : false
             }
         ],
-        "host" : null
+        "host" : null,
+        "number" : 24,
+        "pass" : 0
     },
 
     "25" : {
         "name" : "목포",
+        "info" : {
+            "fullname" : "전라남도 목포시",
+            "person" : "222,809 명"
+        },
         "type" : "map",
         "key" : "mokpo",
         "price" : 45,
@@ -708,32 +942,42 @@
             {
                 "level" : 1,
                 "name" : "주택",
-                "price" : 30
+                "price" : 20,
+                "build" : false
             },
 
             {
                 "level" : 2,
                 "name" : "아파트",
-                "price" : 70
+                "price" : 60,
+                "build" : false
             },
 
             {
                 "level" : 3,
                 "name" : "호텔",
-                "price" : 110
+                "price" : 105,
+                "build" : false
             },
 
             {
                 "level" : 4,
                 "name" : "유달산",
-                "price" : 160
+                "price" : 160,
+                "build" : false
             }
         ],
-        "host" : null
+        "host" : null,
+        "number" : 25,
+        "pass" : 0
     },
 
     "26" : {
         "name" : "대전",
+        "info" : {
+            "fullname" : "대전광역시",
+            "person" : "1,462,064 명"
+        },
         "type" : "map",
         "key" : "deajeon",
         "price" : 115,
@@ -741,32 +985,42 @@
             {
                 "level" : 1,
                 "name" : "주택",
-                "price" : 70
+                "price" : 70,
+                "build" : false
             },
 
             {
                 "level" : 2,
                 "name" : "아파트",
-                "price" : 130
+                "price" : 130,
+                "build" : false
             },
 
             {
                 "level" : 3,
                 "name" : "호텔",
-                "price" : 190
+                "price" : 190,
+                "build" : false
             },
 
             {
                 "level" : 4,
                 "name" : "성심당",
-                "price" : 220
+                "price" : 220,
+                "build" : false
             }
         ],
-        "host" : null
+        "host" : null,
+        "number" : 26,
+        "pass" : 0
     },
 
     "27" : {
         "name" : "경주",
+        "info" : {
+            "fullname" : "경상북도 경주시",
+            "person" : "253,579 명"
+        },
         "type" : "map",
         "key" : "gyeonju",
         "price" : 50,
@@ -774,27 +1028,33 @@
             {
                 "level" : 1,
                 "name" : "주택",
-                "price" : 45
+                "price" : 45,
+                "build" : false
             },
 
             {
                 "level" : 2,
                 "name" : "아파트",
-                "price" : 100
+                "price" : 100,
+                "build" : false
             },
 
             {
                 "level" : 3,
                 "name" : "호텔",
-                "price" : 160
+                "price" : 160,
+                "build" : false
             },
 
             {
                 "level" : 4,
                 "name" : "불국사",
-                "price" : 280
+                "price" : 280,
+                "build" : false
             }
         ],
-        "host" : null
+        "host" : null,
+        "number" : 27,
+        "pass" : 0
     }
 }
