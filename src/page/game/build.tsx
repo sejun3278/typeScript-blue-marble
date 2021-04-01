@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import { actionCreators as initActions } from '../../Store/modules/init';
 import { actionCreators as gameActions } from '../../Store/modules/game';
+import { actionCreators as functionsActions } from '../../Store/modules/functions';
 
 import { connect } from 'react-redux'; 
 import { bindActionCreators } from 'redux'; 
@@ -16,7 +17,9 @@ export interface AllProps {
   turn : number | null,
   player_list : string,
   map_info : string,
-  _removeAlertMent : Function
+  _removeAlertMent : Function,
+  pass_price : number,
+  _commaMoney : Function
 };
 
 class Build extends React.Component<AllProps> {
@@ -27,7 +30,7 @@ class Build extends React.Component<AllProps> {
         const map_info = JSON.parse(this.props.map_info);
         const player_list = JSON.parse(this.props.player_list);
         
-        const { initActions, gameActions, _removeAlertMent } = this.props; 
+        const { initActions, gameActions, _removeAlertMent, pass_price } = this.props; 
 
         if(type === 'on') {
             if(my_info.money >= select_info.price) {
@@ -59,11 +62,11 @@ class Build extends React.Component<AllProps> {
 
                 // 맵 설정
                 map_info[select_info.number].host = my_info.number;
-                map_info[select_info.number].pass = map_info[select_info.number].pass + select_info.price;
+                map_info[select_info.number].pass = select_info.price * pass_price;
                 initActions.set_setting_state({ 'map_info' : JSON.stringify(map_info) });
 
                 select_info.host = my_info.number;
-                select_info.pass = map_info[select_info.number].pass + select_info.price;
+                select_info.pass = select_info.price * pass_price;
                 gameActions.select_type({ 'select_info' : JSON.stringify(select_info) })
             }
         }
@@ -94,7 +97,7 @@ class Build extends React.Component<AllProps> {
 
         const player_list : any = JSON.parse(this.props.player_list)
 
-        const { gameActions, initActions, turn, _removeAlertMent } = this.props;
+        const { gameActions, initActions, turn, _removeAlertMent, pass_price } = this.props;
 
         if(turn === 1) {
             if(type === 'on') {
@@ -118,7 +121,7 @@ class Build extends React.Component<AllProps> {
                         initActions.set_player_info({ 'player_list' : JSON.stringify(player_list) });
 
                         map_info[select_info.number].build[key].build = true;
-                        map_info[select_info.number].pass = map_info[select_info.number].pass + map_info[select_info.number].build[key].price;      
+                        map_info[select_info.number].pass = map_info[select_info.number].pass + ( map_info[select_info.number].build[key].price * pass_price );      
                         
                         delete map_info[select_info.number].build[key]['select'];
                         
@@ -136,7 +139,7 @@ class Build extends React.Component<AllProps> {
     }
 
   render() {
-    const { turn } = this.props;
+    const { turn, pass_price, _commaMoney } = this.props;
     const { _buyMap, _checkLandMark, _build } = this;
 
     const select_info = JSON.parse(this.props.select_info);
@@ -162,6 +165,8 @@ class Build extends React.Component<AllProps> {
         grid_style['gridTemplateColumns'] = 'repeat(3, 33%)';
     }
 
+    console.log(_commaMoney)
+
     return(
       <div id='build_div'>
           <div id='build_city_info_div'>
@@ -182,7 +187,15 @@ class Build extends React.Component<AllProps> {
 
                         <div className='build_notice_grid_div'>
                             <div className='aRight'> 통행료　|　</div>
-                            <div id='pass_price_notice_div'> { select_info.pass } 만원 </div> 
+                            <div id='pass_price_notice_div'> 
+                                { _commaMoney(select_info.pass) } 
+                                {pass_price > 1
+                                    ? ' ( ' + select_info.pass / pass_price + ' X ' + pass_price + ' 배 ) '
+
+                                    : undefined
+                                }
+                                만원
+                            </div> 
                         </div>
                     </div>
                 }
@@ -278,14 +291,17 @@ class Build extends React.Component<AllProps> {
 }
 
 export default connect( 
-  ( { init, game } : StoreState  ) => ({
+  ( { init, game, functions } : StoreState  ) => ({
     select_info : game.select_info,
     turn : game.turn,
     player_list : init.player_list,
-    map_info : init.map_info
+    map_info : init.map_info,
+    pass_price : init.pass_price,
+    _commaMoney : functions._commaMoney
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),
-      gameActions: bindActionCreators(gameActions, dispatch) 
+      gameActions: bindActionCreators(gameActions, dispatch),
+      functionsActions : bindActionCreators(functionsActions, dispatch)
   }) 
 )(Build);

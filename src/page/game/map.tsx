@@ -2,10 +2,12 @@ import * as React from 'react';
 
 import { actionCreators as initActions } from '../../Store/modules/init';
 import { actionCreators as gameActions } from '../../Store/modules/game';
+import { actionCreators as functionsActions } from '../../Store/modules/functions';
 
 import { connect } from 'react-redux'; 
 import { bindActionCreators } from 'redux'; 
 import { StoreState } from '../../Store/modules';
+import build from './build';
 
 export interface AllProps {
     class_col : string,
@@ -15,13 +17,15 @@ export interface AllProps {
     player_list : string,
     playing : boolean,
     able_player : number,
-    move_location : null | number
+    move_location : null | number,
+    _commaMoney : Function,
+    round : number
 };
 
 class Map extends React.Component<AllProps> {
 
   render() {
-    const { class_col, style, playing, able_player, move_location } = this.props;
+    const { class_col, style, playing, able_player, move_location, _commaMoney, round } = this.props;
 
     const info = JSON.parse(this.props.info);
     const city_info = JSON.parse(this.props.map_info)
@@ -70,6 +74,17 @@ class Map extends React.Component<AllProps> {
         }
       }
     }
+
+    let name = info.name;
+    if(round > 1) {
+      if(info.number === 0) {
+        // 1 라운드 이후에 출발점을 은행으로 변환하기
+
+        name = '은행';
+        map_icon = icon.map_icon['bank'];
+      }
+    }
+
     return(
         <div className={class_col} style={cover_style}
             id={'map_number_' + info.number}
@@ -77,7 +92,7 @@ class Map extends React.Component<AllProps> {
             <div className={map_class_col}
                  style={color_style}
             >
-                <b> {info.name} </b>
+                <b> {name} </b>
             </div>
 
             {/* <div id={'map_number_' + info.number}> */}
@@ -90,7 +105,7 @@ class Map extends React.Component<AllProps> {
                         <div className='city_price_div'
                             style={city_style}
                         >
-                          {city_price} 만원
+                          {_commaMoney(city_price)} 만원
                         </div>
                       </div>
                 }
@@ -129,15 +144,18 @@ class Map extends React.Component<AllProps> {
 }
 
 export default connect( 
-  ( { init, game } : StoreState  ) => ({
+  ( { init, game, functions } : StoreState  ) => ({
     map_info : init.map_info,
     player_list : init.player_list,
     playing : game.playing,
     able_player : init.able_player,
-    move_location : game.move_location
+    move_location : game.move_location,
+    _commaMoney : functions._commaMoney,
+    round : game.round
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),
-      gamections: bindActionCreators(gameActions, dispatch)
+      gamections: bindActionCreators(gameActions, dispatch),
+      functionsActions : bindActionCreators(functionsActions, dispatch)
   }) 
 )(Map);

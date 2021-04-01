@@ -1056,5 +1056,12 @@
         "host" : null,
         "number" : 27,
         "pass" : 0
+    },
+
+    "28" : {
+        "name" : "은행",
+        "type" : "bank",
+        "key" : "bank",
+        "number" : 28
     }
 }

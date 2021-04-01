@@ -7,18 +7,21 @@ export const actionCreators = {
 }
 
 export interface functionsState {
-    _moveCharacter : Function
+    _moveCharacter : Function,
+    _commaMoney : Function
 }
 
 const initialState : functionsState = {
-    _moveCharacter : () => {}
+    _moveCharacter : () => {},
+    _commaMoney  :() => {}
 }
 
 export default handleActions<functionsState> ({
    [SAVEFUNCTION] : (state : any, data : any) => {
       return {
         ...state,
-        _moveCharacter : data.payload._moveCharacter
+        _moveCharacter : data.payload._moveCharacter !== undefined ? data.payload._moveCharacter : state._moveCharacter,
+        _commaMoney : data.payload._commaMoney !== undefined ? data.payload._commaMoney : state._commaMoney
       };
     }
 

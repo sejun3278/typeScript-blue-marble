@@ -18,6 +18,7 @@ import Map from './map';
 export interface AllProps {
   initActions : any,
   gameActions : any,
+  functionsActions : any,
   player_list : string,
   playing : boolean,
   _flash : Function,
@@ -45,11 +46,17 @@ let timer_play : any = false;
 class Game extends React.Component<AllProps> {
 
   componentDidMount() {
+    const { functionsActions } = this.props;
+
     // 초기 scrollTop 위치 잡기
     window.scrollTo(0, 80);
 
     // 초기 무한 플래쉬
     this._infiniteFlash('game_main_start_title', 70, true);
+
+    functionsActions.save_function({
+      '_commaMoney' : this._commaMoney
+    })
   }
 
   // 돈 컴마 표시하기
@@ -134,6 +141,8 @@ class Game extends React.Component<AllProps> {
       save_card_info['card_notice_ment'] = "첫번째 통행 카드를 뽑아주세요.";
       gameActions.select_card_info(save_card_info);
 
+      this._infiniteFlash('player_main_character_' + turn, 60, true);
+
       // 타이머 지정하기
       if(round_timer !== 0) {
         const timer_el : any = document.getElementById('timer_slide_div');
@@ -142,8 +151,6 @@ class Game extends React.Component<AllProps> {
         timer_el.style.width = String(6 * round_timer) + 'px';
 
         gameActions.set_timer({ 'timer' : String(round_timer) })
-
-        this._infiniteFlash('player_main_character_' + turn, 60, true);
 
         // 타이머 가동하기
         timer_play = window.setInterval( () => {
@@ -331,7 +338,7 @@ class Game extends React.Component<AllProps> {
   render() {
     const player_list = JSON.parse(this.props.player_list);
     const { _commaMoney, _realGameStart } = this;
-    const { playing } = this.props;
+    const { playing, round } = this.props;
 
     const top_player_list = player_list.slice(0, 2);
     const bottom_player_list = player_list.slice(2, 4);
@@ -394,6 +401,15 @@ class Game extends React.Component<AllProps> {
                           class_col = 'game_middle_main_map_grid_div';
                         }
 
+                        let info : any = JSON.stringify(cu);
+
+                        // if(cu.number === 0) {
+                        //   if(round > 1) {
+                        //     // 출발지점을 은행으로 변환하기
+                        //     info = JSON.stringify(MapList.maps[2].info[7]);
+                        //   }
+                        // }
+
                         return(
                           <div key={key_2} className={class_col}
                                style={style}
@@ -403,7 +419,7 @@ class Game extends React.Component<AllProps> {
                                   <Map 
                                     class_col={'game_map_columns_divs'}
                                     style={border_style}
-                                    info={JSON.stringify(cu)}
+                                    info={info}
                                   />
                                 </div>
 
