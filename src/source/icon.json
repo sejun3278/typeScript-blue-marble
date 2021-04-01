@@ -1,34 +1,34 @@
 {
     "icon" : {
-        "close" : "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2012/png/iconmonstr-x-mark-2.png&r=0&g=0&b=0",
-        "notice" : "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2012/png/iconmonstr-info-8.png&r=0&g=0&b=0",
-        "left_arrow" : "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2017/png/iconmonstr-arrow-64.png&r=0&g=0&b=0",
-        "left_gray_arrow" : "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2017/png/iconmonstr-arrow-64.png&r=171&g=171&b=171",
-        "right_arrow" : "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2017/png/iconmonstr-arrow-63.png&r=0&g=0&b=0",
-        "right_gray_arrow" : "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2017/png/iconmonstr-arrow-63.png&r=171&g=171&b=171",
-        "plus" : "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2018/png/iconmonstr-plus-circle-thin.png&r=171&g=171&b=171",
-        "plus_black" : "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2018/png/iconmonstr-plus-circle-thin.png&r=0&g=0&b=0",
-        "close_red" : "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2012/png/iconmonstr-x-mark-7.png&r=241&g=70&b=104",
-        "close_gray" : "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2012/png/iconmonstr-x-mark-7.png&r=171&g=171&b=171",
-        "point" : "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2017/png/iconmonstr-arrow-80.png&r=242&g=161&b=84",
-        "fix" : "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2017/png/iconmonstr-pin-23.png&r=0&g=0&b=0",
-        "modify" : "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2013/png/iconmonstr-wrench-4.png&r=82&g=191&b=255"
+        "close" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/close.png",
+        "notice" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/notice.png",
+        "left_arrow" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/left_arrow.png",
+        "left_gray_arrow" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/left_gray_arrow.png",
+        "right_arrow" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/right_arrow.png",
+        "right_gray_arrow" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/right_gray_arrow.png",
+        "plus" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/plus.png",
+        "plus_black" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/plus_black.png",
+        "close_red" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/close_red.png",
+        "close_gray" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/close_gray.png",
+        "point" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/point.png",
+        "fix" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/fix.png",
+        "modify" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/modify.png"
     },
 
     "map_icon" : {
-        "gold_key" : "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2012/png/iconmonstr-key-2.png&r=255&g=215&b=0",
-        "move" : "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2017/png/iconmonstr-airport-2.png&r=0&g=0&b=0",
+        "gold_key" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/gold.png",
+        "move" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/airport.png",
         "stop" : "https://cdn2.iconfinder.com/data/icons/travel-solid-world-is-beautiful/512/Island-256.png",
-        "start" : "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2018/png/iconmonstr-arrow-left-circle-thin.png&r=0&g=0&b=0"
+        "start" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/start.png"
     },
 
     "building" : {
-        "house" : "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2012/png/iconmonstr-home-9.png&r=0&g=0&b=0",
-        "house_gray" : "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2012/png/iconmonstr-home-9.png&r=171&g=171&b=171",
-        "apartment" : "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2017/png/iconmonstr-building-20.png&r=0&g=0&b=0",
-        "apartment_gray" : "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2017/png/iconmonstr-building-20.png&r=171&g=171&b=171",
-        "hotel" : "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2017/png/iconmonstr-building-24.png&r=0&g=0&b=0",
-        "hotel_gray" : "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2017/png/iconmonstr-building-24.png&r=171&g=171&b=171"
+        "house" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/house.png",
+        "house_gray" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/house_gray.png",
+        "apartment" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/apartment.png",
+        "apartment_gray" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/apartment_gray.png",
+        "hotel" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/hotel.png",
+        "hotel_gray" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/hotel_gray.png"
     },
 
     "img" : {

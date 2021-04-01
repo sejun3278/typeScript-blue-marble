@@ -59,11 +59,11 @@ class Build extends React.Component<AllProps> {
 
                 // 맵 설정
                 map_info[select_info.number].host = my_info.number;
-                // map_info[select_info.number].pass = map_info[select_info.number].pass + select_info.price;
+                map_info[select_info.number].pass = map_info[select_info.number].pass + select_info.price;
                 initActions.set_setting_state({ 'map_info' : JSON.stringify(map_info) });
 
                 select_info.host = my_info.number;
-                // select_info.pass = map_info[select_info.number].pass + select_info.price;
+                select_info.pass = map_info[select_info.number].pass + select_info.price;
                 gameActions.select_type({ 'select_info' : JSON.stringify(select_info) })
             }
         }

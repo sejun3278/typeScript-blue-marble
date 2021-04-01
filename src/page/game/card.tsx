@@ -24,7 +24,8 @@ export interface AllProps {
   overlap_card : boolean,
   all_card_num : number,
   player_list : string,
-  map_info : string
+  map_info : string,
+  move_location : number | null
 };
 
 class Card extends React.Component<AllProps> {
@@ -114,142 +115,258 @@ class Card extends React.Component<AllProps> {
         const { turn, gameActions } = this.props;
         const player_list = JSON.parse(this.props.player_list);
 
-        const target : any = document.getElementById('player_main_character_' + turn);
+        // const target : any = document.getElementById('player_main_character_' + turn);
         const my_location : number = player_list[Number(turn) - 1].location;
+        // const my_location : number = 10;
 
         // 캐릭터의 현재 위치 + 이동할 위치
         let move_location = my_location + move;
-        let cover_move_location = move_location;
 
         if(move_location > 27) {
-            move_location = move_location - 27;
+            move_location = move_location - 28;
         }
 
         gameActions.move({ 'move_location' : move_location });
 
         let circle : boolean = false;
         // 이동하기
-        const _moveAction = (location : number) => {
-            // 최종 목적지 = move_location; ex ) 5 (0 + 5)
-            // 현재 위치 = location; ex ) 0
-            // 이동할 거리 = move; ex ) 5
-            let extra : number = 0;
-            let _next : boolean = false;
-            
-            if( (location < 28 && location >= 21) ) {
 
-                let _move : number = 0;
-                if(cover_move_location > 27) {
-                    extra = -7;
-                    _next = true;
-                    location = 0;
-
-                    cover_move_location = move_location;
-                    circle = true;
-
-                } else if(cover_move_location <= 27) {
-                    extra = location - cover_move_location;
-                }
-
-                if(extra === 0) {
-                    _move = -590;
-                } else if(extra === -1) {
-                    _move = -510;
-                } else if(extra === -2) {
-                    _move = -430;
-                } else if(extra === -3) {
-                    _move = -350;
-                } else if(extra === -4) {
-                    _move = -265;
-                } else if(extra === -5) {
-                    _move = -185;
-                } else if(extra === -6) {
-                    _move = -105;
-                } else {
-                    _move = -35;
-                }
-
-                $(target).animate({ 'marginTop' : _move + 'px' });
-
-
-            } else if( (location < 21 && location >= 14) ) {
-                // 14 ~ 21 사이일 때
-
-                let _move : number = 0;
-                if(cover_move_location > 21) {
-                    extra = -6;
-                    _next = true;
-                    location = 21;
-
-                } else if(cover_move_location <= 21) {
-                    extra = location - cover_move_location;
-                }
-
-                if(extra > 0) {
-                    extra = -extra;
-                }
-
-                if(extra === -1) {
-                    _move = -435;
-                } else if(extra === -2) {
-                    _move = -345;
-                } else if(extra === -3) {
-                    _move = -260;
-                } else if(extra === -4) {
-                    _move = -175;
-                } else if(extra === -5) {
-                    _move = -85;
-                } else if(extra === -6) {
-                    _move = 5;
-                }
-
-                $(target).animate({ 'marginLeft' : _move + 'px' });
-
-            } else if( (location < 14 && location >= 6)) {
-                // 6 ~ 14 사이일 때
-
-                if(cover_move_location > 14) {
-                    extra = -8;
-                    _next = true;
-                    location = 14;
-
-                } else if(cover_move_location <= 14) {
-                    extra = location - cover_move_location;
-                }
-
-                $(target).animate({ 'marginTop' : extra * 85 + 'px' });
-
-            } else if(location < 7 && location >= 0) {
-                // 0 ~ 6 사이일 때
-                if( cover_move_location > 6 ) {
-                    extra = 6;
-                    _next = true;
-                    location = 6;
-
-                } else {
-                    if(circle === false) {
-                        extra = move + my_location;
-
-                    } else {
-                        extra = cover_move_location;
-                    }
-                }
-                $(target).animate({ 'marginLeft' : extra * -85 + 'px' });
-            }
-
-            if(_next === true) {
-                window.setTimeout( () => {
-                    _moveAction(location);
-
-                }, 300);
-
-            } else {
-                return window.setTimeout( () => {
-                    return this._action(cover_move_location);
-
-                }, 300);
-            }
+        const move_map_obj = {
+            "1" : 0,
+            "2" : 0,
+            "3" : 0,
+            "4" : 0
         }
+
+        const _moveAction = (location : number) => {
+
+            let start : number = 0;
+            // 이동거리 구하기
+            const get_move_map_info : Function = (_location : number, limit : number) => {
+
+                if(limit <= 0) {
+                    return move_map_obj;
+
+                } else {
+                    _location = _location + 1;
+                    if(_location > 27) {
+                        _location = 0;
+                        // 맵을 한 바퀴 돌았을 경우
+                        circle = true;
+                    }
+
+                    if(_location > 0 && _location <= 6) {
+                        move_map_obj["1"] += 1;
+
+                        if(start === 0) {
+                            start = 1;
+                        }
+
+
+                    } else if(_location > 6 && _location <= 14) {
+                        move_map_obj["2"] += 1;
+
+                        if(start === 0) {
+                            start = 2;
+                        }
+
+                    } else if(_location > 14 && _location <= 20) {
+                        move_map_obj["3"] += 1;
+
+                        if(start === 0) {
+                            start = 3;
+                        }
+
+                    } else if(_location > 20 && _location <= 27 || _location === 0) {
+                        move_map_obj["4"] += 1;
+
+                        if(start === 0) {
+                            start = 4;
+                        }
+                    }
+
+                    limit = limit - 1;
+
+                    return get_move_map_info(_location, limit);
+                }
+                
+            }; // 함수 끝
+
+            const move_obj = get_move_map_info(location, move);
+
+            let final : boolean = false;
+            const move_character = (obj : any, num : number, _location : number) => {
+                const { turn } = this.props;
+
+                const target : any = document.getElementById('player_main_character_' + turn);
+                let player_move_location = _location + obj[num];
+
+                if(num === 1) {
+                    $(target).animate({ 'marginLeft' : player_move_location * -84.5 + 'px' }, 300);
+
+                } else if(num === 2) {
+                    $(target).animate({ 'marginTop' : (player_move_location - 6) * -84 + 'px' }, 300);
+
+                } else if(num === 3) {
+                    const player_left : number = Number( target.style.marginLeft.slice(0, target.style.marginLeft.indexOf("px")) );
+                    const move_left = player_left + ( obj[num] * 86.5 );
+                    
+                    $(target).animate({ 'marginLeft' : move_left + 'px' }, 300);
+
+                } else if(num === 4) {
+                    const player_top : number = Number( target.style.marginTop.slice(0, target.style.marginTop.indexOf("px")) );
+                    const move_top = player_top + ( obj[num] * 82 );
+
+
+                    $(target).animate({ 'marginTop' : move_top + 'px' }, 300);
+                }
+
+                obj[num] = 0;
+
+                if(obj[num + 1] > 0 || (num === 4 && obj[1] > 0)) {
+                    if(num === 4) {
+                        num = 0;
+                        player_move_location = 0;
+
+                        circle = true;
+                        // 한바퀴 순환
+                    }
+
+                    return window.setTimeout( () => {
+                        move_character(obj, num + 1, player_move_location);
+                    }, 300)
+
+                } else {
+                    return window.setTimeout( () => {
+                        this._action(move_location);
+                    }, 300)
+                }
+            }
+
+            return move_character(move_obj, start, my_location);
+        }
+
+        // const _moveAction = (location : number) => {
+        //     // 최종 목적지 = move_location; ex ) 5 (0 + 5)
+        //     // 현재 위치 = location; ex ) 0
+        //     // 이동할 거리 = move; ex ) 5
+        //     let extra : number = 0;
+        //     let _next : boolean = false;
+            
+        //     if( (location < 28 && location >= 21) ) {
+
+        //         let _move : number = 0;
+        //         if(cover_move_location > 27) {
+        //             extra = -7;
+        //             _next = true;
+        //             location = 0;
+
+        //             cover_move_location = move_location;
+        //             circle = true;
+
+        //         } else if(cover_move_location <= 27) {
+        //             extra = location - cover_move_location;
+        //         }
+
+        //         if(extra === 0) {
+        //             _move = -590;
+        //         } else if(extra === -1) {
+        //             _move = -510;
+        //         } else if(extra === -2) {
+        //             _move = -430;
+        //         } else if(extra === -3) {
+        //             _move = -350;
+        //         } else if(extra === -4) {
+        //             _move = -265;
+        //         } else if(extra === -5) {
+        //             _move = -185;
+        //         } else if(extra === -6) {
+        //             _move = -105;
+        //         } else {
+        //             _move = -35;
+        //         }
+
+        //         $(target).animate({ 'marginTop' : _move + 'px' });
+
+
+        //     } else if( (location < 21 && location >= 14) ) {
+        //         // 14 ~ 21 사이일 때
+
+        //         let _move : number = 0;
+        //         if(cover_move_location > 21) {
+        //             extra = -6;
+        //             _next = true;
+        //             location = 21;
+
+        //         } else if(cover_move_location <= 21) {
+        //             extra = location - cover_move_location;
+        //         }
+
+        //         if(extra > 0) {
+        //             extra = -extra;
+        //         }
+
+        //         if(extra === -1) {
+        //             _move = -435;
+        //         } else if(extra === -2) {
+        //             _move = -345;
+        //         } else if(extra === -3) {
+        //             _move = -260;
+        //         } else if(extra === -4) {
+        //             _move = -175;
+        //         } else if(extra === -5) {
+        //             _move = -85;
+        //         } else if(extra === -6) {
+        //             _move = 5;
+        //         }
+
+        //         $(target).animate({ 'marginLeft' : _move + 'px' });
+
+        //     } else if( (location < 14 && location >= 6)) {
+        //         // 6 ~ 14 사이일 때
+
+        //         if(cover_move_location > 14) {
+        //             extra = -8;
+        //             _next = true;
+        //             location = 14;
+
+        //         } else if(cover_move_location <= 14) {
+        //             extra = location - cover_move_location;
+        //         }
+
+        //         $(target).animate({ 'marginTop' : extra * 85 + 'px' });
+
+        //     } else if(location < 7 && location >= 0) {
+        //         // 0 ~ 6 사이일 때
+        //         if( cover_move_location > 6 ) {
+        //             extra = 6;
+        //             _next = true;
+        //             location = 6;
+
+        //         } else {
+        //             if(circle === false) {
+        //                 extra = move + my_location;
+
+        //             } else {
+        //                 extra = cover_move_location;
+        //             }
+        //         }
+        //         $(target).animate({ 'marginLeft' : extra * -85 + 'px' });
+        //     }
+
+        //     if(_next === true) {
+        //         window.setTimeout( () => {
+        //             _moveAction(location);
+
+        //         }, 300);
+
+        //     } else {
+        //         return window.setTimeout( () => {
+        //             return this._action(cover_move_location);
+
+        //         }, 300);
+        //     }
+        // }
 
         return _moveAction(my_location);
     }
@@ -350,7 +467,8 @@ export default connect(
     overlap_card : init.overlap_card,
     all_card_num : game.all_card_num,
     player_list : init.player_list,
-    map_info : init.map_info
+    map_info : init.map_info,
+    move_location : game.move_location
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),
