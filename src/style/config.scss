@@ -117,6 +117,12 @@ body {
 }
 
 #game_home_div {
+    #game_sound_divs {
+        audio {
+            opacity: 0 !important;
+        }
+    }
+
     #game_title_div { 
         text-align: $aCenter;
         margin-top: 100px;

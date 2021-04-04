@@ -118,6 +118,9 @@ body #notice_div {
   font-size: 12px;
 }
 
+#game_home_div #game_sound_divs audio {
+  opacity: 0 !important;
+}
 #game_home_div #game_title_div {
   text-align: center;
   margin-top: 100px;

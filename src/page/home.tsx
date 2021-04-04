@@ -3,6 +3,7 @@ import Modal from 'react-modal';
 
 import { actionCreators as initActions } from '../Store/modules/init';
 import { actionCreators as gameActions } from '../Store/modules/game';
+import { actionCreators as functionsActions } from '../Store/modules/functions';
 
 import { connect } from 'react-redux'; 
 import { bindActionCreators } from 'redux'; 
@@ -17,6 +18,7 @@ import Game from './game/game';
 import icon from '../source/icon.json';
 
 export interface AllProps {
+  functionsActions : any,
   game_start : boolean,
   setting_modal : boolean,
   setting_type : null | string,
@@ -41,6 +43,15 @@ const modalCustomStyles = {
 };
 
 class Home extends React.Component<AllProps> {
+
+  componentDidMount() {
+    const { functionsActions } = this.props;
+
+    // 함수 state 로 저장하기
+    functionsActions.save_function({ 
+      '_addSound' : this._addSound
+    })
+  }
 
   _flash = (
       target : string, 
@@ -179,12 +190,34 @@ class Home extends React.Component<AllProps> {
     return;
   }
 
+  // 사운드 추가하기
+  _addSound = (type : string, name : string, number : number) => {
+    const sound_list = require('../source/sound.json');
+    const sound = sound_list[type][name][number];
+
+    let audio : any = document.createElement('audio');
+    audio.classList.add('game_sound_audio');
+    
+    if(type === 'effect') {
+      audio.id = 'game_effect_sound';
+    }
+
+    audio.autoplay = true
+    audio.src = sound;
+  }
+
   render() {
     const { game_start, setting_modal, setting_type, initActions, setting_able, loading, main_start } = this.props;
     const modal_title = setting_type === 'setting' ? '게임 셋팅' : '게임 방법';
 
+    const { _addSound } = this;
+
     return(
       <div id='game_home_div'>
+        <div id='game_sound_divs'>
+          {/* <audio id='game_effect_1_audio' controls /> */}
+        </div>
+
         {main_start === false
           ?
             <div id='game_title_div'>
@@ -197,7 +230,9 @@ class Home extends React.Component<AllProps> {
 
         {game_start === false && main_start === false
           ? loading === false 
-            ? <StartHome />
+            ? <StartHome 
+               _addSound={_addSound}
+            />
 
             : <Loading {...this} />
 
@@ -225,7 +260,8 @@ class Home extends React.Component<AllProps> {
               {setting_type !== null
                 ? setting_type === 'setting'
                   ? <Setting
-                      {...this}
+                      _flash={this._flash}
+                      _addSound={this._addSound}
                     />
 
                   : <Notice />
@@ -254,6 +290,7 @@ export default connect(
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),
-      gameActions: bindActionCreators(gameActions, dispatch)
+      gameActions: bindActionCreators(gameActions, dispatch),
+      functionsActions : bindActionCreators(functionsActions, dispatch)
   }) 
 )(Home);

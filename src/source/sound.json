@@ -1,0 +1,14 @@
+{
+    "effect" : {
+        "move" : {
+            "1" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/sound/move_1.mp3"
+        },
+
+        "character" : {
+            "1" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/sound/dog_1.mp3",
+            "2" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/sound/cat_1.mp3",
+            "3" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/sound/cat_2.mp3",
+            "4" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/sound/cat_3.mp3"
+        }
+    }
+}

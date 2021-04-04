@@ -27,7 +27,8 @@ export interface AllProps {
   select_character_list : string,
   _flash : Function,
   setting_able : boolean,
-  overlap_card : boolean
+  overlap_card : boolean,
+  _addSound : Function
 };
 
 class Setting extends React.Component<AllProps> {
@@ -56,7 +57,7 @@ class Setting extends React.Component<AllProps> {
     }
 
     _moveStage = (stage : number) => {
-        const { initActions, setting_stage, setting_able } = this.props;
+        const { initActions, setting_stage, setting_able, _addSound } = this.props;
         const player_list = JSON.parse(this.props.player_list)
 
         if(setting_able === true) {
@@ -72,6 +73,7 @@ class Setting extends React.Component<AllProps> {
                 })
             }
             
+            _addSound('effect', 'move', 1)
 
             initActions.set_setting_state({ 'stage' : stage });
         }
@@ -198,7 +200,7 @@ class Setting extends React.Component<AllProps> {
 
     // 캐릭터 선택하기
     _selectCharacter = (type : string, value : number) => {
-        const { initActions } = this.props;
+        const { initActions, _addSound } = this.props;
         const player_list : any = JSON.parse(this.props.player_list);
 
         const select_info : any = JSON.parse(this.props.select_info);
@@ -253,6 +255,10 @@ class Setting extends React.Component<AllProps> {
 
             if(select_character_list[value] !== false) {
                 overlap_check = true;
+            }
+
+            if(origin_charater !== value) {
+                _addSound('effect', 'character', value);
             }
 
             player_list[select_info.number - 1]['character'] = value;
@@ -768,6 +774,6 @@ class Setting extends React.Component<AllProps> {
     }), 
         (dispatch) => ({ 
         initActions: bindActionCreators(initActions, dispatch),
-        gameActions: bindActionCreators(gameActions, dispatch)
+        gameActions: bindActionCreators(gameActions, dispatch),
     }) 
     )(Setting);

@@ -8,12 +8,14 @@ export const actionCreators = {
 
 export interface functionsState {
     _moveCharacter : Function,
-    _commaMoney : Function
+    _commaMoney : Function,
+    _addSound : Function
 }
 
 const initialState : functionsState = {
     _moveCharacter : () => {},
-    _commaMoney  :() => {}
+    _commaMoney  :() => {},
+    _addSound  :() => {}
 }
 
 export default handleActions<functionsState> ({
@@ -21,7 +23,8 @@ export default handleActions<functionsState> ({
       return {
         ...state,
         _moveCharacter : data.payload._moveCharacter !== undefined ? data.payload._moveCharacter : state._moveCharacter,
-        _commaMoney : data.payload._commaMoney !== undefined ? data.payload._commaMoney : state._commaMoney
+        _commaMoney : data.payload._commaMoney !== undefined ? data.payload._commaMoney : state._commaMoney,
+        _addSound : data.payload._addSound !== undefined ? data.payload._addSound : state._addSound
       };
     }
 

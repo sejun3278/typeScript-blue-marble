@@ -39,7 +39,7 @@ export interface gameState {
     overlap_card_check : string,
     move_location : number | null,
     move_able : boolean,
-    alert_able : boolean
+    alert_able : boolean,
 }
 
 const initialState : gameState = {
