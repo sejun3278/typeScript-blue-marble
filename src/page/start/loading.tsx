@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { actionCreators as initActions } from '../../Store/modules/init';
-import { actionCreators as gameActions } from '../../Store/modules/game';
+import game, { actionCreators as gameActions } from '../../Store/modules/game';
 
 import { connect } from 'react-redux'; 
 import { bindActionCreators } from 'redux'; 
@@ -14,7 +14,9 @@ export interface AllProps {
   player_list : string,
   start_price : number,
   round_timer : number,
-  _setCardDeck : Function
+  _setCardDeck : Function,
+  stop_info : string,
+  able_player : number
 };
 
 class Loading extends React.Component<AllProps> {
@@ -52,7 +54,7 @@ class Loading extends React.Component<AllProps> {
 
     // 게임 초기 설정하기
     _initGameInfo = () => {
-      const { start_price, initActions, gameActions, _setCardDeck } = this.props;
+      const { start_price, initActions, gameActions, _setCardDeck, able_player } = this.props;
       const player_list = JSON.parse(this.props.player_list);
       const Map = require('../game/city_info.json');
 
@@ -71,6 +73,13 @@ class Loading extends React.Component<AllProps> {
 
       // 카드댁 설정
       _setCardDeck('init');
+
+      // 턴 제한 여부 설정하기
+      const stop_info = JSON.parse(this.props.stop_info);
+      for(let i = 1; i <= able_player; i++) {
+        stop_info[i] = 0;
+      }
+      gameActions.event_info({ 'stop_info' : JSON.stringify(stop_info) })
 
       // 맵 저장하기
       initActions.set_setting_state({ 
@@ -93,10 +102,12 @@ class Loading extends React.Component<AllProps> {
 }
 
 export default connect( 
-  ( { init } : StoreState  ) => ({
+  ( { init, game } : StoreState  ) => ({
     player_list : init.player_list,
     start_price : init.start_price,
-    round_timer : init.round_timer
+    round_timer : init.round_timer,
+    stop_info : game.stop_info,
+    able_player : init.able_player
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

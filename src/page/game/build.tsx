@@ -165,8 +165,6 @@ class Build extends React.Component<AllProps> {
         grid_style['gridTemplateColumns'] = 'repeat(3, 33%)';
     }
 
-    console.log(_commaMoney)
-
     return(
       <div id='build_div'>
           <div id='build_city_info_div'>

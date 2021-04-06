@@ -31,7 +31,10 @@ export interface AllProps {
   _setCardDeck : Function,
   alert_able : boolean,
   map_info : string,
-  _moveCharacter : Function
+  _moveCharacter : Function,
+  stop_info : string,
+  move_event_able : boolean,
+  time_over : boolean
 };
 
 const flash_info : any = {
@@ -55,8 +58,29 @@ class Game extends React.Component<AllProps> {
     this._infiniteFlash('game_main_start_title', 70, true);
 
     functionsActions.save_function({
-      '_commaMoney' : this._commaMoney
+      '_commaMoney' : this._commaMoney,
+      '_removeAlertMent' : this._removeAlertMent,
+      '_playerMoney' : this._playerMoney
     })
+  }
+
+  // 플레이어 돈 관리하기
+  _playerMoney = (player : number, money : number, type : string) => {
+    const { initActions } = this.props;
+    const player_list = JSON.parse(this.props.player_list);
+
+    if(type === 'plus') {
+      // 돈 추가하기
+      player_list[player - 1].money += money;
+
+    } else if(type === 'minus') {
+      // 돈 삭감하기
+      player_list[player - 1].money -= money;
+    }
+
+    initActions.set_player_info({ 
+      'player_list' : JSON.stringify(player_list)
+     })
   }
 
   // 돈 컴마 표시하기
@@ -97,6 +121,7 @@ class Game extends React.Component<AllProps> {
   // 라운드 (턴) 시작하기
   _roundStart = (type : string) => {
     const { gameActions, round, turn, _flash, round_timer, _setCardDeck } = this.props;
+    const stop_info = JSON.parse(this.props.stop_info)
     const player_list = JSON.parse(this.props.player_list);
     const map_info = JSON.parse(this.props.map_info);
 
@@ -114,6 +139,18 @@ class Game extends React.Component<AllProps> {
       }, 1000);
 
     } else if(type === 'turn') {
+
+      gameActions.round_start({ 'time_over' : false })
+
+      if(stop_info[turn] > 0) {
+        // 무인도에 있을 경우
+
+        stop_info[turn] = stop_info[turn] - 1;
+        gameActions.event_info({ 'stop_info' : JSON.stringify(stop_info) })
+
+        return this._turnEnd();
+      }
+
       _flash('#play_main_notice_div', false, 1.4, true, 30, null, 1);
       _flash('#playing_action_div', true, 0, false, 30);
 
@@ -124,6 +161,8 @@ class Game extends React.Component<AllProps> {
       if(turn === 1) {
         ment = '<div> 내 턴입니다. </div>';
         save_card_info['card_select_able'] = true;
+
+        gameActions.round_start({ "turn_end_able" : true })
 
       } else {
         ment = `<div> <b class=${'color_player_' + turn}> 플레이어 ${turn} </b>의 턴입니다. </div>`;
@@ -176,6 +215,9 @@ class Game extends React.Component<AllProps> {
       timer_el.style.width = String(6 * (Number(timer) - 1)) + 'px';
 
       if((Number(timer) - 1) <= 0) {
+        // 타임 아웃
+        gameActions.round_start({ 'time_over' : true })
+
         return this._turnEnd();
       }
     }
@@ -249,15 +291,26 @@ class Game extends React.Component<AllProps> {
 
   // 턴 끝내기
   _turnEnd = () => {
-    const { turn, _flash, gameActions } = this.props;
-    const _target : any = document.getElementById(String(turn) + '_player_info_div')
+    const { turn, _flash, gameActions, move_event_able, _moveCharacter, time_over } = this.props;
+    const _target : any = document.getElementById(String(turn) + '_player_info_div');
 
     this._infiniteFlash('player_main_character_' + turn, 60, false);
     _flash('#player_main_character_' + turn, true, 0, false, 30);
 
-    gameActions.move({ 'move_location' : null, 'move_able' : true });
+    if(time_over === true) {
+    // 시간 초과로 인한 상황처리
 
-    gameActions.select_type({ 'select_type' : null, 'select_info' : JSON.stringify({}), "select_tap" : 0 })
+      if(move_event_able === true) {
+        // 김포 공항에서 시간이 초과됐을 경우에는
+        // 플레이어를 은행으로 이동시킨다.
+        _moveCharacter(8, 20);
+
+        gameActions.event_info({ 'move_event_able' : false })
+      }
+    }
+
+    gameActions.move({ 'move_location' : null, 'move_able' : true });
+    gameActions.round_start({ 'turn_end_able' : false })
 
     // 턴 종료
     window.clearInterval(timer_play);
@@ -299,7 +352,9 @@ class Game extends React.Component<AllProps> {
 
   // 컴퓨터 행동 함수
   _playingComputerAction = () => {
-    const { _moveCharacter } = this.props;
+    const { _moveCharacter, gameActions } = this.props;
+
+    gameActions.select_type({ 'select_tap' : 0 })
 
     window.setTimeout( () => {
       // _moveCharacter(1)
@@ -329,16 +384,14 @@ class Game extends React.Component<AllProps> {
           })
         }, 300)
 
-
-
-      }, 2000)
+      }, 1500)
     }
   }
 
   render() {
     const player_list = JSON.parse(this.props.player_list);
     const { _commaMoney, _realGameStart } = this;
-    const { playing, round } = this.props;
+    const { playing } = this.props;
 
     const top_player_list = player_list.slice(0, 2);
     const bottom_player_list = player_list.slice(2, 4);
@@ -403,13 +456,6 @@ class Game extends React.Component<AllProps> {
 
                         let info : any = JSON.stringify(cu);
 
-                        // if(cu.number === 0) {
-                        //   if(round > 1) {
-                        //     // 출발지점을 은행으로 변환하기
-                        //     info = JSON.stringify(MapList.maps[2].info[7]);
-                        //   }
-                        // }
-
                         return(
                           <div key={key_2} className={class_col}
                                style={style}
@@ -444,7 +490,7 @@ class Game extends React.Component<AllProps> {
                                         )
                                     })
 
-                                    : <PlayGame 
+                                    : <PlayGame
                                         {...this}
                                     />
                                   }
@@ -486,7 +532,10 @@ export default connect(
     overlap_card : init.overlap_card,
     alert_able : game.alert_able,
     map_info : init.map_info,
-    _moveCharacter : functions._moveCharacter
+    _moveCharacter : functions._moveCharacter,
+    stop_info : game.stop_info,
+    move_event_able : game.move_event_able,
+    time_over : game.time_over
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

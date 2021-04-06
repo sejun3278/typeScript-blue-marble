@@ -28,19 +28,53 @@ export interface AllProps {
   move_able : boolean,
   move_location : number | null,
   _removeAlertMent : Function,
-  map_info : string
+  map_info : string,
+  stop_info : string,
+  turn_end_able : boolean,
+  card_select_able : boolean
 };
 
 class PlayGame extends React.Component<AllProps> {
 
   render() {
     const { 
-      round, main_ment, alert_ment, timer, round_timer, round_limit, round_start, turn, _turnEnd, select_type, select_tap, gameActions, move_location
+      round, main_ment, alert_ment, timer, round_timer, round_limit, round_start, turn, _turnEnd, select_type, select_tap, 
+      gameActions, move_location, turn_end_able, card_select_able
     } = this.props;
+    const stop_info = JSON.parse(this.props.stop_info);
     // const map_info = JSON.parse(this.props.map_info);
     const select_info = JSON.parse(this.props.select_info);
+    const icon_list = require('../../source/icon.json');
     
     const build_name = '<　건설';
+  
+    let state_name = '통행 카드 뽑기';
+    let state_style : any = {};
+    let event_img : any = null;
+
+    if(select_tap !== 0) {
+      state_style = { 'color' : 'black' };
+      
+      if(select_tap === 1) {
+        state_style = { 'color' : '#ababab' };
+
+      } else if(select_tap === 2) {
+        state_name = '무인도 체류 중';
+        event_img = icon_list.map_icon['stop'];
+  
+      } else if(select_tap === 3) {
+        state_name = '카지노';
+        event_img = icon_list.map_icon['gold_key'];
+
+      } else if(select_tap === 4) {
+        state_name = '김포 공항';
+        event_img = icon_list.map_icon['move'];
+      
+      } else if(select_tap === 5) {
+        state_name = '한국 은행';
+        event_img = icon_list.map_icon['bank'];
+      }
+    }
 
     return(
       <div id='play_game_divs'>
@@ -85,13 +119,19 @@ class PlayGame extends React.Component<AllProps> {
                   ?
                     <div id='playing_contents_div'>
                       <div id='playing_select_div'>
-                        <div onClick={() => gameActions.select_type({ 'select_tap' : 0 })}
-                            style={select_tap !== 0 ?  { 'color' : '#ababab' } : undefined}
+                        {event_img !== null
+                          ? <img alt='' src={event_img} id='playing_event_icon' />
+
+                          : undefined
+                        }
+                        <div onClick={() => select_tap < 2 ? gameActions.select_type({ 'select_tap' : 0 }) : undefined}
+                            style={state_style}
                         > 
-                          통행 카드 뽑기 
+                          {state_name} 
                         </div>
 
-                        {select_type !== null || (select_info !== null && select_info.type === 'map')
+                        {select_info.type !== 'event'
+                        // || (select_info !== null && select_info.type === 'map')
                           ? <div onClick={() => gameActions.select_type({ 'select_tap' : 1 })}
                                 style={select_tap !== 1 ?  { 'color' : '#ababab' } : undefined}
                             >
@@ -105,23 +145,41 @@ class PlayGame extends React.Component<AllProps> {
                       {select_tap === 0
                         ? <Card />
 
-                        : select_info.type === 'map' 
+                        : select_info.type === 'map'
                             ? <Build {...this.props} />
                             : undefined
                       }
                       
+                      {select_tap === 2
+                        ? <div id='stop_div' className='event_ment_div'>
+                            <h3> 당신은 공기 좋고 물 좋은 무인도에 갇혔습니다. </h3>
+                            <h3> 약 <b style={{ 'color' : "#e2703a" }}> { stop_info[turn] } 턴 </b> 후 구조선이 도착합니다. </h3>
+                            <h3> 그때까지 충분한 휴식을 취하십시오. </h3>
+                          </div>
+                        
+                        : undefined
+                      }
+
+                      {select_tap === 4
+                        ? <div id='event_move_div' className='event_ment_div'>
+                            <h3> 이동하고 싶은 장소를 클릭해주세요. </h3>
+                            <h3> 무인도, 상대 플레이어의 토지는 이동할 수 없습니다. </h3>
+                          </div>
+
+                        : undefined
+                      }
 
                     </div>
                   : undefined}
                 </div>
 
-                {turn === 1
+                {turn === 1 && turn_end_able === true && card_select_able === false && move_location !== 20
                 ?
-                <h3 id='end_turn_button'
-                    onClick={() => turn === 1 && round_start === true ? _turnEnd() : undefined}
-                > 
-                  턴 종료 
-                </h3>
+                  <h3 id='end_turn_button'
+                      onClick={() => turn === 1 && round_start === true ? _turnEnd() : undefined}
+                  > 
+                    턴 종료 
+                  </h3>
 
                 : undefined}
               </div>
@@ -148,7 +206,10 @@ export default connect(
     select_tap : game.select_tap,
     move_able : game.move_able,
     move_location : game.move_location,
-    map_info : init.map_info
+    map_info : init.map_info,
+    stop_info : game.stop_info,
+    turn_end_able : game.turn_end_able,
+    card_select_able : game.card_select_able
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

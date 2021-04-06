@@ -25,7 +25,11 @@ export interface AllProps {
   all_card_num : number,
   player_list : string,
   map_info : string,
-  move_location : number | null
+  move_location : number | null,
+  stop_info : string,
+  _removeAlertMent : Function,
+  _playerMoney : Function,
+  time_over : boolean
 };
 
 class Card extends React.Component<AllProps> {
@@ -98,7 +102,8 @@ class Card extends React.Component<AllProps> {
                 if(save_obj['card_select_able'] === false) {
                     save_obj['card_notice_ment'] = save_obj['all_card_num'] + ' 칸을 이동합니다.';
 
-                    this._moveCharacter(save_obj['all_card_num']);
+                    // this._moveCharacter(save_obj['all_card_num'], null);
+                    this._moveCharacter(20, null) //
                 }
 
                 initActions.set_setting_state({ 'card_deck' : JSON.stringify(card_deck) })
@@ -111,12 +116,17 @@ class Card extends React.Component<AllProps> {
     }
 
     // 캐릭터 움직이기
-    _moveCharacter = (move : number) => {
-        const { turn, gameActions } = this.props;
+    _moveCharacter = (move : number, _player_location : undefined | null | number) => {
+        const { turn, gameActions, _removeAlertMent, _playerMoney } = this.props;
         const player_list = JSON.parse(this.props.player_list);
 
-        // const target : any = document.getElementById('player_main_character_' + turn);
-        const my_location : number = player_list[Number(turn) - 1].location;
+        let my_location : number = 0;
+        if(_player_location !== undefined && _player_location !== null) {
+            my_location = _player_location;
+
+        } else {
+            my_location = player_list[Number(turn) - 1].location;
+        }
         // const my_location : number = 10;
 
         // 캐릭터의 현재 위치 + 이동할 위치
@@ -125,7 +135,6 @@ class Card extends React.Component<AllProps> {
         if(move_location > 27) {
             move_location = move_location - 28;
         }
-
         gameActions.move({ 'move_location' : move_location });
 
         let circle : boolean = false;
@@ -194,7 +203,6 @@ class Card extends React.Component<AllProps> {
 
             const move_obj = get_move_map_info(location, move);
 
-            let final : boolean = false;
             const move_character = (obj : any, num : number, _location : number) => {
                 const { turn } = this.props;
 
@@ -230,6 +238,10 @@ class Card extends React.Component<AllProps> {
 
                         circle = true;
                         // 한바퀴 순환
+
+                        // 순환시 현재 자금의 10% 추가
+                        _removeAlertMent('은행으로부터 50 만원의 추가금을 받았습니다.');
+                        _playerMoney(turn, 50, 'plus');
                     }
 
                     return window.setTimeout( () => {
@@ -246,134 +258,12 @@ class Card extends React.Component<AllProps> {
             return move_character(move_obj, start, my_location);
         }
 
-        // const _moveAction = (location : number) => {
-        //     // 최종 목적지 = move_location; ex ) 5 (0 + 5)
-        //     // 현재 위치 = location; ex ) 0
-        //     // 이동할 거리 = move; ex ) 5
-        //     let extra : number = 0;
-        //     let _next : boolean = false;
-            
-        //     if( (location < 28 && location >= 21) ) {
-
-        //         let _move : number = 0;
-        //         if(cover_move_location > 27) {
-        //             extra = -7;
-        //             _next = true;
-        //             location = 0;
-
-        //             cover_move_location = move_location;
-        //             circle = true;
-
-        //         } else if(cover_move_location <= 27) {
-        //             extra = location - cover_move_location;
-        //         }
-
-        //         if(extra === 0) {
-        //             _move = -590;
-        //         } else if(extra === -1) {
-        //             _move = -510;
-        //         } else if(extra === -2) {
-        //             _move = -430;
-        //         } else if(extra === -3) {
-        //             _move = -350;
-        //         } else if(extra === -4) {
-        //             _move = -265;
-        //         } else if(extra === -5) {
-        //             _move = -185;
-        //         } else if(extra === -6) {
-        //             _move = -105;
-        //         } else {
-        //             _move = -35;
-        //         }
-
-        //         $(target).animate({ 'marginTop' : _move + 'px' });
-
-
-        //     } else if( (location < 21 && location >= 14) ) {
-        //         // 14 ~ 21 사이일 때
-
-        //         let _move : number = 0;
-        //         if(cover_move_location > 21) {
-        //             extra = -6;
-        //             _next = true;
-        //             location = 21;
-
-        //         } else if(cover_move_location <= 21) {
-        //             extra = location - cover_move_location;
-        //         }
-
-        //         if(extra > 0) {
-        //             extra = -extra;
-        //         }
-
-        //         if(extra === -1) {
-        //             _move = -435;
-        //         } else if(extra === -2) {
-        //             _move = -345;
-        //         } else if(extra === -3) {
-        //             _move = -260;
-        //         } else if(extra === -4) {
-        //             _move = -175;
-        //         } else if(extra === -5) {
-        //             _move = -85;
-        //         } else if(extra === -6) {
-        //             _move = 5;
-        //         }
-
-        //         $(target).animate({ 'marginLeft' : _move + 'px' });
-
-        //     } else if( (location < 14 && location >= 6)) {
-        //         // 6 ~ 14 사이일 때
-
-        //         if(cover_move_location > 14) {
-        //             extra = -8;
-        //             _next = true;
-        //             location = 14;
-
-        //         } else if(cover_move_location <= 14) {
-        //             extra = location - cover_move_location;
-        //         }
-
-        //         $(target).animate({ 'marginTop' : extra * 85 + 'px' });
-
-        //     } else if(location < 7 && location >= 0) {
-        //         // 0 ~ 6 사이일 때
-        //         if( cover_move_location > 6 ) {
-        //             extra = 6;
-        //             _next = true;
-        //             location = 6;
-
-        //         } else {
-        //             if(circle === false) {
-        //                 extra = move + my_location;
-
-        //             } else {
-        //                 extra = cover_move_location;
-        //             }
-        //         }
-        //         $(target).animate({ 'marginLeft' : extra * -85 + 'px' });
-        //     }
-
-        //     if(_next === true) {
-        //         window.setTimeout( () => {
-        //             _moveAction(location);
-
-        //         }, 300);
-
-        //     } else {
-        //         return window.setTimeout( () => {
-        //             return this._action(cover_move_location);
-
-        //         }, 300);
-        //     }
-        // }
-
         return _moveAction(my_location);
     }
 
     // 이동 후 액션취하기
     _action = (arrive : number) => {
-        const { turn, initActions, gameActions } = this.props;
+        const { turn, initActions, gameActions, time_over, _removeAlertMent } = this.props;
         const player_list : any = JSON.parse(this.props.player_list);
 
         const city : any = JSON.parse(this.props.map_info);
@@ -383,8 +273,44 @@ class Card extends React.Component<AllProps> {
 
         player_list[Number(turn) - 1].location = arrive;
 
+        let tap_info = 1;
+        if(city_info.type === 'event') {
+            if(city_info.number === 6) {
+                // 무인도
+                tap_info = 2;
+                
+                const stop_info : any = JSON.parse(this.props.stop_info);
+                stop_info[Number(turn)] = 1;
+
+                gameActions.event_info({ 'stop_info' : JSON.stringify(stop_info) })
+
+            } else if(city_info.number === 14) {
+                // 카지노
+                tap_info = 3;
+
+            } else if(city_info.number === 20) {
+                // 김포공항
+                tap_info = 4;
+
+                gameActions.event_info({ 'move_event_able' : true });
+
+            } else if(city_info.number === 0) {
+                // 은행
+                tap_info = 5;
+
+                _removeAlertMent('은행으로부터 50 만원의 추가금을 받았습니다.');
+                player_list[Number(turn) - 1].money += 50;    
+            }
+        }
+
+        if(time_over === true) {
+            tap_info = 0;
+
+            gameActions.round_start({ 'time_over' : false })
+        }
+
         gameActions.move({ 'move_able' : false });;
-        gameActions.select_type({ 'select_type' : select_type, 'select_info' : JSON.stringify(city_info), "select_tap" : 1 })
+        gameActions.select_type({ 'select_type' : select_type, 'select_info' : JSON.stringify(city_info), "select_tap" : tap_info })
         initActions.set_player_info({ 'player_list' : JSON.stringify(player_list) })
     }
 
@@ -455,7 +381,7 @@ class Card extends React.Component<AllProps> {
 }
 
 export default connect( 
-  ( { init, game } : StoreState  ) => ({
+  ( { init, game, functions } : StoreState  ) => ({
     card_deck : init.card_deck,
     card_notice_ment : game.card_notice_ment,
     select_first_card : game.select_first_card,
@@ -468,7 +394,11 @@ export default connect(
     all_card_num : game.all_card_num,
     player_list : init.player_list,
     map_info : init.map_info,
-    move_location : game.move_location
+    move_location : game.move_location,
+    stop_info : game.stop_info,
+    _removeAlertMent : functions._removeAlertMent,
+    _playerMoney : functions._playerMoney,
+    time_over : game.time_over
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

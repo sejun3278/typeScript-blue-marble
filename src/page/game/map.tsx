@@ -7,9 +7,9 @@ import { actionCreators as functionsActions } from '../../Store/modules/function
 import { connect } from 'react-redux'; 
 import { bindActionCreators } from 'redux'; 
 import { StoreState } from '../../Store/modules';
-import build from './build';
 
 export interface AllProps {
+    gameActions : any,
     class_col : string,
     style : any,
     info : string,
@@ -19,13 +19,43 @@ export interface AllProps {
     able_player : number,
     move_location : null | number,
     _commaMoney : Function,
-    round : number
+    round : number,
+    move_event_able : boolean,
+    _removeAlertMent : Function,
+    _moveCharacter : Function
 };
 
 class Map extends React.Component<AllProps> {
 
+  _moveMap = (number : number) => {
+    const { move_event_able, _removeAlertMent, _moveCharacter, gameActions } = this.props;
+
+    let move = 0;
+    if(move_event_able === true) {
+      if(number === 6 || number === 20) {
+        return _removeAlertMent('이동 할 수 없는 지역입니다.');
+
+      } else {
+        // 이동할 거리 구하기
+        if(number > 20) {
+          move = number - 20;
+
+        } else {
+          move = 7 + (number + 1)
+        }
+
+        gameActions.event_info({ 'move_event_able' : false })
+        return _moveCharacter(move, 20);
+      }
+
+    } else {
+      return _removeAlertMent('김포 공항에서만 이동할 수 있습니다.');
+    }
+  }
+
   render() {
-    const { class_col, style, playing, able_player, move_location, _commaMoney, round } = this.props;
+    const { class_col, style, playing, able_player, move_location, _commaMoney, round, move_event_able } = this.props;
+    const { _moveMap } = this;
 
     const info = JSON.parse(this.props.info);
     const city_info = JSON.parse(this.props.map_info)
@@ -85,9 +115,13 @@ class Map extends React.Component<AllProps> {
       }
     }
 
+    // 김포 공항에서 이동 가능한 맵 표시하기
+
+
     return(
         <div className={class_col} style={cover_style}
             id={'map_number_' + info.number}
+            onClick={move_event_able === true ? () => _moveMap(info.number) : undefined}
         >
             <div className={map_class_col}
                  style={color_style}
@@ -151,11 +185,14 @@ export default connect(
     able_player : init.able_player,
     move_location : game.move_location,
     _commaMoney : functions._commaMoney,
-    round : game.round
+    round : game.round,
+    move_event_able : game.move_event_able,
+    _removeAlertMent : functions._removeAlertMent,
+    _moveCharacter : functions._moveCharacter
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),
-      gamections: bindActionCreators(gameActions, dispatch),
+      gameActions: bindActionCreators(gameActions, dispatch),
       functionsActions : bindActionCreators(functionsActions, dispatch)
   }) 
 )(Map);

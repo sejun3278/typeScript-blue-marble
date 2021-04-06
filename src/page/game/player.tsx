@@ -17,7 +17,8 @@ export interface AllProps {
   number : number,
   _commaMoney : Function,
   turn : number | null,
-  round_start : boolean
+  round_start : boolean,
+  stop_info : string
 };
 
 class Player extends React.Component<AllProps> {
@@ -84,6 +85,17 @@ class Player extends React.Component<AllProps> {
       }
     }
 
+    const stop_info = JSON.parse(this.props.stop_info);
+    let stop_turn : string = '';
+
+    if(info.location === 6) {
+      if(stop_info[Number(info.number)] > 0) {
+        stop_turn = ' ( ' + stop_info[Number(info.number)] + ' 턴 남음 )'
+      }
+
+    } else {
+
+    }
     // let my_location : string = MapInfo[info.location].name;
 
     return(
@@ -107,7 +119,7 @@ class Player extends React.Component<AllProps> {
 
                 : <div className='game_contents_user_info_div'>
                     <div className='game_user_have_money_div'> 보유 자산　|　{money} 만원 </div>
-                    <div className='game_user_my_location'> 현재 위치　|　{my_location} </div>
+                    <div className='game_user_my_location'> 현재 위치　|　{my_location} <b> {stop_turn} </b> </div>
                     <div className='game_user_has_location'> 보유 도시　|　{info.maps.length}　도시 소유 중 </div>
                   </div>
             }
@@ -130,7 +142,8 @@ class Player extends React.Component<AllProps> {
 export default connect( 
   ( { init, game } : StoreState  ) => ({
     turn : game.turn,
-    round_start : game.round_start
+    round_start : game.round_start,
+    stop_info : game.stop_info
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

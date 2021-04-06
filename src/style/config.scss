@@ -803,6 +803,7 @@ body {
         height: 255px;
 
         #playing_contents_div {
+            // height: 260px !important;
         }
 
         #playing_select_div {
@@ -810,6 +811,12 @@ body {
             font-size: 13px;
             font-family: $recipe_korea;
             color: #046582;
+
+            img {
+                width: 25px;
+                position: absolute;
+                margin: -5px -25px;
+            }
 
             div {
                 cursor: pointer;
@@ -882,7 +889,7 @@ body {
 
 
 #end_turn_button {
-    margin: 0px;
+    margin: 0px !important;
     background-color: black;
     display: inline-block;
     width: 85%;
@@ -998,4 +1005,8 @@ body {
             }
         }
     }
+}
+
+.event_ment_div {
+    margin-top: 50px;
 }

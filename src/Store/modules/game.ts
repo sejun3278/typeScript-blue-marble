@@ -7,6 +7,7 @@ const SETTIMER = 'game/set_timer';
 const SELECTTYPE = 'game/select_type';
 const SELECTCARDINFO = 'game/select_card_info';
 const MOVE = 'game/move';
+const EVENTINFO = 'game/event_info';
 
 export const actionCreators = {
     game_loading : createAction(GAMELOADING),
@@ -15,7 +16,8 @@ export const actionCreators = {
     set_timer : createAction(SETTIMER),
     select_type : createAction(SELECTTYPE),
     select_card_info : createAction(SELECTCARDINFO),
-    move : createAction(MOVE)
+    move : createAction(MOVE),
+    event_info : createAction(EVENTINFO),
 }
 
 export interface gameState {
@@ -40,6 +42,10 @@ export interface gameState {
     move_location : number | null,
     move_able : boolean,
     alert_able : boolean,
+    stop_info : string,
+    turn_end_able : boolean,
+    move_event_able : boolean,
+    time_over : boolean
 }
 
 const initialState : gameState = {
@@ -63,7 +69,11 @@ const initialState : gameState = {
     overlap_card_check : JSON.stringify({}),
     move_location : null,
     move_able : true,
-    alert_able : true
+    alert_able : true,
+    stop_info : JSON.stringify({}),
+    turn_end_able : false,
+    move_event_able : false,
+    time_over : false
 }
 
 export default handleActions<gameState> ({
@@ -81,7 +91,9 @@ export default handleActions<gameState> ({
             ...state,
             round_start : data.payload.round_start !== undefined ? data.payload.round_start : state.round_start,
             turn : data.payload.turn !== undefined ? data.payload.turn : state.turn,
-            round : data.payload.round !== undefined ? data.payload.round : state.round
+            round : data.payload.round !== undefined ? data.payload.round : state.round,
+            turn_end_able : data.payload.turn_end_able !== undefined ? data.payload.turn_end_able : state.turn_end_able,
+            time_over : data.payload.time_over !== undefined ? data.payload.time_over : state.time_over
         }
     },
 
@@ -129,5 +141,15 @@ export default handleActions<gameState> ({
             move_able : data.payload.move_able !== undefined ? data.payload.move_able : state.move_able
         }
     },
+
+    [EVENTINFO] : (state : any, data : any) => {
+        return {
+            ...state,
+            stop_info : data.payload.stop_info !== undefined ? data.payload.stop_info : state.stop_info,
+            move_event_able : data.payload.move_event_able !== undefined ? data.payload.move_event_able : state.move_event_able
+        }
+    }
+
+    
 
 }, initialState);
