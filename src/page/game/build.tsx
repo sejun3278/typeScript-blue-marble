@@ -144,17 +144,21 @@ class Build extends React.Component<AllProps> {
 
     const select_info = JSON.parse(this.props.select_info);
 
-    let my_info = JSON.parse(this.props.player_list)
+    let my_info = JSON.parse(this.props.player_list);
+
     if(turn !== null) {
-        my_info = my_info[turn - 1];
+        // if(turn > 0) {
+            my_info = my_info[turn - 1];
+        // }
     }
 
     let buy_button_style : any = {};
     let buy_able = true;
+
     if(my_info.money < select_info.price) {
         buy_button_style['backgroundColor'] = '#ababab';
         buy_button_style['color'] = '#b7657b';
-
+            
         buy_able = false;
     }
 
@@ -207,9 +211,9 @@ class Build extends React.Component<AllProps> {
                 <input 
                     style={buy_button_style}
                     type='button' value={select_info.price + ' 만원'} 
-                    onMouseEnter={(event) => buy_able === true ? _buyMap(event, 'on', my_info) : undefined}
-                    onMouseOut={(event) => buy_able === true ? _buyMap(event, 'off', my_info) : undefined}
-                    onClick={(event) =>  _buyMap(event, 'click', my_info)}
+                    onMouseEnter={(event) => buy_able === true && turn === 1 ? _buyMap(event, 'on', my_info) : undefined}
+                    onMouseOut={(event) => buy_able === true && turn === 1 ? _buyMap(event, 'off', my_info) : undefined}
+                    onClick={(event) => turn === 1 ? _buyMap(event, 'click', my_info) : undefined}
                 />
               </div>
             

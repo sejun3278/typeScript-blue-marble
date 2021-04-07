@@ -1,4 +1,5 @@
 import * as React from 'react';
+import $ from 'jquery';
 
 import { actionCreators as initActions } from '../../Store/modules/init';
 import { actionCreators as gameActions } from '../../Store/modules/game';
@@ -31,16 +32,56 @@ export interface AllProps {
   map_info : string,
   stop_info : string,
   turn_end_able : boolean,
-  card_select_able : boolean
+  card_select_able : boolean,
+  time_over : boolean,
+  select_first_card : number,
+  select_last_card : number,
 };
 
 class PlayGame extends React.Component<AllProps> {
 
+  _moveTap = (num : number) => {
+    const { gameActions, select_last_card, select_first_card } = this.props;
+    
+    gameActions.select_type({ 'select_tap' : num });
+
+    const css_style : any = { 
+      'marginTop' : '-30px',
+      'border' : 'solid 3px black',
+      'color' : 'black'
+    };
+
+    let target : any = undefined;
+
+    // if(select_tap !== num) {
+      if(num === 0) {
+        window.setTimeout( () => {
+
+          if(select_first_card > 0) {
+            target = document.getElementById('each_cards_number_' + select_first_card);
+
+            css_style['zIndex'] = 100;
+            $(target).css(css_style);
+          }
+
+          if(select_last_card > 0) {
+            target = document.getElementById('each_cards_number_' + select_last_card);
+
+            css_style['zIndex'] = 200;
+            $(target).css(css_style);
+          }
+
+        }, 0)
+      }
+  }
+
   render() {
     const { 
-      round, main_ment, alert_ment, timer, round_timer, round_limit, round_start, turn, _turnEnd, select_type, select_tap, 
-      gameActions, move_location, turn_end_able, card_select_able
+      round, main_ment, alert_ment, timer, round_timer, round_limit, round_start, turn, _turnEnd, time_over, select_tap, 
+      move_location, turn_end_able, card_select_able
     } = this.props;
+    const { _moveTap } = this;
+
     const stop_info = JSON.parse(this.props.stop_info);
     // const map_info = JSON.parse(this.props.map_info);
     const select_info = JSON.parse(this.props.select_info);
@@ -124,7 +165,7 @@ class PlayGame extends React.Component<AllProps> {
 
                           : undefined
                         }
-                        <div onClick={() => select_tap < 2 ? gameActions.select_type({ 'select_tap' : 0 }) : undefined}
+                        <div onClick={select_tap <= 1 ? () => _moveTap(0) : undefined}
                             style={state_style}
                         > 
                           {state_name} 
@@ -132,7 +173,7 @@ class PlayGame extends React.Component<AllProps> {
 
                         {select_info.type !== 'event'
                         // || (select_info !== null && select_info.type === 'map')
-                          ? <div onClick={() => gameActions.select_type({ 'select_tap' : 1 })}
+                          ? <div onClick={() => _moveTap(1)}
                                 style={select_tap !== 1 ?  { 'color' : '#ababab' } : undefined}
                             >
                               {build_name} 
@@ -173,7 +214,7 @@ class PlayGame extends React.Component<AllProps> {
                   : undefined}
                 </div>
 
-                {turn === 1 && turn_end_able === true && card_select_able === false && move_location !== 20
+                {turn === 1 && turn_end_able === true && card_select_able === false && move_location !== 20 && time_over === false
                 ?
                   <h3 id='end_turn_button'
                       onClick={() => turn === 1 && round_start === true ? _turnEnd() : undefined}
@@ -209,7 +250,10 @@ export default connect(
     map_info : init.map_info,
     stop_info : game.stop_info,
     turn_end_able : game.turn_end_able,
-    card_select_able : game.card_select_able
+    card_select_able : game.card_select_able,
+    time_over : game.time_over,
+    select_first_card : game.select_first_card,
+    select_last_card : game.select_last_card
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

@@ -29,7 +29,8 @@ export interface AllProps {
   stop_info : string,
   _removeAlertMent : Function,
   _playerMoney : Function,
-  time_over : boolean
+  time_over : boolean,
+  able_player : number
 };
 
 class Card extends React.Component<AllProps> {
@@ -46,7 +47,8 @@ class Card extends React.Component<AllProps> {
     const target = event !== null ? event.target : document.getElementById(event);
     const card_deck : any = JSON.parse(this.props.card_deck);
 
-    const able = card_deck[key].select === false && card_deck[key].use === false
+    const { time_over } = this.props;
+    const able = card_deck[key].select === false && card_deck[key].use === false && time_over === false
 
         if(able === true) {
             if(type === 'on') {
@@ -58,7 +60,11 @@ class Card extends React.Component<AllProps> {
                 target.style.color = '#bbbbbb';
 
             } else if(type === 'click') {
-                const { card_limit, overlap_card, select_first_card, all_card_num, initActions, gameActions } = this.props;
+                const { card_limit, overlap_card, select_first_card, all_card_num, initActions, gameActions} = this.props;
+
+                if(time_over === true) {
+                    return;
+                }
 
                 let select_num : number | null = null;
                 const save_obj : any = { 'all_card_num' : all_card_num };
@@ -103,13 +109,13 @@ class Card extends React.Component<AllProps> {
                     save_obj['card_notice_ment'] = save_obj['all_card_num'] + ' 칸을 이동합니다.';
 
                     // this._moveCharacter(save_obj['all_card_num'], null);
-                    this._moveCharacter(20, null) //
+                    this._moveCharacter(1, null) //
                 }
 
                 initActions.set_setting_state({ 'card_deck' : JSON.stringify(card_deck) })
                 gameActions.select_card_info(save_obj);
 
-                $(target).animate({ 'marginTop' : '-20px' }, 200);
+                $(target).animate({ 'marginTop' : '-30px' }, 200);
                 $(target).css({ 'zIndex' : z_idx });
             }
         }
@@ -205,6 +211,7 @@ class Card extends React.Component<AllProps> {
 
             const move_character = (obj : any, num : number, _location : number) => {
                 const { turn } = this.props;
+                // const move_list = require('./move.json');
 
                 const target : any = document.getElementById('player_main_character_' + turn);
                 let player_move_location = _location + obj[num];
@@ -317,12 +324,12 @@ class Card extends React.Component<AllProps> {
   render() {
       const { 
           card_notice_ment, select_first_card, select_last_card, turn, round_start, card_select_able,
-          card_limit
+          card_limit, time_over
         } = this.props;
       const card_deck = JSON.parse(this.props.card_deck);
       const { _toggleCardEvent } = this;
 
-      let toggle_able = card_select_able === true && round_start === true && turn === 1;
+      const toggle_able = card_select_able === true && round_start === true && turn === 1 && time_over === false;
 
     return(
       <div id='card_select_div' className='aLeft'>
@@ -342,6 +349,7 @@ class Card extends React.Component<AllProps> {
                     onMouseEnter={(event) => toggle_able === true ? _toggleCardEvent(event, 'on', key) : undefined}
                     onMouseOut={(event) => toggle_able === true ? _toggleCardEvent(event, 'off', key) : undefined}
                     onClick={(event) => toggle_able === true ? _toggleCardEvent(event, 'click', key) : undefined}
+                    id={'each_cards_number_' + card_num}
                 >
                     {el.select === false ? '?' : card_num}
                 </div>
@@ -398,7 +406,8 @@ export default connect(
     stop_info : game.stop_info,
     _removeAlertMent : functions._removeAlertMent,
     _playerMoney : functions._playerMoney,
-    time_over : game.time_over
+    time_over : game.time_over,
+    able_player : init.able_player
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

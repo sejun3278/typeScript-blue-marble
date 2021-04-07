@@ -34,7 +34,13 @@ export interface AllProps {
   _moveCharacter : Function,
   stop_info : string,
   move_event_able : boolean,
-  time_over : boolean
+  time_over : boolean,
+  move_able : boolean,
+  card_deck : string,
+  card_limit : number,
+  select_first_card : number,
+  select_last_card : number,
+  move_location : number | null
 };
 
 const flash_info : any = {
@@ -140,7 +146,7 @@ class Game extends React.Component<AllProps> {
 
     } else if(type === 'turn') {
 
-      gameActions.round_start({ 'time_over' : false })
+      gameActions.round_start({ 'time_over' : false });
 
       if(stop_info[turn] > 0) {
         // 무인도에 있을 경우
@@ -180,7 +186,7 @@ class Game extends React.Component<AllProps> {
       save_card_info['card_notice_ment'] = "첫번째 통행 카드를 뽑아주세요.";
       gameActions.select_card_info(save_card_info);
 
-      this._infiniteFlash('player_main_character_' + turn, 60, true);
+      // this._infiniteFlash('player_main_character_' + turn, 60, true);
 
       // 타이머 지정하기
       if(round_timer !== 0) {
@@ -217,6 +223,7 @@ class Game extends React.Component<AllProps> {
       if((Number(timer) - 1) <= 0) {
         // 타임 아웃
         gameActions.round_start({ 'time_over' : true })
+        gameActions.select_card_info({ 'card_select_able' : false });
 
         return this._turnEnd();
       }
@@ -248,7 +255,8 @@ class Game extends React.Component<AllProps> {
 
     } else {
       // 턴이 모두 돈 후, 다음 라운드 시작
-      gameActions.round_start({ 'turn' : 0 });
+      // gameActions.round_start({ 'turn' : 0 });
+      gameActions.select_type({ 'select_tap' : 0 })
 
       this._roundStart('round');
     }
@@ -290,13 +298,17 @@ class Game extends React.Component<AllProps> {
   }
 
   // 턴 끝내기
-  _turnEnd = () => {
-    const { turn, _flash, gameActions, move_event_able, _moveCharacter, time_over } = this.props;
+  _turnEnd = async () => {
+    const { turn, _flash, gameActions, move_event_able, _moveCharacter, time_over, move_able } = this.props;
     const _target : any = document.getElementById(String(turn) + '_player_info_div');
 
     this._infiniteFlash('player_main_character_' + turn, 60, false);
     _flash('#player_main_character_' + turn, true, 0, false, 30);
 
+    // 턴 종료
+    window.clearInterval(timer_play);
+
+    let timer = 200;
     if(time_over === true) {
     // 시간 초과로 인한 상황처리
 
@@ -305,60 +317,151 @@ class Game extends React.Component<AllProps> {
         // 플레이어를 은행으로 이동시킨다.
         _moveCharacter(8, 20);
 
-        gameActions.event_info({ 'move_event_able' : false })
+        gameActions.event_info({ 'move_event_able' : false });
+
+      } else {
+        if(move_able === true) {
+          // 카드 뽑기 전인 상태
+          gameActions.select_type({ 'select_tap' : 0 });
+
+          // 강제로 랜덤한 카드를 뽑는다.
+          await this._drawRandomCard();
+
+          timer = timer * 10;
+        }
       }
     }
 
-    gameActions.move({ 'move_location' : null, 'move_able' : true });
-    gameActions.round_start({ 'turn_end_able' : false })
+    window.setTimeout( () => {
+      gameActions.move({ 'move_location' : null, 'move_able' : true });
+      gameActions.round_start({ 'turn_end_able' : false })
 
-    // 턴 종료
-    window.clearInterval(timer_play);
+      // 카드 섞기
+      gameActions.select_card_info({
+        'card_select_able' : false,
+        'select_first_card' : 0,
+        'select_last_card' : 0,
+        'all_card_num' : 0
+      })
 
-    // 카드 섞기
-    gameActions.select_card_info({
-      'card_select_able' : false,
-      'select_first_card' : 0,
-      'select_last_card' : 0,
-      'all_card_num' : 0
-    })
-
-    $('.each_cards_div').animate({
-      'marginLeft' : '0px'
-    }, 200)
-
-    return window.setTimeout( () => {
-      _flash('#card_list_div', false, 1.4, false, 30);
+      $('.each_cards_div').animate({
+        'marginLeft' : '0px'
+      }, 200)
 
       return window.setTimeout( () => {
-        _flash('#timer_slide_div', false, 1.4, false, 30);
-        _flash('#playing_action_div', false, 1.4, false, 30);
-        _flash('#play_main_notice_div', false, 1.4, false, 30);
-    
-        _target.style.border = 'solid 1px #ababab';
-    
-        gameActions.set_timer({ 'timer' : '-' })
-    
-          window.setTimeout( () => {
-            gameActions.round_start({ 'round_start' : false })
-            gameActions.set_game_notice_ment({ 'main_ment' : '' })
-          }, 300)
-    
-        const next_turn = turn + 1;
-        return this._nextGames(next_turn);
+        _flash('#card_list_div', false, 1.4, false, 30);
+
+        return window.setTimeout( () => {
+          _flash('#timer_slide_div', false, 1.4, false, 30);
+          _flash('#playing_action_div', false, 1.4, false, 30);
+          _flash('#play_main_notice_div', false, 1.4, false, 30);
+      
+          _target.style.border = 'solid 1px #ababab';
+      
+          gameActions.set_timer({ 'timer' : '-' })
+      
+            window.setTimeout( () => {
+              gameActions.round_start({ 'round_start' : false })
+              gameActions.set_game_notice_ment({ 'main_ment' : '' })
+            }, 300)
+      
+          const next_turn = turn + 1;
+          return this._nextGames(next_turn);
+        }, 200)
       }, 200)
-    }, 200)
+    }, timer)
+  }
+
+  // 랜덤으로 카드 뽑기
+  _drawRandomCard = () => {
+    const card_deck = JSON.parse(this.props.card_deck);
+    const { card_limit, _moveCharacter, initActions, select_last_card, select_first_card, gameActions, overlap_card } = this.props;
+
+    const save_obj : any = { 'all_card_num' : 0 };
+
+    let cover_first_card = select_first_card;
+    const get_random_card : Function = (limit : number) => {
+      const random_card = Math.trunc( Math.random() * (card_deck.length - 0) + 0 )
+
+      if( (card_deck[random_card].select === false && card_deck[random_card].use === false) && card_deck[random_card].number !== cover_first_card) {
+        card_deck[random_card].select = true;
+        
+        if(overlap_card === false) {
+          card_deck[random_card].use = true;
+        }
+
+        initActions.set_setting_state({ 'card_deck' : JSON.stringify(card_deck) });
+
+        const card_number = card_deck[random_card].number;
+        save_obj['all_card_num'] += card_number
+
+        const target : any = document.getElementById('each_cards_number_' + card_number);
+        let z_idx : number = 100;
+        
+        if(cover_first_card === 0) {
+          save_obj['select_first_card'] = card_number;
+          cover_first_card = card_number;
+
+        } else if(select_last_card === 0) {
+          save_obj['select_last_card'] = card_number;
+          save_obj['all_card_num'] = cover_first_card + card_number;
+
+          limit = 2;
+
+          z_idx = 200;
+        }
+
+        $(target).animate({ 'marginTop' : '-30px' }, 300)
+        $(target).css({ 
+          'zIndex' : z_idx,
+          'border' : 'solid 3px black',
+          'color' : 'black'
+        });
+        $(target).text(card_number)
+
+        gameActions.select_card_info(save_obj)
+
+      } else {
+        return get_random_card(limit);
+      }
+
+      return window.setTimeout( async () => {
+        if(limit >= card_limit) {
+          gameActions.select_card_info({
+            'card_notice_ment' : save_obj['all_card_num'] + ' 칸을 이동합니다.'
+          })
+          // await _moveCharacter(save_obj['all_card_num'], null);
+          await _moveCharacter(1, null);
+  
+          return initActions.set_setting_state({ 'card_deck' : JSON.stringify(card_deck) });
+
+        } else {
+          limit = limit + 1;
+  
+          return get_random_card(limit);
+        }
+      }, 500)
+    }
+
+    return get_random_card(1);
   }
 
   // 컴퓨터 행동 함수
   _playingComputerAction = () => {
-    const { _moveCharacter, gameActions } = this.props;
+    const { _moveCharacter, gameActions, turn, move_location } = this.props;
+    const player_list = JSON.parse(this.props.player_list);
 
     gameActions.select_type({ 'select_tap' : 0 })
 
     window.setTimeout( () => {
-      // _moveCharacter(1)
-      this._turnEnd();
+      this._drawRandomCard();
+
+      window.setTimeout( () => {
+        this._turnEnd();
+
+
+
+      }, 2000)
     }, 2000)
   }
 
@@ -535,7 +638,13 @@ export default connect(
     _moveCharacter : functions._moveCharacter,
     stop_info : game.stop_info,
     move_event_able : game.move_event_able,
-    time_over : game.time_over
+    time_over : game.time_over,
+    move_able : game.move_able,
+    card_deck : init.card_deck,
+    card_limit : init.card_limit,
+    select_first_card : game.select_first_card,
+    select_last_card : game.select_last_card,
+    move_location : game.move_location
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),
