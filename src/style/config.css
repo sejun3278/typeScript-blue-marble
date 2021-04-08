@@ -506,6 +506,10 @@ body #notice_div {
 #game_div #game_contents_div #game_main_contents_div #game_main_map_div .game_main_map_divs #game_middle_right_divs {
   border-left: solid 2px #ababab;
 }
+#game_div #game_contents_div #game_main_contents_div #game_main_map_div .game_main_map_divs .map_name_div {
+  width: 89px !important;
+  margin-left: 0px !important;
+}
 #game_div #game_contents_div #game_main_contents_div #game_main_map_div .game_main_map_divs .map_name_div b {
   display: block;
   border-bottom: solid 1px #ababab;
@@ -795,7 +799,7 @@ body #notice_div {
   height: 10px;
   line-height: 10px;
 }
-#build_div #build_map_div .build_select_divs #build_confirm_div {
+#build_div #build_map_div .build_select_divs #build_confirm_div, #build_div #build_map_div .build_select_divs .build_complate_div {
   height: 52px;
   font-size: 18px;
   font-family: SDSamliphopangche_Outline;
@@ -808,9 +812,75 @@ body #notice_div {
   position: absolute;
   margin: -52px 0px;
 }
+#build_div #build_map_div .build_select_divs .build_complate_div {
+  color: #94ebcd;
+}
 
 .event_ment_div {
   margin-top: 50px;
+}
+
+.build_complate_icon_divs {
+  width: 30px !important;
+  position: absolute;
+  opacity: 0.15;
+}
+.build_complate_icon_divs img {
+  width: 30px !important;
+}
+
+#casino_event_div #casino_betting_select_div {
+  margin-top: 10px;
+}
+#casino_event_div #casino_betting_select_div input {
+  margin-left: 10px;
+  padding: 3px;
+}
+#casino_event_div #casino_betting_select_div #betting_input {
+  width: 100px;
+  text-align: right;
+  margin-right: 10px;
+}
+#casino_event_div #casino_select_card_div {
+  font-family: Y_Spotlight;
+  border: solid 2px #ababab;
+  margin: 20px 20px;
+  height: 140px;
+}
+#casino_event_div #casino_select_card_div #betting_confirm_input {
+  width: 50%;
+  background-color: white;
+  margin-top: 35px;
+  font-size: 13px;
+  padding: 5px 0px;
+  cursor: pointer;
+  font-family: paybooc-Bold;
+  background-color: black;
+  color: white;
+}
+#casino_event_div #casino_select_card_div #casino_card_limit_select {
+  margin-top: 20px;
+}
+#casino_event_div #casino_select_card_div #casino_card_limit_select div {
+  border: solid 1px #ababab;
+  color: white;
+  border-bottom: none;
+  background-color: #bbbbbb;
+  height: 39.5px;
+  width: 100.5%;
+  margin-left: -2px !important;
+  line-height: 38px;
+  cursor: pointer;
+}
+#casino_event_div #casino_select_card_div #casino_game_contents_div #casino_card_selecting_div {
+  margin-top: 20px;
+}
+#casino_event_div #casino_select_card_div #casino_game_contents_div #casino_card_selecting_div div {
+  display: inline-block;
+  width: 60px;
+  height: 70px;
+  line-height: 70px;
+  font-size: 19px;
 }
 
 /*# sourceMappingURL=config.css.map */

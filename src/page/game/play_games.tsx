@@ -10,6 +10,7 @@ import { StoreState } from '../../Store/modules';
 
 import Card from './card';
 import Build from './build';
+import Casino from './casino';
 
 export interface AllProps {
   gameActions : any,
@@ -35,7 +36,7 @@ export interface AllProps {
   card_select_able : boolean,
   time_over : boolean,
   select_first_card : number,
-  select_last_card : number,
+  select_last_card : number
 };
 
 class PlayGame extends React.Component<AllProps> {
@@ -198,6 +199,12 @@ class PlayGame extends React.Component<AllProps> {
                             <h3> 그때까지 충분한 휴식을 취하십시오. </h3>
                           </div>
                         
+                        : undefined
+                      }
+
+                      {select_tap === 3
+                        ? <Casino />
+
                         : undefined
                       }
 

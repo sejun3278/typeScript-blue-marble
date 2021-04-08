@@ -231,7 +231,7 @@
     "7" : {
         "name" : "독도",
         "info" : {
-            "fullname" : "경상북도 울릉군 울릉읍 독도리",
+            "fullname" : "대한민국 경상북도 울릉군 울릉읍 독도리",
             "person" : "약 40 명"
         },
         "type" : "map",
@@ -240,28 +240,28 @@
         "build" : [
             {
                 "level" : 1,
-                "name" : "태극기",
+                "name" : "태극기 1",
                 "price" : 25,
                 "build" : false
             },
 
             {
                 "level" : 2,
-                "name" : "태극기",
+                "name" : "태극기 2",
                 "price" : 50,
                 "build" : false
             },
 
             {
                 "level" : 3,
-                "name" : "태극기",
+                "name" : "태극기 3",
                 "price" : 100,
                 "build" : false
             },
 
             {
                 "level" : 4,
-                "name" : "태극기",
+                "name" : "독도는 우리땅",
                 "price" : 200,
                 "build" : false
             }

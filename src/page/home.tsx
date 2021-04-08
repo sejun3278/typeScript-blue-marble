@@ -49,7 +49,8 @@ class Home extends React.Component<AllProps> {
 
     // 함수 state 로 저장하기
     functionsActions.save_function({ 
-      '_addSound' : this._addSound
+      '_addSound' : this._addSound,
+      '_flash' : this._flash
     })
   }
 

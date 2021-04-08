@@ -2,7 +2,7 @@ import * as React from 'react';
 import $ from 'jquery';
 
 import { actionCreators as initActions } from '../../Store/modules/init';
-import { actionCreators as gameActions } from '../../Store/modules/game';
+import game, { actionCreators as gameActions } from '../../Store/modules/game';
 import { actionCreators as functionsActions } from '../../Store/modules/functions';
 
 import { connect } from 'react-redux'; 
@@ -30,7 +30,8 @@ export interface AllProps {
   _removeAlertMent : Function,
   _playerMoney : Function,
   time_over : boolean,
-  able_player : number
+  able_player : number,
+  _timer : Function
 };
 
 class Card extends React.Component<AllProps> {
@@ -109,7 +110,7 @@ class Card extends React.Component<AllProps> {
                     save_obj['card_notice_ment'] = save_obj['all_card_num'] + ' 칸을 이동합니다.';
 
                     // this._moveCharacter(save_obj['all_card_num'], null);
-                    this._moveCharacter(1, null) //
+                    this._moveCharacter(14, null) //
                 }
 
                 initActions.set_setting_state({ 'card_deck' : JSON.stringify(card_deck) })
@@ -211,29 +212,39 @@ class Card extends React.Component<AllProps> {
 
             const move_character = (obj : any, num : number, _location : number) => {
                 const { turn } = this.props;
-                // const move_list = require('./move.json');
 
                 const target : any = document.getElementById('player_main_character_' + turn);
+
+                // 현재 left 위치
+                const player_left : number = Number( target.style.marginLeft.slice(0, target.style.marginLeft.indexOf("px")) );
+
+                // 현재 top 위치
+                const player_top : number = Number( target.style.marginTop.slice(0, target.style.marginTop.indexOf("px")) );
+
                 let player_move_location = _location + obj[num];
 
                 if(num === 1) {
-                    $(target).animate({ 'marginLeft' : player_move_location * -84.5 + 'px' }, 300);
+                    $(target).animate({ 'marginLeft' : ( player_left + ( (player_move_location - _location) * -88.5) ) + 'px' }, 300);
+                    // $(target).animate({ 'marginLeft' : ( (player_move_location * -84.5) ) + 'px' }, 300);
 
                 } else if(num === 2) {
-                    $(target).animate({ 'marginTop' : (player_move_location - 6) * -84 + 'px' }, 300);
+                    $(target).animate({ 'marginTop' : (player_top + ( (player_move_location - _location) * -80 ) - 10) + 'px' }, 300);
+                    // $(target).animate({ 'marginTop' : ( (player_move_location - 6) * -80 ) - 10 + 'px' }, 300);
 
                 } else if(num === 3) {
-                    const player_left : number = Number( target.style.marginLeft.slice(0, target.style.marginLeft.indexOf("px")) );
-                    const move_left = player_left + ( obj[num] * 86.5 );
-                    
-                    $(target).animate({ 'marginLeft' : move_left + 'px' }, 300);
+                    // const player_left : number = Number( target.style.marginLeft.slice(0, target.style.marginLeft.indexOf("px")) );
+
+                    // const move_left : number = player_left + ( obj[num] * 86.5 );
+                    // $(target).animate({ 'marginLeft' : move_left + 'px' }, 300);
+
+                    $(target).animate({ 'marginLeft' : ( player_left + ( (player_move_location - _location) * 88.5) ) + 'px' }, 300);
 
                 } else if(num === 4) {
-                    const player_top : number = Number( target.style.marginTop.slice(0, target.style.marginTop.indexOf("px")) );
-                    const move_top = player_top + ( obj[num] * 82 );
+                    // const player_top : number = Number( target.style.marginTop.slice(0, target.style.marginTop.indexOf("px")) );
+                    // const move_top = player_top + ( obj[num] * 82 );
 
-
-                    $(target).animate({ 'marginTop' : move_top + 'px' }, 300);
+                    // $(target).animate({ 'marginTop' : move_top + 'px' }, 300);
+                    $(target).animate({ 'marginTop' : (player_top + ( (player_move_location - _location) * 80 )) + 'px' }, 300);
                 }
 
                 obj[num] = 0;
@@ -270,7 +281,7 @@ class Card extends React.Component<AllProps> {
 
     // 이동 후 액션취하기
     _action = (arrive : number) => {
-        const { turn, initActions, gameActions, time_over, _removeAlertMent } = this.props;
+        const { turn, initActions, gameActions, time_over, _removeAlertMent, _timer } = this.props;
         const player_list : any = JSON.parse(this.props.player_list);
 
         const city : any = JSON.parse(this.props.map_info);
@@ -280,6 +291,7 @@ class Card extends React.Component<AllProps> {
 
         player_list[Number(turn) - 1].location = arrive;
 
+        let turn_end = { 'turn_end_able' : true };
         let tap_info = 1;
         if(city_info.type === 'event') {
             if(city_info.number === 6) {
@@ -294,6 +306,10 @@ class Card extends React.Component<AllProps> {
             } else if(city_info.number === 14) {
                 // 카지노
                 tap_info = 3;
+                turn_end['turn_end_able'] = false;
+
+                gameActions.event_info({ 'casino_start' : true })
+                _timer(false)
 
             } else if(city_info.number === 20) {
                 // 김포공항
@@ -315,7 +331,8 @@ class Card extends React.Component<AllProps> {
 
             gameActions.round_start({ 'time_over' : false })
         }
-
+        
+        gameActions.round_start(turn_end)
         gameActions.move({ 'move_able' : false });;
         gameActions.select_type({ 'select_type' : select_type, 'select_info' : JSON.stringify(city_info), "select_tap" : tap_info })
         initActions.set_player_info({ 'player_list' : JSON.stringify(player_list) })
@@ -407,7 +424,8 @@ export default connect(
     _removeAlertMent : functions._removeAlertMent,
     _playerMoney : functions._playerMoney,
     time_over : game.time_over,
-    able_player : init.able_player
+    able_player : init.able_player,
+    _timer : functions._timer
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

@@ -22,7 +22,7 @@ export interface AllProps {
     round : number,
     move_event_able : boolean,
     _removeAlertMent : Function,
-    _moveCharacter : Function
+    _moveCharacter : Function,
 };
 
 class Map extends React.Component<AllProps> {
@@ -116,7 +116,11 @@ class Map extends React.Component<AllProps> {
     }
 
     // 김포 공항에서 이동 가능한 맵 표시하기
-
+    if(move_event_able === true) {
+      if(info.number === 6) {
+        cover_style['backgroundColor'] = '#ababab';
+      }
+    }
 
     return(
         <div className={class_col} style={cover_style}
@@ -136,6 +140,47 @@ class Map extends React.Component<AllProps> {
                         />
 
                     : <div>
+                        {city_info[info.number].build.map( (el : any, key : number) => {
+                          let building_icon : any = null;
+                          const icon_list = require('../../source/icon.json');
+
+                          let margin_style : any = {};
+                          if(info.number !== 7) {
+                            if(key === 0) {
+                              building_icon = icon_list.building.house;
+
+                            } else if(key === 1) {
+                              building_icon = icon_list.building.apartment;
+                            
+                            } else if(key === 2) {
+                              building_icon = icon_list.building.hotel;
+                            }
+
+                          } else if(info.number === 7) {
+                            building_icon = icon_list.building.flag;
+                          }
+                          
+                          if(info.number >= 1 && info.number <= 5) {
+                            margin_style['marginTop'] = '10px';
+
+                          } else if(info.number >= 7 && info.number <= 13) {
+                            margin_style['marginTop'] = '-2px';
+
+                          } else if(info.number >= 15 && info.number <= 19) {
+                            margin_style['marginTop'] = '10px';
+                          }
+
+                          margin_style['marginLeft'] = 30 * key + 'px';
+
+                          if(el.build === true) {
+                            return(
+                              <div className='build_complate_icon_divs' key={key}>
+                                <img alt='' src={building_icon} style={margin_style} />
+                              </div>
+                            )
+                          }
+                        })}
+
                         <div className='city_price_div'
                             style={city_style}
                         >

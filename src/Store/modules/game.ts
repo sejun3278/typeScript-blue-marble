@@ -45,7 +45,12 @@ export interface gameState {
     stop_info : string,
     turn_end_able : boolean,
     move_event_able : boolean,
-    time_over : boolean
+    time_over : boolean,
+    casino_start : boolean,
+    casino_betting : number,
+    casino_game_start : boolean | null,
+    casino_select_card : number,
+    casino_card_info : string
 }
 
 const initialState : gameState = {
@@ -73,7 +78,12 @@ const initialState : gameState = {
     stop_info : JSON.stringify({}),
     turn_end_able : false,
     move_event_able : false,
-    time_over : false
+    time_over : false,
+    casino_start : false,
+    casino_betting : 1,
+    casino_game_start : false,
+    casino_select_card : 0,
+    casino_card_info : JSON.stringify([])
 }
 
 export default handleActions<gameState> ({
@@ -146,7 +156,12 @@ export default handleActions<gameState> ({
         return {
             ...state,
             stop_info : data.payload.stop_info !== undefined ? data.payload.stop_info : state.stop_info,
-            move_event_able : data.payload.move_event_able !== undefined ? data.payload.move_event_able : state.move_event_able
+            move_event_able : data.payload.move_event_able !== undefined ? data.payload.move_event_able : state.move_event_able,
+            casino_start : data.payload.casino_start !== undefined ? data.payload.casino_start : state.casino_start,
+            casino_betting : data.payload.casino_betting !== undefined ? data.payload.casino_betting : state.casino_betting,
+            casino_game_start : data.payload.casino_game_start !== undefined ? data.payload.casino_game_start : state.casino_game_start,
+            casino_select_card : data.payload.casino_select_card !== undefined ? data.payload.casino_select_card : state.casino_select_card,
+            casino_card_info : data.payload.casino_card_info !== undefined ? data.payload.casino_card_info : state.casino_card_info
         }
     }
 

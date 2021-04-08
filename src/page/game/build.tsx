@@ -223,26 +223,33 @@ class Build extends React.Component<AllProps> {
                     const img_list : any = img.building;
                     let build_icon : undefined | string = ''
 
-                    if(key === 0) {
-                        build_icon = img_list['house'];
+                    let build_style : any = {};
+                    if(select_info.number !== 7) {
+                        if(key === 0) {
+                            build_icon = img_list['house'];
 
-                        if(el.build === false) {
-                            build_icon = img_list['house_gray'];
+                            if(el.build === false) {
+                                build_icon = img_list['house_gray'];
+                            }
+
+                        } else if(key === 1) {
+                            build_icon = img_list['apartment'];
+
+                            if(el.build === false) {
+                                build_icon = img_list['apartment_gray'];
+                            }
+
+                        } else if(key === 2) {
+                            build_icon = img_list['hotel'];
+
+                            if(el.build === false) {
+                                build_icon = img_list['hotel_gray'];
+                            }
                         }
 
-                    } else if(key === 1) {
-                        build_icon = img_list['apartment'];
-
-                        if(el.build === false) {
-                            build_icon = img_list['apartment_gray'];
-                        }
-
-                    } else if(key === 2) {
-                        build_icon = img_list['hotel'];
-
-                        if(el.build === false) {
-                            build_icon = img_list['hotel_gray'];
-                        }
+                    } else if(select_info.number === 7) {
+                        build_icon = img_list['flag'];
+                        build_style['width'] = '55px';
                     }
 
                     const able_condition = turn === 1 && el.build === false;
@@ -255,14 +262,13 @@ class Build extends React.Component<AllProps> {
                                      onClick={() => able_condition === true ? _build('click', key) : undefined}
                                      style={el.build === false ? { 'color' : '#ababab'} : { 'color' : 'black' }}
                                 >
-
                                     <div className='build_select_title_div'>
-                                        <b> {el.name} </b>
+                                        <b style={el.build === true ? { 'fontFamily' : 'Recipekorea' } : undefined}> {el.name} </b>
                                     </div>
 
                                     <div>
                                         <img className='building_image' alt=''
-                                             src={build_icon}
+                                             src={build_icon} style={build_style}
                                         />
 
                                         <div className='build_price_div'>
@@ -278,6 +284,16 @@ class Build extends React.Component<AllProps> {
 
                                             : undefined
                                         }
+
+                                        {el.build === true
+                                            ? <div className='build_complate_div'>
+                                                건설 완료
+                                              </div>
+
+                                            : undefined
+                                        }
+
+                                        
                                     </div>
 
                                 </div>

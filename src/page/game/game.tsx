@@ -40,7 +40,8 @@ export interface AllProps {
   card_limit : number,
   select_first_card : number,
   select_last_card : number,
-  move_location : number | null
+  move_location : number | null,
+  casino_start : boolean
 };
 
 const flash_info : any = {
@@ -66,7 +67,8 @@ class Game extends React.Component<AllProps> {
     functionsActions.save_function({
       '_commaMoney' : this._commaMoney,
       '_removeAlertMent' : this._removeAlertMent,
-      '_playerMoney' : this._playerMoney
+      '_playerMoney' : this._playerMoney,
+      '_timer' : this._timer
     })
   }
 
@@ -168,7 +170,7 @@ class Game extends React.Component<AllProps> {
         ment = '<div> 내 턴입니다. </div>';
         save_card_info['card_select_able'] = true;
 
-        gameActions.round_start({ "turn_end_able" : true })
+        // gameActions.round_start({ "turn_end_able" : true })
 
       } else {
         ment = `<div> <b class=${'color_player_' + turn}> 플레이어 ${turn} </b>의 턴입니다. </div>`;
@@ -200,7 +202,7 @@ class Game extends React.Component<AllProps> {
         // 타이머 가동하기
         timer_play = window.setInterval( () => {
 
-          return this._timer();
+          return this._timer(true);
         }, 1000)
       }      
 
@@ -210,23 +212,28 @@ class Game extends React.Component<AllProps> {
   }
 
   // 타이머 시작 / 종료
-  _timer = () => {
+  _timer = (start : boolean) => {
     const { gameActions, _flash, timer } = this.props;
 
-    if(timer !== '-') {
-      gameActions.set_timer({ 'timer' : String(Number(timer) - 1) })
-      _flash('#timer_notice_div', false, 1.4, true, 25, null, 1);
+    if(start === true) {
+      if(timer !== '-') {
+        gameActions.set_timer({ 'timer' : String(Number(timer) - 1) })
+        _flash('#timer_notice_div', false, 1.4, true, 25, null, 1);
 
-      const timer_el : any = document.getElementById('timer_slide_div');
-      timer_el.style.width = String(6 * (Number(timer) - 1)) + 'px';
+        const timer_el : any = document.getElementById('timer_slide_div');
+        timer_el.style.width = String(6 * (Number(timer) - 1)) + 'px';
 
-      if((Number(timer) - 1) <= 0) {
-        // 타임 아웃
-        gameActions.round_start({ 'time_over' : true })
-        gameActions.select_card_info({ 'card_select_able' : false });
+        if((Number(timer) - 1) <= 0) {
+          // 타임 아웃
+          gameActions.round_start({ 'time_over' : true })
+          gameActions.select_card_info({ 'card_select_able' : false });
 
-        return this._turnEnd();
+          return this._turnEnd();
+        }
       }
+
+    } else if(start === false) {
+      window.clearInterval(timer_play);
     }
   }
 
@@ -459,8 +466,6 @@ class Game extends React.Component<AllProps> {
       window.setTimeout( () => {
         this._turnEnd();
 
-
-
       }, 2000)
     }, 2000)
   }
@@ -644,7 +649,8 @@ export default connect(
     card_limit : init.card_limit,
     select_first_card : game.select_first_card,
     select_last_card : game.select_last_card,
-    move_location : game.move_location
+    move_location : game.move_location,
+    casino_start : game.casino_start
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

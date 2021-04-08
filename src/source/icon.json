@@ -29,7 +29,8 @@
         "apartment" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/apartment.png",
         "apartment_gray" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/apartment_gray.png",
         "hotel" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/hotel.png",
-        "hotel_gray" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/hotel_gray.png"
+        "hotel_gray" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/hotel_gray.png",
+        "flag" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/flag_of_south_korea.png"
     },
 
     "img" : {
