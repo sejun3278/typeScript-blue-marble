@@ -874,13 +874,23 @@ body #notice_div {
 }
 #casino_event_div #casino_select_card_div #casino_game_contents_div #casino_card_selecting_div {
   margin-top: 20px;
+  background-color: white !important;
+  color: black !important;
 }
-#casino_event_div #casino_select_card_div #casino_game_contents_div #casino_card_selecting_div div {
+#casino_event_div #casino_select_card_div #casino_game_contents_div #casino_card_selecting_div .select_casino_card_div, #casino_event_div #casino_select_card_div #casino_game_contents_div #casino_card_selecting_div .casino_select_card_able_div {
   display: inline-block;
   width: 60px;
   height: 70px;
   line-height: 70px;
   font-size: 19px;
+}
+#casino_event_div #casino_select_card_div #casino_game_contents_div #casino_card_selecting_div .casino_select_card_able_div {
+  position: absolute;
+  border: solid 2px black;
+  margin: -2px -38px;
+  background-color: black;
+  color: white;
+  opacity: 0.5;
 }
 
 /*# sourceMappingURL=config.css.map */

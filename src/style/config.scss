@@ -1082,12 +1082,25 @@ body {
         #casino_game_contents_div {
             #casino_card_selecting_div {
                 margin-top: 20px;
-                div {
+                background-color: white !important;
+                color: black !important;
+
+                .select_casino_card_div, .casino_select_card_able_div{
                     display: inline-block;
                     width: 60px;
                     height: 70px;
                     line-height: 70px;
                     font-size: 19px;
+                }
+
+                .casino_select_card_able_div {
+                    position: absolute;
+                    border: solid 2px black;
+                    margin: -2px -38px;
+                    background-color: black;
+                    color: white;
+                    opacity: 0.5;
+                    
                 }
             }
         }

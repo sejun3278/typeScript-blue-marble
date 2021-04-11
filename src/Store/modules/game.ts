@@ -8,6 +8,7 @@ const SELECTTYPE = 'game/select_type';
 const SELECTCARDINFO = 'game/select_card_info';
 const MOVE = 'game/move';
 const EVENTINFO = 'game/event_info';
+const RESETCASINGO = 'game/reset_casino';
 
 export const actionCreators = {
     game_loading : createAction(GAMELOADING),
@@ -18,6 +19,7 @@ export const actionCreators = {
     select_card_info : createAction(SELECTCARDINFO),
     move : createAction(MOVE),
     event_info : createAction(EVENTINFO),
+    reset_casino : createAction(RESETCASINGO),
 }
 
 export interface gameState {
@@ -50,7 +52,12 @@ export interface gameState {
     casino_betting : number,
     casino_game_start : boolean | null,
     casino_select_card : number,
-    casino_card_info : string
+    casino_card_tool : string,
+    casino_card_select : boolean,
+    casino_card_ment : string,
+    casino_select_result : string,
+    casino_now_card_number : number,
+    casino_game_result : boolean | null
 }
 
 const initialState : gameState = {
@@ -83,7 +90,12 @@ const initialState : gameState = {
     casino_betting : 1,
     casino_game_start : false,
     casino_select_card : 0,
-    casino_card_info : JSON.stringify([])
+    casino_card_tool : JSON.stringify([]),
+    casino_card_select : false,
+    casino_card_ment : "　",
+    casino_select_result : JSON.stringify({}),
+    casino_now_card_number : 0,
+    casino_game_result : null
 }
 
 export default handleActions<gameState> ({
@@ -161,10 +173,29 @@ export default handleActions<gameState> ({
             casino_betting : data.payload.casino_betting !== undefined ? data.payload.casino_betting : state.casino_betting,
             casino_game_start : data.payload.casino_game_start !== undefined ? data.payload.casino_game_start : state.casino_game_start,
             casino_select_card : data.payload.casino_select_card !== undefined ? data.payload.casino_select_card : state.casino_select_card,
-            casino_card_info : data.payload.casino_card_info !== undefined ? data.payload.casino_card_info : state.casino_card_info
+            casino_card_tool : data.payload.casino_card_tool !== undefined ? data.payload.casino_card_tool : state.casino_card_tool,
+            casino_card_ment : data.payload.casino_card_ment !== undefined ? data.payload.casino_card_ment : state.casino_card_ment,
+            casino_card_select : data.payload.casino_card_select !== undefined ? data.payload.casino_card_select : state.casino_card_select,
+            casino_select_result : data.payload.casino_select_result !== undefined ? data.payload.casino_select_result : state.casino_select_result,
+            casino_now_card_number : data.payload.casino_now_card_number !== undefined ? data.payload.casino_now_card_number : state.casino_now_card_number,
+            casino_game_result : data.payload.casino_game_result !== undefined ? data.payload.casino_game_result : state.casino_game_result
+        }
+    },
+
+    [RESETCASINGO] : (state : any) => {
+        return {
+            ...state,
+            casino_start : false,
+            casino_betting : 1,
+            casino_game_start : false,
+            casino_select_card : 0,
+            casino_card_tool : JSON.stringify([]),
+            casino_card_select : false,
+            casino_card_ment : "　",
+            casino_select_result : JSON.stringify({}),
+            casino_now_card_number : 0,
+            casino_game_result : null
         }
     }
-
-    
 
 }, initialState);

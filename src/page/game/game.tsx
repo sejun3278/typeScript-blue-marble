@@ -41,7 +41,8 @@ export interface AllProps {
   select_first_card : number,
   select_last_card : number,
   move_location : number | null,
-  casino_start : boolean
+  casino_start : boolean,
+  casino_game_result : boolean | null
 };
 
 const flash_info : any = {
@@ -62,13 +63,15 @@ class Game extends React.Component<AllProps> {
     window.scrollTo(0, 80);
 
     // 초기 무한 플래쉬
-    this._infiniteFlash('game_main_start_title', 70, true);
+    this._infiniteFlash('game_main_start_title', 70, true, null);
 
     functionsActions.save_function({
       '_commaMoney' : this._commaMoney,
       '_removeAlertMent' : this._removeAlertMent,
       '_playerMoney' : this._playerMoney,
-      '_timer' : this._timer
+      '_timer' : this._timer,
+      '_infiniteFlash' : this._infiniteFlash,
+      '_timerOn' : this._timerOn
     })
   }
 
@@ -101,7 +104,7 @@ class Game extends React.Component<AllProps> {
 
     if(game_start_button === false) {
       game_start_button = true;
-      this._infiniteFlash('game_main_start_title', 70, false);
+      this._infiniteFlash('game_main_start_title', 70, false, null);
 
       window.setTimeout( () => {
         _flash('#game_main_start_ready_div', false, 1.4, false, 40);
@@ -200,14 +203,22 @@ class Game extends React.Component<AllProps> {
         gameActions.set_timer({ 'timer' : String(round_timer) })
 
         // 타이머 가동하기
-        timer_play = window.setInterval( () => {
-
-          return this._timer(true);
-        }, 1000)
+        this._timerOn();
       }      
 
       gameActions.set_game_notice_ment({ 'main_ment' : ment })
       gameActions.round_start({ 'round_start' : true })
+    }
+  }
+
+  // 타이머 가동하기
+  _timerOn = () => {
+    const { round_timer } = this.props;
+
+    if(round_timer !== 0) {
+      timer_play = window.setInterval( () => {
+        return this._timer(true);
+      }, 1000)
     }
   }
 
@@ -216,7 +227,7 @@ class Game extends React.Component<AllProps> {
     const { gameActions, _flash, timer } = this.props;
 
     if(start === true) {
-      if(timer !== '-') {
+      // if(timer !== '-') {
         gameActions.set_timer({ 'timer' : String(Number(timer) - 1) })
         _flash('#timer_notice_div', false, 1.4, true, 25, null, 1);
 
@@ -230,7 +241,7 @@ class Game extends React.Component<AllProps> {
 
           return this._turnEnd();
         }
-      }
+      // }
 
     } else if(start === false) {
       window.clearInterval(timer_play);
@@ -270,7 +281,7 @@ class Game extends React.Component<AllProps> {
   }
 
   // 무한 플래쉬 효과
-  _infiniteFlash = (target : string, timer : number, on : boolean) => {
+  _infiniteFlash = (target : string, timer : number, on : boolean, finish_opacity : undefined | null | number) => {
     const _target : any = document.getElementById(target);
 
     if(_target) { 
@@ -297,7 +308,12 @@ class Game extends React.Component<AllProps> {
         }, timer)
 
       } else if(on === false) {
-        _target.style.opacity = 0;
+        let _finish = 0;
+        if(finish_opacity !== undefined && finish_opacity !== null) {
+          _finish = finish_opacity;
+        }
+
+        _target.style.opacity = _finish;
 
         return clearInterval(flash_info['flash']);
       }
@@ -306,10 +322,10 @@ class Game extends React.Component<AllProps> {
 
   // 턴 끝내기
   _turnEnd = async () => {
-    const { turn, _flash, gameActions, move_event_able, _moveCharacter, time_over, move_able } = this.props;
+    const { turn, _flash, gameActions, move_event_able, _moveCharacter, time_over, move_able, casino_game_result } = this.props;
     const _target : any = document.getElementById(String(turn) + '_player_info_div');
 
-    this._infiniteFlash('player_main_character_' + turn, 60, false);
+    this._infiniteFlash('player_main_character_' + turn, 60, false, null);
     _flash('#player_main_character_' + turn, true, 0, false, 30);
 
     // 턴 종료
@@ -342,6 +358,11 @@ class Game extends React.Component<AllProps> {
     window.setTimeout( () => {
       gameActions.move({ 'move_location' : null, 'move_able' : true });
       gameActions.round_start({ 'turn_end_able' : false })
+
+      if(casino_game_result !== null) {
+        // 카지노 초기화하기
+        gameActions.reset_casino();
+      }
 
       // 카드 섞기
       gameActions.select_card_info({
@@ -650,7 +671,8 @@ export default connect(
     select_first_card : game.select_first_card,
     select_last_card : game.select_last_card,
     move_location : game.move_location,
-    casino_start : game.casino_start
+    casino_start : game.casino_start,
+    casino_game_result : game.casino_game_result
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

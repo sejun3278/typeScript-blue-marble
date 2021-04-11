@@ -13,7 +13,9 @@ export interface functionsState {
     _removeAlertMent : Function,
     _playerMoney : Function,
     _timer : Function,
-    _flash : Function
+    _flash : Function,
+    _infiniteFlash : Function,
+    _timerOn : Function
 }
 
 const initialState : functionsState = {
@@ -23,7 +25,9 @@ const initialState : functionsState = {
     _removeAlertMent : () => {},
     _playerMoney : () => {},
     _timer : () => {},
-    _flash : () => {}
+    _flash : () => {},
+    _infiniteFlash : () => {},
+    _timerOn : () => {}
 }
 
 export default handleActions<functionsState> ({
@@ -36,7 +40,9 @@ export default handleActions<functionsState> ({
         _removeAlertMent : data.payload._removeAlertMent !== undefined ? data.payload._removeAlertMent : state._removeAlertMent,
         _playerMoney : data.payload._playerMoney !== undefined ? data.payload._playerMoney : state._playerMoney,
         _timer : data.payload._timer !== undefined ? data.payload._timer : state._timer,
-        _flash : data.payload._flash !== undefined ? data.payload._flash : state._flash
+        _flash : data.payload._flash !== undefined ? data.payload._flash : state._flash,
+        _infiniteFlash : data.payload._infiniteFlash !== undefined ? data.payload._infiniteFlash : state._infiniteFlash,
+        _timerOn : data.payload._timerOn !== undefined ? data.payload._timerOn : state._timerOn
       };
     }
 
