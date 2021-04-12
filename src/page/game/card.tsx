@@ -228,7 +228,13 @@ class Card extends React.Component<AllProps> {
                     // $(target).animate({ 'marginLeft' : ( (player_move_location * -84.5) ) + 'px' }, 300);
 
                 } else if(num === 2) {
-                    $(target).animate({ 'marginTop' : (player_top + ( (player_move_location - _location) * -80 ) - 10) + 'px' }, 300);
+                    
+                    if(player_move_location === 14) {
+                        $(target).animate({ 'marginTop' : '-650px' }, 300);
+
+                    } else {
+                        $(target).animate({ 'marginTop' : (player_top + ( (player_move_location - _location) * -80 ) - 10) + 'px' }, 300);
+                    }
                     // $(target).animate({ 'marginTop' : ( (player_move_location - 6) * -80 ) - 10 + 'px' }, 300);
 
                 } else if(num === 3) {

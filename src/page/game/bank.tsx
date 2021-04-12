@@ -109,15 +109,60 @@ class Bank extends React.Component<AllProps> {
     }
   }
 
+  _setPlayerRating = (player : number, bank_info : any) => {
+    const player_list = JSON.parse(this.props.player_list);
+    const my_info = player_list[player - 1];
+
+    let rating : number = 9;
+
+    // 보유 도시 보기
+    const my_city_length = my_info.maps.length;
+    if(my_city_length > 0) {
+        if(my_city_length >= 1 && my_city_length < 4) {
+            // 1 ~ 3개 이상 소유
+            rating = rating - 1;
+
+        } else if(my_city_length >= 4 && my_city_length < 8) {
+            // 4 ~ 7개 이상 소유
+            rating = rating - 1;
+
+        } else if(my_city_length >= 8 && my_city_length < 12) {
+            // 8 ~ 11개 이상 소유
+            rating = rating - 1;
+
+        } else if(my_city_length >= 12 && my_city_length < 17) {
+            // 12 ~ 16개 이상 소유
+            rating = rating - 1;
+
+        } else if(my_city_length >= 17 && my_city_length < 20) {
+            // 17 ~ 20개 이상 소유
+            rating = rating - 1;
+        }
+    }
+    
+    // 예금액 보기
+    const save_money : number = bank_info.save_money;
+    if(save_money > 0) {
+        if(save_money >= 100 && save_money < 200) {
+            rating = rating - 1;
+        }
+    }
+
+    return rating;
+  }
+
   render() {
     const { bank_tap, gameActions, bank_incentive_percent, turn } = this.props;
-    const { _clickBankTap, _toggleHomeDiv, _saveMoney, _returnTotalIncentive } = this;
+    const { _clickBankTap, _toggleHomeDiv, _saveMoney, _returnTotalIncentive, _setPlayerRating } = this;
 
     const bank_info = JSON.parse(this.props.bank_info);
     const my_info = bank_info[Number(turn)];
 
     const tap_arr : string[] = ['예금', '대출']
     const home_arr : string[] = ['예금 정보', '대출 정보'];
+
+    // 신용 등급 정하기
+    let player_rating = _setPlayerRating(Number(turn), my_info);
 
     return(
       <div id='bank_event_map_div'>
@@ -199,7 +244,9 @@ class Bank extends React.Component<AllProps> {
         : bank_tap === 2
 
             ? <div id='bank_loan_div'>
-
+                <div id='bank_loan_player_credit_rating'>
+                    <h3> <b> 내 신용 등급 </b>　|　<b> {player_rating} 등급 </b> </h3>
+                </div>
               </div>
 
         : undefined

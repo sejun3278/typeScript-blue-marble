@@ -973,5 +973,8 @@ body #notice_div {
   grid-template-columns: 150px auto;
   margin-top: 5px;
 }
+#bank_event_map_div #bank_loan_div #bank_loan_player_credit_rating h3 {
+  font-family: Recipekorea;
+}
 
 /*# sourceMappingURL=config.css.map */

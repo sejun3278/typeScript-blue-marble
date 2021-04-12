@@ -1208,6 +1208,16 @@ body {
         display: grid;
         grid-template-columns: 150px auto;
         margin-top: 5px;
+    }
 
+    #bank_loan_div {
+        #bank_loan_player_credit_rating {
+            h3 {
+                font-family: $recipe_korea;
+
+                b { 
+                }
+            }
+        }
     }
 }
