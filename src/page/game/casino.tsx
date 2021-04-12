@@ -168,7 +168,8 @@ class Casino extends React.Component<AllProps> {
     if(casino_card_select === true) {
         if(casino_now_card_number === num) {
             const random_card = Math.trunc(Math.random() * (10 - 2) + 2);
-            // const random_card = 9;
+            // const random_card = 7;
+
             _infiniteFlash('select_casino_card_' + num, 50, false, 1.4);
             $('select_casino_card_' + num).css({
                 'border' : 'solid 2px black',
@@ -221,12 +222,15 @@ class Casino extends React.Component<AllProps> {
     } else {
         if(now === casino_select_card) {
             return this._endCasinoGame(false, 0);
-
-        } else if(casino_select_card === 3) {
-            if(now >= 2) {
-                return this._endCasinoGame(false, 0);
-            } 
         }
+    }
+
+    if(casino_select_card === 3) {
+        if(now >= 2) {
+            if(obj[1] !== obj[2]) {
+                return this._endCasinoGame(false, 0);
+            }
+        } 
     }
 
     return 
