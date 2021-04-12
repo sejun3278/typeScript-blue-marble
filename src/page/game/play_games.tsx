@@ -11,6 +11,7 @@ import { StoreState } from '../../Store/modules';
 import Card from './card';
 import Build from './build';
 import Casino from './casino';
+import Bank from './bank';
 
 export interface AllProps {
   gameActions : any,
@@ -213,6 +214,12 @@ class PlayGame extends React.Component<AllProps> {
                             <h3> 이동하고 싶은 장소를 클릭해주세요. </h3>
                             <h3> 무인도, 상대 플레이어의 토지는 이동할 수 없습니다. </h3>
                           </div>
+
+                        : undefined
+                      }
+
+                      {select_tap === 5
+                        ? <Bank />
 
                         : undefined
                       }

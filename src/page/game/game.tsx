@@ -42,7 +42,8 @@ export interface AllProps {
   select_last_card : number,
   move_location : number | null,
   casino_start : boolean,
-  casino_game_result : boolean | null
+  casino_game_result : boolean | null,
+  bank_info : string
 };
 
 const flash_info : any = {
@@ -276,8 +277,32 @@ class Game extends React.Component<AllProps> {
       // gameActions.round_start({ 'turn' : 0 });
       gameActions.select_type({ 'select_tap' : 0 })
 
+      // 플레이어들의 은행 정산하기
+      this._setPlayerBank();
+
       this._roundStart('round');
     }
+  }
+
+  _setPlayerBank = () => {
+    const { gameActions } = this.props;
+    const bank_info = JSON.parse(this.props.bank_info);
+
+    let player = 0;
+    for(let key in bank_info) {
+      player += 1;
+
+      // 예금 정산하기
+      if(bank_info[key].round_incentive) {
+        this._playerMoney(player, bank_info[key].round_incentive, 'plus');
+
+        bank_info[key].total_incentive += bank_info[key].round_incentive;
+      }
+
+      // 대출 정산하기
+    }
+
+    return gameActions.event_info({ 'bank_info' : JSON.stringify(bank_info) });
   }
 
   // 무한 플래쉬 효과
@@ -322,7 +347,7 @@ class Game extends React.Component<AllProps> {
 
   // 턴 끝내기
   _turnEnd = async () => {
-    const { turn, _flash, gameActions, move_event_able, _moveCharacter, time_over, move_able, casino_game_result } = this.props;
+    const { turn, _flash, gameActions, move_event_able, _moveCharacter, time_over, move_able } = this.props;
     const _target : any = document.getElementById(String(turn) + '_player_info_div');
 
     this._infiniteFlash('player_main_character_' + turn, 60, false, null);
@@ -359,10 +384,10 @@ class Game extends React.Component<AllProps> {
       gameActions.move({ 'move_location' : null, 'move_able' : true });
       gameActions.round_start({ 'turn_end_able' : false })
 
-      if(casino_game_result !== null) {
-        // 카지노 초기화하기
+      // if(casino_game_result !== null) {
+        // 이벤트 초기화하기
         gameActions.reset_casino();
-      }
+      // }
 
       // 카드 섞기
       gameActions.select_card_info({
@@ -672,7 +697,8 @@ export default connect(
     select_last_card : game.select_last_card,
     move_location : game.move_location,
     casino_start : game.casino_start,
-    casino_game_result : game.casino_game_result
+    casino_game_result : game.casino_game_result,
+    bank_info : game.bank_info
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

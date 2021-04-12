@@ -58,6 +58,9 @@ class Loading extends React.Component<AllProps> {
       const player_list = JSON.parse(this.props.player_list);
       const Map = require('../game/city_info.json');
 
+      // 은행 정보 저장
+      const bank_info : any = {};
+      
       // 플레이어 설정하기
       for(let i = 0; i < player_list.length; i++) {
         // 초기 시작 자금 설정
@@ -65,6 +68,22 @@ class Loading extends React.Component<AllProps> {
           player_list[i]['money'] = start_price;
           player_list[i]['maps'] = [];
           player_list[i]['location'] = 0;
+
+          bank_info[i + 1] = {};
+          // 예금
+          bank_info[i + 1]['save_money'] = 0;
+          
+          // 라운드당 지급되는 금리
+          bank_info[i + 1]['round_incentive'] = 0;
+
+          // 총 합 금리
+          bank_info[i + 1]['total_incentive'] = 0;
+
+          // 대출금
+          bank_info[i + 1]['loan'] = 0;
+
+          // 대출 이자금
+          bank_info[i + 1]['loan_percent'] = 0;
         }
       }
 
@@ -79,7 +98,7 @@ class Loading extends React.Component<AllProps> {
       for(let i = 1; i <= able_player; i++) {
         stop_info[i] = 0;
       }
-      gameActions.event_info({ 'stop_info' : JSON.stringify(stop_info) })
+      gameActions.event_info({ 'stop_info' : JSON.stringify(stop_info), 'bank_info' : JSON.stringify(bank_info) })
 
       // 맵 저장하기
       initActions.set_setting_state({ 
@@ -90,6 +109,7 @@ class Loading extends React.Component<AllProps> {
       initActions.set_player_info({
         'player_list' : JSON.stringify(player_list)
       })
+
     }
 
   render() {

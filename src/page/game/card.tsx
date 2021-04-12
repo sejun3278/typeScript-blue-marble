@@ -110,7 +110,7 @@ class Card extends React.Component<AllProps> {
                     save_obj['card_notice_ment'] = save_obj['all_card_num'] + ' 칸을 이동합니다.';
 
                     // this._moveCharacter(save_obj['all_card_num'], null);
-                    this._moveCharacter(14, null) //
+                    this._moveCharacter(20, null) //
                 }
 
                 initActions.set_setting_state({ 'card_deck' : JSON.stringify(card_deck) })
@@ -244,7 +244,13 @@ class Card extends React.Component<AllProps> {
                     // const move_top = player_top + ( obj[num] * 82 );
 
                     // $(target).animate({ 'marginTop' : move_top + 'px' }, 300);
-                    $(target).animate({ 'marginTop' : (player_top + ( (player_move_location - _location) * 80 )) + 'px' }, 300);
+
+                    if(circle === false) {
+                        $(target).animate({ 'marginTop' : (player_top + ( (player_move_location - _location) * 80 ) + 4) + 'px' }, 300);
+
+                    } else if(circle === true) {
+                        $(target).animate({ 'marginTop' : '-10px' }, 300);
+                    }
                 }
 
                 obj[num] = 0;

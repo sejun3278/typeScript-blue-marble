@@ -57,7 +57,9 @@ export interface gameState {
     casino_card_ment : string,
     casino_select_result : string,
     casino_now_card_number : number,
-    casino_game_result : boolean | null
+    casino_game_result : boolean | null,
+    bank_info : string,
+    bank_tap : number | null,
 }
 
 const initialState : gameState = {
@@ -95,7 +97,9 @@ const initialState : gameState = {
     casino_card_ment : "　",
     casino_select_result : JSON.stringify({}),
     casino_now_card_number : 0,
-    casino_game_result : null
+    casino_game_result : null,
+    bank_info : JSON.stringify({}),
+    bank_tap : null,
 }
 
 export default handleActions<gameState> ({
@@ -178,7 +182,9 @@ export default handleActions<gameState> ({
             casino_card_select : data.payload.casino_card_select !== undefined ? data.payload.casino_card_select : state.casino_card_select,
             casino_select_result : data.payload.casino_select_result !== undefined ? data.payload.casino_select_result : state.casino_select_result,
             casino_now_card_number : data.payload.casino_now_card_number !== undefined ? data.payload.casino_now_card_number : state.casino_now_card_number,
-            casino_game_result : data.payload.casino_game_result !== undefined ? data.payload.casino_game_result : state.casino_game_result
+            casino_game_result : data.payload.casino_game_result !== undefined ? data.payload.casino_game_result : state.casino_game_result,
+            bank_info : data.payload.bank_info !== undefined ? data.payload.bank_info : state.bank_info,
+            bank_tap : data.payload.bank_tap !== undefined ? data.payload.bank_tap : state.bank_tap
         }
     },
 
@@ -194,7 +200,8 @@ export default handleActions<gameState> ({
             casino_card_ment : "　",
             casino_select_result : JSON.stringify({}),
             casino_now_card_number : 0,
-            casino_game_result : null
+            casino_game_result : null,
+            bank_tap : null,
         }
     }
 

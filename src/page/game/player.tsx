@@ -18,13 +18,14 @@ export interface AllProps {
   _commaMoney : Function,
   turn : number | null,
   round_start : boolean,
-  stop_info : string
+  stop_info : string,
+  round : number
 };
 
 class Player extends React.Component<AllProps> {
 
   render() {
-    const { float_style, _commaMoney, number, turn, round_start } = this.props;
+    const { float_style, _commaMoney, number, turn, round_start, round } = this.props;
     const info : any = JSON.parse(this.props.info);
 
     let img_list : any = img.img.character;
@@ -55,6 +56,12 @@ class Player extends React.Component<AllProps> {
         name_style["color"] = 'white';
 
         my_location = MapInfo[info.location].name;
+
+        if(round > 1) {
+          if(MapInfo[info.location].number === 0) {
+            my_location = '은행';
+          }
+        }
 
         money = _commaMoney(info.money);
     }
@@ -92,11 +99,7 @@ class Player extends React.Component<AllProps> {
       if(stop_info[Number(info.number)] > 0) {
         stop_turn = ' ( ' + stop_info[Number(info.number)] + ' 턴 남음 )'
       }
-
-    } else {
-
     }
-    // let my_location : string = MapInfo[info.location].name;
 
     return(
       <div className='game_contents_player_profile_div' key={number}
@@ -143,7 +146,8 @@ export default connect(
   ( { init, game } : StoreState  ) => ({
     turn : game.turn,
     round_start : game.round_start,
-    stop_info : game.stop_info
+    stop_info : game.stop_info,
+    round : game.round
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

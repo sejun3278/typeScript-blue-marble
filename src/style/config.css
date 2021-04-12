@@ -893,4 +893,85 @@ body #notice_div {
   opacity: 0.5;
 }
 
+#bank_event_map_div #bank_tap_div {
+  margin-top: 10px;
+  border-top: solid 2px #ababab;
+  padding: 5px 0px;
+  border-bottom: solid 2px #ababab;
+}
+#bank_event_map_div #bank_tap_div #select_bank_tap {
+  color: #1687a7;
+  border-bottom: solid 3px #1687a7;
+}
+#bank_event_map_div #bank_tap_div div {
+  display: inline-block !important;
+  margin: 0px 20%;
+  cursor: pointer;
+  color: #ababab;
+  padding-bottom: 0px;
+}
+#bank_event_map_div #bank_home_div {
+  margin-top: 35px;
+}
+#bank_event_map_div #bank_home_div h3 {
+  font-family: Recipekorea;
+  margin-bottom: 0px !important;
+  font-size: 16px;
+}
+#bank_event_map_div #bank_home_div p {
+  font-family: Y_Spotlight;
+  margin-top: 0px !important;
+  font-size: 12px;
+}
+#bank_event_map_div #bank_home_div #bank_select_home_div {
+  margin-top: 25px;
+}
+#bank_event_map_div #bank_home_div #bank_select_home_div div {
+  margin: 0px 25%;
+  width: 50%;
+  border: solid 2px #ababab;
+  border-radius: 5px;
+  margin-top: 10px;
+  padding: 3px;
+  cursor: pointer;
+  color: #ababab;
+}
+#bank_event_map_div #bank_save_money_div h3 {
+  margin-top: 15px;
+  font-family: Recipekorea;
+}
+#bank_event_map_div #bank_save_money_div #bank_my_money_info {
+  border: solid 2px #ababab;
+  margin: -5px 20px;
+  height: 100px;
+  border-radius: 5px;
+}
+#bank_event_map_div #bank_save_money_div #bank_my_money_info #bank_my_save_money_input_div {
+  margin-top: 10px;
+}
+#bank_event_map_div #bank_save_money_div #bank_my_money_info #bank_my_save_money_input_div input {
+  padding: 2px;
+  padding-right: 5px;
+  text-align: right;
+  width: 40%;
+  margin-right: 10px;
+}
+#bank_event_map_div #bank_save_money_div #bank_my_money_info #bank_my_total_incentive_div div input[type=button] {
+  position: absolute;
+  font-size: 10px;
+  margin-left: 25px;
+  background-color: white;
+  border: solid 1px black;
+  border-radius: 5px;
+  padding: 2px 10px;
+  cursor: pointer;
+  font-weight: bold;
+  font-family: Y_Spotlight;
+}
+#bank_event_map_div .bank_grid_div {
+  display: grid;
+  grid-template-columns: 150px auto;
+  margin-top: 5px;
+}
+
 /*# sourceMappingURL=config.css.map */

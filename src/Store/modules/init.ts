@@ -4,12 +4,14 @@ const REDUXTEST = 'init/redux_test';
 const TOGGLESEETINGMODAL = 'init/toggle_setting_modal';
 const SETSETTINGSTATE = 'init/set_setting_state';
 const SETPLAYERINFO = 'init/set_player_info';
+const CHANGESTATE = 'init/change_state';
 
 export const actionCreators = {
     redux_test : createAction(REDUXTEST),
     toggle_setting_modal : createAction(TOGGLESEETINGMODAL),
     set_setting_state : createAction(SETSETTINGSTATE),
-    set_player_info : createAction(SETPLAYERINFO)
+    set_player_info : createAction(SETPLAYERINFO),
+    change_state : createAction(CHANGESTATE),
 }
 
 // export const redux_test = createAction(REDUXTEST);
@@ -36,6 +38,8 @@ export interface initState {
     overlap_card : boolean;
     map_info : string;
     card_deck : string;
+    bank_incentive_percent : number,
+    stop_days : number
 }
 
 const initialState : initState = {
@@ -59,7 +63,9 @@ const initialState : initState = {
     select_character_list : JSON.stringify({}),
     overlap_card : true,
     map_info : JSON.stringify([]),
-    card_deck : JSON.stringify([])
+    card_deck : JSON.stringify([]),
+    bank_incentive_percent : 5,
+    stop_days : 1
 }
 
 // const initialState = {
@@ -112,8 +118,18 @@ export default handleActions<initState> ({
             select_character : data.payload.select_character !== undefined ? data.payload.select_character : state.select_character,
             select_info : data.payload.select_info !== undefined ? data.payload.select_info : state.select_info
         }
-
     },
+
+    // 이벤트로 인해 변경되는 부분들
+    [CHANGESTATE] : (state : any, data : any) => {
+        return {
+            ...state,
+            // 무인도 체류 기간
+            stop_days : data.payload.stop_days !== undefined ? data.payload.stop_days : state.stop_days,
+            // 예금 이자율
+            bank_incentive_percent : data.payload.bank_incentive_percent !== undefined ? data.payload.bank_incentive_percent : state.bank_incentive_percent        
+        }
+    }
 
 
 }, initialState);
