@@ -1214,9 +1214,26 @@ body {
         #bank_loan_player_credit_rating {
             h3 {
                 font-family: $recipe_korea;
+            }
+        }
 
-                b { 
-                }
+        #bank_loan_grid_div {
+            margin-top: 10px;
+            display: grid;
+            grid-template-columns: 60% auto;
+
+            #bank_loan_contents_div {
+            //     width: 60%;
+            //     text-align: left;
+                border: solid 2px #ababab;
+                border-radius: 5px;
+                margin-left: 20px;
+                
+            }
+
+            div {
+                height: 95px;
+            //     display: inline-block;
             }
         }
     }

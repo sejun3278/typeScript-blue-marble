@@ -285,7 +285,7 @@ class Game extends React.Component<AllProps> {
   }
 
   _setPlayerBank = () => {
-    const { gameActions } = this.props;
+    const { gameActions, turn } = this.props;
     const bank_info = JSON.parse(this.props.bank_info);
 
     let player = 0;
@@ -300,9 +300,66 @@ class Game extends React.Component<AllProps> {
       }
 
       // 대출 정산하기
+
+      // 신용등급 판단하기
+      bank_info[key].my_rating = this._getMyRating(turn, bank_info[key].my_rating, bank_info);
     }
 
     return gameActions.event_info({ 'bank_info' : JSON.stringify(bank_info) });
+  }
+
+  // 신용등급 판단하기
+  _getMyRating = (player : number, _rating : number, bank_info : any) => {
+    const player_list = JSON.parse(this.props.player_list);
+    const my_info = player_list[player - 1];
+
+    let my_rating = _rating;
+
+    // 보유 도시 보기
+    const my_city_length = my_info.maps.length;
+    if(my_city_length > 0) {
+        if(my_city_length >= 1 && my_city_length < 4) {
+            // 1 ~ 3개 이상 소유
+            my_rating = my_rating - 1;
+
+        } else if(my_city_length >= 4 && my_city_length < 8) {
+            // 4 ~ 7개 이상 소유
+            my_rating = my_rating - 2;
+
+        } else if(my_city_length >= 8 && my_city_length < 12) {
+            // 8 ~ 11개 이상 소유
+            my_rating = my_rating - 3;
+
+        } else if(my_city_length >= 12 && my_city_length < 17) {
+            // 12 ~ 16개 이상 소유
+            my_rating = my_rating - 4;
+
+        } else if(my_city_length >= 17 && my_city_length < 20) {
+            // 17 ~ 19개 이상 소유
+            my_rating = my_rating - 5;
+
+        } else if(my_city_length >= 20) {
+            // 20개 이상 소유
+            my_rating = my_rating - 6;
+
+        }
+    }
+    
+    // 예금액 보기
+    const save_money : number = bank_info.save_money;
+    if(save_money > 0) {
+        if(save_money >= 100 && save_money < 200) {
+            my_rating = my_rating - 1;
+        } else if(save_money >= 200 && save_money < 300) {
+            my_rating = my_rating - 2;
+        }
+    }
+
+    if(my_rating <= 1) {
+        my_rating = 1;
+    }
+
+    return my_rating;
   }
 
   // 무한 플래쉬 효과

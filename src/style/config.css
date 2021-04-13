@@ -976,5 +976,18 @@ body #notice_div {
 #bank_event_map_div #bank_loan_div #bank_loan_player_credit_rating h3 {
   font-family: Recipekorea;
 }
+#bank_event_map_div #bank_loan_div #bank_loan_grid_div {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: 60% auto;
+}
+#bank_event_map_div #bank_loan_div #bank_loan_grid_div #bank_loan_contents_div {
+  border: solid 2px #ababab;
+  border-radius: 5px;
+  margin-left: 20px;
+}
+#bank_event_map_div #bank_loan_div #bank_loan_grid_div div {
+  height: 95px;
+}
 
 /*# sourceMappingURL=config.css.map */
