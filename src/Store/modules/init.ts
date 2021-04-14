@@ -39,7 +39,8 @@ export interface initState {
     map_info : string;
     card_deck : string;
     bank_incentive_percent : number,
-    stop_days : number
+    stop_days : number,
+    loan_percent : number
 }
 
 const initialState : initState = {
@@ -65,7 +66,8 @@ const initialState : initState = {
     map_info : JSON.stringify([]),
     card_deck : JSON.stringify([]),
     bank_incentive_percent : 5,
-    stop_days : 1
+    stop_days : 1,
+    loan_percent : 5
 }
 
 // const initialState = {
@@ -127,7 +129,9 @@ export default handleActions<initState> ({
             // 무인도 체류 기간
             stop_days : data.payload.stop_days !== undefined ? data.payload.stop_days : state.stop_days,
             // 예금 이자율
-            bank_incentive_percent : data.payload.bank_incentive_percent !== undefined ? data.payload.bank_incentive_percent : state.bank_incentive_percent        
+            bank_incentive_percent : data.payload.bank_incentive_percent !== undefined ? data.payload.bank_incentive_percent : state.bank_incentive_percent,
+            // 대출 이자율
+            loan_percent : data.payload.loan_percent !== undefined ? data.payload.loan_percent : state.loan_percent       
         }
     }
 

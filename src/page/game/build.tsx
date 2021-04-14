@@ -147,9 +147,7 @@ class Build extends React.Component<AllProps> {
     let my_info = JSON.parse(this.props.player_list);
 
     if(turn !== null) {
-        // if(turn > 0) {
-            my_info = my_info[turn - 1];
-        // }
+        my_info = my_info[turn - 1];
     }
 
     let buy_button_style : any = {};

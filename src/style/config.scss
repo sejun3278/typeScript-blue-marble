@@ -1211,6 +1211,24 @@ body {
     }
 
     #bank_loan_div {
+
+        #bank_loan_confirm_button_div {
+            border: solid 2px #d3e0ea;
+            position: absolute;
+            width: 60%;
+            margin-left: -1px;
+            margin-top: -53px;
+            height: 35px;
+            line-height: 35px;
+            background-color: #d3e0ea;
+            color: black;
+            text-shadow: 2px 2px 2px white;
+            font-family: $SDSamliphopangche_Outline;
+            font-size: 18px;
+            cursor: pointer;
+            // opacity: 0;
+        }
+
         #bank_loan_player_credit_rating {
             h3 {
                 font-family: $recipe_korea;
@@ -1220,7 +1238,7 @@ body {
         #bank_loan_grid_div {
             margin-top: 10px;
             display: grid;
-            grid-template-columns: 60% auto;
+            grid-template-columns: 55% auto;
 
             #bank_loan_contents_div {
             //     width: 60%;
@@ -1228,13 +1246,116 @@ body {
                 border: solid 2px #ababab;
                 border-radius: 5px;
                 margin-left: 20px;
+
+                p {
+                    color: #c19277;
+                    margin: 15px 0px !important;
+                }
                 
+                div {
+                    height: 55px !important;
+                    input {
+                        width: 80px;
+                        text-align: right;
+                        padding: 5px;
+                        margin-right: 5px;
+                        padding-right: 10px;
+                    }
+                }
+
+                #bank_loan_option_div {
+                    display: inline-block;
+                    position: absolute;
+                    height: 0px !important;
+                    margin-left: -30px;
+                    margin-top : 4.2px;
+                    color: #ababab;
+                    // color: #ababab;
+                }
+            }
+
+            #bank_loan_info_div {
+                padding-top: 15px;
+
+                div {
+                    height: auto !important;
+                }
+
+                .bank_loan_grid_div {
+                    display: grid;
+                    grid-template-columns: 70% auto;
+                }
+
+                #bank_loan_order_div {
+                    margin: 5px 0px;
+
+                    select {
+                        cursor: pointer;
+                        padding: 5px;
+                        font-size: 12px;
+                        width: 80%;
+                    }
+                }
             }
 
             div {
                 height: 95px;
             //     display: inline-block;
             }
+        }
+
+        #loan_confirm_div {
+            h3 {
+                font-family: $recipe_korea;
+                color: #719fb0;
+            }
+
+            #loan_bill_div {
+                border: solid 2px #ababab;
+                margin: 0px 20px;
+                height: 100px;
+
+                h4 {
+                    margin: 5px 0px;
+                    color: #ababab;
+                }
+            }
+        }
+
+        #loan_repay_divs {
+            h3 {
+                font-family: $recipe_korea;
+                margin-bottom: 10px !important;
+            }
+
+            #loan_repay_button {
+                background-color: white;
+                padding: 5px 15px;
+                font-size: 12px;
+                margin-top: -15px;
+                cursor: pointer;
+                font-weight: bold;
+            }
+
+            #loan_state_div {
+                border: solid 1px #ababab;
+                margin: 15px 20px;
+                height: 70px;
+
+                div {
+                    padding: 3px 0px;
+                }
+
+                .loan_bill_grid_div {
+                    grid-template-columns: 190px auto !important;
+                    color: #ababab;
+                }
+            }
+        }
+
+        .loan_bill_grid_div {
+            display: grid;
+            grid-template-columns: 170px auto;
         }
     }
 }

@@ -60,6 +60,11 @@ export interface gameState {
     casino_game_result : boolean | null,
     bank_info : string,
     bank_tap : number | null,
+    loan_date_list : string,
+    loan_order_money : number,
+    loan_payback_date : number
+    loan_plus_incentive : number,
+    loan_order_confirm : boolean
 }
 
 const initialState : gameState = {
@@ -100,6 +105,11 @@ const initialState : gameState = {
     casino_game_result : null,
     bank_info : JSON.stringify({}),
     bank_tap : null,
+    loan_date_list : JSON.stringify([]),
+    loan_order_money : 0,
+    loan_payback_date : 0,
+    loan_plus_incentive : 0,
+    loan_order_confirm : false
 }
 
 export default handleActions<gameState> ({
@@ -184,7 +194,12 @@ export default handleActions<gameState> ({
             casino_now_card_number : data.payload.casino_now_card_number !== undefined ? data.payload.casino_now_card_number : state.casino_now_card_number,
             casino_game_result : data.payload.casino_game_result !== undefined ? data.payload.casino_game_result : state.casino_game_result,
             bank_info : data.payload.bank_info !== undefined ? data.payload.bank_info : state.bank_info,
-            bank_tap : data.payload.bank_tap !== undefined ? data.payload.bank_tap : state.bank_tap
+            bank_tap : data.payload.bank_tap !== undefined ? data.payload.bank_tap : state.bank_tap,
+            loan_date_list : data.payload.loan_date_list !== undefined ? data.payload.loan_date_list : state.loan_date_list,
+            loan_order_money : data.payload.loan_order_money !== undefined ? data.payload.loan_order_money : state.loan_order_money,
+            loan_payback_date : data.payload.loan_payback_date !== undefined ? data.payload.loan_payback_date : state.loan_payback_date,
+            loan_plus_incentive : data.payload.loan_plus_incentive !== undefined ? data.payload.loan_plus_incentive : state.loan_plus_incentive,
+            loan_order_confirm : data.payload.loan_order_confirm !== undefined ? data.payload.loan_order_confirm : state.loan_order_confirm
         }
     },
 
@@ -202,6 +217,10 @@ export default handleActions<gameState> ({
             casino_now_card_number : 0,
             casino_game_result : null,
             bank_tap : null,
+            loan_order_money : 0,
+            loan_payback_date : 0,
+            loan_plus_incentive : 0,
+            loan_order_confirm : false
         }
     }
 

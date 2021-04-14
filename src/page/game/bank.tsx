@@ -1,4 +1,5 @@
 import * as React from 'react';
+import $ from 'jquery';
 
 import { actionCreators as initActions } from '../../Store/modules/init';
 import { actionCreators as gameActions } from '../../Store/modules/game';
@@ -18,10 +19,41 @@ export interface AllProps {
   bank_incentive_percent : number,
   player_list : string,
   _removeAlertMent : Function,
-  _playerMoney : Function
+  _playerMoney : Function,
+  loan_percent : number,
+  loan_date_list : string,
+  loan_order_money : number,
+  loan_payback_date : number,
+  loan_plus_incentive : number,
+  _flash : Function,
+  loan_order_confirm : boolean
 };
 
 class Bank extends React.Component<AllProps> {
+
+  componentDidMount() {
+      // 상환 날짜 구하기
+      this._getPaybackDate();
+  }
+
+  // 상환 날짜 구하기
+  _getPaybackDate = () => {
+    const { gameActions, turn } = this.props;
+
+    const bank_info = JSON.parse(this.props.bank_info);
+    const my_info = bank_info[Number(turn)];
+
+    const date_list : Number[] = [ 3 ];
+
+    let date = 4;
+    for(let i = 10; i > my_info.my_rating; i--) {
+        date_list.push(date);
+
+        date += 1;
+    }
+
+    gameActions.event_info({ 'loan_date_list' : JSON.stringify(date_list) });
+  }
 
   _clickBankTap = (tap_num : number) => {
     const { turn, gameActions } = this.props;
@@ -109,18 +141,144 @@ class Bank extends React.Component<AllProps> {
     }
   }
 
+  // 대출 신청금 input
+  _setLoanInput = (event : any, my_info : any) => {
+    const { turn, gameActions } = this.props;
+
+    if(turn !== 1) {
+        return;
+    }
+
+    const target = event.target;
+    let value = Number(target.value);
+
+    if(value < 0) {
+        value = 0;
+
+    } else if(value > my_info.bank_loan_limit) {
+        value = my_info.bank_loan_limit;
+    }
+
+    target.value = value;
+
+    window.setTimeout( () => {
+        this._setLoanIncentive();
+    })
+
+    gameActions.event_info({ 'loan_order_money' : value });
+  }
+
+  // 대출 상환 기간 설정
+  _setLoanPaybackDate = (event : any) => {
+    const { turn, gameActions } = this.props;
+
+    if(turn !== 1) {
+        return;
+    }
+
+    const target = event.target;
+
+    // 상환 날짜 받아오기
+    const select_date = Number(target.value);
+
+    window.setTimeout( () => {
+        this._setLoanIncentive();
+    })
+
+    return gameActions.event_info({ 'loan_payback_date' : select_date })
+  }
+
+  // 대출 이자금 설정하기
+  _setLoanIncentive = () => {
+    const { loan_order_money, loan_percent, loan_payback_date, gameActions } = this.props;
+
+    let result = 0;
+
+    if(loan_order_money === 0 || loan_payback_date === 0) {
+        result = 0;
+
+    } else {
+        const percent = (loan_percent / 100)
+        const minus_percent = (loan_payback_date - 3) * 0.005
+        
+        const total_percent = Number(String(percent - minus_percent).slice(0, 5));
+        
+        result = Math.ceil((loan_order_money * 100) * total_percent);
+    }
+  
+    return gameActions.event_info({ 
+        'loan_plus_incentive' : result
+    })
+  }
+
+  // 대출 신청하기
+  _orderLoan = () => {
+    const { turn, gameActions, loan_plus_incentive, loan_order_money, loan_payback_date, loan_order_confirm, _removeAlertMent, _playerMoney } = this.props;
+
+    const bank_info = JSON.parse(this.props.bank_info);
+
+    if(loan_order_confirm === false) {
+        if(loan_order_money === 0) {
+            _removeAlertMent('대출액은 100 만원 이상부터 가능합니다.');
+            document.getElementById('my_loan_input')?.focus();
+            return;
+
+        } else if(loan_payback_date === 0) {
+            _removeAlertMent('대출 자동 상환 기간을 설정해주세요.');
+            document.getElementById('select_bank_loan_payback_date')?.focus();
+            return;
+        }
+
+        bank_info[Number(turn)]['repay_day'] = loan_payback_date;
+        bank_info[Number(turn)]['loan_incentive'] = loan_plus_incentive;
+        bank_info[Number(turn)]['loan'] = loan_order_money;
+
+        gameActions.event_info({
+            'bank_info' : JSON.stringify(bank_info),
+            'loan_order_confirm' : true
+        })
+
+        return _playerMoney(turn, (loan_order_money * 100), 'plus');
+
+    } else {
+        _removeAlertMent('대출 신청중입니다. 잠시만 기다려주세요.');
+        return;
+    }
+  }
+
+  // 대출 상환하기
+  _repayLoan = (money : number, loan : number) => {
+    const { gameActions, _playerMoney, _removeAlertMent, turn } = this.props;
+    const bank_info = JSON.parse(this.props.bank_info);
+
+    if(money < loan) {
+        return _removeAlertMent('상환금 ' + loan + ' 만원이 필요합니다.');   
+
+    } else {
+        _playerMoney(turn, loan, 'minus');
+
+        bank_info[Number(turn)]['loan'] = 0;
+        bank_info[Number(turn)]['loan_incentive'] = 0;
+        bank_info[Number(turn)]['repay_day'] = 0;
+    }
+
+    return gameActions.event_info({ 'bank_info' : JSON.stringify(bank_info), 'loan_order_confirm' : false })
+  }
+
   render() {
-    const { bank_tap, gameActions, bank_incentive_percent, turn } = this.props;
-    const { _clickBankTap, _toggleHomeDiv, _saveMoney, _returnTotalIncentive } = this;
+    const { bank_tap, gameActions, bank_incentive_percent, turn, loan_percent, loan_order_money, loan_plus_incentive, loan_payback_date, loan_order_confirm} = this.props;
+    const { _clickBankTap, _toggleHomeDiv, _saveMoney, _returnTotalIncentive, _setLoanInput, _setLoanPaybackDate, _orderLoan, _repayLoan } = this;
 
     const bank_info = JSON.parse(this.props.bank_info);
     const my_info = bank_info[Number(turn)];
+    const loan_date_list = JSON.parse(this.props.loan_date_list);
+
+    const player_list = JSON.parse(this.props.player_list);
 
     const tap_arr : string[] = ['예금', '대출']
     const home_arr : string[] = ['예금 정보', '대출 정보'];
 
-    console.log(my_info)
-
+    // console.log(my_info)
     return(
       <div id='bank_event_map_div'>
         {bank_tap !== null
@@ -201,19 +359,127 @@ class Bank extends React.Component<AllProps> {
         : bank_tap === 2
 
             ? <div id='bank_loan_div'>
-                <div id='bank_loan_player_credit_rating'>
-                    <h3> <b> 내 신용 등급 </b>　|　<b> {my_info.my_rating} 등급 </b> </h3>
 
-                    <div id='bank_loan_grid_div'>
-                        <div id='bank_loan_contents_div'> 
-                            <p> ◎ 대출 한도액　|　{my_info.bank_loan_limit} 만원 </p>
-                        </div>
+                {my_info.repay_day === 0 && my_info.loan === 0 && my_info.loan_incentive === 0 && loan_order_confirm === false
+                ?
+                    loan_order_confirm === false
+                    ?
+                    <div id='bank_loan_player_credit_rating'>
+                        <h3> <b> 내 신용 등급 </b>　|　<b> {my_info.my_rating} 등급 </b> </h3>
 
-                        <div id='bank_loan_info_div'> 
-                            2
+                        {loan_plus_incentive > 0
+                            ?
+                            <div id='bank_loan_confirm_button_div'
+                                onClick={_orderLoan}
+                            >
+                                대출 신청
+                            </div>
+
+                            : undefined
+                        }
+
+                        <div id='bank_loan_grid_div'>
+                            <div id='bank_loan_contents_div'> 
+                                <p> 대출 한도액　|　{my_info.bank_loan_limit}00 만원 </p>
+                                <div className={loan_order_money === 0 ? 'gray' : undefined}>                            
+                                    <input type='number' id='my_loan_input' defaultValue={loan_order_money}
+                                        max={my_info.bank_loan_limit} min={0}
+                                        onChange={(event) => _setLoanInput(event, my_info)}
+                                    />
+                                    <div id='bank_loan_option_div' style={loan_order_money > 0 ? { 'color' : 'black' } : undefined}>
+                                        00
+                                    </div>
+                                    만원
+                                </div>
+                            </div>
+
+                            <div id='bank_loan_info_div'> 
+                                <div className='bank_loan_grid_div'> 
+                                    <div className='aRight'> 기본 이자율　|　</div>
+                                    <div className='aLeft'> {loan_percent} % </div> 
+                                </div>
+                                <div id='bank_loan_order_div'>
+                                        <select onChange={(event) => _setLoanPaybackDate(event)}
+                                                defaultValue={loan_payback_date}
+                                                id='select_bank_loan_payback_date'
+                                        > 
+                                            <option value={0}> - 자동 상환 기간 </option>
+                                            {loan_date_list.map( (el : number, key : number) => {
+                                                return(
+                                                    <option key={key} value={el}>
+                                                        {el} 라운드
+                                                    </option>
+                                                )
+                                            })}
+                                        </select>
+                                </div>
+                                <div className='bank_loan_grid_div' style={loan_plus_incentive === 0 ? { 'color' : '#ababab' } : undefined}> 
+                                    <div className='aRight'> 대출 이자금　|　</div>
+                                    <div className='aLeft'>
+                                        {loan_plus_incentive} 만원 
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
+
+                    : undefined
+
+                : <div id='loan_repay_divs'>
+                    {loan_order_confirm === true
+                        ?   <div id='loan_confirm_div'>
+                                <h3> 대출 신청이 완료되었습니다. </h3>
+
+                                <div id='loan_bill_div'>
+                                    <h4> 대출 확인서 </h4>
+
+                                    <div id='loan_bill_list_div'>
+                                        <div className='loan_bill_grid_div'>
+                                            <div className='aRight'> 대출금　|　 </div>
+                                            <div className='aLeft'> {my_info.loan * 100} 만원 </div>
+                                        </div>
+
+                                        <div className='loan_bill_grid_div'>
+                                            <div className='aRight'> 상환 라운드　|　 </div>
+                                            <div className='aLeft'> {my_info.repay_day} 라운드 후 </div>
+                                        </div>
+
+                                        <div className='loan_bill_grid_div'>
+                                            <div className='aRight'> 대출 이자　|　 </div>
+                                            <div className='aLeft'> {my_info.loan_incentive} 만원 </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        : <div>
+                            <h3> 내 대출 정보 </h3>
+
+                            <input type='button' value='대출 상환하기' id='loan_repay_button' 
+                                   style={player_list[Number(turn) - 1].money < (my_info.loan * 100) + my_info.loan_incentive
+                                        ? { 'color' : 'white', 'backgroundColor' : '#ababab' }
+
+                                        : undefined
+                                    }
+                                    onClick={() => _repayLoan(player_list[Number(turn) - 1].money, (my_info.loan * 100) + my_info.loan_incentive)}
+                            />
+
+                            <div id='loan_state_div'>
+                                <div className='loan_bill_grid_div'>
+                                    <div className='aRight'> 대출 상환금　|　 </div>
+                                    <div className='aLeft'> { (my_info.loan * 100) + my_info.loan_incentive } 만원 </div>
+                                </div>
+
+                                <div className='loan_bill_grid_div'>
+                                    <div className='aRight'> 남은 상환일　|　 </div>
+                                    <div className='aLeft'> { my_info.repay_day } 라운드 </div>
+                                </div>
+                            </div>
+                          </div>
+                    }
+                  </div>
+                }
               </div>
 
         : undefined
@@ -232,7 +498,14 @@ export default connect(
     bank_incentive_percent : init.bank_incentive_percent,
     player_list : init.player_list,
     _removeAlertMent : functions._removeAlertMent,
-    _playerMoney : functions._playerMoney
+    _playerMoney : functions._playerMoney,
+    loan_percent : init.loan_percent,
+    loan_date_list : game.loan_date_list,
+    loan_order_money : game.loan_order_money,
+    loan_payback_date : game.loan_payback_date,
+    loan_plus_incentive : game.loan_plus_incentive,
+    _flash : functions._flash,
+    loan_order_confirm : game.loan_order_confirm
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

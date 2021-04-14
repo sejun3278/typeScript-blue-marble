@@ -43,7 +43,8 @@ export interface AllProps {
   move_location : number | null,
   casino_start : boolean,
   casino_game_result : boolean | null,
-  bank_info : string
+  bank_info : string,
+  bank_incentive_percent : number
 };
 
 const flash_info : any = {
@@ -76,11 +77,86 @@ class Game extends React.Component<AllProps> {
     })
   }
 
+  // 돈 삭감하기
+  _minusPlayerMoney = (player : number, price : number) => {
+    const { initActions, gameActions, bank_incentive_percent } = this.props;
+    const player_list = JSON.parse(this.props.player_list);
+    const bank_info = JSON.parse(this.props.bank_info);
+
+    // 1. 플레이어 보유 자산에서 삭감하기
+    price = price - player_list[player - 1].money;
+    
+    if(price > 0) {
+      // 돈이 남았다면 플레이어 돈을 0 처리하기
+      this._playerMoney(player, player_list[player - 1].money, 'minus');
+
+      // 은행 예금에서 처리하기
+      if(bank_info[player].save_money > 0) {
+        price = price - bank_info[player].save_money;
+
+        bank_info[player].save_money = bank_info[player].save_money - price < 0 ? 0 : bank_info[player].save_money;
+
+        if(bank_info[player].save_money === 0) {
+          // 예금이 0 일 때, 
+          bank_info[player].round_incentive = 0;
+
+        } else {
+          // 예금이 남아 있을 때
+          bank_info[player].round_incentive = Math.floor( (bank_incentive_percent / 100) * bank_info[player].save_money );
+
+          return true;
+        }
+      }
+
+    } else {
+      return true;
+    }
+
+    return true;
+
+    if(player_list[player - 1].money >= price) {
+      this._playerMoney(player, price, 'minus');
+      return true;
+
+    } else {
+      // 예금 + 예금 누적 이자
+      const my_save_money = bank_info[player].save_money + bank_info[player].total_incentive;
+
+      if(my_save_money >= price) {
+        // 예금에서 먼저 금액 차감하기
+        price = price - bank_info[player].save_money;
+
+        if(price > 0) {
+          // 예금에서 차감해도 돈이 남았다면, 누적 이자에서 차감하기
+          bank_info[player].save_money = 0;
+          bank_info[player].round_incentive = 0;
+
+          bank_info[player].total_incentive = bank_info[player].total_incentive - price;
+
+        } else {
+          // 예금 정비하기
+          bank_info[player].save_money = bank_info[player].save_money - price;
+
+          // 이자율 다시 계산하기
+          bank_info[player].round_incentive = Math.floor( (bank_incentive_percent / 100) * bank_info[player].save_money )
+        }
+
+        gameActions.event_info({ 'bank_info' : JSON.stringify(bank_info) })
+
+        return true;
+      }
+    }
+
+
+    return false;
+  }
+
   // 플레이어 돈 관리하기
   _playerMoney = (player : number, money : number, type : string) => {
     const { initActions } = this.props;
     const player_list = JSON.parse(this.props.player_list);
 
+    let result = true;
     if(type === 'plus') {
       // 돈 추가하기
       player_list[player - 1].money += money;
@@ -93,6 +169,8 @@ class Game extends React.Component<AllProps> {
     initActions.set_player_info({ 
       'player_list' : JSON.stringify(player_list)
      })
+
+     return result;
   }
 
   // 돈 컴마 표시하기
@@ -300,6 +378,21 @@ class Game extends React.Component<AllProps> {
       }
 
       // 대출 정산하기
+      if(bank_info[key].repay_day !== 0) {
+        bank_info[key].repay_day = bank_info[key].repay_day - 1;
+
+        this._playerMoney(player, bank_info[key].loan_incentive, 'minus');
+
+        if(bank_info[key].repay_day === 0) {
+          console.log(33)
+          // 대출기간 완료
+          const payback = this._minusPlayerMoney(player, (bank_info[key].loan * 100));
+
+          if(payback === false) {
+            alert('파산')
+          }
+        }
+      }
 
       // 신용등급 판단하기
       bank_info[key].my_rating = this._getMyRating(turn, bank_info[key].my_rating, bank_info);
@@ -755,7 +848,8 @@ export default connect(
     move_location : game.move_location,
     casino_start : game.casino_start,
     casino_game_result : game.casino_game_result,
-    bank_info : game.bank_info
+    bank_info : game.bank_info,
+    bank_incentive_percent : init.bank_incentive_percent
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

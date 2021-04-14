@@ -83,16 +83,16 @@ class Loading extends React.Component<AllProps> {
           bank_info[i + 1]['loan'] = 0;
 
           // 대출 이자금
-          bank_info[i + 1]['loan_percent'] = 0;
+          bank_info[i + 1]['loan_incentive'] = 0;
 
           // 내 신용등급
           bank_info[i + 1]['my_rating'] = 9;
 
           // 대출 한도액
-          bank_info[i + 1]['bank_loan_limit'] = 500;
+          bank_info[i + 1]['bank_loan_limit'] = 5;
           
           // 상환 라운드
-          bank_info[i + 1]['repay_days'] = 0;
+          bank_info[i + 1]['repay_day'] = 0;
 
         }
       }

@@ -973,21 +973,118 @@ body #notice_div {
   grid-template-columns: 150px auto;
   margin-top: 5px;
 }
+#bank_event_map_div #bank_loan_div #bank_loan_confirm_button_div {
+  border: solid 2px #d3e0ea;
+  position: absolute;
+  width: 60%;
+  margin-left: -1px;
+  margin-top: -53px;
+  height: 35px;
+  line-height: 35px;
+  background-color: #d3e0ea;
+  color: black;
+  text-shadow: 2px 2px 2px white;
+  font-family: SDSamliphopangche_Outline;
+  font-size: 18px;
+  cursor: pointer;
+}
 #bank_event_map_div #bank_loan_div #bank_loan_player_credit_rating h3 {
   font-family: Recipekorea;
 }
 #bank_event_map_div #bank_loan_div #bank_loan_grid_div {
   margin-top: 10px;
   display: grid;
-  grid-template-columns: 60% auto;
+  grid-template-columns: 55% auto;
 }
 #bank_event_map_div #bank_loan_div #bank_loan_grid_div #bank_loan_contents_div {
   border: solid 2px #ababab;
   border-radius: 5px;
   margin-left: 20px;
 }
+#bank_event_map_div #bank_loan_div #bank_loan_grid_div #bank_loan_contents_div p {
+  color: #c19277;
+  margin: 15px 0px !important;
+}
+#bank_event_map_div #bank_loan_div #bank_loan_grid_div #bank_loan_contents_div div {
+  height: 55px !important;
+}
+#bank_event_map_div #bank_loan_div #bank_loan_grid_div #bank_loan_contents_div div input {
+  width: 80px;
+  text-align: right;
+  padding: 5px;
+  margin-right: 5px;
+  padding-right: 10px;
+}
+#bank_event_map_div #bank_loan_div #bank_loan_grid_div #bank_loan_contents_div #bank_loan_option_div {
+  display: inline-block;
+  position: absolute;
+  height: 0px !important;
+  margin-left: -30px;
+  margin-top: 4.2px;
+  color: #ababab;
+}
+#bank_event_map_div #bank_loan_div #bank_loan_grid_div #bank_loan_info_div {
+  padding-top: 15px;
+}
+#bank_event_map_div #bank_loan_div #bank_loan_grid_div #bank_loan_info_div div {
+  height: auto !important;
+}
+#bank_event_map_div #bank_loan_div #bank_loan_grid_div #bank_loan_info_div .bank_loan_grid_div {
+  display: grid;
+  grid-template-columns: 70% auto;
+}
+#bank_event_map_div #bank_loan_div #bank_loan_grid_div #bank_loan_info_div #bank_loan_order_div {
+  margin: 5px 0px;
+}
+#bank_event_map_div #bank_loan_div #bank_loan_grid_div #bank_loan_info_div #bank_loan_order_div select {
+  cursor: pointer;
+  padding: 5px;
+  font-size: 12px;
+  width: 80%;
+}
 #bank_event_map_div #bank_loan_div #bank_loan_grid_div div {
   height: 95px;
+}
+#bank_event_map_div #bank_loan_div #loan_confirm_div h3 {
+  font-family: Recipekorea;
+  color: #719fb0;
+}
+#bank_event_map_div #bank_loan_div #loan_confirm_div #loan_bill_div {
+  border: solid 2px #ababab;
+  margin: 0px 20px;
+  height: 100px;
+}
+#bank_event_map_div #bank_loan_div #loan_confirm_div #loan_bill_div h4 {
+  margin: 5px 0px;
+  color: #ababab;
+}
+#bank_event_map_div #bank_loan_div #loan_repay_divs h3 {
+  font-family: Recipekorea;
+  margin-bottom: 10px !important;
+}
+#bank_event_map_div #bank_loan_div #loan_repay_divs #loan_repay_button {
+  background-color: white;
+  padding: 5px 15px;
+  font-size: 12px;
+  margin-top: -15px;
+  cursor: pointer;
+  font-weight: bold;
+}
+#bank_event_map_div #bank_loan_div #loan_repay_divs #loan_state_div {
+  border: solid 1px #ababab;
+  margin: 15px 20px;
+  height: 70px;
+}
+#bank_event_map_div #bank_loan_div #loan_repay_divs #loan_state_div div {
+  padding: 3px 0px;
+}
+#bank_event_map_div #bank_loan_div #loan_repay_divs #loan_state_div .loan_bill_grid_div {
+  grid-template-columns: 190px auto !important;
+  color: #ababab;
+}
+#bank_event_map_div #bank_loan_div .loan_bill_grid_div {
+  display: grid;
+  grid-template-columns: 170px auto;
 }
 
 /*# sourceMappingURL=config.css.map */
