@@ -278,7 +278,6 @@ class Bank extends React.Component<AllProps> {
     const tap_arr : string[] = ['예금', '대출']
     const home_arr : string[] = ['예금 정보', '대출 정보'];
 
-    // console.log(my_info)
     return(
       <div id='bank_event_map_div'>
         {bank_tap !== null

@@ -40,7 +40,7 @@ export interface initState {
     card_deck : string;
     bank_incentive_percent : number,
     stop_days : number,
-    loan_percent : number
+    loan_percent : number,
 }
 
 const initialState : initState = {
@@ -67,7 +67,7 @@ const initialState : initState = {
     card_deck : JSON.stringify([]),
     bank_incentive_percent : 5,
     stop_days : 1,
-    loan_percent : 5
+    loan_percent : 5,
 }
 
 // const initialState = {
@@ -133,7 +133,6 @@ export default handleActions<initState> ({
             // 대출 이자율
             loan_percent : data.payload.loan_percent !== undefined ? data.payload.loan_percent : state.loan_percent       
         }
-    }
-
+    },
 
 }, initialState);

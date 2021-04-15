@@ -14,7 +14,7 @@ export interface AllProps {
 class StartHome extends React.Component<AllProps> {
 
   render() {
-    const { initActions, _addSound } = this.props;
+    const { initActions } = this.props;
 
     return(
       <div id='game_start_home_div'>
@@ -24,7 +24,7 @@ class StartHome extends React.Component<AllProps> {
                 게임 시작 
               </b> 
             </div>
-            
+
             <div> <b onClick={() => initActions.toggle_setting_modal({ 'modal' : true, 'type' : 'notice' })}> 게임 방법 </b> </div>
           </div>
       </div>

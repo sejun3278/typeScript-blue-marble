@@ -9,6 +9,8 @@ const SELECTCARDINFO = 'game/select_card_info';
 const MOVE = 'game/move';
 const EVENTINFO = 'game/event_info';
 const RESETCASINGO = 'game/reset_casino';
+const SETTILEPLAYERMONEY = 'game/settle_player_money';
+const PLAYERBANKINFO = 'game/player_bank_info';
 
 export const actionCreators = {
     game_loading : createAction(GAMELOADING),
@@ -20,6 +22,8 @@ export const actionCreators = {
     move : createAction(MOVE),
     event_info : createAction(EVENTINFO),
     reset_casino : createAction(RESETCASINGO),
+    settle_player_money : createAction(SETTILEPLAYERMONEY),
+    player_bank_info : createAction(PLAYERBANKINFO),
 }
 
 export interface gameState {
@@ -64,7 +68,9 @@ export interface gameState {
     loan_order_money : number,
     loan_payback_date : number
     loan_plus_incentive : number,
-    loan_order_confirm : boolean
+    loan_order_confirm : boolean,
+    settle_modal : boolean,
+    player_bank_info_alert : boolean
 }
 
 const initialState : gameState = {
@@ -109,7 +115,9 @@ const initialState : gameState = {
     loan_order_money : 0,
     loan_payback_date : 0,
     loan_plus_incentive : 0,
-    loan_order_confirm : false
+    loan_order_confirm : false,
+    settle_modal : false,
+    player_bank_info_alert : false
 }
 
 export default handleActions<gameState> ({
@@ -221,6 +229,20 @@ export default handleActions<gameState> ({
             loan_payback_date : 0,
             loan_plus_incentive : 0,
             loan_order_confirm : false
+        }
+    },
+
+    [SETTILEPLAYERMONEY] : (state : any, data : any) => {
+        return {
+            ...state,
+            settle_modal : data.payload.settle_modal !== undefined ? data.payload.settle_modal : state.settle_modal
+        }
+    },
+
+    [PLAYERBANKINFO] : (state : any, data : any) => {
+        return {
+            ...state,
+            player_bank_info_alert : data.payload.player_bank_info_alert !== undefined ? data.payload.player_bank_info_alert : state.player_bank_info_alert
         }
     }
 

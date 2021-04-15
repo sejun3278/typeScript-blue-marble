@@ -1,5 +1,6 @@
 import * as React from 'react';
 import $ from 'jquery';
+import Modal from 'react-modal';
 
 import { actionCreators as initActions } from '../../Store/modules/init';
 import { actionCreators as gameActions } from '../../Store/modules/game';
@@ -44,13 +45,26 @@ export interface AllProps {
   casino_start : boolean,
   casino_game_result : boolean | null,
   bank_info : string,
-  bank_incentive_percent : number
+  bank_incentive_percent : number,
+  settle_modal : boolean
 };
 
 const flash_info : any = {
   "flash" : false,
   "opacity" : 1.4,
   "on" : false
+};
+
+const modalCustomStyles = {
+  content : {
+    top                   : '350px',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)',
+    width                 : '600px',
+  }
 };
 
 let game_start_button = false;
@@ -78,23 +92,30 @@ class Game extends React.Component<AllProps> {
   }
 
   // 돈 삭감하기
-  _minusPlayerMoney = (player : number, price : number) => {
-    const { initActions, gameActions, bank_incentive_percent } = this.props;
+  _minusPlayerMoney = (player : number, price : number, bank_info : any) => {
+    const { initActions, bank_incentive_percent } = this.props;
     const player_list = JSON.parse(this.props.player_list);
-    const bank_info = JSON.parse(this.props.bank_info);
 
+    const result_obj : any = {};
+    let result = true;
     // 1. 플레이어 보유 자산에서 삭감하기
-    price = price - player_list[player - 1].money;
-    
-    if(price > 0) {
-      // 돈이 남았다면 플레이어 돈을 0 처리하기
-      this._playerMoney(player, player_list[player - 1].money, 'minus');
 
-      // 은행 예금에서 처리하기
-      if(bank_info[player].save_money > 0) {
-        price = price - bank_info[player].save_money;
+    let cover_price = price - player_list[player - 1].money <= 0 ? 0 : price - player_list[player - 1].money;
 
-        bank_info[player].save_money = bank_info[player].save_money - price < 0 ? 0 : bank_info[player].save_money;
+    const player_money = player_list[player - 1].money - price <= 0 ? 0 : player_list[player - 1].money - price;
+    player_list[player - 1].money = player_money;
+
+    initActions.set_player_info({ 'player_list' : JSON.stringify(player_list) })
+
+    if(cover_price > 0) {
+    // 2. 은행 예금에서 처리하기
+
+    let player_save_money = bank_info[player].save_money;
+      if(player_save_money > 0) {
+        // console.log(bank_info, bank_info[player].save_money, cover_price)
+        bank_info[player].save_money = bank_info[player].save_money - cover_price <= 0 ? 0 : bank_info[player].save_money - cover_price;
+
+        cover_price = cover_price - player_save_money <= 0 ? 0 : cover_price - player_save_money;
 
         if(bank_info[player].save_money === 0) {
           // 예금이 0 일 때, 
@@ -103,52 +124,27 @@ class Game extends React.Component<AllProps> {
         } else {
           // 예금이 남아 있을 때
           bank_info[player].round_incentive = Math.floor( (bank_incentive_percent / 100) * bank_info[player].save_money );
-
-          return true;
         }
       }
 
-    } else {
-      return true;
-    }
+      if(cover_price > 0) {
+        let cover_total_incentive = bank_info[player].total_incentive;
+        // 3. 마지막으로 누적 이자에서 처리하기
+        bank_info[player].total_incentive = bank_info[player].total_incentive - cover_price <= 0 ? 0 : bank_info[player].total_incentive - cover_price;
 
-    return true;
-
-    if(player_list[player - 1].money >= price) {
-      this._playerMoney(player, price, 'minus');
-      return true;
-
-    } else {
-      // 예금 + 예금 누적 이자
-      const my_save_money = bank_info[player].save_money + bank_info[player].total_incentive;
-
-      if(my_save_money >= price) {
-        // 예금에서 먼저 금액 차감하기
-        price = price - bank_info[player].save_money;
-
-        if(price > 0) {
-          // 예금에서 차감해도 돈이 남았다면, 누적 이자에서 차감하기
-          bank_info[player].save_money = 0;
-          bank_info[player].round_incentive = 0;
-
-          bank_info[player].total_incentive = bank_info[player].total_incentive - price;
-
-        } else {
-          // 예금 정비하기
-          bank_info[player].save_money = bank_info[player].save_money - price;
-
-          // 이자율 다시 계산하기
-          bank_info[player].round_incentive = Math.floor( (bank_incentive_percent / 100) * bank_info[player].save_money )
-        }
-
-        gameActions.event_info({ 'bank_info' : JSON.stringify(bank_info) })
-
-        return true;
+        cover_price = cover_price - cover_total_incentive <= 0 ? 0 : cover_price - cover_total_incentive;
       }
     }
 
+    if(cover_price > 0) {
+      result = false;
+    }
 
-    return false;
+    result_obj['result'] = result;
+    result_obj['extra'] = cover_price;
+    result_obj['info'] = bank_info[player];
+
+    return result_obj;
   }
 
   // 플레이어 돈 관리하기
@@ -381,15 +377,24 @@ class Game extends React.Component<AllProps> {
       if(bank_info[key].repay_day !== 0) {
         bank_info[key].repay_day = bank_info[key].repay_day - 1;
 
-        this._playerMoney(player, bank_info[key].loan_incentive, 'minus');
+        const return_loan_incentive = this._minusPlayerMoney(player, bank_info[key].loan_incentive, bank_info);
+        bank_info[key] = return_loan_incentive['info'];
 
         if(bank_info[key].repay_day === 0) {
-          console.log(33)
           // 대출기간 완료
-          const payback = this._minusPlayerMoney(player, (bank_info[key].loan * 100));
+          // 대출금 상환하기
+          const payback_result = this._minusPlayerMoney(player, (bank_info[key].loan * 100), bank_info);
 
-          if(payback === false) {
-            alert('파산')
+          bank_info[key] = payback_result['info'];
+
+          if(payback_result['result'] === true) {
+            bank_info[key]['repay_day'] = 0;
+            bank_info[key]['loan'] = 0;
+            bank_info[key]['loan_incentive'] = 0;
+
+          } else {
+            // 파산 및 재산 매각하기
+            // gameActions.settle_player_money({ 'settle_modal' : true });
           }
         }
       }
@@ -695,7 +700,7 @@ class Game extends React.Component<AllProps> {
   render() {
     const player_list = JSON.parse(this.props.player_list);
     const { _commaMoney, _realGameStart } = this;
-    const { playing } = this.props;
+    const { playing, settle_modal } = this.props;
 
     const top_player_list = player_list.slice(0, 2);
     const bottom_player_list = player_list.slice(2, 4);
@@ -715,6 +720,18 @@ class Game extends React.Component<AllProps> {
         </div>
 
         <div id='game_contents_div'>
+          {settle_modal === true
+              ? <Modal
+                  isOpen={settle_modal}
+                  style={modalCustomStyles}
+                  ariaHideApp={false}
+                >
+
+                </Modal>
+            
+              : undefined
+          }
+
           <PlayerList
             list={JSON.stringify(top_player_list)}
             _commaMoney={_commaMoney}
@@ -812,7 +829,6 @@ class Game extends React.Component<AllProps> {
             </div>
           </div>
 
-
           <PlayerList
             _commaMoney={_commaMoney}
             list={JSON.stringify(bottom_player_list)}
@@ -849,7 +865,8 @@ export default connect(
     casino_start : game.casino_start,
     casino_game_result : game.casino_game_result,
     bank_info : game.bank_info,
-    bank_incentive_percent : init.bank_incentive_percent
+    bank_incentive_percent : init.bank_incentive_percent,
+    settle_modal : game.settle_modal
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

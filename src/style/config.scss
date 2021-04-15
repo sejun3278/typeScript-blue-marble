@@ -698,6 +698,54 @@ body {
                     .game_user_have_money_div {
                         font-family: $recipe_korea;
                         border-bottom: solid 1px #ababab;
+
+                        .game_user_bank_info_icon { 
+                            width: 15px;
+                            position: absolute;
+                            margin-left: 15px;
+                            cursor: pointer;
+                        }
+                    }
+
+                    #game_user_bank_info {
+                        position: absolute;
+                        width: 215px;
+                        border: solid 2px black;
+                        border-radius: 5px;
+                        padding: 5px;
+                        text-align: center;
+                        margin-top: -60px;
+                        background-color: white;
+                        padding-bottom: 20px;
+                        
+                        h3 { 
+                            margin: 10px 0px !important;
+                            font-size: 14px;
+                            font-family: $recipe_korea;
+                            padding-bottom: 10px;
+                            border-bottom: dotted 1px #ababab;
+                        }
+
+                        .game_user_bank_info_divs {
+                            padding-left: 10px;
+                            margin-top: 20px;
+
+                            h4 {
+                                font-size: 13px;
+                                margin: 15px 0px 3px 0px !important;
+                                color: #ababab;
+                                text-align: left;
+                                font-family: $SDSamliphopangche_Outline;
+                            }
+
+                            .game_user_bank_info_grid_div {
+                                display: grid;
+                                grid-template-columns: 100px auto;
+                                font-size: 12px;
+                                margin-top: 10px;
+                                font-family: $Y_Spotlight;
+                            }
+                        }
                     }
 
                     .game_user_my_location, .game_user_has_location {
