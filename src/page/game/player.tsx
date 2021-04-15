@@ -1,4 +1,5 @@
 import * as React from 'react';
+import $ from 'jquery';
 
 import { actionCreators as initActions } from '../../Store/modules/init';
 import { actionCreators as gameActions } from '../../Store/modules/game';
@@ -8,6 +9,7 @@ import { bindActionCreators } from 'redux';
 import { StoreState } from '../../Store/modules';
 
 import img from '../../source/icon.json';
+import ment_list from '../../source/ment.json';
 
 export interface AllProps {
   initActions : any,
@@ -21,27 +23,43 @@ export interface AllProps {
   stop_info : string,
   round : number,
   bank_info : string,
-  player_bank_info_alert : boolean
+  player_bank_info_alert : boolean,
+  bank_incentive_percent : number,
+  loan_percent : number
 };
 
 class Player extends React.Component<AllProps> {
 
-  // 플레이어의 은행 정보 보기
-  _setBankInfoAlert = (bool : boolean) => {
-    const { gameActions } = this.props;
-    const info : any = JSON.parse(this.props.info);
+  // 정보 알럿 띄우기
+  _setInfoAlert = (_ment : any, bool : boolean, _target : string) => {
+    let target : any = document.getElementById(_target);
+    const get_ment : any = ment_list.alert;
+    const ment = get_ment[_ment];
 
-    gameActions.player_bank_info({ 'player_bank_info_alert' : bool })
+    // let html : any = `<div id="notice_div"> ${ment} </div>`
+    // html = new DOMParser().parseFromString(html, "text/html");
+    // html = html.documentElement.innerHTML;
+
     // if(bool === true) {
-    //   gameActions.player_bank_info({ 'player_bank_info_alert' : false })
+    //   // $(target).append('<div id="notice_alert_div"> </div>')
+    //   // $('#notice_div').html(html)
+    //     // target.append(document.createElement('div'));
+    //     // target = target.childNodes[target.childNodes.length - 1];
 
+    //     target.innerHTML = html;
+    
     // } else if(bool === false) {
+    // // //     target = document.getElementById('notice_div');
+    // // //     target.remove();
     // }
   }
 
   render() {
-    const { float_style, _commaMoney, number, turn, round_start, round, player_bank_info_alert } = this.props;
-    const { _setBankInfoAlert } = this;
+    const { 
+      gameActions, float_style, _commaMoney, number, turn, round_start, round, player_bank_info_alert,
+      bank_incentive_percent, loan_percent
+    } = this.props;
+    const { _setInfoAlert } = this;
     const info : any = JSON.parse(this.props.info);
 
     let img_list : any = img.img.character;
@@ -135,6 +153,7 @@ class Player extends React.Component<AllProps> {
     const bank_info_alert_info = [
       {
         "title" : "예금 정보",
+        "other" : "( 금　리　" + bank_incentive_percent + " % )",
         "info" : [      
           { 'title' : '예금 금액', 'value' : 'save_money' },
           { 'title' : '예금 이자', 'value' : 'round_incentive' },
@@ -144,6 +163,7 @@ class Player extends React.Component<AllProps> {
 
       {
         "title" : "대출 정보",
+        "other" : "( 이자율　" + loan_percent + " % )",
         "info" : [
           { 'title' : '대출 금액', 'value' : 'loan' },
           { 'title' : '대출 이자', 'value' : 'loan_incentive' },
@@ -151,6 +171,17 @@ class Player extends React.Component<AllProps> {
         ]
       }
     ]
+
+    let bonus_money : number | string = my_bank['round_incentive'] - my_bank['loan_incentive'];
+    const bonus_style = { 'color' : '#ababab' };
+
+    if(bonus_money > 0) {
+      bonus_money = "+" + _commaMoney(bonus_money);
+      bonus_style['color'] = '#00af91'
+
+    } else if(bonus_money < 0) {
+      bonus_style['color'] = '#af0069'
+    }
 
     return(
       <div className='game_contents_player_profile_div' key={number}
@@ -175,8 +206,7 @@ class Player extends React.Component<AllProps> {
                     <div className='game_user_have_money_div'> 
                       보유 자산　|　{money} 만원 
                       <img alt='' className='game_user_bank_info_icon' src={bank_icon} 
-                           onMouseEnter={() => turn === info.number ? _setBankInfoAlert(true) : undefined}
-                           onMouseOut={() => turn === info.number ? _setBankInfoAlert(false) : undefined}
+                           onMouseEnter={() => turn === info.number ? gameActions.player_bank_info({ 'player_bank_info_alert' : true }) : undefined}
                       />
                     </div>
 
@@ -184,13 +214,15 @@ class Player extends React.Component<AllProps> {
                     <div className='game_user_has_location'> 보유 도시　|　{info.maps.length}　도시 소유 중 </div>
 
                     {player_bank_info_alert === true && turn === info.number
-                      ? <div id='game_user_bank_info' className={'color_player_' + turn}> 
+                      ? <div id='game_user_bank_info' className={'color_player_' + turn}
+                             onMouseLeave={() => turn === info.number ? gameActions.player_bank_info({ 'player_bank_info_alert' : false }) : undefined}
+                        > 
                           <h3> 플레이어 {turn} 의 은행 정보 </h3>
 
                           {bank_info_alert_info.map( (el, key) => {
                             return(
                               <div key={key} className='game_user_bank_info_divs'>
-                                <h4> {el.title} </h4>
+                                <h4> {el.title}　<b> {el.other} </b> </h4>
 
                                 {el.info.map( (_info, key2) => {
                                   let value = _commaMoney(my_bank[_info.value]);
@@ -215,22 +247,17 @@ class Player extends React.Component<AllProps> {
                             )
                           })}
 
-                          {/* <div className='game_user_bank_info_divs'> */}
-                            {/* <h4> 예금 정보 </h4> */}
-
-                            {/* {save_money_arr.map( (el, key) => {
-                              return(
-                                <div key={key} className='game_user_bank_info_grid_div bold'
-                                     style={my_bank[el.value] <= 0 ? { 'color' : '#ababab' } : undefined}
-                                >
-                                  <div className='aRight'> {el.title}　|　 </div>
-                                  <div className='aLeft'> {_commaMoney(my_bank[el.value])} 만원 </div>
-                                </div>
-                              )
-                            })} */}
-
-                            {/* <h4> 대출 정보 </h4> */}
-                          {/* </div> */}
+                            <div id='game_user_bank_info_round_bonus_alert'
+                                 style={bonus_style}
+                            >
+                              <div> 라운드 보너스　|　</div>
+                              <div> 
+                                 { _commaMoney(bonus_money) } 만원 
+                                <img alt='' src={img.icon.notice_white} id='game_bonus_money_info_alert_icon' 
+                                     onMouseEnter={() => _setInfoAlert('bonus_info', true, 'game_bonus_money_info_alert_icon')}
+                                />
+                              </div>
+                            </div>
                         </div>
 
                       : undefined}
@@ -260,7 +287,9 @@ export default connect(
     stop_info : game.stop_info,
     round : game.round,
     bank_info : game.bank_info,
-    player_bank_info_alert : game.player_bank_info_alert
+    player_bank_info_alert : game.player_bank_info_alert,
+    bank_incentive_percent : init.bank_incentive_percent,
+    loan_percent : init.loan_percent
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

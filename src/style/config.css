@@ -598,7 +598,6 @@ body #notice_div {
   text-align: center;
   margin-top: -60px;
   background-color: white;
-  padding-bottom: 20px;
 }
 #game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #game_user_bank_info h3 {
   margin: 10px 0px !important;
@@ -618,12 +617,35 @@ body #notice_div {
   text-align: left;
   font-family: SDSamliphopangche_Outline;
 }
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #game_user_bank_info .game_user_bank_info_divs h4 b {
+  color: black;
+}
 #game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #game_user_bank_info .game_user_bank_info_divs .game_user_bank_info_grid_div {
   display: grid;
   grid-template-columns: 100px auto;
   font-size: 12px;
   margin-top: 10px;
   font-family: Y_Spotlight;
+}
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #game_user_bank_info #game_user_bank_info_round_bonus_alert {
+  border: solid 2px black;
+  margin-top: 25px;
+  padding: 5px;
+  background-color: black;
+  color: white;
+  text-align: left;
+  padding-left: 10px;
+  font-size: 12px;
+  font-family: Recipekorea;
+}
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #game_user_bank_info #game_user_bank_info_round_bonus_alert div {
+  display: inline-block;
+}
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #game_user_bank_info #game_user_bank_info_round_bonus_alert div #game_bonus_money_info_alert_icon {
+  width: 17px;
+  position: absolute;
+  margin: -1px 15px;
+  cursor: pointer;
 }
 #game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_my_location, #game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_has_location {
   margin-top: 5px;

@@ -716,7 +716,7 @@ body {
                         text-align: center;
                         margin-top: -60px;
                         background-color: white;
-                        padding-bottom: 20px;
+                        // padding-bottom: 20px;
                         
                         h3 { 
                             margin: 10px 0px !important;
@@ -736,6 +736,10 @@ body {
                                 color: #ababab;
                                 text-align: left;
                                 font-family: $SDSamliphopangche_Outline;
+
+                                b {
+                                    color: black;
+                                }
                             }
 
                             .game_user_bank_info_grid_div {
@@ -744,6 +748,29 @@ body {
                                 font-size: 12px;
                                 margin-top: 10px;
                                 font-family: $Y_Spotlight;
+                            }
+                        }
+
+                        #game_user_bank_info_round_bonus_alert {
+                            border: solid 2px black;
+                            margin-top: 25px;
+                            padding: 5px;
+                            background-color: black;
+                            color: white;
+                            text-align: left;
+                            padding-left: 10px;
+                            font-size: 12px;
+                            font-family: $recipe_korea;
+
+                            div {
+                                display: inline-block;
+
+                                #game_bonus_money_info_alert_icon {
+                                    width: 17px;
+                                    position: absolute;
+                                    margin: -1px 15px;
+                                    cursor: pointer;
+                                }
                             }
                         }
                     }

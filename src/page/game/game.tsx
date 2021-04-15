@@ -511,6 +511,8 @@ class Game extends React.Component<AllProps> {
     // 턴 종료
     window.clearInterval(timer_play);
 
+    gameActions.player_bank_info({ 'player_bank_info_alert' : false })
+
     let timer = 200;
     if(time_over === true) {
     // 시간 초과로 인한 상황처리

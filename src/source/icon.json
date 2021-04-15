@@ -14,7 +14,8 @@
         "fix" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/fix.png",
         "modify" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/modify.png",
         "empty_bank" : "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2018/png/iconmonstr-credit-card-thin.png&r=171&g=171&b=171",
-        "bank" : "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2013/png/iconmonstr-credit-card-10.png&r=0&g=0&b=0"
+        "bank" : "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2013/png/iconmonstr-credit-card-10.png&r=0&g=0&b=0",
+        "notice_white" : "https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2012/png/iconmonstr-info-8.png&r=255&g=255&b=255"
     },
 
     "map_icon" : {
