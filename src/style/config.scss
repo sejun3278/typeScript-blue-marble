@@ -26,6 +26,7 @@ $margin_60 : 60px;
 $gray : #ababab; .gray { color : $gray }
 $black : black; .black { color : $black }
 $white : white; .white { color : $white }
+$custom_color_1 : #00c7f5; .custom_color_1 { color : $custom_color_1 }
 
 /* float */
 $float_left : left; .float_left { float : left };
@@ -113,6 +114,19 @@ body {
         z-index: 1000;
         font-family: $paybook_bold;
         font-size: 12px;
+    }
+
+    #notice_divs {
+        position: absolute;
+        width: 96%;
+        border: solid 3px #046582;
+        border-radius: 5px;
+        margin: 5px -8px;
+        background-color: white;
+        font-size: 11px;
+        padding : 5px;
+        color: black;
+        font-family: $paybook_bold;
     }
 }
 
@@ -1433,4 +1447,92 @@ body {
             grid-template-columns: 170px auto;
         }
     }
+}
+
+#game_play_other_div {
+    position: absolute;
+    margin-left: 75.2%;
+    margin-top: 130px;
+    border: solid 2px #ababab;
+    width: 333px;
+    height: 460px;
+
+    #news_div {
+        border-bottom: solid 2px #ababab;
+
+        #news_title_div {
+            padding: 5px 0px;
+            border-bottom: dotted 1px black;
+            text-align: center;
+            background-color: #d6b0b1;
+
+            #news_title {
+                padding-right: 25px;
+                display: $inline_block;
+                margin: 0px;
+                font-size: 13px;
+                font-family: $recipe_korea;
+                color: white;
+            }
+
+            img {
+                position: absolute;
+                width: 25px;
+                margin: 3px -10px;
+                cursor: pointer;
+            }
+        }
+
+        #news_round_divs {
+            padding: 5px;
+            text-align: center;
+            border-bottom: solid 1px black;
+
+            input {
+                width: 30px;
+                text-align: center;
+                border: solid 1px #ababab;
+            }
+
+            b {
+                font-size: 12px;
+                font-family: $recipe_korea;
+            }
+
+            img {
+                width: 15px;
+                position: absolute;
+                margin-top: 5.5px;
+                cursor: pointer;
+            }
+        }
+
+        #news_state_divs {
+            .news_state_divs {
+                height: 20px;
+                background-color: #6e7582;
+                color: white;
+                padding: 3px 10px;
+            }
+        }
+
+        #new_event_off_div {
+            width: 333px;
+            border: solid 2px black;
+            position: absolute;
+            margin-top: -153px;
+            margin-left: -2px;
+            height: 150px;
+            background-color: black;
+            opacity: 0.7;
+            color: white;
+            font-size: 40px;
+            font-family: $SDSamliphopangche_Outline;
+            text-align: center;
+            line-height: 225px;
+        }
+    }
+
+
+
 }

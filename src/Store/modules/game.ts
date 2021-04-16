@@ -11,6 +11,8 @@ const EVENTINFO = 'game/event_info';
 const RESETCASINGO = 'game/reset_casino';
 const SETTILEPLAYERMONEY = 'game/settle_player_money';
 const PLAYERBANKINFO = 'game/player_bank_info';
+const SETGAMELOG = 'game/set_game_log';
+const SETNEWSINFO = 'game/set_news_info';
 
 export const actionCreators = {
     game_loading : createAction(GAMELOADING),
@@ -24,6 +26,8 @@ export const actionCreators = {
     reset_casino : createAction(RESETCASINGO),
     settle_player_money : createAction(SETTILEPLAYERMONEY),
     player_bank_info : createAction(PLAYERBANKINFO),
+    set_game_log : createAction(SETGAMELOG),
+    set_news_info : createAction(SETNEWSINFO),
 }
 
 export interface gameState {
@@ -70,7 +74,10 @@ export interface gameState {
     loan_plus_incentive : number,
     loan_order_confirm : boolean,
     settle_modal : boolean,
-    player_bank_info_alert : boolean
+    player_bank_info_alert : boolean,
+    game_log : string,
+    news_list : string,
+    news_round : number
 }
 
 const initialState : gameState = {
@@ -117,7 +124,10 @@ const initialState : gameState = {
     loan_plus_incentive : 0,
     loan_order_confirm : false,
     settle_modal : false,
-    player_bank_info_alert : false
+    player_bank_info_alert : false,
+    game_log : JSON.stringify([]),
+    news_list : JSON.stringify({}),
+    news_round : 1
 }
 
 export default handleActions<gameState> ({
@@ -243,6 +253,21 @@ export default handleActions<gameState> ({
         return {
             ...state,
             player_bank_info_alert : data.payload.player_bank_info_alert !== undefined ? data.payload.player_bank_info_alert : state.player_bank_info_alert
+        }
+    },
+
+    [SETGAMELOG] : (state : any, data : any) => {
+        return {
+            ...state,
+            game_log : data.payload.game_log !== undefined ? data.payload.game_log : state.game_log
+        }
+    },
+
+    [SETNEWSINFO] : (state : any, data : any) => {
+        return {
+            ...state,
+            news_list : data.payload.news_list !== undefined ? data.payload.news_list : state.news_list,
+            news_round : data.payload.news_round !== undefined ? data.payload.news_round : state.news_round
         }
     }
 

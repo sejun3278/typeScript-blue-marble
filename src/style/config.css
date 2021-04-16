@@ -33,6 +33,10 @@
   color: white;
 }
 
+.custom_color_1 {
+  color: #00c7f5;
+}
+
 /* float */
 .float_left {
   float: left;
@@ -116,6 +120,18 @@ body #notice_div {
   z-index: 1000;
   font-family: paybooc-Bold;
   font-size: 12px;
+}
+body #notice_divs {
+  position: absolute;
+  width: 96%;
+  border: solid 3px #046582;
+  border-radius: 5px;
+  margin: 5px -8px;
+  background-color: white;
+  font-size: 11px;
+  padding: 5px;
+  color: black;
+  font-family: paybooc-Bold;
 }
 
 #game_home_div #game_sound_divs audio {
@@ -1149,6 +1165,79 @@ body #notice_div {
 #bank_event_map_div #bank_loan_div .loan_bill_grid_div {
   display: grid;
   grid-template-columns: 170px auto;
+}
+
+#game_play_other_div {
+  position: absolute;
+  margin-left: 75.2%;
+  margin-top: 130px;
+  border: solid 2px #ababab;
+  width: 333px;
+  height: 460px;
+}
+#game_play_other_div #news_div {
+  border-bottom: solid 2px #ababab;
+}
+#game_play_other_div #news_div #news_title_div {
+  padding: 5px 0px;
+  border-bottom: dotted 1px black;
+  text-align: center;
+  background-color: #d6b0b1;
+}
+#game_play_other_div #news_div #news_title_div #news_title {
+  padding-right: 25px;
+  display: inline-block;
+  margin: 0px;
+  font-size: 13px;
+  font-family: Recipekorea;
+  color: white;
+}
+#game_play_other_div #news_div #news_title_div img {
+  position: absolute;
+  width: 25px;
+  margin: 3px -10px;
+  cursor: pointer;
+}
+#game_play_other_div #news_div #news_round_divs {
+  padding: 5px;
+  text-align: center;
+  border-bottom: solid 1px black;
+}
+#game_play_other_div #news_div #news_round_divs input {
+  width: 30px;
+  text-align: center;
+  border: solid 1px #ababab;
+}
+#game_play_other_div #news_div #news_round_divs b {
+  font-size: 12px;
+  font-family: Recipekorea;
+}
+#game_play_other_div #news_div #news_round_divs img {
+  width: 15px;
+  position: absolute;
+  margin-top: 5.5px;
+  cursor: pointer;
+}
+#game_play_other_div #news_div #news_state_divs .news_state_divs {
+  height: 20px;
+  background-color: #6e7582;
+  color: white;
+  padding: 3px 10px;
+}
+#game_play_other_div #news_div #new_event_off_div {
+  width: 333px;
+  border: solid 2px black;
+  position: absolute;
+  margin-top: -153px;
+  margin-left: -2px;
+  height: 150px;
+  background-color: black;
+  opacity: 0.7;
+  color: white;
+  font-size: 40px;
+  font-family: SDSamliphopangche_Outline;
+  text-align: center;
+  line-height: 225px;
 }
 
 /*# sourceMappingURL=config.css.map */

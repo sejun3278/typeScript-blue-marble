@@ -335,6 +335,8 @@ class Card extends React.Component<AllProps> {
 
                 _removeAlertMent('은행으로부터 50 만원의 추가금을 받았습니다.');
                 player_list[Number(turn) - 1].money += 50;    
+
+                gameActions.player_bank_info({ 'player_bank_info_alert' : true })
             }
         }
 

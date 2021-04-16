@@ -12,6 +12,7 @@ import { StoreState } from '../../Store/modules';
 
 import PlayerList from './player_list';
 import PlayGame from './play_games';
+import GameOther from './game_other';
 
 import MapList from '../../source/map.json';
 import Map from './map';
@@ -46,7 +47,8 @@ export interface AllProps {
   casino_game_result : boolean | null,
   bank_info : string,
   bank_incentive_percent : number,
-  settle_modal : boolean
+  settle_modal : boolean,
+  game_event: boolean
 };
 
 const flash_info : any = {
@@ -206,7 +208,7 @@ class Game extends React.Component<AllProps> {
 
   // 라운드 (턴) 시작하기
   _roundStart = (type : string) => {
-    const { gameActions, round, turn, _flash, round_timer, _setCardDeck } = this.props;
+    const { gameActions, round, turn, _flash, round_timer, _setCardDeck, game_event } = this.props;
     const stop_info = JSON.parse(this.props.stop_info)
     const player_list = JSON.parse(this.props.player_list);
     const map_info = JSON.parse(this.props.map_info);
@@ -215,7 +217,14 @@ class Game extends React.Component<AllProps> {
     if(type === 'round') {
       // 라운드 올리기
       gameActions.round_start({ 'round' : round + 1, 'turn' : 1 });
-      
+
+      if(game_event === true) {
+        gameActions.set_news_info({ 'news_round' : round + 1 });
+
+        const round_inupt : any = document.getElementById('news_round_input');
+        round_inupt.value = round + 1
+      }
+
       // 카드댁 초기화
       _setCardDeck('init');
 
@@ -829,13 +838,14 @@ class Game extends React.Component<AllProps> {
               })}
 
             </div>
+
+            <GameOther />              
           </div>
 
           <PlayerList
             _commaMoney={_commaMoney}
             list={JSON.stringify(bottom_player_list)}
           />
-
         </div>
       </div>
     )
@@ -868,7 +878,8 @@ export default connect(
     casino_game_result : game.casino_game_result,
     bank_info : game.bank_info,
     bank_incentive_percent : init.bank_incentive_percent,
-    settle_modal : game.settle_modal
+    settle_modal : game.settle_modal,
+    game_event : init.game_event
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

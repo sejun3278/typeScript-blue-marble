@@ -36,22 +36,13 @@ class Player extends React.Component<AllProps> {
     const get_ment : any = ment_list.alert;
     const ment = get_ment[_ment];
 
-    // let html : any = `<div id="notice_div"> ${ment} </div>`
-    // html = new DOMParser().parseFromString(html, "text/html");
-    // html = html.documentElement.innerHTML;
+    if(bool === true) {
+      $(target).append('<div id="notice_divs">' + ment + '</div>');
 
-    // if(bool === true) {
-    //   // $(target).append('<div id="notice_alert_div"> </div>')
-    //   // $('#notice_div').html(html)
-    //     // target.append(document.createElement('div'));
-    //     // target = target.childNodes[target.childNodes.length - 1];
-
-    //     target.innerHTML = html;
-    
-    // } else if(bool === false) {
-    // // //     target = document.getElementById('notice_div');
-    // // //     target.remove();
-    // }
+    } else if(bool === false) {
+      target = document.getElementById('notice_divs');
+      target.remove();
+    }
   }
 
   render() {
@@ -172,21 +163,26 @@ class Player extends React.Component<AllProps> {
       }
     ]
 
-    let bonus_money : number | string = my_bank['round_incentive'] - my_bank['loan_incentive'];
+    let bonus_money : number | string = 0;
     const bonus_style = { 'color' : '#ababab' };
 
-    if(bonus_money > 0) {
-      bonus_money = "+" + _commaMoney(bonus_money);
-      bonus_style['color'] = '#00af91'
+    if(round_start === true) {
+     bonus_money = my_bank['round_incentive'] - my_bank['loan_incentive'];
 
-    } else if(bonus_money < 0) {
-      bonus_style['color'] = '#af0069'
+      if(bonus_money > 0) {
+        bonus_money = "+" + _commaMoney(bonus_money);
+        bonus_style['color'] = '#00af91'
+
+      } else if(bonus_money < 0) {
+        bonus_style['color'] = '#af0069'
+      }
     }
 
     return(
       <div className='game_contents_player_profile_div' key={number}
              id={info.number + '_player_info_div'}
              style={float_style} 
+             onMouseLeave={() => gameActions.player_bank_info({ 'player_bank_info_alert' : false })}
         >
         <div style={float_style} className='game_contents_player_thumbnail_div'> 
             <div className={thumb_class} 
@@ -206,7 +202,7 @@ class Player extends React.Component<AllProps> {
                     <div className='game_user_have_money_div'> 
                       보유 자산　|　{money} 만원 
                       <img alt='' className='game_user_bank_info_icon' src={bank_icon} 
-                           onMouseEnter={() => turn === info.number ? gameActions.player_bank_info({ 'player_bank_info_alert' : true }) : undefined}
+                           onMouseEnter={() => turn === info.number && turn === 1 ? gameActions.player_bank_info({ 'player_bank_info_alert' : true }) : undefined}
                       />
                     </div>
 
@@ -254,7 +250,8 @@ class Player extends React.Component<AllProps> {
                               <div> 
                                  { _commaMoney(bonus_money) } 만원 
                                 <img alt='' src={img.icon.notice_white} id='game_bonus_money_info_alert_icon' 
-                                     onMouseEnter={() => _setInfoAlert('bonus_info', true, 'game_bonus_money_info_alert_icon')}
+                                     onMouseEnter={() => _setInfoAlert('bonus_info', true, 'game_user_bank_info')}
+                                     onMouseOut={() => _setInfoAlert('bonus_info', false, 'game_user_bank_info')}
                                 />
                               </div>
                             </div>
