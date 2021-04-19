@@ -41,7 +41,6 @@ class News extends React.Component<AllProps> {
 
       event.target.value = value;
 
-      console.log(value)
       gameActions.set_news_info({
           'news_round' : value
       });
@@ -132,7 +131,6 @@ class News extends React.Component<AllProps> {
             <div id='news_state_divs'>
                 {news_list[news_round]['info'].map( (el : any, key : number) => {
                     const option_check = key === 2;
-                    const result_icon = '　=>　';
 
                     const news_style : any = {};
 

@@ -52,7 +52,8 @@ export interface AllProps {
   news_info_list : string,
   news_list : string,
   loan_percent : number,
-  stop_days : number
+  stop_days : number,
+  add_land_info : string
 };
 
 const flash_info : any = {
@@ -75,6 +76,8 @@ const modalCustomStyles = {
 
 let game_start_button = false;
 let timer_play : any = false;
+
+let overlap_news_number : any = {};
 
 class Game extends React.Component<AllProps> {
 
@@ -228,12 +231,12 @@ class Game extends React.Component<AllProps> {
 
         const round_inupt : any = document.getElementById('news_round_input');
         round_inupt.value = round + 1
+
+        this._setNewsEvent(round + 1);
       }
 
       // 카드댁 초기화
       _setCardDeck('init');
-
-      this._setNewsEvent(round + 1);
 
       return window.setTimeout( () => {
         return this._roundStart('turn');
@@ -254,8 +257,10 @@ class Game extends React.Component<AllProps> {
       }
 
       if(round === 1 && turn === 1) {
-        // 초기 뉴스 가동하기
-        this._setNewsEvent(round);
+        if(game_event === true) {
+          // 초기 뉴스 가동하기
+          this._setNewsEvent(round);
+        }
       }
 
       _flash('#play_main_notice_div', false, 1.4, true, 30, null, 1);
@@ -724,11 +729,18 @@ class Game extends React.Component<AllProps> {
 
   // 뉴스 설정하기
   _setNewsEvent = (round : number) => {
-    const { gameActions, initActions } = this.props;
+    const { gameActions, game_event } = this.props;
     const news_list = JSON.parse(this.props.news_list);
+
+    if(game_event === false) {
+      return;
+    }
 
     news_list[round] = { 'info' : [] };
 
+    // 메인 뉴스의 중복 걸러내기 위한 객체
+    overlap_news_number = {};
+    
     for(let i = 1; i <= 3; i++) {
       let type = 'main';
       if(i === 3) {
@@ -750,11 +762,49 @@ class Game extends React.Component<AllProps> {
     const props : any = this.props;
 
     if(type === 'main') {
+      const add_land_info = JSON.parse(this.props.add_land_info);
+
+      const _recursion : Function = () => {
         // UP 또는 Down 을 정할 랜덤한 수를 뽑는다.
         const main_random_number : number = Math.trunc(Math.random() * (2 - 0) + 0);
         // 0 이라면 Down, 1 이라면 Up
         const main_type : string = main_random_number === 0 ? "false" : "true";
 
+        // 해당 타입의 모든 선택 Length 값 가져오기
+        const length = Object.keys(news_info['main'][main_type]).length;
+
+        // 랜덤 숫자 구하기
+        const random : number = Math.trunc(Math.random() * (length - 1) + 1);
+
+        if(overlap_news_number[random] === undefined) {
+          overlap_news_number[random] = true;
+
+        } else if(overlap_news_number[random] === true) {
+          return _recursion();
+        }
+
+        // 뉴스 조회하기
+        const main_news = news_info['main'][main_type][random];
+
+        // 적용 상대 구하기
+        const apply_target = main_news['target'];
+
+        // 적용 범위 구하기
+        const min = main_news['range'][0];
+        const max = main_news['range'][1];
+
+        const value_result : number = Math.trunc(Math.random() * (max - min) + min);
+
+        // 적용하기
+
+        main_news['value'] = value_result;
+
+        main_news['summary'] = '';
+
+        return main_news;
+      }
+
+      result = _recursion();
 
     } else if(type === 'option') {
       const _recursion : Function = () => {
@@ -1040,7 +1090,8 @@ export default connect(
     news_info_list: init.news_info_list,
     news_list : game.news_list,
     loan_percent : init.loan_percent,
-    stop_days : init.stop_days
+    stop_days : init.stop_days,
+    add_land_info : init.add_land_info
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

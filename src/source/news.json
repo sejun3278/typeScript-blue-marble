@@ -2,21 +2,135 @@
     "main" : {
         "true" : {
             "1" : {
-                "title" : "전국 토지 매입값 인상",
-                "ment" : "전국의 모든 도시 토지 매입값이 인상되었습니다. \n( 이번 라운드부터 적용됩니다. )",
+                "title" : "전국 땅값 인상",
+                "ment" : "전국의 모든 도시의 토지 매입값이 인상됩니다.",
                 "range" : [5, 20],
+                "target" : [0],
                 "apply" : true,
-                "type" : true
+                "type" : true,
+                "other_ment" : " 만원 인상 ",
+                "unit" : "만원",
+                "limit" : 1000,
+                "good" : true
+            },
+
+            "2" : {
+                "title" : "안동 땅값 인상",
+                "ment" : "안동의 땅값이 인상됩니다.",
+                "range" : [5, 10],
+                "target" : [1],
+                "apply" : true,
+                "type" : true,
+                "other_ment" : " 만원 인상 ",
+                "unit" : "만원",
+                "limit" : 1000,
+                "good" : true
+            },
+
+            "3" : {
+                "title" : "평창 땅값 인상",
+                "ment" : "평창의 땅값이 인상됩니다.",
+                "range" : [5, 10],
+                "target" : [2],
+                "apply" : true,
+                "type" : true,
+                "other_ment" : " 만원 인상 ",
+                "unit" : "만원",
+                "limit" : 1000,
+                "good" : true
+            },
+
+            "4" : {
+                "title" : "부산 땅값 인상",
+                "ment" : "부산의 땅값이 인상됩니다.",
+                "range" : [5, 10],
+                "target" : [3],
+                "apply" : true,
+                "type" : true,
+                "other_ment" : " 만원 인상 ",
+                "unit" : "만원",
+                "limit" : 1000,
+                "good" : true
+            },
+
+            "5" : {
+                "title" : "여수 땅값 인상",
+                "ment" : "여수의 땅값이 인상됩니다.",
+                "range" : [5, 10],
+                "target" : [4],
+                "apply" : true,
+                "type" : true,
+                "other_ment" : " 만원 인상 ",
+                "unit" : "만원",
+                "limit" : 1000,
+                "good" : true
             }
         },
 
         "false" : {
             "1" : {
-                "title" : "전국 토지 매입값 인하",
-                "ment" : "전국의 모든 도시 토지 매입값이 인하되었습니다. \n( 이번 라운드부터 적용됩니다. )",
-                "range" : [5, 20],
+                "title" : "전국 땅값 인하",
+                "ment" : "전국의 모든 도시 토지 매입값이 인하됩니다.",
+                "range" : [5, 10],
+                "target" : [0],
                 "apply" : true,
-                "type" : false
+                "type" : false,
+                "other_ment" : " 만원 인하 ",
+                "unit" : "만원",
+                "limit" : 10,
+                "good" : false
+            },
+
+            "2" : {
+                "title" : "안동 땅값 인하",
+                "ment" : "안동의 땅값이 인하됩니다.",
+                "range" : [1, 5],
+                "target" : [1],
+                "apply" : true,
+                "type" : false,
+                "other_ment" : " 만원 인하 ",
+                "unit" : "만원",
+                "limit" : 10,
+                "good" : false
+            },
+
+            "3" : {
+                "title" : "평창 땅값 인하",
+                "ment" : "평창의 땅값이 인하됩니다.",
+                "range" : [1, 5],
+                "target" : [2],
+                "apply" : true,
+                "type" : false,
+                "other_ment" : " 만원 인하 ",
+                "unit" : "만원",
+                "limit" : 10,
+                "good" : false
+            },
+
+            "4" : {
+                "title" : "부산 땅값 인하",
+                "ment" : "부산의 땅값이 인하됩니다.",
+                "range" : [1, 5],
+                "target" : [3],
+                "apply" : true,
+                "type" : false,
+                "other_ment" : " 만원 인하 ",
+                "unit" : "만원",
+                "limit" : 10,
+                "good" : false
+            },
+
+            "5" : {
+                "title" : "여수 땅값 인하",
+                "ment" : "여수의 땅값이 인하됩니다. ",
+                "range" : [1, 5],
+                "target" : [4],
+                "apply" : true,
+                "type" : false,
+                "other_ment" : " 만원 인하 ",
+                "unit" : "만원",
+                "limit" : 10,
+                "good" : false
             }
         }
     },
