@@ -57,6 +57,7 @@ class Loading extends React.Component<AllProps> {
       const { start_price, initActions, gameActions, _setCardDeck, able_player } = this.props;
       const player_list = JSON.parse(this.props.player_list);
       const Map = require('../game/city_info.json');
+      const news_info_list = require('../../source/news.json');
 
       // 은행 정보 저장
       const bank_info : any = {};
@@ -118,6 +119,11 @@ class Loading extends React.Component<AllProps> {
 
       initActions.set_player_info({
         'player_list' : JSON.stringify(player_list)
+      })
+
+      // 뉴스 할당하기
+      initActions.change_state({
+        'news_info_list' : JSON.stringify(news_info_list)
       })
 
     }

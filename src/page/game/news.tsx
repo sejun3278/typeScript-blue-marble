@@ -18,7 +18,8 @@ export interface AllProps {
   news_round : number,
   round : number,
   playing : boolean,
-  game_event : boolean
+  game_event : boolean,
+  news_set : boolean
 };
 
 class News extends React.Component<AllProps> {
@@ -40,6 +41,7 @@ class News extends React.Component<AllProps> {
 
       event.target.value = value;
 
+      console.log(value)
       gameActions.set_news_info({
           'news_round' : value
       });
@@ -74,7 +76,7 @@ class News extends React.Component<AllProps> {
   }
 
   render() {
-    const { news_round, playing, round, game_event } = this.props;
+    const { news_round, playing, round, game_event, news_set } = this.props;
     const { _setNewsRound, _angelNewsRound } = this;
     const news_list = JSON.parse(this.props.news_list);
 
@@ -96,6 +98,7 @@ class News extends React.Component<AllProps> {
     }
 
     const able = playing === false && game_event === true;
+
     return(
         <div id='news_div'>
             <div id='news_title_div'>
@@ -111,9 +114,9 @@ class News extends React.Component<AllProps> {
 
                     : undefined
                 }
-                <input type='number' max={news_round} min={1} readOnly={able} disabled={game_event === false}
+                <input type='number' max={round} min={1} readOnly={able} disabled={game_event === false}
                        id='news_round_input' defaultValue={playing === true && game_event === true ? news_round : undefined}
-                       onBlur={(event) => able ? _setNewsRound(event) : undefined}
+                       onChange={(event) => _setNewsRound(event)}
                 />
                 <b> 라운드 </b>
 
@@ -128,10 +131,41 @@ class News extends React.Component<AllProps> {
 
             <div id='news_state_divs'>
                 {news_list[news_round]['info'].map( (el : any, key : number) => {
+                    const option_check = key === 2;
+                    const result_icon = '　=>　';
+
+                    const news_style : any = {};
+
+                    let origin_value : string = '';
+                    let result_value : string = '';
+                    if(option_check === true) {
+                        origin_value = el.origin_value + el.unit;
+                        result_value = el.result_value + el.unit;
+                    }
+
+                    if(el.good === true) {
+                        news_style['color'] = '#8ab6d6';
+
+                    } else {
+                        news_style['color'] = '#ca8a8b';
+                    }
+
                     return(
                         <div key={key} className='news_state_divs'
                              style={(key + 1) < news_list[news_round]['info'].length ? { 'borderBottom' : 'dotted 1px white' } : undefined}
                         >
+                            <div className='news_title_div'> 
+                                {el.title}
+                            </div>
+
+                            <div className='news_detail_info_div aRight' style={news_style}> 
+                                {el.value} {el.other_ment}
+
+                                {option_check === true && game_event === true && playing === true && news_set === true
+                                    ? <b className='gray'> {el.summary} </b>
+                                    : undefined
+                                }
+                            </div>
                         </div>
                     )
                 })}
@@ -156,7 +190,8 @@ export default connect(
     news_round : game.news_round,
     round : game.round,
     playing : game.playing,
-    game_event : init.game_event
+    game_event : init.game_event,
+    news_set : game.news_set
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

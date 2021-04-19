@@ -635,6 +635,20 @@ body {
                         font-family: $recipe_korea;
                         line-height: 3;
                         height: 20px !important;
+
+                        #stop_number_icon {
+                            position: absolute;
+                            margin: -31px 67px;
+                            width: 16px;
+                            height: 16px;
+                            border: solid 2px white;
+                            background-color: #ababab;
+                            color: white;
+                            border-radius: 10px;
+                            line-height: 1.5;
+                            font-size: 12px;
+                            font-family: $SDSamliphopangche_Outline;
+                        }
                     }
 
                     .event_map_icon {
@@ -1510,9 +1524,16 @@ body {
         #news_state_divs {
             .news_state_divs {
                 height: 20px;
+                line-height: 25px;
                 background-color: #6e7582;
                 color: white;
                 padding: 3px 10px;
+                display: grid;
+                grid-template-columns: 125px 190px;
+                font-size: 13px;
+                font-family: $recipe_korea;
+
+
             }
         }
 

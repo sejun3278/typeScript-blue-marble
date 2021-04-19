@@ -41,6 +41,7 @@ export interface initState {
     bank_incentive_percent : number,
     stop_days : number,
     loan_percent : number,
+    news_info_list : string
 }
 
 const initialState : initState = {
@@ -68,6 +69,7 @@ const initialState : initState = {
     bank_incentive_percent : 5,
     stop_days : 1,
     loan_percent : 5,
+    news_info_list : JSON.stringify({})
 }
 
 // const initialState = {
@@ -131,7 +133,9 @@ export default handleActions<initState> ({
             // 예금 이자율
             bank_incentive_percent : data.payload.bank_incentive_percent !== undefined ? data.payload.bank_incentive_percent : state.bank_incentive_percent,
             // 대출 이자율
-            loan_percent : data.payload.loan_percent !== undefined ? data.payload.loan_percent : state.loan_percent       
+            loan_percent : data.payload.loan_percent !== undefined ? data.payload.loan_percent : state.loan_percent,
+            // 뉴스 정보
+            news_info_list : data.payload.news_info_list !== undefined? data.payload.news_info_list : state.news_info_list
         }
     },
 

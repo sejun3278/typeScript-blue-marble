@@ -542,6 +542,19 @@ body #notice_divs {
   line-height: 3;
   height: 20px !important;
 }
+#game_div #game_contents_div #game_main_contents_div #game_main_map_div .game_main_map_divs .map_event_div #stop_number_icon {
+  position: absolute;
+  margin: -31px 67px;
+  width: 16px;
+  height: 16px;
+  border: solid 2px white;
+  background-color: #ababab;
+  color: white;
+  border-radius: 10px;
+  line-height: 1.5;
+  font-size: 12px;
+  font-family: SDSamliphopangche_Outline;
+}
 #game_div #game_contents_div #game_main_contents_div #game_main_map_div .game_main_map_divs .event_map_icon {
   width: 35px !important;
   margin-top: 10px;
@@ -1220,9 +1233,14 @@ body #notice_divs {
 }
 #game_play_other_div #news_div #news_state_divs .news_state_divs {
   height: 20px;
+  line-height: 25px;
   background-color: #6e7582;
   color: white;
   padding: 3px 10px;
+  display: grid;
+  grid-template-columns: 125px 190px;
+  font-size: 13px;
+  font-family: Recipekorea;
 }
 #game_play_other_div #news_div #new_event_off_div {
   width: 333px;

@@ -31,7 +31,8 @@ export interface AllProps {
   _playerMoney : Function,
   time_over : boolean,
   able_player : number,
-  _timer : Function
+  _timer : Function,
+  stop_days : number
 };
 
 class Card extends React.Component<AllProps> {
@@ -293,7 +294,7 @@ class Card extends React.Component<AllProps> {
 
     // 이동 후 액션취하기
     _action = (arrive : number) => {
-        const { turn, initActions, gameActions, time_over, _removeAlertMent, _timer } = this.props;
+        const { turn, initActions, gameActions, time_over, _removeAlertMent, _timer, stop_days } = this.props;
         const player_list : any = JSON.parse(this.props.player_list);
 
         const city : any = JSON.parse(this.props.map_info);
@@ -311,7 +312,7 @@ class Card extends React.Component<AllProps> {
                 tap_info = 2;
                 
                 const stop_info : any = JSON.parse(this.props.stop_info);
-                stop_info[Number(turn)] = 1;
+                stop_info[Number(turn)] = stop_days;
 
                 gameActions.event_info({ 'stop_info' : JSON.stringify(stop_info) })
 
@@ -439,7 +440,8 @@ export default connect(
     _playerMoney : functions._playerMoney,
     time_over : game.time_over,
     able_player : init.able_player,
-    _timer : functions._timer
+    _timer : functions._timer,
+    stop_days : init.stop_days
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

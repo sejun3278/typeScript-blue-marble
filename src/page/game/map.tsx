@@ -23,6 +23,7 @@ export interface AllProps {
     move_event_able : boolean,
     _removeAlertMent : Function,
     _moveCharacter : Function,
+    stop_days : number
 };
 
 class Map extends React.Component<AllProps> {
@@ -54,7 +55,7 @@ class Map extends React.Component<AllProps> {
   }
 
   render() {
-    const { class_col, style, playing, able_player, move_location, _commaMoney, round, move_event_able } = this.props;
+    const { class_col, style, playing, able_player, move_location, _commaMoney, round, move_event_able, stop_days } = this.props;
     const { _moveMap } = this;
 
     const info = JSON.parse(this.props.info);
@@ -131,13 +132,21 @@ class Map extends React.Component<AllProps> {
                  style={color_style}
             >
                 <b> {name} </b>
+                
+                {info.number === 6
+                  ? <div id='stop_number_icon'>
+                      {stop_days}
+                    </div>
+
+                  : undefined
+                }
             </div>
 
             {/* <div id={'map_number_' + info.number}> */}
             {info.type === 'event'
                     ? <img className='event_map_icon' alt='' 
-                            src={map_icon}
-                        />
+                        src={map_icon}
+                      />
 
                     : <div>
                         {city_info[info.number].build.map( (el : any, key : number) => {
@@ -233,7 +242,8 @@ export default connect(
     round : game.round,
     move_event_able : game.move_event_able,
     _removeAlertMent : functions._removeAlertMent,
-    _moveCharacter : functions._moveCharacter
+    _moveCharacter : functions._moveCharacter,
+    stop_days : init.stop_days
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

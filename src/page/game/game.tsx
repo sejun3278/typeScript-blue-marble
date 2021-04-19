@@ -48,7 +48,11 @@ export interface AllProps {
   bank_info : string,
   bank_incentive_percent : number,
   settle_modal : boolean,
-  game_event: boolean
+  game_event: boolean,
+  news_info_list : string,
+  news_list : string,
+  loan_percent : number,
+  stop_days : number
 };
 
 const flash_info : any = {
@@ -209,6 +213,7 @@ class Game extends React.Component<AllProps> {
   // 라운드 (턴) 시작하기
   _roundStart = (type : string) => {
     const { gameActions, round, turn, _flash, round_timer, _setCardDeck, game_event } = this.props;
+
     const stop_info = JSON.parse(this.props.stop_info)
     const player_list = JSON.parse(this.props.player_list);
     const map_info = JSON.parse(this.props.map_info);
@@ -228,6 +233,8 @@ class Game extends React.Component<AllProps> {
       // 카드댁 초기화
       _setCardDeck('init');
 
+      this._setNewsEvent(round + 1);
+
       return window.setTimeout( () => {
         return this._roundStart('turn');
 
@@ -244,6 +251,11 @@ class Game extends React.Component<AllProps> {
         gameActions.event_info({ 'stop_info' : JSON.stringify(stop_info) })
 
         return this._turnEnd();
+      }
+
+      if(round === 1 && turn === 1) {
+        // 초기 뉴스 가동하기
+        this._setNewsEvent(round);
       }
 
       _flash('#play_main_notice_div', false, 1.4, true, 30, null, 1);
@@ -359,6 +371,8 @@ class Game extends React.Component<AllProps> {
       // 턴이 모두 돈 후, 다음 라운드 시작
       // gameActions.round_start({ 'turn' : 0 });
       gameActions.select_type({ 'select_tap' : 0 })
+
+      gameActions.set_news_info({ 'news_set' : false })
 
       // 플레이어들의 은행 정산하기
       this._setPlayerBank();
@@ -708,6 +722,149 @@ class Game extends React.Component<AllProps> {
     }
   }
 
+  // 뉴스 설정하기
+  _setNewsEvent = (round : number) => {
+    const { gameActions, initActions } = this.props;
+    const news_list = JSON.parse(this.props.news_list);
+
+    news_list[round] = { 'info' : [] };
+
+    for(let i = 1; i <= 3; i++) {
+      let type = 'main';
+      if(i === 3) {
+        type = 'option';
+      }
+      const result = this._getNewsData(type);
+
+      news_list[round].info.push(result);
+    }
+
+    gameActions.set_news_info({ 'news_list' : JSON.stringify(news_list), 'news_set' : true });    
+    return;
+  }
+
+  // 뉴스 구하기
+  _getNewsData = (type : string) => {
+    let result : any = {};
+    const news_info = require('../../source/news.json');
+    const props : any = this.props;
+
+    if(type === 'main') {
+        // UP 또는 Down 을 정할 랜덤한 수를 뽑는다.
+        const main_random_number : number = Math.trunc(Math.random() * (2 - 0) + 0);
+        // 0 이라면 Down, 1 이라면 Up
+        const main_type : string = main_random_number === 0 ? "false" : "true";
+
+
+    } else if(type === 'option') {
+      const _recursion : Function = () => {
+        const option_length : number = (Object.keys(news_info['option']).length + 1);
+        const random : number = Math.trunc(Math.random() * (option_length - 1) + 1);
+        // const random = 5;
+
+        // 옵션 타입의 뉴스를 가져온다.
+        const option_news_result = news_info['option'][random];
+        // 가져온 뉴스의 범위를 가져온다.
+        const option_news_value_range : number[] = option_news_result.range;
+
+        // 범위의 최소값, 최대값을 변수로 할당한다.
+        const min : number = option_news_value_range[0];
+        const max : number = option_news_value_range[1];
+
+        // 옵션의 범위값을 지정한다.
+        const option_value : number = Math.trunc(Math.random() * (max - min) + min);
+        option_news_result['value'] = option_value;
+
+        /* ////////// 후 처리하기 ///////////// */
+
+        // 현재 값 가져오기
+        const origin_value = props[option_news_result['state']];
+
+        option_news_result['origin_value'] = origin_value;
+        
+        if(origin_value === option_news_result.limit) {
+          return _recursion();
+        }
+
+        // 값 인상 또는 인하값 구하기
+        let result_value : number = 0;
+        if(option_news_result['result'] === true) {
+          // 인상하기
+          result_value = origin_value + option_value;
+
+          if(result_value > option_news_result.limit) {
+            option_news_result['value'] = option_news_result.limit - origin_value;
+            result_value = option_news_result.limit;
+          }
+
+        } else if(option_news_result['result'] === false) {
+          // 인하하기
+          result_value = origin_value - option_value;
+          
+          if(result_value < option_news_result.limit) {
+            option_news_result['value'] = origin_value - option_news_result.limit;
+            result_value = option_news_result.limit;
+          }
+        }
+        option_news_result['result_value'] = result_value;
+
+        const save_obj : any = {};
+        save_obj[option_news_result['state']] = result_value;
+
+        if(option_news_result['apply'] === true) {
+          // 즉시 적용의 경우
+          this._newsApply(option_news_result, type);
+        }
+
+        const origin_str = origin_value + ' ' +option_news_result['unit'];
+        const result_str = result_value + ' ' + option_news_result['unit'];
+        if(random >= 1 && random < 5) {
+          option_news_result['summary'] = `　( ${origin_str}　=>　${result_str} )`;
+
+        } else if(random >= 5 && random < 7) {
+          option_news_result['summary'] = `　( => ${result_str} )`;
+        }
+
+        props.initActions.change_state(save_obj);
+
+        return option_news_result;
+      }
+
+      result = _recursion();
+    }
+
+    return result;
+  }
+
+  // 뉴스 즉시 적용하기
+  _newsApply = (info : any, type : string) => {
+    const player_list = JSON.parse(this.props.player_list);
+    const bank_info = JSON.parse(this.props.bank_info);
+
+    if(type === 'main') {
+
+    } else if(type === 'option') {
+      const result_value : number = info.result_value;
+      const props : any = this.props;
+      const save_obj : any = {};
+
+      if(info.state === "bank_incentive_percent") {
+        // 은행 금리 관련
+        for(let key in bank_info) {
+          if(bank_info[key]['save_money'] > 0) {
+            const percent = result_value / 100;
+            const incentive = Math.floor(bank_info[key]['save_money'] * percent);
+
+            bank_info[key]['round_incentive'] = incentive;
+          }
+        }
+      }
+
+
+      props.gameActions.event_info({ 'bank_info' : JSON.stringify(bank_info) })
+    }
+  }
+
   render() {
     const player_list = JSON.parse(this.props.player_list);
     const { _commaMoney, _realGameStart } = this;
@@ -879,7 +1036,11 @@ export default connect(
     bank_info : game.bank_info,
     bank_incentive_percent : init.bank_incentive_percent,
     settle_modal : game.settle_modal,
-    game_event : init.game_event
+    game_event : init.game_event,
+    news_info_list: init.news_info_list,
+    news_list : game.news_list,
+    loan_percent : init.loan_percent,
+    stop_days : init.stop_days
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

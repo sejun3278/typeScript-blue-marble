@@ -1,10 +1,23 @@
 {
     "main" : {
-        "up" : {
+        "true" : {
+            "1" : {
+                "title" : "전국 토지 매입값 인상",
+                "ment" : "전국의 모든 도시 토지 매입값이 인상되었습니다. \n( 이번 라운드부터 적용됩니다. )",
+                "range" : [5, 20],
+                "apply" : true,
+                "type" : true
+            }
         },
 
-        "minus" : {
-
+        "false" : {
+            "1" : {
+                "title" : "전국 토지 매입값 인하",
+                "ment" : "전국의 모든 도시 토지 매입값이 인하되었습니다. \n( 이번 라운드부터 적용됩니다. )",
+                "range" : [5, 20],
+                "apply" : true,
+                "type" : false
+            }
         }
     },
 
@@ -12,29 +25,79 @@
         "1" : {
             "title" : "금리 인상",
             "ment" : "금리가 인상되었습니다.",
-            "value" : [1, 3],
-            "apply" : 0
+            "range" : [1, 4],
+            "state" : "bank_incentive_percent",
+            "apply" : true,
+            "result" : true,
+            "other_ment" : " % 인상 ",
+            "unit" : "%",
+            "limit" : 10,
+            "good" : true
         },
 
         "2" : {
             "title" : "금리 인하",
             "ment" : "금리가 인하되었습니다.",
-            "value" : [2, 5],
-            "apply" : 0
+            "range" : [2, 6],
+            "state" : "bank_incentive_percent",
+            "apply" : true,
+            "result" : false,
+            "other_ment" : " % 인하 ",
+            "unit" : "%",
+            "limit" : 1,
+            "good" : false
         },
 
         "3" : {
             "title" : "대출 이자율 인상",
             "ment" : "대출의 이자율이 인상되었습니다. \n앞으로 받는 대출에 영향을 받습니다.",
-            "value" : [2, 5],
-            "apply" : 0
+            "range" : [2, 6],
+            "state" : "loan_percent",
+            "apply" : false,
+            "result" : true,
+            "other_ment" : " % 인상 ",
+            "unit" : "%",
+            "limit" : 10,
+            "good" : false
         },
 
         "4" : {
             "title" : "대출 이자율 인하",
             "ment" : "대출의 이자율이 인하되었습니다. \n앞으로 받는 대출에 영향을 받습니다.",
-            "value" : [1, 3],
-            "apply" : 0
+            "range" : [1, 4],
+            "state" : "loan_percent",
+            "apply" : false,
+            "result" : false,
+            "other_ment" : " % 인하 ",
+            "unit" : "%",
+            "limit" : 1,
+            "good" : true
+        },
+
+        "5" : {
+            "title" : "무인도 체류 연장",
+            "ment" : "구조선의 연착으로 인해 구조가 늦어져 무인도에 1 라운드 더 체류하게 됩니다. \n앞으로 무인도에 도착하게 되는 플레이어부터 적용됩니다.",
+            "range" : [1, 1],
+            "state" : "stop_days",
+            "apply" : false,
+            "result" : true,
+            "other_ment" : " 라운드 증가 ",
+            "unit" : "라운드",
+            "limit" : 3,
+            "good" : false
+        },
+
+        "6" : {
+            "title" : "무인도 체류 감소",
+            "ment" : "구조선의 빠른 초동대처로 무인도 탈출이 1 라운드 더 빨라집니다. \n앞으로 무인도에 도착하게 되는 플레이어부터 적용됩니다.",
+            "range" : [1, 1],
+            "state" : "stop_days",
+            "apply" : false,
+            "result" : false,
+            "other_ment" : " 라운드 감소 ",
+            "unit" : "라운드",
+            "limit" : 1,
+            "good" : true
         }
     }
 }
