@@ -133,7 +133,7 @@ class Map extends React.Component<AllProps> {
             >
                 <b> {name} </b>
                 
-                {info.number === 6
+                {info.number === 6 && playing === true
                   ? <div id='stop_number_icon'>
                       {stop_days}
                     </div>

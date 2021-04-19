@@ -213,6 +213,7 @@ class Card extends React.Component<AllProps> {
 
             const move_character = (obj : any, num : number, _location : number) => {
                 const { turn } = this.props;
+                const move_list = require('../../source/move.json');
 
                 const target : any = document.getElementById('player_main_character_' + turn);
 
@@ -229,14 +230,8 @@ class Card extends React.Component<AllProps> {
                     // $(target).animate({ 'marginLeft' : ( (player_move_location * -84.5) ) + 'px' }, 300);
 
                 } else if(num === 2) {
-                    
-                    if(player_move_location === 14) {
-                        $(target).animate({ 'marginTop' : '-650px' }, 300);
-
-                    } else {
-                        $(target).animate({ 'marginTop' : (player_top + ( (player_move_location - _location) * -80 ) - 10) + 'px' }, 300);
-                    }
-                    // $(target).animate({ 'marginTop' : ( (player_move_location - 6) * -80 ) - 10 + 'px' }, 300);
+                    const move : number = move_list[player_move_location];
+                    $(target).animate({ 'marginTop' : move + 'px' }, 300);
 
                 } else if(num === 3) {
                     // const player_left : number = Number( target.style.marginLeft.slice(0, target.style.marginLeft.indexOf("px")) );
@@ -247,13 +242,19 @@ class Card extends React.Component<AllProps> {
                     $(target).animate({ 'marginLeft' : ( player_left + ( (player_move_location - _location) * 88.5) ) + 'px' }, 300);
 
                 } else if(num === 4) {
+                    // console.log(player_move_location)
+                    // const move : number = move_list[player_move_location];
+                    // $(target).animate({ 'marginTop' : move + 'px' }, 300);
+
                     // const player_top : number = Number( target.style.marginTop.slice(0, target.style.marginTop.indexOf("px")) );
                     // const move_top = player_top + ( obj[num] * 82 );
 
                     // $(target).animate({ 'marginTop' : move_top + 'px' }, 300);
 
                     if(circle === false) {
-                        $(target).animate({ 'marginTop' : (player_top + ( (player_move_location - _location) * 80 ) + 4) + 'px' }, 300);
+                        const move : number = move_list[player_move_location];
+                        $(target).animate({ 'marginTop' : move + 'px' }, 300);
+                        // $(target).animate({ 'marginTop' : (player_top + ( (player_move_location - _location) * 80 ) + 4) + 'px' }, 300);
 
                     } else if(circle === true) {
                         $(target).animate({ 'marginTop' : '-10px' }, 300);
