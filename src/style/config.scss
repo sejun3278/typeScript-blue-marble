@@ -26,17 +26,22 @@ $margin_60 : 60px;
 $gray : #ababab; .gray { color : $gray }
 $black : black; .black { color : $black }
 $white : white; .white { color : $white }
+$red : #ce1f6a; .red { color : $red }
 $custom_color_1 : #00c7f5; .custom_color_1 { color : $custom_color_1 }
+.orange { color : orange}
+
+/* Background Color */
+.back_black { background-color: black; }
 
 /* float */
 $float_left : left; .float_left { float : left };
 $float_right : right; .float_right { float : right };
 
 /* player color */
-.color_player_1 { color : #28527a };
-.color_player_2 { color : #ad6c80 };
-.color_player_3 { color : #007965 };
-.color_player_4 { color : #f8dc81 };
+.color_player_1 { color : #28527a !important };
+.color_player_2 { color : #ad6c80 !important };
+.color_player_3 { color : #007965 !important };
+.color_player_4 { color : #f8dc81 !important };
 
 /* font style */
 @font-face {
@@ -1554,6 +1559,73 @@ body {
         }
     }
 
+    #game_log_div {
+        height: 306px;
 
+        #game_log_list_div {
+            overflow: auto;
+            height: 275px;
+            display: flex;
+            flex-direction: column-reverse;
+            // transform: rotate(180deg);
+        }
 
+        #game_player_chat_div {
+            border-top: solid 2px #ababab;
+            // padding: 3px 0px;
+
+            #game_chat_grid_div {
+                display: grid;
+                grid-template-columns: 280px auto;
+
+                #game_chat {
+                    width: 95%;
+                    padding: 4.5px;
+                    border: solid 2px #ababab;
+                    padding-left: 8px;
+                    color: #ababab;
+                }
+
+                #game_chat_submit {
+                    width: 49px;
+                    height: 29px;
+                    line-height: 27px;
+                    font-size: 12px;
+                    cursor: pointer;
+                    background-color: white;
+                    border: solid 2px #ababab;
+                    font-family: $recipe_korea;
+                    margin-left: 2px;
+                }
+            }
+        }
+    }
+
+}
+
+.log_divs {
+    border-top: dotted 1px #ababab;
+    padding: 4px 5px;
+    font-size: 13px;
+    font-family: $HangeulNuri-Bold;
+    // transform: rotate(-180deg);
+
+    .player_chat {
+        color: #28527a;
+    }
+
+    .game_alert {
+        text-align: center;
+        padding: 8px 0px;
+        font-size: 16px;
+        font-family: $SDSamliphopangche_Outline;
+        color: orange;
+        word-spacing: 4px !important;
+    }
+
+    .game_alert_2 {
+        padding: 8px 0px;
+        text-align: center;
+        font-family: $recipe_korea;
+    }
 }

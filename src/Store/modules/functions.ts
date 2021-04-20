@@ -15,7 +15,10 @@ export interface functionsState {
     _timer : Function,
     _flash : Function,
     _infiniteFlash : Function,
-    _timerOn : Function
+    _timerOn : Function,
+    _addLog : Function,
+    _playerMoneys : Function,
+    _minusPlayerMoney : Function
 }
 
 const initialState : functionsState = {
@@ -27,7 +30,10 @@ const initialState : functionsState = {
     _timer : () => {},
     _flash : () => {},
     _infiniteFlash : () => {},
-    _timerOn : () => {}
+    _timerOn : () => {},
+    _addLog : () => {},
+    _playerMoneys : () => {},
+    _minusPlayerMoney : () => {}
 }
 
 export default handleActions<functionsState> ({
@@ -42,7 +48,10 @@ export default handleActions<functionsState> ({
         _timer : data.payload._timer !== undefined ? data.payload._timer : state._timer,
         _flash : data.payload._flash !== undefined ? data.payload._flash : state._flash,
         _infiniteFlash : data.payload._infiniteFlash !== undefined ? data.payload._infiniteFlash : state._infiniteFlash,
-        _timerOn : data.payload._timerOn !== undefined ? data.payload._timerOn : state._timerOn
+        _timerOn : data.payload._timerOn !== undefined ? data.payload._timerOn : state._timerOn,
+        _addLog : data.payload._addLog !== undefined ? data.payload._addLog : state._addLog,
+        _playerMoneys : data.payload._playerMoneys !== undefined ? data.payload._playerMoneys : state._playerMoneys,
+        _minusPlayerMoney : data.payload._minusPlayerMoney !== undefined ? data.payload._minusPlayerMoney : state._minusPlayerMoney
       };
     }
 

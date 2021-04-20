@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { actionCreators as initActions } from '../../Store/modules/init';
-import { actionCreators as gameActions } from '../../Store/modules/game';
+import game, { actionCreators as gameActions } from '../../Store/modules/game';
 import { actionCreators as functionsActions } from '../../Store/modules/functions';
 
 import { connect } from 'react-redux'; 
@@ -19,7 +19,11 @@ export interface AllProps {
   map_info : string,
   _removeAlertMent : Function,
   pass_price : number,
-  _commaMoney : Function
+  _commaMoney : Function,
+  _addLog : Function,
+  bank_info : string,
+  _playerMoneys : Function,
+  _minusPlayerMoney : Function
 };
 
 class Build extends React.Component<AllProps> {
@@ -28,24 +32,26 @@ class Build extends React.Component<AllProps> {
     _buyMap = (event : any, type : string, my_info : any | undefined | null) => {
         const select_info = JSON.parse(this.props.select_info);
         const map_info = JSON.parse(this.props.map_info);
-        const player_list = JSON.parse(this.props.player_list);
+        // const player_list = JSON.parse(this.props.player_list);
         
-        const { initActions, gameActions, _removeAlertMent, pass_price } = this.props; 
+        const { initActions, gameActions, _removeAlertMent, pass_price, _addLog, turn, _playerMoneys, _minusPlayerMoney } = this.props; 
+
+        const player_all_money = _playerMoneys(turn);
 
         if(type === 'on') {
-            if(my_info.money >= select_info.price) {
+            if(player_all_money >= select_info.price) {
                 event.target.style.backgroundColor = '#9fd8df';
                 event.target.style.color = 'white'
             }
 
         } else if(type === 'off') {
-            if(my_info.money >= select_info.price) {
+            if(player_all_money >= select_info.price) {
                 event.target.style.backgroundColor = 'white';
                 event.target.style.color = 'black'
             }
 
         } else if(type === 'click') {
-            if(my_info.money < select_info.price) {
+            if(player_all_money < select_info.price) {
                 // 돈이 부족할 경우
                 _removeAlertMent("토지 매입 비용이 부족합니다.");
                 return
@@ -53,12 +59,18 @@ class Build extends React.Component<AllProps> {
 
             if(map_info[select_info.number].host === null) {
                 // 플레이어 설정
-                player_list[my_info.number - 1]['money'] = my_info.money - select_info.price;
+                // player_list[my_info.number - 1]['money'] = my_info.money - select_info.price;
+                const result = _minusPlayerMoney(turn, select_info.price, undefined, true);
+                
+                const player_list = result['player'];
+                
                 player_list[my_info.number - 1]['maps'].push(select_info.number);
 
                 initActions.set_player_info({ 
                     'player_list' : JSON.stringify(player_list), 
                 });
+
+                gameActions.event_info({ 'bank_info' : JSON.stringify(result['bank']) })
 
                 // 맵 설정
                 map_info[select_info.number].host = my_info.number;
@@ -68,6 +80,10 @@ class Build extends React.Component<AllProps> {
                 select_info.host = my_info.number;
                 select_info.pass = select_info.price * pass_price;
                 gameActions.select_type({ 'select_info' : JSON.stringify(select_info) })
+
+                const ment = `<div class='game_alert_2'> <b class='color_player_${turn}'> 플레이어 ${turn} </b>　|　${map_info[select_info.number].name} 토지 구매 <b class='custom_color_1'> ( ${select_info.price} 만원 ) </b>  <br /> <b class='gray'> ( 이제부터 ${map_info[select_info.number].name} 에 도착한 다른 플레이어에게는 <br /> <b class='red'>${map_info[select_info.number].pass} 만원</b>의 동행료가 부과됩니다. ) </b> </div>`;
+
+                _addLog(ment)
             }
         }
     }
@@ -97,7 +113,7 @@ class Build extends React.Component<AllProps> {
 
         const player_list : any = JSON.parse(this.props.player_list)
 
-        const { gameActions, initActions, turn, _removeAlertMent, pass_price } = this.props;
+        const { gameActions, initActions, turn, _removeAlertMent, pass_price, _addLog } = this.props;
 
         if(turn === 1) {
             if(type === 'on') {
@@ -108,9 +124,7 @@ class Build extends React.Component<AllProps> {
                 map_info[select_info.number].build[key]['select'] = true;
 
             } else if(type === 'off') {
-            
                 delete map_info[select_info.number].build[key]['select'];
-
 
             } else if(type === 'click') {
                 const my_info = player_list[turn - 1];
@@ -120,11 +134,16 @@ class Build extends React.Component<AllProps> {
                         player_list[turn - 1].money = my_info.money - map_info[select_info.number].build[key].price;
                         initActions.set_player_info({ 'player_list' : JSON.stringify(player_list) });
 
+                        const origin_pass = map_info[select_info.number].pass;
+
                         map_info[select_info.number].build[key].build = true;
                         map_info[select_info.number].pass = map_info[select_info.number].pass + ( map_info[select_info.number].build[key].price * pass_price );      
                         
                         delete map_info[select_info.number].build[key]['select'];
                         
+                        const ment = `<div class='game_alert_2'> <b class='color_player_${turn}'> 플레이어 ${turn} </b>　|　${map_info[select_info.number].build[key].name} 건설 <b class='custom_color_1'> ( ${map_info[select_info.number].build[key].price} 만원 ) </b>  <br /> <b class='gray'> ( 통행료　|　${origin_pass} 만원　=>　<b class='red'>${map_info[select_info.number].pass} 만원</b> ) </b> </div>`;
+                        _addLog(ment);
+
                         _removeAlertMent(map_info[select_info.number].build[key].name + " (이)가 건설되었습니다.");
 
                     } else {
@@ -139,10 +158,11 @@ class Build extends React.Component<AllProps> {
     }
 
   render() {
-    const { turn, pass_price, _commaMoney } = this.props;
+    const { turn, pass_price, _commaMoney, _playerMoneys } = this.props;
     const { _buyMap, _checkLandMark, _build } = this;
 
     const select_info = JSON.parse(this.props.select_info);
+    const bank_info = JSON.parse(this.props.bank_info);
 
     let my_info = JSON.parse(this.props.player_list);
 
@@ -153,7 +173,9 @@ class Build extends React.Component<AllProps> {
     let buy_button_style : any = {};
     let buy_able = true;
 
-    if(my_info.money < select_info.price) {
+    const player_all_money : number = _playerMoneys(Number(turn));
+
+    if(player_all_money < select_info.price) {
         buy_button_style['backgroundColor'] = '#ababab';
         buy_button_style['color'] = '#b7657b';
             
@@ -313,7 +335,11 @@ export default connect(
     player_list : init.player_list,
     map_info : init.map_info,
     pass_price : init.pass_price,
-    _commaMoney : functions._commaMoney
+    _commaMoney : functions._commaMoney,
+    _addLog : functions._addLog,
+    bank_info : game.bank_info,
+    _playerMoneys : functions._playerMoneys,
+    _minusPlayerMoney : functions._minusPlayerMoney
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

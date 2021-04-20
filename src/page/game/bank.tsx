@@ -26,7 +26,8 @@ export interface AllProps {
   loan_payback_date : number,
   loan_plus_incentive : number,
   _flash : Function,
-  loan_order_confirm : boolean
+  loan_order_confirm : boolean,
+  _addLog : Function
 };
 
 class Bank extends React.Component<AllProps> {
@@ -124,7 +125,7 @@ class Bank extends React.Component<AllProps> {
 
   // 누적 이자금 환급받기
   _returnTotalIncentive = () => {
-    const { turn, _removeAlertMent, gameActions, _playerMoney } = this.props;
+    const { turn, _removeAlertMent, gameActions, _playerMoney, _addLog } = this.props;
     const bank_info = JSON.parse(this.props.bank_info);
     const my_info = bank_info[Number(turn)];
 
@@ -133,6 +134,7 @@ class Bank extends React.Component<AllProps> {
 
     } else {
         _playerMoney(turn, my_info.total_incentive, 'plus');
+        _addLog(`<div class='game_alert_2'> 누적 이자금 <b class='custom_color_1'> ${my_info.total_incentive} 만원</b>을 환급받으셨습니다. </div>`)
 
         my_info.total_incentive = 0;
         gameActions.event_info({ 'bank_info' : JSON.stringify(bank_info) })
@@ -213,7 +215,7 @@ class Bank extends React.Component<AllProps> {
 
   // 대출 신청하기
   _orderLoan = () => {
-    const { turn, gameActions, loan_plus_incentive, loan_order_money, loan_payback_date, loan_order_confirm, _removeAlertMent, _playerMoney } = this.props;
+    const { turn, _addLog, gameActions, loan_plus_incentive, loan_order_money, loan_payback_date, loan_order_confirm, _removeAlertMent, _playerMoney } = this.props;
 
     const bank_info = JSON.parse(this.props.bank_info);
 
@@ -237,7 +239,8 @@ class Bank extends React.Component<AllProps> {
             'bank_info' : JSON.stringify(bank_info),
             'loan_order_confirm' : true
         })
-
+        
+        _addLog(`<div class='game_alert_2'> 은행으로부터 <b class='custom_color_1'>${(loan_order_money * 100)} 만원</b>을 대출받았습니다. <br /> <b class='orange'>${loan_payback_date} 라운드</b> 후 자동으로 상환됩니다. </div>`)
         return _playerMoney(turn, (loan_order_money * 100), 'plus');
 
     } else {
@@ -248,11 +251,11 @@ class Bank extends React.Component<AllProps> {
 
   // 대출 상환하기
   _repayLoan = (money : number, loan : number) => {
-    const { gameActions, _playerMoney, _removeAlertMent, turn } = this.props;
+    const { gameActions, _playerMoney, _removeAlertMent, turn, _addLog } = this.props;
     const bank_info = JSON.parse(this.props.bank_info);
 
     if(money < loan) {
-        return _removeAlertMent('상환금 ' + loan + ' 만원이 필요합니다.');   
+        return _removeAlertMent('상환금 ' + loan + ' 만원이 필요합니다.');
 
     } else {
         _playerMoney(turn, loan, 'minus');
@@ -260,6 +263,8 @@ class Bank extends React.Component<AllProps> {
         bank_info[Number(turn)]['loan'] = 0;
         bank_info[Number(turn)]['loan_incentive'] = 0;
         bank_info[Number(turn)]['repay_day'] = 0;
+
+        _addLog(`<div class='game_alert_2'> 대출금 <b class='custom_color_1'> ${loan} 만원 </b> 을 상환하셨습니다. </div>`)
     }
 
     return gameActions.event_info({ 'bank_info' : JSON.stringify(bank_info), 'loan_order_confirm' : false })
@@ -504,7 +509,8 @@ export default connect(
     loan_payback_date : game.loan_payback_date,
     loan_plus_incentive : game.loan_plus_incentive,
     _flash : functions._flash,
-    loan_order_confirm : game.loan_order_confirm
+    loan_order_confirm : game.loan_order_confirm,
+    _addLog : functions._addLog
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

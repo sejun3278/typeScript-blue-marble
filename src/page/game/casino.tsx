@@ -31,10 +31,10 @@ export interface AllProps {
   _commaMoney : Function,
   _timer : Function,
   round_timer : number,
-  _timerOn : Function
+  _timerOn : Function,
+  _addLog : Function
 };
 
-let game_start = false;
 class Casino extends React.Component<AllProps> {
 
   _checkMoney = (event : any, max : number) => {
@@ -55,7 +55,7 @@ class Casino extends React.Component<AllProps> {
   }
 
   _bettingGameStart = () => {
-    const { gameActions, casino_betting, _removeAlertMent, _playerMoney, turn, casino_game_start, _flash } = this.props;
+    const { gameActions, casino_betting, _removeAlertMent, _playerMoney, turn, casino_game_start, _flash, _addLog } = this.props;
     if(casino_betting <= 0) {
         document.getElementById('betting_input')?.focus();
         _removeAlertMent('배팅금은 1 만원 이상부터 가능합니다.')
@@ -66,6 +66,8 @@ class Casino extends React.Component<AllProps> {
         return;
     }
     _playerMoney(turn, casino_betting, 'minus');
+
+    _addLog(`<div class='game_alert_2'> <b class='color_player_${turn}'> ${turn} 플레이어 </b>　|　${casino_betting} 만원 배팅 </div>`)
 
     gameActions.event_info({ 'casino_game_start' : null })
 
@@ -238,7 +240,7 @@ class Casino extends React.Component<AllProps> {
 
   // 마무리 짓기
   _endCasinoGame = (result : boolean, num : number) => {
-    const { gameActions, casino_betting,_playerMoney, turn, _commaMoney, _timerOn, round_timer } = this.props;
+    const { gameActions, casino_betting,_playerMoney, turn, _commaMoney, _timerOn, round_timer, _addLog } = this.props;
 
     return window.setTimeout( () => {
         gameActions.event_info({ 'casino_game_result' : result });
@@ -251,9 +253,12 @@ class Casino extends React.Component<AllProps> {
 
             $('#casino_game_money_result_notice_div').text(num + ' 배율로 ' + _commaMoney((num * casino_betting)) + ' 만원을 획득하셨습니다.' );
     
+            _addLog(`<div class="game_alert_2 custom_color_1"> 잭팟 성공 ( + ${_commaMoney((num * casino_betting))} 만원 ) </div>`)
+
         } else if(result === false) {
             // 게임 실패
             $('#casino_game_money_result_notice_div').text('다음에 다시 도전하세요.');
+            _addLog(`<div class="game_alert_2 red back_black"> 잭팟 실패 </div>`)
         }
 
         if(round_timer !== 0) {
@@ -444,7 +449,8 @@ export default connect(
     _commaMoney : functions._commaMoney,
     _timer : functions._timer,
     round_timer : init.round_timer,
-    _timerOn : functions._timerOn
+    _timerOn : functions._timerOn,
+    _addLog : functions._addLog
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

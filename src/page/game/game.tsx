@@ -53,7 +53,8 @@ export interface AllProps {
   news_list : string,
   loan_percent : number,
   stop_days : number,
-  add_land_info : string
+  add_land_info : string,
+  game_log : string
 };
 
 const flash_info : any = {
@@ -96,14 +97,21 @@ class Game extends React.Component<AllProps> {
       '_playerMoney' : this._playerMoney,
       '_timer' : this._timer,
       '_infiniteFlash' : this._infiniteFlash,
-      '_timerOn' : this._timerOn
+      '_timerOn' : this._timerOn,
+      '_addLog' : this._addLog,
+      '_playerMoneys' : this._playerMoneys,
+      '_minusPlayerMoney' : this._minusPlayerMoney
     })
   }
 
   // 돈 삭감하기
-  _minusPlayerMoney = (player : number, price : number, bank_info : any) => {
+  _minusPlayerMoney = (player : number, price : number, bank_info : any, save : any) => {
     const { initActions, bank_incentive_percent } = this.props;
     const player_list = JSON.parse(this.props.player_list);
+
+    if(bank_info === undefined || bank_info === null) {
+      bank_info = JSON.parse(this.props.bank_info);
+    }
 
     const result_obj : any = {};
     let result = true;
@@ -149,9 +157,15 @@ class Game extends React.Component<AllProps> {
       result = false;
     }
 
+    if(save === true) {
+      gameActions.event_info({ 'bank_info' : JSON.stringify(bank_info) })
+    }
+
     result_obj['result'] = result;
     result_obj['extra'] = cover_price;
     result_obj['info'] = bank_info[player];
+    result_obj['player'] = player_list;
+    result_obj['bank'] = bank_info;
 
     return result_obj;
   }
@@ -257,6 +271,8 @@ class Game extends React.Component<AllProps> {
       }
 
       if(round === 1 && turn === 1) {
+        this._addLog(`<div class='game_alert back_black'> 1 라운드를 시작합니다. </div>`)
+
         if(game_event === true) {
           // 초기 뉴스 가동하기
           this._setNewsEvent(round);
@@ -267,7 +283,7 @@ class Game extends React.Component<AllProps> {
       _flash('#playing_action_div', true, 0, false, 30);
 
       const player_target : any = document.getElementById(String(turn) + '_player_info_div');
-      player_target.style.border = 'solid 3px black';      
+      player_target.style.border = 'solid 3px black';
 
       const save_card_info : any = {};
       if(turn === 1) {
@@ -282,6 +298,9 @@ class Game extends React.Component<AllProps> {
         // 컴퓨터 행동하기
         this._playingComputerAction();
       }
+
+      this._addLog(`<div class='game_alert'> <b class='color_player_${turn}'> ${turn} 플레이어 </b> 의 턴입니다.  </div>`);
+
 
       // 플레이어 현재 위치 파악하기
       const now_location = player_list[turn - 1].location;
@@ -330,6 +349,11 @@ class Game extends React.Component<AllProps> {
     if(start === true) {
       // if(timer !== '-') {
         gameActions.set_timer({ 'timer' : String(Number(timer) - 1) })
+
+        if(Number(timer) === 11) {
+          this._addLog(`<div class='game_alert_2 red'> 10 초 남았습니다. </div>`)
+        }
+
         _flash('#timer_notice_div', false, 1.4, true, 25, null, 1);
 
         const timer_el : any = document.getElementById('timer_slide_div');
@@ -351,7 +375,7 @@ class Game extends React.Component<AllProps> {
 
   // 다음 라운드 (턴 준비)
   _nextGames = (turn : number) => {
-    const { gameActions, able_player, _flash, overlap_card, _setCardDeck } = this.props;
+    const { gameActions, able_player, _flash, overlap_card, _setCardDeck, round } = this.props;
 
     if(turn <= able_player) {
       gameActions.round_start({ 'turn' : turn });
@@ -382,6 +406,8 @@ class Game extends React.Component<AllProps> {
       // 플레이어들의 은행 정산하기
       this._setPlayerBank();
 
+      this._addLog(`<div class='game_alert back_black'> ${ round + 1 } 라운드를 시작합니다. </div>`);
+
       this._roundStart('round');
     }
   }
@@ -405,17 +431,25 @@ class Game extends React.Component<AllProps> {
       if(bank_info[key].repay_day !== 0) {
         bank_info[key].repay_day = bank_info[key].repay_day - 1;
 
-        const return_loan_incentive = this._minusPlayerMoney(player, bank_info[key].loan_incentive, bank_info);
+        if(bank_info[key].repay_day === 1) {
+          if(turn === 1) {
+            this._addLog(`<div class='game_alert_2 red'> 대출 상환 라운드가 한 라운드 남았습니다. </div>`);
+          }
+        }
+
+        const return_loan_incentive = this._minusPlayerMoney(player, bank_info[key].loan_incentive, bank_info, false);
         bank_info[key] = return_loan_incentive['info'];
 
         if(bank_info[key].repay_day === 0) {
           // 대출기간 완료
           // 대출금 상환하기
-          const payback_result = this._minusPlayerMoney(player, (bank_info[key].loan * 100), bank_info);
+          const payback_result = this._minusPlayerMoney(player, (bank_info[key].loan * 100), bank_info, false);
 
           bank_info[key] = payback_result['info'];
 
           if(payback_result['result'] === true) {
+            this._addLog(`<div class='game_alert_2'> 대출금 <b class='red'>${(bank_info[key].loan * 100)} 만원</b>이 자동 상환되었습니다. </div>`)
+
             bank_info[key]['repay_day'] = 0;
             bank_info[key]['loan'] = 0;
             bank_info[key]['loan_incentive'] = 0;
@@ -668,8 +702,8 @@ class Game extends React.Component<AllProps> {
           gameActions.select_card_info({
             'card_notice_ment' : save_obj['all_card_num'] + ' 칸을 이동합니다.'
           })
-          // await _moveCharacter(save_obj['all_card_num'], null);
-          await _moveCharacter(1, null);
+          await _moveCharacter(save_obj['all_card_num'], null);
+          // await _moveCharacter(1, null);
   
           return initActions.set_setting_state({ 'card_deck' : JSON.stringify(card_deck) });
 
@@ -728,8 +762,8 @@ class Game extends React.Component<AllProps> {
   }
 
   // 뉴스 설정하기
-  _setNewsEvent = (round : number) => {
-    const { gameActions, game_event } = this.props;
+  _setNewsEvent = async (round : number) => {
+    const { gameActions, initActions, game_event } = this.props;
     const news_list = JSON.parse(this.props.news_list);
 
     if(game_event === false) {
@@ -740,31 +774,37 @@ class Game extends React.Component<AllProps> {
 
     // 메인 뉴스의 중복 걸러내기 위한 객체
     overlap_news_number = {};
-    
+
+    let map_list : any = JSON.parse(this.props.map_info);
     for(let i = 1; i <= 3; i++) {
       let type = 'main';
+
       if(i === 3) {
         type = 'option';
       }
-      const result = this._getNewsData(type);
+
+      const result = await this._getNewsData(type, map_list);
+
+      if(i !== 3) {
+        map_list = result.map_list;
+      }
 
       news_list[round].info.push(result);
     }
 
     gameActions.set_news_info({ 'news_list' : JSON.stringify(news_list), 'news_set' : true });    
+    initActions.set_setting_state({ 'map_info' : JSON.stringify(map_list) })
     return;
   }
 
   // 뉴스 구하기
-  _getNewsData = (type : string) => {
+  _getNewsData = (type : string, map_list : any) => {
     let result : any = {};
     const news_info = require('../../source/news.json');
     const props : any = this.props;
 
     if(type === 'main') {
-      const add_land_info = JSON.parse(this.props.add_land_info);
-
-      const _recursion : Function = () => {
+      const _recursion : Function = async () => {
         // UP 또는 Down 을 정할 랜덤한 수를 뽑는다.
         const main_random_number : number = Math.trunc(Math.random() * (2 - 0) + 0);
         // 0 이라면 Down, 1 이라면 Up
@@ -786,20 +826,19 @@ class Game extends React.Component<AllProps> {
         // 뉴스 조회하기
         const main_news = news_info['main'][main_type][random];
 
-        // 적용 상대 구하기
-        const apply_target = main_news['target'];
-
         // 적용 범위 구하기
         const min = main_news['range'][0];
         const max = main_news['range'][1];
 
         const value_result : number = Math.trunc(Math.random() * (max - min) + min);
 
-        // 적용하기
-
         main_news['value'] = value_result;
-
         main_news['summary'] = '';
+
+        // 적용하기
+        const set_main = await this._newsApply(main_news, 'main', map_list);
+
+        main_news['map_list'] = set_main;
 
         return main_news;
       }
@@ -863,7 +902,7 @@ class Game extends React.Component<AllProps> {
 
         if(option_news_result['apply'] === true) {
           // 즉시 적용의 경우
-          this._newsApply(option_news_result, type);
+          this._newsApply(option_news_result, type, map_list);
         }
 
         const origin_str = origin_value + ' ' +option_news_result['unit'];
@@ -887,16 +926,68 @@ class Game extends React.Component<AllProps> {
   }
 
   // 뉴스 즉시 적용하기
-  _newsApply = (info : any, type : string) => {
-    const player_list = JSON.parse(this.props.player_list);
+  _newsApply = async (info : any, type : string, map_list : any) => {
     const bank_info = JSON.parse(this.props.bank_info);
+    const props : any = this.props;
 
     if(type === 'main') {
+      // const map_list = JSON.parse(this.props.map_info);
+      const target_col_arr : any = [];
+      
+      info.target.forEach( (el : any) => {
+        let target : any;
+
+        if(el === 0) {
+          for(let key in map_list) {
+            target = map_list[key];
+
+            if(target.type === 'map') {
+              target_col_arr.push(target);
+            }
+          }
+
+        } else {
+          target = map_list[el];
+          target_col_arr.push(target);
+        }
+      })
+
+      // 변경된 가격 적용하기
+      await target_col_arr.forEach( (el : any) => {
+        let bonus_value : number = info.value;
+
+        if(info.type === true) {
+          // 인상
+          map_list[el.number].price += info.value;
+
+          if(map_list[el.number].price > info.limit) {
+            map_list[el.number].price = info.limit;
+            bonus_value = info.limit - map_list[el.number].price;
+          }
+
+          if(map_list[el.number].host !== null) {
+            map_list[el.number].pass += bonus_value;
+          }
+          
+        } else if(info.type === false) {
+          // 인하
+          map_list[el.number].price -= info.value;
+
+          if(map_list[el.number].price < info.limit) {
+            map_list[el.number].price = info.limit;
+            bonus_value = info.value - map_list[el.number].price;
+          }
+
+          if(map_list[el.number].host !== null) {
+            map_list[el.number].pass -= bonus_value;
+          }
+        }
+      })
+
+      return map_list;
 
     } else if(type === 'option') {
       const result_value : number = info.result_value;
-      const props : any = this.props;
-      const save_obj : any = {};
 
       if(info.state === "bank_incentive_percent") {
         // 은행 금리 관련
@@ -910,9 +1001,29 @@ class Game extends React.Component<AllProps> {
         }
       }
 
-
       props.gameActions.event_info({ 'bank_info' : JSON.stringify(bank_info) })
     }
+  }
+
+  // 로그 추가하기
+  _addLog = (str : string) => {
+    const { gameActions } = this.props;
+    
+    const game_log = JSON.parse(this.props.game_log);
+  
+    game_log.push(str);
+
+    gameActions.set_game_log({ 'game_log' : JSON.stringify(game_log) });
+  }
+
+  // 플레이어 현 자산 + 예금액
+  _playerMoneys = (player : number) => {
+    const bank_info = JSON.parse(this.props.bank_info);
+    const player_list = JSON.parse(this.props.player_list);
+
+    const money = player_list[player - 1].money + bank_info[player].save_money;
+
+    return money;
   }
 
   render() {
@@ -1091,7 +1202,8 @@ export default connect(
     news_list : game.news_list,
     loan_percent : init.loan_percent,
     stop_days : init.stop_days,
-    add_land_info : init.add_land_info
+    add_land_info : init.add_land_info,
+    game_log : game.game_log
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

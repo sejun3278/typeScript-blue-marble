@@ -33,8 +33,21 @@
   color: white;
 }
 
+.red {
+  color: #ce1f6a;
+}
+
 .custom_color_1 {
   color: #00c7f5;
+}
+
+.orange {
+  color: orange;
+}
+
+/* Background Color */
+.back_black {
+  background-color: black;
 }
 
 /* float */
@@ -48,19 +61,19 @@
 
 /* player color */
 .color_player_1 {
-  color: #28527a;
+  color: #28527a !important;
 }
 
 .color_player_2 {
-  color: #ad6c80;
+  color: #ad6c80 !important;
 }
 
 .color_player_3 {
-  color: #007965;
+  color: #007965 !important;
 }
 
 .color_player_4 {
-  color: #f8dc81;
+  color: #f8dc81 !important;
 }
 
 /* font style */
@@ -1256,6 +1269,63 @@ body #notice_divs {
   font-family: SDSamliphopangche_Outline;
   text-align: center;
   line-height: 225px;
+}
+#game_play_other_div #game_log_div {
+  height: 306px;
+}
+#game_play_other_div #game_log_div #game_log_list_div {
+  overflow: auto;
+  height: 275px;
+  display: flex;
+  flex-direction: column-reverse;
+}
+#game_play_other_div #game_log_div #game_player_chat_div {
+  border-top: solid 2px #ababab;
+}
+#game_play_other_div #game_log_div #game_player_chat_div #game_chat_grid_div {
+  display: grid;
+  grid-template-columns: 280px auto;
+}
+#game_play_other_div #game_log_div #game_player_chat_div #game_chat_grid_div #game_chat {
+  width: 95%;
+  padding: 4.5px;
+  border: solid 2px #ababab;
+  padding-left: 8px;
+  color: #ababab;
+}
+#game_play_other_div #game_log_div #game_player_chat_div #game_chat_grid_div #game_chat_submit {
+  width: 49px;
+  height: 29px;
+  line-height: 27px;
+  font-size: 12px;
+  cursor: pointer;
+  background-color: white;
+  border: solid 2px #ababab;
+  font-family: Recipekorea;
+  margin-left: 2px;
+}
+
+.log_divs {
+  border-top: dotted 1px #ababab;
+  padding: 4px 5px;
+  font-size: 13px;
+  font-family: HangeulNuri-Bold;
+}
+.log_divs .player_chat {
+  color: #28527a;
+}
+.log_divs .game_alert {
+  text-align: center;
+  padding: 8px 0px;
+  font-size: 16px;
+  font-family: SDSamliphopangche_Outline;
+  color: orange;
+  word-spacing: 4px !important;
+}
+.log_divs .game_alert_2 {
+  padding: 8px 0px;
+  text-align: center;
+  font-family: Recipekorea;
 }
 
 /*# sourceMappingURL=config.css.map */

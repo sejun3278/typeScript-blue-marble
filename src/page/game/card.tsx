@@ -32,7 +32,9 @@ export interface AllProps {
   time_over : boolean,
   able_player : number,
   _timer : Function,
-  stop_days : number
+  stop_days : number,
+  _addLog : Function,
+  round : number
 };
 
 class Card extends React.Component<AllProps> {
@@ -125,8 +127,9 @@ class Card extends React.Component<AllProps> {
 
     // 캐릭터 움직이기
     _moveCharacter = (move : number, _player_location : undefined | null | number) => {
-        const { turn, gameActions, _removeAlertMent, _playerMoney } = this.props;
+        const { turn, gameActions, _removeAlertMent, _playerMoney, round } = this.props;
         const player_list = JSON.parse(this.props.player_list);
+        const map_info = JSON.parse(this.props.map_info);
 
         let my_location : number = 0;
         if(_player_location !== undefined && _player_location !== null) {
@@ -135,7 +138,14 @@ class Card extends React.Component<AllProps> {
         } else {
             my_location = player_list[Number(turn) - 1].location;
         }
-        // const my_location : number = 10;
+
+        let now_location = map_info[my_location].name;
+
+        if(my_location === 0 && round > 1) {
+            now_location = '은행';
+        }
+
+        const log_ment = `<div class='game_alert_2'> ${move} 칸 이동 ( ${now_location}　=>　`;
 
         // 캐릭터의 현재 위치 + 이동할 위치
         let move_location = my_location + move;
@@ -212,7 +222,7 @@ class Card extends React.Component<AllProps> {
             const move_obj = get_move_map_info(location, move);
 
             const move_character = (obj : any, num : number, _location : number) => {
-                const { turn } = this.props;
+                const { turn, _addLog } = this.props;
                 const move_list = require('../../source/move.json');
 
                 const target : any = document.getElementById('player_main_character_' + turn);
@@ -221,7 +231,7 @@ class Card extends React.Component<AllProps> {
                 const player_left : number = Number( target.style.marginLeft.slice(0, target.style.marginLeft.indexOf("px")) );
 
                 // 현재 top 위치
-                const player_top : number = Number( target.style.marginTop.slice(0, target.style.marginTop.indexOf("px")) );
+                // const player_top : number = Number( target.style.marginTop.slice(0, target.style.marginTop.indexOf("px")) );
 
                 let player_move_location = _location + obj[num];
 
@@ -273,7 +283,10 @@ class Card extends React.Component<AllProps> {
 
                         // 순환시 현재 자금의 10% 추가
                         _removeAlertMent('은행으로부터 50 만원의 추가금을 받았습니다.');
-                        _playerMoney(turn, 50, 'plus');
+                        _addLog(`<div class='game_alert color_player_${turn}'> 은행으로부터 지원금 50 만원을 받았습니다. </div>`);
+
+                        player_list[Number(turn) - 1].money += 50;
+                        // _playerMoney(turn, 50, 'plus');
                     }
 
                     return window.setTimeout( () => {
@@ -282,7 +295,7 @@ class Card extends React.Component<AllProps> {
 
                 } else {
                     return window.setTimeout( () => {
-                        this._action(move_location);
+                        this._action(move_location, log_ment, player_list);
                     }, 300)
                 }
             }
@@ -294,12 +307,20 @@ class Card extends React.Component<AllProps> {
     }
 
     // 이동 후 액션취하기
-    _action = (arrive : number) => {
-        const { turn, initActions, gameActions, time_over, _removeAlertMent, _timer, stop_days } = this.props;
-        const player_list : any = JSON.parse(this.props.player_list);
+    _action = (arrive : number, log_ment : string, player_list : any) => {
+        const { turn, initActions, gameActions, time_over, _removeAlertMent, _timer, stop_days, _addLog, round } = this.props;
+        // const player_list : any = JSON.parse(this.props.player_list);
 
         const city : any = JSON.parse(this.props.map_info);
         const city_info = city[String(arrive)];
+
+        let city_name = city_info.name;
+        if(round > 1 && city_info.number === 0) {
+            city_name = '은행';
+        }
+
+        log_ment += city_name + ' )';
+        _addLog(log_ment);
 
         let select_type : string = city_info.type;
 
@@ -317,6 +338,8 @@ class Card extends React.Component<AllProps> {
 
                 gameActions.event_info({ 'stop_info' : JSON.stringify(stop_info) })
 
+                _addLog(`<div class='game_alert white back_black'> 무인도에 떨어졌습니다. <br /> <b class='red'> ${stop_days} 라운드 </b> 후에 탈출 할 수 있습니다. </div>`);
+
             } else if(city_info.number === 14) {
                 // 카지노
                 tap_info = 3;
@@ -325,17 +348,24 @@ class Card extends React.Component<AllProps> {
                 gameActions.event_info({ 'casino_start' : true })
                 _timer(false)
 
+                _addLog(`<div class='game_alert'> 카지노에 도착했습니다. <br /> 배팅을 시작해주세요. </div>`);
+
+
             } else if(city_info.number === 20) {
                 // 김포공항
                 tap_info = 4;
 
                 gameActions.event_info({ 'move_event_able' : true });
 
+                _addLog(`<div class='game_alert'> 이동하고 싶은 장소를 선택해주세요. </div>`);
+
             } else if(city_info.number === 0) {
                 // 은행
                 tap_info = 5;
 
-                _removeAlertMent('은행으로부터 50 만원의 추가금을 받았습니다.');
+                _removeAlertMent('은행으로부터 50 만원의 지원금을 받았습니다.');
+                _addLog(`<div class='game_alert color_player_${turn}'> 은행으로부터 지원금 50 만원을 받았습니다. </div>`);
+
                 player_list[Number(turn) - 1].money += 50;    
 
                 gameActions.player_bank_info({ 'player_bank_info_alert' : true })
@@ -442,7 +472,9 @@ export default connect(
     time_over : game.time_over,
     able_player : init.able_player,
     _timer : functions._timer,
-    stop_days : init.stop_days
+    stop_days : init.stop_days,
+    _addLog : functions._addLog,
+    round : game.round
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),
