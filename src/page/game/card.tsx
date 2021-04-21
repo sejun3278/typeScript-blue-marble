@@ -286,7 +286,7 @@ class Card extends React.Component<AllProps> {
                         _addLog(`<div class='game_alert color_player_${turn}'> 은행으로부터 지원금 50 만원을 받았습니다. </div>`);
 
                         player_list[Number(turn) - 1].money += 50;
-                        // _playerMoney(turn, 50, 'plus');
+                        _playerMoney(turn, 50, 'plus');
                     }
 
                     return window.setTimeout( () => {

@@ -22,8 +22,9 @@ export interface AllProps {
   _commaMoney : Function,
   _addLog : Function,
   bank_info : string,
-  _playerMoneys : Function,
-  _minusPlayerMoney : Function
+  _checkPlayerMoney : Function,
+  _minusPlayerMoney : Function,
+  _checkEstatePlayerMoney : Function
 };
 
 class Build extends React.Component<AllProps> {
@@ -34,9 +35,9 @@ class Build extends React.Component<AllProps> {
         const map_info = JSON.parse(this.props.map_info);
         // const player_list = JSON.parse(this.props.player_list);
         
-        const { initActions, gameActions, _removeAlertMent, pass_price, _addLog, turn, _playerMoneys, _minusPlayerMoney } = this.props; 
+        const { initActions, gameActions, _removeAlertMent, pass_price, _addLog, turn, _checkPlayerMoney, _minusPlayerMoney, _checkEstatePlayerMoney } = this.props; 
 
-        const player_all_money = _playerMoneys(turn);
+        const player_all_money = _checkPlayerMoney(turn);
 
         if(type === 'on') {
             if(player_all_money >= select_info.price) {
@@ -59,11 +60,10 @@ class Build extends React.Component<AllProps> {
 
             if(map_info[select_info.number].host === null) {
                 // 플레이어 설정
-                // player_list[my_info.number - 1]['money'] = my_info.money - select_info.price;
                 const result = _minusPlayerMoney(turn, select_info.price, undefined, true);
                 
                 const player_list = result['player'];
-                
+
                 player_list[my_info.number - 1]['maps'].push(select_info.number);
 
                 initActions.set_player_info({ 
@@ -83,14 +83,19 @@ class Build extends React.Component<AllProps> {
 
                 const ment = `<div class='game_alert_2'> <b class='color_player_${turn}'> 플레이어 ${turn} </b>　|　${map_info[select_info.number].name} 토지 구매 <b class='custom_color_1'> ( ${select_info.price} 만원 ) </b>  <br /> <b class='gray'> ( 이제부터 ${map_info[select_info.number].name} 에 도착한 다른 플레이어에게는 <br /> <b class='red'>${map_info[select_info.number].pass} 만원</b>의 동행료가 부과됩니다. ) </b> </div>`;
 
+                _checkEstatePlayerMoney(turn, player_list, map_info);
+
                 _addLog(ment)
             }
         }
     }
 
     // 랜드마크 건설 가능 체크
-    _checkLandMark = () => {
-        const select_info = JSON.parse(this.props.select_info);
+    _checkLandMark = (_info : any) => {
+        let select_info : any = JSON.parse(this.props.select_info);
+        if(_info !== null) {
+            select_info = _info;
+        }
 
         let result = true;
         if(select_info.type === 'map') {
@@ -102,8 +107,8 @@ class Build extends React.Component<AllProps> {
                 }
             }
         }
+
         return result;
-        
     }
 
     // 건물 건설하기
@@ -111,9 +116,9 @@ class Build extends React.Component<AllProps> {
         const map_info = JSON.parse(this.props.map_info);
         const select_info = JSON.parse(this.props.select_info);
 
-        const player_list : any = JSON.parse(this.props.player_list)
+        const player_list : any = JSON.parse(this.props.player_list);
 
-        const { gameActions, initActions, turn, _removeAlertMent, pass_price, _addLog } = this.props;
+        const { gameActions, initActions, turn, _removeAlertMent, pass_price, _addLog, _checkPlayerMoney, _minusPlayerMoney, _checkEstatePlayerMoney } = this.props;
 
         if(turn === 1) {
             if(type === 'on') {
@@ -127,12 +132,14 @@ class Build extends React.Component<AllProps> {
                 delete map_info[select_info.number].build[key]['select'];
 
             } else if(type === 'click') {
-                const my_info = player_list[turn - 1];
+                const player_all_money = _checkPlayerMoney(turn);
+
+                console.log(player_all_money)
 
                 if(map_info[select_info.number].build[key].build === false) {
-                    if(my_info.money >= map_info[select_info.number].build[key].price) {
-                        player_list[turn - 1].money = my_info.money - map_info[select_info.number].build[key].price;
-                        initActions.set_player_info({ 'player_list' : JSON.stringify(player_list) });
+                    if(player_all_money >= map_info[select_info.number].build[key].price) {
+                        const result = _minusPlayerMoney(turn, map_info[select_info.number].build[key].price, undefined, true);
+                        gameActions.event_info({ 'bank_info' : JSON.stringify(result['bank']) })
 
                         const origin_pass = map_info[select_info.number].pass;
 
@@ -141,10 +148,28 @@ class Build extends React.Component<AllProps> {
                         
                         delete map_info[select_info.number].build[key]['select'];
                         
-                        const ment = `<div class='game_alert_2'> <b class='color_player_${turn}'> 플레이어 ${turn} </b>　|　${map_info[select_info.number].build[key].name} 건설 <b class='custom_color_1'> ( ${map_info[select_info.number].build[key].price} 만원 ) </b>  <br /> <b class='gray'> ( 통행료　|　${origin_pass} 만원　=>　<b class='red'>${map_info[select_info.number].pass} 만원</b> ) </b> </div>`;
+                        const now_location = map_info[player_list[turn - 1].location].name;
+
+                        const ment = `<div class='game_alert_2'> <b class='color_player_${turn}'> 플레이어 ${turn} </b>　|　${now_location} 에 ${map_info[select_info.number].build[key].name} 건설 <b class='custom_color_1'> ( ${map_info[select_info.number].build[key].price} 만원 ) </b>  <br /> <b class='gray'> ( 통행료　|　${origin_pass} 만원　=>　<b class='red'>${map_info[select_info.number].pass} 만원</b> ) </b> </div>`;
                         _addLog(ment);
 
+                        _checkEstatePlayerMoney(turn, result['player'], map_info);
+
                         _removeAlertMent(map_info[select_info.number].build[key].name + " (이)가 건설되었습니다.");
+
+                        // 랜드마크 건설 여부 체크
+                        const check_lendMark = this._checkLandMark(map_info[select_info.number]);
+
+                        if(key !== 3) {
+                            if(check_lendMark === true) {
+                                window.setTimeout(() => {
+                                    _addLog(`<div class='game_alert_2'> 이제 <b class='custom_color_1'> ${now_location} </b> 에 랜드마크를 건설할 수 있습니다. </div>`)                                
+                                }, 200);
+                            }
+
+                        } else {
+                            _addLog(`<div class='game_alert_2'> <b class='custom_color_1'> ${now_location} </b> 랜드마크 건설 ! </div>`)                                
+                        }
 
                     } else {
                         return _removeAlertMent("건설 비용이 부족합니다.");
@@ -158,13 +183,14 @@ class Build extends React.Component<AllProps> {
     }
 
   render() {
-    const { turn, pass_price, _commaMoney, _playerMoneys } = this.props;
+    const { turn, pass_price, _commaMoney, _checkPlayerMoney } = this.props;
     const { _buyMap, _checkLandMark, _build } = this;
 
     const select_info = JSON.parse(this.props.select_info);
     const bank_info = JSON.parse(this.props.bank_info);
 
     let my_info = JSON.parse(this.props.player_list);
+    const landmark_list = require('../../source/landmark.json');
 
     if(turn !== null) {
         my_info = my_info[turn - 1];
@@ -173,7 +199,7 @@ class Build extends React.Component<AllProps> {
     let buy_button_style : any = {};
     let buy_able = true;
 
-    const player_all_money : number = _playerMoneys(Number(turn));
+    const player_all_money : number = _checkPlayerMoney(Number(turn));
 
     if(player_all_money < select_info.price) {
         buy_button_style['backgroundColor'] = '#ababab';
@@ -182,7 +208,7 @@ class Build extends React.Component<AllProps> {
         buy_able = false;
     }
 
-    const check_landmark = _checkLandMark();
+    const check_landmark = _checkLandMark(null);
     const grid_style : any = {};
 
     if(check_landmark === false) {
@@ -319,6 +345,47 @@ class Build extends React.Component<AllProps> {
                                 </div>
                             )
                         }
+                    } else {
+                        if(key === 3) {
+                            const landmark_img : string = landmark_list.landmark[select_info.number];
+
+                            return(
+                                <div id='build_land_mark_div' className='aLeft' key={key}>
+                                    <div 
+                                        id='build_land_mark_image_div'
+                                        style={{ 'backgroundImage' : `url(${landmark_img})` }}
+                                    />
+                                    <div id='build_land_mark_info_div'>
+                                        {/* <p> 
+                                            <b className='custom_color_1'> {select_info.name} </b> 의 랜드마크 
+                                        </p> */}
+
+                                        <div id='build_land_mark_title_div'> 
+                                            <div>
+                                                <b> {el.name} </b>　/　
+                                                {el.price} 만원
+                                            </div>
+
+                                            <div>
+                                                {el.build === false
+                                                    ?
+                                                        <input type='button' value='건설' 
+                                                               id={player_all_money < el.price ? "unable_build_landmark" : undefined}
+                                                               onClick={() => player_all_money >= el.price ? _build('click', 3) : undefined}
+                                                        />
+
+                                                    : undefined
+                                                }
+                                            </div>
+                                        </div>
+
+                                        <div id='build_land_mark_detail_info_div' 
+                                             dangerouslySetInnerHTML={{ __html : el.info }}
+                                        />
+                                    </div>
+                                </div>
+                            )
+                        }
                     }
                 })}
               </div>
@@ -338,8 +405,9 @@ export default connect(
     _commaMoney : functions._commaMoney,
     _addLog : functions._addLog,
     bank_info : game.bank_info,
-    _playerMoneys : functions._playerMoneys,
-    _minusPlayerMoney : functions._minusPlayerMoney
+    _checkPlayerMoney : functions._checkPlayerMoney,
+    _minusPlayerMoney : functions._minusPlayerMoney,
+    _checkEstatePlayerMoney : functions._checkEstatePlayerMoney
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

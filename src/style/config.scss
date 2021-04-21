@@ -738,9 +738,13 @@ body {
                             margin-left: 15px;
                             cursor: pointer;
                         }
+
+                        #bank_icon {
+                            margin-left: 40px;
+                        }
                     }
 
-                    #game_user_bank_info {
+                    .game_user_bank_info {
                         position: absolute;
                         width: 215px;
                         border: solid 2px black;
@@ -808,6 +812,85 @@ body {
                         }
                     }
 
+                    #player_estate_info_div {
+                        margin-top: -20px;
+
+                        #player_estate_length_div {
+                            margin: 3px;
+                            font-size: 14px;
+                            font-family: $SDSamliphopangche_Outline;
+                            word-spacing: 3px;
+                            padding-bottom: 10px;
+                        }
+
+                        #player_estate_list_div {
+                            border-top: dotted 1px #ababab;
+                            padding-top: 10px;
+                            min-height: 200px;
+                            max-height: 400px;
+                        }
+
+                        #player_estate_list_empty_div {
+                            color: #ababab;
+                            line-height: 150px;
+                            font-family: $paybook_bold;
+                        }
+
+                        #player_estate_money_result_div {
+                            border-top: solid 2px black;
+                            display: grid;
+                            grid-template-columns: 100px auto;
+                            font-size: 13px;
+                            padding: 5px;
+                            padding-top: 10px;
+                            color: black;
+                            font-family: $recipe_korea;
+                        }
+
+                        #player_estate_list_div {
+                            .player_estate_list_divs {
+                                display: grid;
+                                grid-template-columns: 50px 100px auto;
+                                padding: 3px 5px;
+                                font-size: 13px;
+                                color: black;
+                                height: 20px;
+                                line-height: 20px;
+                                
+
+                                .player_estate_city_name {
+                                    font-weight: bold;    
+                                }
+
+                                .player_estate_build_state_div {
+                                    line-height: 25px;
+                                    text-align: left;
+
+                                    .player_estate_building_divs {
+                                        display: inline-block;
+                                        width: 25px;
+
+                                        img {
+                                            width: 20px;
+                                        }
+                                    }
+
+                                    .player_estate_landmark_state_div {
+                                        img {
+                                            width: 20px;
+                                        }
+                                    }
+                                }
+
+                                .player_estate_total_money_div {
+                                    font-family: $recipe_korea;
+                                    font-size: 10px;
+                                    line-height: 25px;
+                                }
+                            }
+                        }
+                    }
+
                     .game_user_my_location, .game_user_has_location {
                         margin-top: 5px;
                         color: #ababab;
@@ -816,6 +899,13 @@ body {
                     .game_user_has_location {
                         margin-top: 0px;
                         padding-bottom: 0px;
+
+                        .game_user_estate_info_icon {
+                            width: 15px;
+                            position: absolute;
+                            margin: 2.5px 10px;
+                            cursor: pointer;
+                        }
                     }
                 }
             }
@@ -1077,6 +1167,60 @@ body {
         padding: 0px 10px;
         margin-top: 15px;
 
+        #build_land_mark_div {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 80px auto;
+            border-top: dotted 1px #ababab;
+            padding-top: 5px;
+
+            #build_land_mark_image_div {
+                width: 75px;
+                height: 75px;
+                background-size: cover;
+                // border: dotted 1px #ababab
+            }
+
+            #build_land_mark_info_div {
+                // border: dotted 1px #ababab;
+                padding: 0px 10px;
+                // p {
+                //     font-family: $recipe_korea;
+                //     margin: 0px ;
+                // }
+
+                #build_land_mark_title_div {
+                    display: grid;
+                    grid-template-columns: 220px auto;
+
+                    b {
+                        font-family: $recipe_korea;
+                        color: $custom_color_1;
+                    }
+
+                    input {
+                        font-size: 12px;
+                        border: none;
+                        background-color: white;
+                        color: black;
+                        font-weight: bold;
+                        font-family: $Y_Spotlight;
+                        cursor: pointer;
+                    }
+
+                    #unable_build_landmark {
+                        color: #ababab;
+                    }
+                }
+
+                #build_land_mark_detail_info_div {
+                    height: 45px;
+                    overflow: auto;
+                    border: dotted 1px #ababab;
+                }
+            }
+        }
+
         .build_select_divs {
             border: solid 1px #ababab;
             height: 80px;
@@ -1135,6 +1279,17 @@ body {
     img {
         width: 30px !important;
     }
+}
+
+.landmark_icon {
+    width: 89px;
+    height: 55px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position-y: 50%;
+    position: absolute;
+    opacity: 0.2;
+    // margin: -15px 0px;
 }
 
 #casino_event_div {

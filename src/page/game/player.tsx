@@ -25,7 +25,9 @@ export interface AllProps {
   bank_info : string,
   player_bank_info_alert : boolean,
   bank_incentive_percent : number,
-  loan_percent : number
+  loan_percent : number,
+  player_estate_info_alert : boolean,
+  map_info : string
 };
 
 class Player extends React.Component<AllProps> {
@@ -48,10 +50,11 @@ class Player extends React.Component<AllProps> {
   render() {
     const { 
       gameActions, float_style, _commaMoney, number, turn, round_start, round, player_bank_info_alert,
-      bank_incentive_percent, loan_percent
+      bank_incentive_percent, loan_percent, player_estate_info_alert
     } = this.props;
     const { _setInfoAlert } = this;
     const info : any = JSON.parse(this.props.info);
+    const map_list = JSON.parse(this.props.map_info)
 
     let img_list : any = img.img.character;
     const MapInfo = require('./city_info.json');
@@ -127,6 +130,8 @@ class Player extends React.Component<AllProps> {
     }
 
     let bank_icon : string = img.icon.empty_bank;
+    let estate_notice_icon : string = img.icon.notice_gray;
+
     const bank_info = JSON.parse(this.props.bank_info);
     const my_bank = bank_info[Number(turn)];
 
@@ -139,6 +144,11 @@ class Player extends React.Component<AllProps> {
         bank_icon = img.icon.empty_bank;
       }
 
+      if(info.able === true) {
+        if(info.maps.length > 0) {
+          estate_notice_icon = img.icon.notice
+        }
+      }
     }
 
     const bank_info_alert_info = [
@@ -201,16 +211,23 @@ class Player extends React.Component<AllProps> {
                 : <div className='game_contents_user_info_div'>
                     <div className='game_user_have_money_div'> 
                       보유 자산　|　{money} 만원 
-                      <img alt='' className='game_user_bank_info_icon' src={bank_icon} 
-                           onMouseEnter={() => turn === info.number && turn === 1 ? gameActions.player_bank_info({ 'player_bank_info_alert' : true }) : undefined}
+
+                      <img alt='' className='game_user_bank_info_icon' src={bank_icon} id='bank_icon' 
+                           onMouseEnter={() => turn === info.number && turn === 1 ? gameActions.player_bank_info({ 'player_bank_info_alert' : true, 'player_estate_info_alert' : false }) : undefined}
                       />
+
                     </div>
 
                     <div className='game_user_my_location'> 현재 위치　|　{my_location} <b> {stop_turn} </b> </div>
-                    <div className='game_user_has_location'> 보유 도시　|　{info.maps.length}　도시 소유 중 </div>
+                    <div className='game_user_has_location' style={info.maps.length > 0 ? { 'color' : '#194350', 'fontWeight' : 'bold' } : undefined}> 
+                      보유 도시　|　{info.maps.length}　도시 보유 중 
+                      <img alt='' className='game_user_estate_info_icon' src={estate_notice_icon} 
+                           onMouseEnter={() => turn === info.number && turn === 1 ? gameActions.player_bank_info({ 'player_estate_info_alert' : true, 'player_bank_info_alert' : false })  : undefined}
+                      />
+                    </div>
 
                     {player_bank_info_alert === true && turn === info.number
-                      ? <div id='game_user_bank_info' className={'color_player_' + turn}
+                      ? <div className={'game_user_bank_info color_player_' + turn}
                              onMouseLeave={() => turn === info.number ? gameActions.player_bank_info({ 'player_bank_info_alert' : false }) : undefined}
                         > 
                           <h3> 플레이어 {turn} 의 은행 정보 </h3>
@@ -258,6 +275,111 @@ class Player extends React.Component<AllProps> {
                         </div>
 
                       : undefined}
+
+                      {player_estate_info_alert === true && turn === info.number
+                        ? <div className={'game_user_bank_info color_player_' + turn}
+                               id='player_estate_info_div'
+                               onMouseLeave={() => gameActions.player_bank_info({ 'player_estate_info_alert' : false })}
+                          >
+                            <h3> 플레이어 {turn} 의 부동산 정보 </h3>
+                            <p id='player_estate_length_div'
+                               style={info.maps.length === 0 ? { 'color' : '#ababab' } : undefined}
+                            > 
+                              {info.maps.length} 개의 도시 보유 중 
+                            </p>
+
+                            <div id='player_estate_list_div'>
+                              {info.maps.length > 0
+                                ?
+                                  info.maps.map( (el : any, key : number) => {
+                                    const map = map_list[el];
+                                    
+                                    let total_money = map.price;
+
+                                    for(let i = 0; i < map.build.length; i++) {
+                                      if(map.build[i].build === true) {
+                                        total_money += map.build[i].price;
+                                      }
+                                    }
+
+                                    const map_name = map.number === 8 ? '광명' : map.name;
+
+                                    return(
+                                      <div key={key} className='player_estate_list_divs'
+                                           style={{ 'borderBottom' : 'dotted 1px #ababab' }}
+                                      >
+                                        <div className='player_estate_city_name aLeft'> {map_name} </div>
+                                        <div className='player_estate_build_state_div aLeft'>
+                                          {map.build.map( (cu : any, key_2 : number) => {
+
+                                            if(map.build[3].build === false) {
+                                            let _icon : string = '';
+                                            
+                                            if(map.number !== 7) {
+                                              if(key_2 === 0) {
+                                                _icon = img.building.house;
+
+                                              } else if(key_2 === 1) {
+                                                _icon = img.building.apartment;
+
+                                              } else if(key_2 === 2) {
+                                                _icon = img.building.hotel
+                                              }
+
+                                            } else if(map.number === 7) {
+                                              _icon = img.building.flag;
+                                            }
+
+                                            return(
+                                              <div key={key_2} className='player_estate_building_divs'>
+                                                {cu.build === true
+                                                  ? <img alt='' src={_icon} />
+                                                  : undefined
+                                                }
+                                              </div>
+                                            )
+
+                                          } else {
+                                            if(key_2 === 3) {
+                                              const landmark_list = require('../../source/landmark.json');
+                                              const landmark_img = landmark_list.landmark[map.number];
+
+                                              return(
+                                                <div className='player_estate_landmark_state_div' key={key_2}>
+                                                  <img alt='' title={map.build[3].name}
+                                                       src={landmark_img}
+                                                  />
+                                                  <b className='custom_color_1'> 랜드마크 </b>
+                                                </div>
+                                              )
+                                            }
+                                          }
+
+                                          })}
+                                        </div>
+                                        <div className='player_estate_total_money_div aRight'> {_commaMoney(total_money)} 만원 </div>
+                                      </div>
+                                    )
+                                  })
+
+                                :
+                                  <div id='player_estate_list_empty_div'>
+                                    <h4> 보유 중인 도시가 없습니다. </h4>
+                                  </div>
+                              }
+                            </div>
+
+                            <div id='player_estate_money_result_div'
+                                 className='aLeft'
+                                 style={info.estate_money === 0 ? { 'color' : '#ababab' } : undefined}
+                            >
+                              <div> 부동산 자산　|　</div>
+                              <div className='aLeft'> {_commaMoney(info.estate_money)} 만원 </div>
+                            </div>
+                          </div>
+
+                        : undefined
+                      }
                   </div>
             }
             
@@ -286,7 +408,9 @@ export default connect(
     bank_info : game.bank_info,
     player_bank_info_alert : game.player_bank_info_alert,
     bank_incentive_percent : init.bank_incentive_percent,
-    loan_percent : init.loan_percent
+    loan_percent : init.loan_percent,
+    player_estate_info_alert : game.player_estate_info_alert,
+    map_info : init.map_info
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

@@ -1,0 +1,10 @@
+{
+    "landmark" : {
+        "1" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/landMark/landmark_1.jpg",
+        "2" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/landMark/landmark_2.jpg",
+        "3" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/landMark/landmark_3.jpg",
+        "4" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/landMark/landmark_4.jpg",
+        "7" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/landMark/dokdo_landmark.jpg",
+        "8" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/landMark/gwangmeong_landmark.jpg"
+    }
+}

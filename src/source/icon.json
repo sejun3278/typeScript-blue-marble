@@ -20,7 +20,8 @@
         "left_angel" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/left_angel.png",
         "left_angel_gray" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/left_angel_gray.png",
         "right_angel" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/right_angel.png",
-        "right_angel_gray" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/right_angel_gray.png"
+        "right_angel_gray" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/right_angel_gray.png",
+        "notice_gray" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/notice_gray.png"
     },
 
     "map_icon" : {

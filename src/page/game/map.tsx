@@ -154,20 +154,22 @@ class Map extends React.Component<AllProps> {
                           const icon_list = require('../../source/icon.json');
 
                           let margin_style : any = {};
-                          if(info.number !== 7) {
-                            if(key === 0) {
-                              building_icon = icon_list.building.house;
 
-                            } else if(key === 1) {
-                              building_icon = icon_list.building.apartment;
-                            
-                            } else if(key === 2) {
-                              building_icon = icon_list.building.hotel;
+                          if(city_info[info.number].build[3].build === false) {
+                            if(info.number !== 7) {
+                              if(key === 0) {
+                                building_icon = icon_list.building.house;
+
+                              } else if(key === 1) {
+                                building_icon = icon_list.building.apartment;
+                              
+                              } else if(key === 2) {
+                                building_icon = icon_list.building.hotel;
+                              }
+
+                            } else if(info.number === 7) {
+                              building_icon = icon_list.building.flag;
                             }
-
-                          } else if(info.number === 7) {
-                            building_icon = icon_list.building.flag;
-                          }
                           
                           if(info.number >= 1 && info.number <= 5) {
                             margin_style['marginTop'] = '10px';
@@ -188,6 +190,22 @@ class Map extends React.Component<AllProps> {
                               </div>
                             )
                           }
+
+                        } else {
+                          if(key === 3) {
+                            const landmark_list = require('../../source/landmark.json');
+                            const landmark_icon = landmark_list.landmark[info.number];
+
+                            return(
+                              <div 
+                                key={key}
+                                className='landmark_icon'
+                                style={{ backgroundImage : `url(${landmark_icon})`}} 
+                              />
+                            )
+                          }
+                        }
+
                         })}
 
                         <div className='city_price_div'

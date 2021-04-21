@@ -99,8 +99,9 @@ class Game extends React.Component<AllProps> {
       '_infiniteFlash' : this._infiniteFlash,
       '_timerOn' : this._timerOn,
       '_addLog' : this._addLog,
-      '_playerMoneys' : this._playerMoneys,
-      '_minusPlayerMoney' : this._minusPlayerMoney
+      '_checkPlayerMoney' : this._checkPlayerMoney,
+      '_minusPlayerMoney' : this._minusPlayerMoney,
+      '_checkEstatePlayerMoney' : this._checkEstatePlayerMoney
     })
   }
 
@@ -794,6 +795,8 @@ class Game extends React.Component<AllProps> {
 
     gameActions.set_news_info({ 'news_list' : JSON.stringify(news_list), 'news_set' : true });    
     initActions.set_setting_state({ 'map_info' : JSON.stringify(map_list) })
+
+    this._checkEstatePlayerMoney(0, null, null);
     return;
   }
 
@@ -1016,14 +1019,59 @@ class Game extends React.Component<AllProps> {
     gameActions.set_game_log({ 'game_log' : JSON.stringify(game_log) });
   }
 
-  // 플레이어 현 자산 + 예금액
-  _playerMoneys = (player : number) => {
+  // 플레이어 현 자산 + 예금액 + 누적 이자
+  _checkPlayerMoney = (player : number) => {
     const bank_info = JSON.parse(this.props.bank_info);
     const player_list = JSON.parse(this.props.player_list);
 
-    const money = player_list[player - 1].money + bank_info[player].save_money;
+    const money = player_list[player - 1].money + ( bank_info[player].save_money + bank_info[player].total_incentive );
 
     return money;
+  }
+
+  // 플레이어의 부동산 총 자산 조회하기
+  _checkEstatePlayerMoney = (player : number, _player_list : any, _map_info : any) => {
+    const { able_player, initActions } = this.props;
+
+    // const bank_info = JSON.parse(this.props.bank_info);
+
+    let start : number = player;
+    let end : number = player; 
+
+    let player_list : any = _player_list;
+    let map_info : any = _map_info;
+
+    if(player === 0) {
+      start = 1;
+      end = able_player;
+
+      player_list = JSON.parse(this.props.player_list);
+      map_info = JSON.parse(this.props.map_info);
+    }
+
+    let estate_money = 0;
+    for(let i = start; i <= end; i++) {
+      const player_info = player_list[i - 1];
+
+      if(player_info['maps'].length > 0) {
+        // 소유중인 토지가 있는 경우
+        player_info['maps'].forEach( (el : any) => {
+          const map = map_info[el];
+
+          estate_money += map.price;
+
+          map.build.map( (cu : any) => {
+            if(cu.build === true) {
+              estate_money += cu.price;
+            }
+          })
+        })
+      }
+
+      player_list[i - 1].estate_money = estate_money;
+    }
+
+    initActions.set_player_info({ 'player_list' : JSON.stringify(player_list) })
   }
 
   render() {

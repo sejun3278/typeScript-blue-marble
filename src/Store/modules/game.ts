@@ -78,7 +78,8 @@ export interface gameState {
     game_log : string,
     news_list : string,
     news_round : number,
-    news_set : boolean
+    news_set : boolean,
+    player_estate_info_alert : boolean
 }
 
 const initialState : gameState = {
@@ -129,7 +130,8 @@ const initialState : gameState = {
     game_log : JSON.stringify([]),
     news_list : JSON.stringify({}),
     news_round : 1,
-    news_set : false
+    news_set : false,
+    player_estate_info_alert : false
 }
 
 export default handleActions<gameState> ({
@@ -254,7 +256,8 @@ export default handleActions<gameState> ({
     [PLAYERBANKINFO] : (state : any, data : any) => {
         return {
             ...state,
-            player_bank_info_alert : data.payload.player_bank_info_alert !== undefined ? data.payload.player_bank_info_alert : state.player_bank_info_alert
+            player_bank_info_alert : data.payload.player_bank_info_alert !== undefined ? data.payload.player_bank_info_alert : state.player_bank_info_alert,
+            player_estate_info_alert : data.payload.player_estate_info_alert !== undefined ? data.payload.player_estate_info_alert : state.player_estate_info_alert
         }
     },
 

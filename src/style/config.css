@@ -631,7 +631,10 @@ body #notice_divs {
   margin-left: 15px;
   cursor: pointer;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #game_user_bank_info {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_have_money_div #bank_icon {
+  margin-left: 40px;
+}
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_bank_info {
   position: absolute;
   width: 215px;
   border: solid 2px black;
@@ -641,35 +644,35 @@ body #notice_divs {
   margin-top: -60px;
   background-color: white;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #game_user_bank_info h3 {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_bank_info h3 {
   margin: 10px 0px !important;
   font-size: 14px;
   font-family: Recipekorea;
   padding-bottom: 10px;
   border-bottom: dotted 1px #ababab;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #game_user_bank_info .game_user_bank_info_divs {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_bank_info .game_user_bank_info_divs {
   padding-left: 10px;
   margin-top: 20px;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #game_user_bank_info .game_user_bank_info_divs h4 {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_bank_info .game_user_bank_info_divs h4 {
   font-size: 13px;
   margin: 15px 0px 3px 0px !important;
   color: #ababab;
   text-align: left;
   font-family: SDSamliphopangche_Outline;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #game_user_bank_info .game_user_bank_info_divs h4 b {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_bank_info .game_user_bank_info_divs h4 b {
   color: black;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #game_user_bank_info .game_user_bank_info_divs .game_user_bank_info_grid_div {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_bank_info .game_user_bank_info_divs .game_user_bank_info_grid_div {
   display: grid;
   grid-template-columns: 100px auto;
   font-size: 12px;
   margin-top: 10px;
   font-family: Y_Spotlight;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #game_user_bank_info #game_user_bank_info_round_bonus_alert {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_bank_info #game_user_bank_info_round_bonus_alert {
   border: solid 2px black;
   margin-top: 25px;
   padding: 5px;
@@ -680,14 +683,76 @@ body #notice_divs {
   font-size: 12px;
   font-family: Recipekorea;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #game_user_bank_info #game_user_bank_info_round_bonus_alert div {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_bank_info #game_user_bank_info_round_bonus_alert div {
   display: inline-block;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #game_user_bank_info #game_user_bank_info_round_bonus_alert div #game_bonus_money_info_alert_icon {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_bank_info #game_user_bank_info_round_bonus_alert div #game_bonus_money_info_alert_icon {
   width: 17px;
   position: absolute;
   margin: -1px 15px;
   cursor: pointer;
+}
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #player_estate_info_div {
+  margin-top: -20px;
+}
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #player_estate_info_div #player_estate_length_div {
+  margin: 3px;
+  font-size: 14px;
+  font-family: SDSamliphopangche_Outline;
+  word-spacing: 3px;
+  padding-bottom: 10px;
+}
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #player_estate_info_div #player_estate_list_div {
+  border-top: dotted 1px #ababab;
+  padding-top: 10px;
+  min-height: 200px;
+  max-height: 400px;
+}
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #player_estate_info_div #player_estate_list_empty_div {
+  color: #ababab;
+  line-height: 150px;
+  font-family: paybooc-Bold;
+}
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #player_estate_info_div #player_estate_money_result_div {
+  border-top: solid 2px black;
+  display: grid;
+  grid-template-columns: 100px auto;
+  font-size: 13px;
+  padding: 5px;
+  padding-top: 10px;
+  color: black;
+  font-family: Recipekorea;
+}
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #player_estate_info_div #player_estate_list_div .player_estate_list_divs {
+  display: grid;
+  grid-template-columns: 50px 100px auto;
+  padding: 3px 5px;
+  font-size: 13px;
+  color: black;
+  height: 20px;
+  line-height: 20px;
+}
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #player_estate_info_div #player_estate_list_div .player_estate_list_divs .player_estate_city_name {
+  font-weight: bold;
+}
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #player_estate_info_div #player_estate_list_div .player_estate_list_divs .player_estate_build_state_div {
+  line-height: 25px;
+  text-align: left;
+}
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #player_estate_info_div #player_estate_list_div .player_estate_list_divs .player_estate_build_state_div .player_estate_building_divs {
+  display: inline-block;
+  width: 25px;
+}
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #player_estate_info_div #player_estate_list_div .player_estate_list_divs .player_estate_build_state_div .player_estate_building_divs img {
+  width: 20px;
+}
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #player_estate_info_div #player_estate_list_div .player_estate_list_divs .player_estate_build_state_div .player_estate_landmark_state_div img {
+  width: 20px;
+}
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #player_estate_info_div #player_estate_list_div .player_estate_list_divs .player_estate_total_money_div {
+  font-family: Recipekorea;
+  font-size: 10px;
+  line-height: 25px;
 }
 #game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_my_location, #game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_has_location {
   margin-top: 5px;
@@ -696,6 +761,12 @@ body #notice_divs {
 #game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_has_location {
   margin-top: 0px;
   padding-bottom: 0px;
+}
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_has_location .game_user_estate_info_icon {
+  width: 15px;
+  position: absolute;
+  margin: 2.5px 10px;
+  cursor: pointer;
 }
 #play_game_divs #play_game_main_div {
   padding: 10px 0px;
@@ -884,6 +955,46 @@ body #notice_divs {
   padding: 0px 10px;
   margin-top: 15px;
 }
+#build_div #build_map_div #build_land_mark_div {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 80px auto;
+  border-top: dotted 1px #ababab;
+  padding-top: 5px;
+}
+#build_div #build_map_div #build_land_mark_div #build_land_mark_image_div {
+  width: 75px;
+  height: 75px;
+  background-size: cover;
+}
+#build_div #build_map_div #build_land_mark_div #build_land_mark_info_div {
+  padding: 0px 10px;
+}
+#build_div #build_map_div #build_land_mark_div #build_land_mark_info_div #build_land_mark_title_div {
+  display: grid;
+  grid-template-columns: 220px auto;
+}
+#build_div #build_map_div #build_land_mark_div #build_land_mark_info_div #build_land_mark_title_div b {
+  font-family: Recipekorea;
+  color: #00c7f5;
+}
+#build_div #build_map_div #build_land_mark_div #build_land_mark_info_div #build_land_mark_title_div input {
+  font-size: 12px;
+  border: none;
+  background-color: white;
+  color: black;
+  font-weight: bold;
+  font-family: Y_Spotlight;
+  cursor: pointer;
+}
+#build_div #build_map_div #build_land_mark_div #build_land_mark_info_div #build_land_mark_title_div #unable_build_landmark {
+  color: #ababab;
+}
+#build_div #build_map_div #build_land_mark_div #build_land_mark_info_div #build_land_mark_detail_info_div {
+  height: 45px;
+  overflow: auto;
+  border: dotted 1px #ababab;
+}
 #build_div #build_map_div .build_select_divs {
   border: solid 1px #ababab;
   height: 80px;
@@ -933,6 +1044,16 @@ body #notice_divs {
 }
 .build_complate_icon_divs img {
   width: 30px !important;
+}
+
+.landmark_icon {
+  width: 89px;
+  height: 55px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position-y: 50%;
+  position: absolute;
+  opacity: 0.2;
 }
 
 #casino_event_div #casino_betting_select_div {

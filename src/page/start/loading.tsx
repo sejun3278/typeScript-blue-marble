@@ -69,6 +69,7 @@ class Loading extends React.Component<AllProps> {
           player_list[i]['money'] = start_price;
           player_list[i]['maps'] = [];
           player_list[i]['location'] = 0;
+          player_list[i]['estate_money'] = 0;
 
           bank_info[i + 1] = {};
           // 예금
