@@ -113,7 +113,7 @@ class Card extends React.Component<AllProps> {
                     save_obj['card_notice_ment'] = save_obj['all_card_num'] + ' 칸을 이동합니다.';
 
                     // this._moveCharacter(save_obj['all_card_num'], null);
-                    this._moveCharacter(20, null) //
+                    this._moveCharacter(1, null) //
                 }
 
                 initActions.set_setting_state({ 'card_deck' : JSON.stringify(card_deck) })

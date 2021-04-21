@@ -380,7 +380,7 @@ class Build extends React.Component<AllProps> {
                                         </div>
 
                                         <div id='build_land_mark_detail_info_div' 
-                                             dangerouslySetInnerHTML={{ __html : el.info }}
+                                            dangerouslySetInnerHTML={{ __html : el.info }}
                                         />
                                     </div>
                                 </div>

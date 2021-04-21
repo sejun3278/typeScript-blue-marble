@@ -4,7 +4,27 @@
         "2" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/landMark/landmark_2.jpg",
         "3" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/landMark/landmark_3.jpg",
         "4" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/landMark/landmark_4.jpg",
+        "5" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/landMark/landmark_5.jpg",
         "7" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/landMark/dokdo_landmark.jpg",
-        "8" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/landMark/gwangmeong_landmark.jpg"
+        "8" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/landMark/gwangmeong_landmark.jpg",
+        "9" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/landMark/landmark_9.jpg",
+        "10" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/landMark/landmark_10.jpg",
+        "11" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/landMark/landmark_11.jpg",
+        "12" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/landMark/landmark_12.jpg",
+        "13" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/landMark/landmark_13.jpg",
+        "14" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/landMark/landmark_14.jpg",
+        "15" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/landMark/landmark_15.jpg",
+        "16" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/landMark/landmark_16.jpg",
+        "17" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/landMark/landmark_17.jpg",
+        "18" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/landMark/landmark_18.jpg",
+        "19" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/landMark/landmark_19.jpg",
+        "21" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/landMark/landmark_21.jpg",
+        "22" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/landMark/landmark_22.jpg",
+        "23" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/landMark/landmark_23.jpg",
+        "24" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/landMark/landmark_24.jpg",
+        "25" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/landMark/landmark_25.jpg",
+        "26" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/landMark/landmark_26.jpg",
+        "27" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/landMark/landmark_27.jpg"
+
     }
 }

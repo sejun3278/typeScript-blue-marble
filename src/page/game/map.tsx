@@ -196,17 +196,36 @@ class Map extends React.Component<AllProps> {
                             const landmark_list = require('../../source/landmark.json');
                             const landmark_icon = landmark_list.landmark[info.number];
 
+                            const style : any = {};
+                            let class_col : any = "landmark_icon ";
+                            style['backgroundImage'] = `url(${landmark_icon})`;
+
+                            if(info.number >= 7 && info.number < 14) {
+                              if(info.number === 7) {
+                                class_col += ' height_set ';
+                              }
+
+                              class_col += "landmark_columns";
+
+                            } else if(info.number >= 21 && info.number < 28) {
+                              if(info.number === 27) {
+                                class_col += ' height_set ';
+                              }
+
+                              class_col += "landmark_columns_2";  
+                            }
+                            
                             return(
                               <div 
                                 key={key}
-                                className='landmark_icon'
-                                style={{ backgroundImage : `url(${landmark_icon})`}} 
+                                className={class_col}
+                                style={style} 
                               />
                             )
                           }
                         }
 
-                        })}
+                      })}
 
                         <div className='city_price_div'
                             style={city_style}
