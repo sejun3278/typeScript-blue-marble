@@ -104,7 +104,8 @@ class Game extends React.Component<AllProps> {
       '_checkPlayerMoney' : this._checkPlayerMoney,
       '_minusPlayerMoney' : this._minusPlayerMoney,
       '_checkEstatePlayerMoney' : this._checkEstatePlayerMoney,
-      '_splitMoneyUnit' : this._splitMoneyUnit
+      '_splitMoneyUnit' : this._splitMoneyUnit,
+      '_turnEnd' : this._turnEnd
     })
   }
 

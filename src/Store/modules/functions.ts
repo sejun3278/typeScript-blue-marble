@@ -20,7 +20,8 @@ export interface functionsState {
     _checkPlayerMoney : Function,
     _minusPlayerMoney : Function,
     _checkEstatePlayerMoney : Function,
-    _splitMoneyUnit : Function
+    _splitMoneyUnit : Function,
+    _turnEnd : Function
 }
 
 const initialState : functionsState = {
@@ -37,7 +38,8 @@ const initialState : functionsState = {
     _checkPlayerMoney : () => {},
     _minusPlayerMoney : () => {},
     _checkEstatePlayerMoney : () => {},
-    _splitMoneyUnit : () => {}
+    _splitMoneyUnit : () => {},
+    _turnEnd : () => {}
 }
 
 export default handleActions<functionsState> ({
@@ -57,7 +59,8 @@ export default handleActions<functionsState> ({
         _checkPlayerMoney : data.payload._checkPlayerMoney !== undefined ? data.payload._checkPlayerMoney : state._checkPlayerMoney,
         _minusPlayerMoney : data.payload._minusPlayerMoney !== undefined ? data.payload._minusPlayerMoney : state._minusPlayerMoney,
         _checkEstatePlayerMoney : data.payload._checkEstatePlayerMoney !== undefined ? data.payload._checkEstatePlayerMoney : state._checkEstatePlayerMoney,
-        _splitMoneyUnit : data.payload._splitMoneyUnit !== undefined ? data.payload._splitMoneyUnit : state._splitMoneyUnit
+        _splitMoneyUnit : data.payload._splitMoneyUnit !== undefined ? data.payload._splitMoneyUnit : state._splitMoneyUnit,
+        _turnEnd : data.payload._turnEnd !== undefined ? data.payload._turnEnd : state._turnEnd
       };
     }
 

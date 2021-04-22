@@ -20,13 +20,72 @@ export interface AllProps {
   settle_bill : string,
   turn : number,
   player_list : string,
-  map_info : string
+  map_info : string,
+  _addLog : Function,
+  _timerOn : Function,
+  _turnEnd : Function
 };
 
 class Settle extends React.Component<AllProps> {
 
+  // 소유지 매각하기
+  _saleSettle = (_map_info : any) => {
+    const { _splitMoneyUnit, _addLog, settle_extra_money, turn, initActions, gameActions, _turnEnd } = this.props;
+    const map_info = JSON.parse(this.props.map_info);
+    const player_list = JSON.parse(this.props.player_list);
+
+    let extra_money = settle_extra_money;
+    if(window.confirm(_map_info.name + '에 대한 소유권을 포기하고 매각하시겠습니까? \n매각시 [ ' + _splitMoneyUnit(_map_info.pass) + '] 을 회수합니다.')) {
+      _addLog(`<div class='game_alert_2'> <b class='color_player_${_map_info.host}'>${_map_info.host} 플레이어</b>가 <b class='orange'>${_map_info.name}</b>에 대한 소유권을 포기했습니다. </div>`)
+
+      map_info[_map_info.number].host = null;
+
+      if(_map_info.pass - extra_money > 0) {
+        // 매각 후 돈이 남을 경우
+        player_list[Number(turn) - 1].money = _map_info.pass - extra_money;
+        extra_money = 0;
+
+      } else {
+        extra_money = extra_money - _map_info.pass;
+      }
+
+      // 소유권 포기한 맵 없애기
+      const map_idx = player_list[Number(turn) - 1].maps.indexOf(_map_info.number);
+      player_list[Number(turn) - 1].maps[map_idx] = null;
+
+      player_list[Number(turn) - 1].maps =
+      player_list[Number(turn) - 1].maps.filter( (el : any) => {
+        return el !== null;
+      })
+
+      // 맵 저장
+      initActions.set_setting_state({ 'map_info' : JSON.stringify(map_info) });
+      initActions.set_player_info({ 'player_list' : JSON.stringify(player_list) });
+
+      const save_obj : any = {}
+      save_obj['settle_extra_money'] = extra_money;
+
+      if(extra_money === 0) {
+        save_obj['settle_modal'] = false;
+
+        window.setTimeout(() => {
+          // 턴 종료
+          _turnEnd();
+
+        }, 1000);
+      }
+
+      gameActions.settle_player_money(save_obj);
+
+    } else {
+      return;
+    }
+  }
+
   render() {
     const { settle_extra_money, _splitMoneyUnit, turn } = this.props;
+    const { _saleSettle } = this;
+
     const settle_bill = JSON.parse(this.props.settle_bill);
     const player_list = JSON.parse(this.props.player_list);
 
@@ -153,7 +212,9 @@ class Settle extends React.Component<AllProps> {
                             
                             <div className='player_settle_price_and_sale_div'>
                               <b> {_splitMoneyUnit(map.pass)} </b>
-                              <input type='button' value='매각' className='player_settle_sale_estate' />
+                              <input type='button' value='매각' className='player_settle_sale_estate' 
+                                     onClick={() => _saleSettle(map)}
+                              />
                             </div>
                           </div>
                         )
@@ -185,7 +246,10 @@ export default connect(
     settle_bill : game.settle_bill,
     turn : game.turn,
     player_list : init.player_list,
-    map_info : init.map_info
+    map_info : init.map_info,
+    _addLog : functions._addLog,
+    _timerOn : functions._timerOn,
+    _turnEnd : functions._turnEnd
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),
