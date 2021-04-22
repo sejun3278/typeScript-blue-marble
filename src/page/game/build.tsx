@@ -371,7 +371,7 @@ class Build extends React.Component<AllProps> {
                                                     ?
                                                         <input type='button' value='건설' 
                                                                id={player_all_money < el.price ? "unable_build_landmark" : undefined}
-                                                               onClick={() => player_all_money >= el.price ? _build('click', 3) : undefined}
+                                                               onClick={() => player_all_money >= el.price && turn === 1 ? _build('click', 3) : undefined}
                                                         />
 
                                                     : undefined

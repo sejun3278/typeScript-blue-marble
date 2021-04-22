@@ -83,6 +83,9 @@ class Loading extends React.Component<AllProps> {
 
           // 대출금
           bank_info[i + 1]['loan'] = 0;
+          if(i === 0) {
+            bank_info[i + 1]['loan'] = 5
+          }
 
           // 대출 이자금
           bank_info[i + 1]['loan_incentive'] = 0;
@@ -95,6 +98,10 @@ class Loading extends React.Component<AllProps> {
           
           // 상환 라운드
           bank_info[i + 1]['repay_day'] = 0;
+
+          if(i === 0) {
+            bank_info[i + 1]['repay_day'] = 2;
+          }
 
         }
       }

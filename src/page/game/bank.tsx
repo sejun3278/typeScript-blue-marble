@@ -27,7 +27,8 @@ export interface AllProps {
   loan_plus_incentive : number,
   _flash : Function,
   loan_order_confirm : boolean,
-  _addLog : Function
+  _addLog : Function,
+  _splitMoneyUnit : Function
 };
 
 class Bank extends React.Component<AllProps> {
@@ -271,7 +272,7 @@ class Bank extends React.Component<AllProps> {
   }
 
   render() {
-    const { bank_tap, gameActions, bank_incentive_percent, turn, loan_percent, loan_order_money, loan_plus_incentive, loan_payback_date, loan_order_confirm} = this.props;
+    const { bank_tap, gameActions, bank_incentive_percent, turn, loan_percent, loan_order_money, loan_plus_incentive, loan_payback_date, loan_order_confirm ,_splitMoneyUnit } = this.props;
     const { _clickBankTap, _toggleHomeDiv, _saveMoney, _returnTotalIncentive, _setLoanInput, _setLoanPaybackDate, _orderLoan, _repayLoan } = this;
 
     const bank_info = JSON.parse(this.props.bank_info);
@@ -342,7 +343,7 @@ class Bank extends React.Component<AllProps> {
                          style={my_info.round_incentive === 0 ? { 'color' : '#ababab' } : undefined }
                     >
                         <div className='aRight'> └ 월별 이자　|　</div>
-                        <div className='aLeft'> <b> {my_info.round_incentive} </b> 만원 </div>
+                        <div className='aLeft'> <b> {_splitMoneyUnit(my_info.round_incentive)} </b> </div>
                     </div>
 
                     <div id='bank_my_total_incentive_div' className='bank_grid_div'
@@ -350,7 +351,7 @@ class Bank extends React.Component<AllProps> {
                     >
                         <div className='aRight'> 누적 이자　|　</div>
                         <div className='aLeft'> 
-                            <b> {my_info.total_incentive} </b> 만원 
+                            <b> {_splitMoneyUnit(my_info.total_incentive)} </b> 
                             <input type='button' value='환급' id='get_bank_total_incentive_button'
                                    style={my_info.total_incentive === 0 ? { 'color' : '#ababab' } : undefined}
                                    onClick={() => turn === 1 ? _returnTotalIncentive() : undefined}
@@ -384,7 +385,7 @@ class Bank extends React.Component<AllProps> {
 
                         <div id='bank_loan_grid_div'>
                             <div id='bank_loan_contents_div'> 
-                                <p> 대출 한도액　|　{my_info.bank_loan_limit}00 만원 </p>
+                                <p> 대출 한도　|　{_splitMoneyUnit(my_info.bank_loan_limit * 100)} </p>
                                 <div className={loan_order_money === 0 ? 'gray' : undefined}>                            
                                     <input type='number' id='my_loan_input' defaultValue={loan_order_money}
                                         max={my_info.bank_loan_limit} min={0}
@@ -420,7 +421,7 @@ class Bank extends React.Component<AllProps> {
                                 <div className='bank_loan_grid_div' style={loan_plus_incentive === 0 ? { 'color' : '#ababab' } : undefined}> 
                                     <div className='aRight'> 대출 이자금　|　</div>
                                     <div className='aLeft'>
-                                        {loan_plus_incentive} 만원 
+                                        {_splitMoneyUnit(loan_plus_incentive)} 
                                     </div>
                                 </div>
                             </div>
@@ -510,7 +511,8 @@ export default connect(
     loan_plus_incentive : game.loan_plus_incentive,
     _flash : functions._flash,
     loan_order_confirm : game.loan_order_confirm,
-    _addLog : functions._addLog
+    _addLog : functions._addLog,
+    _splitMoneyUnit: functions._splitMoneyUnit
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

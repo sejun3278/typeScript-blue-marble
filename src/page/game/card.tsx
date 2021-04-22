@@ -34,7 +34,9 @@ export interface AllProps {
   _timer : Function,
   stop_days : number,
   _addLog : Function,
-  round : number
+  round : number,
+  _splitMoneyUnit : Function,
+  _minusPlayerMoney : Function
 };
 
 class Card extends React.Component<AllProps> {
@@ -64,7 +66,7 @@ class Card extends React.Component<AllProps> {
                 target.style.color = '#bbbbbb';
 
             } else if(type === 'click') {
-                const { card_limit, overlap_card, select_first_card, all_card_num, initActions, gameActions} = this.props;
+                const { card_limit, overlap_card, select_first_card, all_card_num, initActions, gameActions } = this.props;
 
                 if(time_over === true) {
                     return;
@@ -113,7 +115,10 @@ class Card extends React.Component<AllProps> {
                     save_obj['card_notice_ment'] = save_obj['all_card_num'] + ' 칸을 이동합니다.';
 
                     // this._moveCharacter(save_obj['all_card_num'], null);
-                    this._moveCharacter(1, null) //
+                    this._moveCharacter(20, null) //
+
+                    // 김포공항행
+
                 }
 
                 initActions.set_setting_state({ 'card_deck' : JSON.stringify(card_deck) })
@@ -308,7 +313,7 @@ class Card extends React.Component<AllProps> {
 
     // 이동 후 액션취하기
     _action = (arrive : number, log_ment : string, player_list : any) => {
-        const { turn, initActions, gameActions, time_over, _removeAlertMent, _timer, stop_days, _addLog, round } = this.props;
+        const { turn, initActions, gameActions, time_over, _removeAlertMent, _timer, stop_days, _addLog, round, _splitMoneyUnit, _minusPlayerMoney } = this.props;
         // const player_list : any = JSON.parse(this.props.player_list);
 
         const city : any = JSON.parse(this.props.map_info);
@@ -370,6 +375,20 @@ class Card extends React.Component<AllProps> {
 
                 gameActions.player_bank_info({ 'player_bank_info_alert' : true })
             }
+        } else if(city_info.type === 'map') {
+            if(city_info.host !== null) {
+                // 상대방 땅에 도착함
+                const pass_price = _splitMoneyUnit(city_info.pass);
+
+                _addLog(`<div class='game_alert'> <b class='color_player_${turn}'> ${turn} 플레이어</b>가 <b class='color_player_${city_info.host}'> ${city_info.host} 플레이어</b>의 도시에 도착합니다. <br /> <b class='red'>${pass_price}</b>을 통행료로 지불합니다.  </div>`);
+                
+                // 도착한 플레이어의 돈 감소
+                const remove_money = _minusPlayerMoney(turn, city_info.pass, null, null);
+                player_list = remove_money['player'];
+
+                // 토지 소유주의 돈 증가
+                player_list[city_info.host - 1].money += city_info.pass;
+            }
         }
 
         if(time_over === true) {
@@ -393,7 +412,7 @@ class Card extends React.Component<AllProps> {
       const { _toggleCardEvent } = this;
 
       const toggle_able = card_select_able === true && round_start === true && turn === 1 && time_over === false;
-
+      console.log(card_select_able)
     return(
       <div id='card_select_div' className='aLeft'>
 
@@ -474,7 +493,9 @@ export default connect(
     _timer : functions._timer,
     stop_days : init.stop_days,
     _addLog : functions._addLog,
-    round : game.round
+    round : game.round,
+    _splitMoneyUnit : functions._splitMoneyUnit,
+    _minusPlayerMoney : functions._minusPlayerMoney
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

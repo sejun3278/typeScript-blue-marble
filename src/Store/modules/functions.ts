@@ -19,7 +19,8 @@ export interface functionsState {
     _addLog : Function,
     _checkPlayerMoney : Function,
     _minusPlayerMoney : Function,
-    _checkEstatePlayerMoney : Function
+    _checkEstatePlayerMoney : Function,
+    _splitMoneyUnit : Function
 }
 
 const initialState : functionsState = {
@@ -35,7 +36,8 @@ const initialState : functionsState = {
     _addLog : () => {},
     _checkPlayerMoney : () => {},
     _minusPlayerMoney : () => {},
-    _checkEstatePlayerMoney : () => {}
+    _checkEstatePlayerMoney : () => {},
+    _splitMoneyUnit : () => {}
 }
 
 export default handleActions<functionsState> ({
@@ -54,7 +56,8 @@ export default handleActions<functionsState> ({
         _addLog : data.payload._addLog !== undefined ? data.payload._addLog : state._addLog,
         _checkPlayerMoney : data.payload._checkPlayerMoney !== undefined ? data.payload._checkPlayerMoney : state._checkPlayerMoney,
         _minusPlayerMoney : data.payload._minusPlayerMoney !== undefined ? data.payload._minusPlayerMoney : state._minusPlayerMoney,
-        _checkEstatePlayerMoney : data.payload._checkEstatePlayerMoney !== undefined ? data.payload._checkEstatePlayerMoney : state._checkEstatePlayerMoney
+        _checkEstatePlayerMoney : data.payload._checkEstatePlayerMoney !== undefined ? data.payload._checkEstatePlayerMoney : state._checkEstatePlayerMoney,
+        _splitMoneyUnit : data.payload._splitMoneyUnit !== undefined ? data.payload._splitMoneyUnit : state._splitMoneyUnit
       };
     }
 

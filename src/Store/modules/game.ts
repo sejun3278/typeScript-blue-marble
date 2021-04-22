@@ -74,6 +74,8 @@ export interface gameState {
     loan_plus_incentive : number,
     loan_order_confirm : boolean,
     settle_modal : boolean,
+    settle_extra_money : number,
+    settle_bill : string,
     player_bank_info_alert : boolean,
     game_log : string,
     news_list : string,
@@ -126,12 +128,14 @@ const initialState : gameState = {
     loan_plus_incentive : 0,
     loan_order_confirm : false,
     settle_modal : false,
+    settle_extra_money : 0,
     player_bank_info_alert : false,
     game_log : JSON.stringify([]),
     news_list : JSON.stringify({}),
     news_round : 1,
     news_set : false,
-    player_estate_info_alert : false
+    player_estate_info_alert : false,
+    settle_bill : JSON.stringify({ })
 }
 
 export default handleActions<gameState> ({
@@ -249,7 +253,9 @@ export default handleActions<gameState> ({
     [SETTILEPLAYERMONEY] : (state : any, data : any) => {
         return {
             ...state,
-            settle_modal : data.payload.settle_modal !== undefined ? data.payload.settle_modal : state.settle_modal
+            settle_modal : data.payload.settle_modal !== undefined ? data.payload.settle_modal : state.settle_modal,
+            settle_extra_money : data.payload.settle_extra_money !== undefined ? data.payload.settle_extra_money : state.settle_extra_money,
+            settle_bill : data.payload.settle_bill !== undefined ? data.payload.settle_bill : state.settle_bill
         }
     },
 

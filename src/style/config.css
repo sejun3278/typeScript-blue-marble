@@ -632,7 +632,7 @@ body #notice_divs {
   cursor: pointer;
 }
 #game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_have_money_div #bank_icon {
-  margin-left: 40px;
+  margin-left: 15px;
 }
 #game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_bank_info {
   position: absolute;
@@ -689,7 +689,7 @@ body #notice_divs {
 #game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_bank_info #game_user_bank_info_round_bonus_alert div #game_bonus_money_info_alert_icon {
   width: 17px;
   position: absolute;
-  margin: -1px 15px;
+  margin: -1px 10px;
   cursor: pointer;
 }
 #game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #player_estate_info_div {
@@ -1464,6 +1464,120 @@ body #notice_divs {
   padding: 8px 0px;
   text-align: center;
   font-family: Recipekorea;
+}
+
+#player_settle_divs {
+  min-height: 300px;
+}
+#player_settle_divs h3 {
+  margin: 5px 0px;
+  text-align: center;
+  font-family: Recipekorea;
+  padding-bottom: 10px;
+  border-bottom: solid 3px black;
+}
+#player_settle_divs h3 b {
+  padding-bottom: 10px;
+  margin: 0px 10px;
+  border-bottom: solid 2px #ce1f6a;
+}
+#player_settle_divs #player_settle_grid_div {
+  display: grid;
+  grid-template-columns: 45% auto;
+}
+#player_settle_divs #player_settle_grid_div h4 {
+  text-align: center;
+  font-family: SDSamliphopangche_Outline;
+  font-size: 18px;
+  color: #ababab;
+  margin: 20px 0px;
+}
+#player_settle_divs #player_settle_grid_div #player_settle_bank_money_state #player_settle_bank_bill_div {
+  border: solid 1px #ababab;
+  min-height: 200px;
+  font-family: Y_Spotlight;
+  padding: 0px 15px;
+}
+#player_settle_divs #player_settle_grid_div #player_settle_bank_money_state #player_settle_bank_bill_div #player_settle_bank_bill_loan_div {
+  margin-top: 10px;
+  color: #ce1f6a;
+}
+#player_settle_divs #player_settle_grid_div #player_settle_bank_money_state #player_settle_bank_bill_div .player_settle_bank_grid_div {
+  display: grid;
+  grid-template-columns: 90px auto;
+  font-size: 13px;
+  padding: 5px 0px;
+}
+#player_settle_divs #player_settle_grid_div #player_settle_bank_money_state #player_settle_bank_bill_div .player_settle_bank_grid_div div {
+  padding: 0px 0px;
+}
+#player_settle_divs #player_settle_grid_div #player_settle_bank_money_state #player_settle_bank_bill_div #player_settle_bank_bill_result_div {
+  border-top: solid 2px black;
+  margin-top: 5px;
+  padding-top: 20px;
+  text-align: center;
+  font-family: Recipekorea;
+}
+#player_settle_divs #player_settle_grid_div #player_settle_bank_money_state #player_settle_bank_bill_div #player_settle_bank_bill_result_div div {
+  padding: 0px;
+}
+#player_settle_divs #player_settle_grid_div #player_settle_estate_money_state #player_settle_estate_list_div {
+  border: solid 1px #ababab;
+  height: 200px;
+}
+#player_settle_divs #player_settle_grid_div #player_settle_estate_money_state #player_settle_estate_list_div #player_sale_estate_div #player_all_estate_money_div {
+  padding: 5px;
+  font-size: 13px;
+  text-align: center;
+  border-bottom: solid 1px black;
+  border-top: solid 1px black;
+  background-color: #ababab;
+  color: white;
+  font-family: TmoneyRoundWindExtraBold;
+}
+#player_settle_divs #player_settle_grid_div #player_settle_estate_money_state #player_settle_estate_list_div #player_sale_estate_div #player_settle_estate_list {
+  height: 170px;
+  overflow: auto;
+}
+#player_settle_divs #player_settle_grid_div #player_settle_estate_money_state #player_settle_estate_list_div #player_sale_estate_div #player_settle_estate_list .player_settle_estate_list_divs {
+  padding: 5px;
+  border-bottom: dotted 1px #ababab;
+  font-size: 12px;
+  display: grid;
+  grid-template-columns: 70px 130px auto;
+}
+#player_settle_divs #player_settle_grid_div #player_settle_estate_money_state #player_settle_estate_list_div #player_sale_estate_div #player_settle_estate_list .player_settle_estate_list_divs .player_settle_estate_build_state_div div {
+  display: inline-block;
+  width: 40px;
+}
+#player_settle_divs #player_settle_grid_div #player_settle_estate_money_state #player_settle_estate_list_div #player_sale_estate_div #player_settle_estate_list .player_settle_estate_list_divs .player_settle_estate_build_state_div div .player_settle_build_icon {
+  width: 15px;
+}
+#player_settle_divs #player_settle_grid_div #player_settle_estate_money_state #player_settle_estate_list_div #player_sale_estate_div #player_settle_estate_list .player_settle_estate_list_divs .player_settle_price_and_sale_div {
+  text-align: right;
+}
+#player_settle_divs #player_settle_grid_div #player_settle_estate_money_state #player_settle_estate_list_div #player_sale_estate_div #player_settle_estate_list .player_settle_estate_list_divs .player_settle_price_and_sale_div input {
+  margin-left: 25px;
+  font-size: 11px;
+  border: none;
+  background-color: white;
+  cursor: pointer;
+}
+#player_settle_divs #player_settle_grid_div #player_settle_estate_money_state #player_settle_estate_list_div #player_settle_estate_empty_div h4 {
+  line-height: 150px;
+  font-size: 15px;
+  font-family: Recipekorea !important;
+}
+#player_settle_divs #player_settle_confirm_div input {
+  width: 100%;
+  margin-top: 20px;
+  height: 50px;
+  line-height: 50px;
+  background-color: black;
+  color: #ce1f6a;
+  font-size: 20px;
+  font-family: Recipekorea;
+  cursor: pointer;
 }
 
 /*# sourceMappingURL=config.css.map */

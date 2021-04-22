@@ -3,6 +3,7 @@ import $ from 'jquery';
 
 import { actionCreators as initActions } from '../../Store/modules/init';
 import { actionCreators as gameActions } from '../../Store/modules/game';
+import { actionCreators as functionsActions } from '../../Store/modules/functions';
 
 import { connect } from 'react-redux'; 
 import { bindActionCreators } from 'redux'; 
@@ -27,7 +28,8 @@ export interface AllProps {
   bank_incentive_percent : number,
   loan_percent : number,
   player_estate_info_alert : boolean,
-  map_info : string
+  map_info : string,
+  _splitMoneyUnit : Function
 };
 
 class Player extends React.Component<AllProps> {
@@ -50,7 +52,7 @@ class Player extends React.Component<AllProps> {
   render() {
     const { 
       gameActions, float_style, _commaMoney, number, turn, round_start, round, player_bank_info_alert,
-      bank_incentive_percent, loan_percent, player_estate_info_alert
+      bank_incentive_percent, loan_percent, player_estate_info_alert, _splitMoneyUnit
     } = this.props;
     const { _setInfoAlert } = this;
     const info : any = JSON.parse(this.props.info);
@@ -67,11 +69,11 @@ class Player extends React.Component<AllProps> {
 
     const contents_style : any = JSON.parse(JSON.stringify(float_style));
     
-    let money : string = '';
     let my_turn_style : any = {};
 
     let my_location : string = '';
 
+    let player_money : string = '';
     if(info.able === false) {
         thumb_class += ' empty_player_thumb';
         contents_class += ' empty_player_contents'
@@ -91,7 +93,7 @@ class Player extends React.Component<AllProps> {
           }
         }
 
-        money = _commaMoney(info.money);
+      player_money = _splitMoneyUnit(info.money);
     }
 
     if(info.number === 2 || info.number === 4) {
@@ -188,6 +190,8 @@ class Player extends React.Component<AllProps> {
       }
     }
 
+    // console.log(player_money)
+
     return(
       <div className='game_contents_player_profile_div' key={number}
              id={info.number + '_player_info_div'}
@@ -210,7 +214,7 @@ class Player extends React.Component<AllProps> {
 
                 : <div className='game_contents_user_info_div'>
                     <div className='game_user_have_money_div'> 
-                      보유 자산　|　{money} 만원 
+                      보유 자산　|　{player_money}
 
                       <img alt='' className='game_user_bank_info_icon' src={bank_icon} id='bank_icon' 
                            onMouseEnter={() => turn === info.number && turn === 1 ? gameActions.player_bank_info({ 'player_bank_info_alert' : true, 'player_estate_info_alert' : false }) : undefined}
@@ -227,7 +231,7 @@ class Player extends React.Component<AllProps> {
                     </div>
 
                     {player_bank_info_alert === true && turn === info.number
-                      ? <div className={'game_user_bank_info color_player_' + turn}
+                      ? <div className={'game_user_bank_info color_player_' + turn} id='game_user_bank_info'
                              onMouseLeave={() => turn === info.number ? gameActions.player_bank_info({ 'player_bank_info_alert' : false }) : undefined}
                         > 
                           <h3> 플레이어 {turn} 의 은행 정보 </h3>
@@ -238,10 +242,14 @@ class Player extends React.Component<AllProps> {
                                 <h4> {el.title}　<b> {el.other} </b> </h4>
 
                                 {el.info.map( (_info, key2) => {
-                                  let value = _commaMoney(my_bank[_info.value]);
+                                  let value = _splitMoneyUnit(my_bank[_info.value]);
 
                                   if(_info.value === 'loan') {
-                                    value = _commaMoney(my_bank['loan'] * 100);
+                                    value = _splitMoneyUnit(my_bank['loan'] * 100);
+                                  }
+
+                                  if(_info.value === 'repay_day') {
+                                    value = my_bank[_info.value];
                                   }
 
                                   return(
@@ -251,7 +259,7 @@ class Player extends React.Component<AllProps> {
                                       <div className='aRight'> {_info.title}　|　 </div>
                                       <div className='aLeft'> 
                                         {value}
-                                        {_info.value !== 'repay_day' ? ' 만원' : ' 라운드'} 
+                                        {_info.value === 'repay_day' ? ' 라운드' : undefined } 
                                       </div>
                                     </div>
                                   )
@@ -357,7 +365,7 @@ class Player extends React.Component<AllProps> {
 
                                           })}
                                         </div>
-                                        <div className='player_estate_total_money_div aRight'> {_commaMoney(total_money)} 만원 </div>
+                                        <div className='player_estate_total_money_div aRight'> {_splitMoneyUnit(total_money)} </div>
                                       </div>
                                     )
                                   })
@@ -400,7 +408,7 @@ class Player extends React.Component<AllProps> {
 }
 
 export default connect( 
-  ( { init, game } : StoreState  ) => ({
+  ( { init, game, functions } : StoreState  ) => ({
     turn : game.turn,
     round_start : game.round_start,
     stop_info : game.stop_info,
@@ -410,10 +418,12 @@ export default connect(
     bank_incentive_percent : init.bank_incentive_percent,
     loan_percent : init.loan_percent,
     player_estate_info_alert : game.player_estate_info_alert,
-    map_info : init.map_info
+    map_info : init.map_info,
+    _splitMoneyUnit : functions._splitMoneyUnit
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),
-      gameActions: bindActionCreators(gameActions, dispatch) 
+      gameActions: bindActionCreators(gameActions, dispatch),
+      functionsActions : bindActionCreators(functionsActions, dispatch)
   }) 
 )(Player);

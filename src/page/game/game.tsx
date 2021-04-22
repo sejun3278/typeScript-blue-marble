@@ -13,6 +13,7 @@ import { StoreState } from '../../Store/modules';
 import PlayerList from './player_list';
 import PlayGame from './play_games';
 import GameOther from './game_other';
+import Settle from './settle';
 
 import MapList from '../../source/map.json';
 import Map from './map';
@@ -54,7 +55,8 @@ export interface AllProps {
   loan_percent : number,
   stop_days : number,
   add_land_info : string,
-  game_log : string
+  game_log : string,
+  settle_extra_money: number,
 };
 
 const flash_info : any = {
@@ -101,14 +103,25 @@ class Game extends React.Component<AllProps> {
       '_addLog' : this._addLog,
       '_checkPlayerMoney' : this._checkPlayerMoney,
       '_minusPlayerMoney' : this._minusPlayerMoney,
-      '_checkEstatePlayerMoney' : this._checkEstatePlayerMoney
+      '_checkEstatePlayerMoney' : this._checkEstatePlayerMoney,
+      '_splitMoneyUnit' : this._splitMoneyUnit
     })
   }
 
   // 돈 삭감하기
   _minusPlayerMoney = (player : number, price : number, bank_info : any, save : any) => {
-    const { initActions, bank_incentive_percent } = this.props;
+    const { initActions, bank_incentive_percent, gameActions } = this.props;
     const player_list = JSON.parse(this.props.player_list);
+
+    // 영수증 만들기
+    const settle_bill : any = { };
+    settle_bill[player] = {
+      "1" : {
+        "loan" : price,
+        "player_money" : player_list[player - 1].money,
+        "repay_money" : 0
+      }
+    }
 
     if(bank_info === undefined || bank_info === null) {
       bank_info = JSON.parse(this.props.bank_info);
@@ -116,6 +129,7 @@ class Game extends React.Component<AllProps> {
 
     const result_obj : any = {};
     let result = true;
+
     // 1. 플레이어 보유 자산에서 삭감하기
 
     let cover_price = price - player_list[player - 1].money <= 0 ? 0 : price - player_list[player - 1].money;
@@ -125,12 +139,20 @@ class Game extends React.Component<AllProps> {
 
     initActions.set_player_info({ 'player_list' : JSON.stringify(player_list) })
 
+    settle_bill[player]["1"]['repay_money'] = price - cover_price;
+    settle_bill[player]["1"]['cover_money'] = cover_price;
+
     if(cover_price > 0) {
     // 2. 은행 예금에서 처리하기
+
+    settle_bill[player]["2"] = {
+      'player_save_money' : bank_info[player].save_money
+    };
 
     let player_save_money = bank_info[player].save_money;
       if(player_save_money > 0) {
         // console.log(bank_info, bank_info[player].save_money, cover_price)
+
         bank_info[player].save_money = bank_info[player].save_money - cover_price <= 0 ? 0 : bank_info[player].save_money - cover_price;
 
         cover_price = cover_price - player_save_money <= 0 ? 0 : cover_price - player_save_money;
@@ -146,11 +168,18 @@ class Game extends React.Component<AllProps> {
       }
 
       if(cover_price > 0) {
+        settle_bill[player]["3"] = {
+          'player_total_incentive' : bank_info[player].total_incentive,
+          'extra_price' : 0
+        };
+
         let cover_total_incentive = bank_info[player].total_incentive;
         // 3. 마지막으로 누적 이자에서 처리하기
         bank_info[player].total_incentive = bank_info[player].total_incentive - cover_price <= 0 ? 0 : bank_info[player].total_incentive - cover_price;
 
         cover_price = cover_price - cover_total_incentive <= 0 ? 0 : cover_price - cover_total_incentive;
+      
+        settle_bill[player]["3"]['extra_price'] = cover_price;
       }
     }
 
@@ -161,6 +190,8 @@ class Game extends React.Component<AllProps> {
     if(save === true) {
       gameActions.event_info({ 'bank_info' : JSON.stringify(bank_info) })
     }
+
+    gameActions.settle_player_money({ 'settle_bill' : JSON.stringify(settle_bill) });
 
     result_obj['result'] = result;
     result_obj['extra'] = cover_price;
@@ -230,7 +261,7 @@ class Game extends React.Component<AllProps> {
 
   // 라운드 (턴) 시작하기
   _roundStart = (type : string) => {
-    const { gameActions, round, turn, _flash, round_timer, _setCardDeck, game_event } = this.props;
+    const { gameActions, round, turn, _flash, round_timer, _setCardDeck, game_event, settle_extra_money } = this.props;
 
     const stop_info = JSON.parse(this.props.stop_info)
     const player_list = JSON.parse(this.props.player_list);
@@ -302,6 +333,17 @@ class Game extends React.Component<AllProps> {
 
       this._addLog(`<div class='game_alert'> <b class='color_player_${turn}'> ${turn} 플레이어 </b> 의 턴입니다.  </div>`);
 
+      if(settle_extra_money > 0) {
+        // 파산 단계라면 잠시 일시정지한다.
+
+        this._addLog(`<div class='game_alert_2 back_black white'> <b class='color_player_${turn}'> ${turn} 플레이어 </b> 가 빚 <b class='red'> ${this._splitMoneyUnit(settle_extra_money)} </b> 을 청산중입니다.  </div>`)
+        gameActions.settle_player_money({ 'settle_modal' : true });
+
+        const event : any = document.querySelectorAll('.ReactModal__Overlay');
+        event[0].style.backgroundColor = 'rgba(0, 0, 0, 0.75)';
+
+        return;
+      }
 
       // 플레이어 현재 위치 파악하기
       const now_location = player_list[turn - 1].location;
@@ -457,7 +499,12 @@ class Game extends React.Component<AllProps> {
 
           } else {
             // 파산 및 재산 매각하기
-            // gameActions.settle_player_money({ 'settle_modal' : true });
+            gameActions.settle_player_money({ 'settle_extra_money' : payback_result['extra'] });
+
+            // 게임 일시정지
+            this._timer(false);
+            gameActions.select_card_info({ 'card_select_able' : false })
+            
           }
         }
       }
@@ -703,8 +750,8 @@ class Game extends React.Component<AllProps> {
           gameActions.select_card_info({
             'card_notice_ment' : save_obj['all_card_num'] + ' 칸을 이동합니다.'
           })
-          await _moveCharacter(save_obj['all_card_num'], null);
-          // await _moveCharacter(1, null);
+          // await _moveCharacter(save_obj['all_card_num'], null);
+          await _moveCharacter(1, null);
   
           return initActions.set_setting_state({ 'card_deck' : JSON.stringify(card_deck) });
 
@@ -1024,9 +1071,11 @@ class Game extends React.Component<AllProps> {
     const bank_info = JSON.parse(this.props.bank_info);
     const player_list = JSON.parse(this.props.player_list);
 
-    const money = player_list[player - 1].money + ( bank_info[player].save_money + bank_info[player].total_incentive );
+    if(player > 0) {
+      const money = player_list[player - 1].money + ( bank_info[player].save_money + bank_info[player].total_incentive );
 
-    return money;
+      return money;
+    }
   }
 
   // 플레이어의 부동산 총 자산 조회하기
@@ -1071,7 +1120,44 @@ class Game extends React.Component<AllProps> {
       player_list[i - 1].estate_money = estate_money;
     }
 
-    initActions.set_player_info({ 'player_list' : JSON.stringify(player_list) })
+    initActions.set_player_info({ 'player_list' : JSON.stringify(player_list) });
+
+    const result : any = {};
+    result['bank_money'] = this._checkPlayerMoney(player);
+    result['estate_money'] = estate_money;
+
+    return result;
+  }
+
+  // 돈 단위 나누기
+  _splitMoneyUnit = (money : number) => {
+    let trans_money : string = this._commaMoney(money) + ' 만원 ';
+
+    // 억 단위로 나누기
+    if(money / 100 >= 100) {
+      // 100 으로 나눴을 때 100 이상일 경우 1 억 이상이다.
+      const split_money = String(Math.floor(money / 100));
+      let split_idx : number = 1;
+
+      if(split_money.length >= 3) {
+        trans_money = split_money[0];
+
+        if(split_money.length === 4) {
+          trans_money += split_money[1];
+
+          split_idx += 1;
+        }
+
+        trans_money += ' 억 ';
+      };
+
+      const extra_money = Number(String(money).slice(split_idx, String(money).length + 1))
+      if(extra_money > 0) {
+        trans_money += '　' + this._commaMoney(extra_money) + ' 만원';
+      }
+    }
+
+    return trans_money;
   }
 
   render() {
@@ -1103,7 +1189,7 @@ class Game extends React.Component<AllProps> {
                   style={modalCustomStyles}
                   ariaHideApp={false}
                 >
-
+                  <Settle />
                 </Modal>
             
               : undefined
@@ -1251,7 +1337,8 @@ export default connect(
     loan_percent : init.loan_percent,
     stop_days : init.stop_days,
     add_land_info : init.add_land_info,
-    game_log : game.game_log
+    game_log : game.game_log,
+    settle_extra_money : game.settle_extra_money
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),
