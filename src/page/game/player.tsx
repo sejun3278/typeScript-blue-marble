@@ -29,7 +29,8 @@ export interface AllProps {
   loan_percent : number,
   player_estate_info_alert : boolean,
   map_info : string,
-  _splitMoneyUnit : Function
+  _splitMoneyUnit : Function,
+  pass_price : number
 };
 
 class Player extends React.Component<AllProps> {
@@ -52,7 +53,7 @@ class Player extends React.Component<AllProps> {
   render() {
     const { 
       gameActions, float_style, _commaMoney, number, turn, round_start, round, player_bank_info_alert,
-      bank_incentive_percent, loan_percent, player_estate_info_alert, _splitMoneyUnit
+      bank_incentive_percent, loan_percent, player_estate_info_alert, _splitMoneyUnit, pass_price
     } = this.props;
     const { _setInfoAlert } = this;
     const info : any = JSON.parse(this.props.info);
@@ -304,11 +305,11 @@ class Player extends React.Component<AllProps> {
                                     
                                     let total_money = map.price;
 
-                                    for(let i = 0; i < map.build.length; i++) {
-                                      if(map.build[i].build === true) {
-                                        total_money += map.build[i].price;
-                                      }
-                                    }
+                                    // for(let i = 0; i < map.build.length; i++) {
+                                    //   if(map.build[i].build === true) {
+                                    //     total_money += map.build[i].price;
+                                    //   }
+                                    // }
 
                                     const map_name = map.number === 8 ? '광명' : map.name;
 
@@ -419,7 +420,8 @@ export default connect(
     loan_percent : init.loan_percent,
     player_estate_info_alert : game.player_estate_info_alert,
     map_info : init.map_info,
-    _splitMoneyUnit : functions._splitMoneyUnit
+    _splitMoneyUnit : functions._splitMoneyUnit,
+    pass_price : init.pass_price
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

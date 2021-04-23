@@ -24,7 +24,8 @@ export interface AllProps {
   bank_info : string,
   _checkPlayerMoney : Function,
   _minusPlayerMoney : Function,
-  _checkEstatePlayerMoney : Function
+  _checkEstatePlayerMoney : Function,
+  _splitMoneyUnit : Function
 };
 
 class Build extends React.Component<AllProps> {
@@ -35,7 +36,9 @@ class Build extends React.Component<AllProps> {
         const map_info = JSON.parse(this.props.map_info);
         // const player_list = JSON.parse(this.props.player_list);
         
-        const { initActions, gameActions, _removeAlertMent, pass_price, _addLog, turn, _checkPlayerMoney, _minusPlayerMoney, _checkEstatePlayerMoney } = this.props; 
+        const { 
+            initActions, gameActions, _removeAlertMent, pass_price, _addLog, turn, _checkPlayerMoney, _minusPlayerMoney, _checkEstatePlayerMoney, _splitMoneyUnit
+        } = this.props; 
 
         const player_all_money = _checkPlayerMoney(turn);
 
@@ -74,14 +77,14 @@ class Build extends React.Component<AllProps> {
 
                 // 맵 설정
                 map_info[select_info.number].host = my_info.number;
-                map_info[select_info.number].pass = select_info.price * pass_price;
+                map_info[select_info.number].pass = select_info.price;
                 initActions.set_setting_state({ 'map_info' : JSON.stringify(map_info) });
 
                 select_info.host = my_info.number;
-                select_info.pass = select_info.price * pass_price;
+                select_info.pass = select_info.price;
                 gameActions.select_type({ 'select_info' : JSON.stringify(select_info) })
 
-                const ment = `<div class='game_alert_2'> <b class='color_player_${turn}'> 플레이어 ${turn} </b>　|　${map_info[select_info.number].name} 토지 구매 <b class='custom_color_1'> ( ${select_info.price} 만원 ) </b>  <br /> <b class='gray'> ( 이제부터 ${map_info[select_info.number].name} 에 도착한 다른 플레이어에게는 <br /> <b class='red'>${map_info[select_info.number].pass} 만원</b>의 동행료가 부과됩니다. ) </b> </div>`;
+                const ment = `<div class='game_alert_2'> <b class='color_player_${turn}'> 플레이어 ${turn} </b>　|　${map_info[select_info.number].name} 토지 구매 <b class='red'> ( ${_splitMoneyUnit(select_info.price)} ) </b>  <br /> <b class='gray'> ( 이제부터 ${map_info[select_info.number].name} 에 도착한 다른 플레이어에게는 <br /> <b class='custom_color_1'>${_splitMoneyUnit(map_info[select_info.number].pass * pass_price)} </b>의 동행료가 부과됩니다. ) </b> </div>`;
 
                 _checkEstatePlayerMoney(turn, player_list, map_info);
 
@@ -118,7 +121,9 @@ class Build extends React.Component<AllProps> {
 
         const player_list : any = JSON.parse(this.props.player_list);
 
-        const { gameActions, initActions, turn, _removeAlertMent, pass_price, _addLog, _checkPlayerMoney, _minusPlayerMoney, _checkEstatePlayerMoney } = this.props;
+        const { 
+            gameActions, initActions, turn, _removeAlertMent, pass_price, _addLog, _checkPlayerMoney, _minusPlayerMoney, _checkEstatePlayerMoney, _splitMoneyUnit
+        } = this.props;
 
         if(turn === 1) {
             if(type === 'on') {
@@ -134,23 +139,23 @@ class Build extends React.Component<AllProps> {
             } else if(type === 'click') {
                 const player_all_money = _checkPlayerMoney(turn);
 
-                console.log(player_all_money)
-
                 if(map_info[select_info.number].build[key].build === false) {
                     if(player_all_money >= map_info[select_info.number].build[key].price) {
                         const result = _minusPlayerMoney(turn, map_info[select_info.number].build[key].price, undefined, true);
                         gameActions.event_info({ 'bank_info' : JSON.stringify(result['bank']) })
 
-                        const origin_pass = map_info[select_info.number].pass;
+                        const origin_pass = map_info[select_info.number].pass * pass_price;
 
                         map_info[select_info.number].build[key].build = true;
-                        map_info[select_info.number].pass = map_info[select_info.number].pass + ( map_info[select_info.number].build[key].price * pass_price );      
+                        map_info[select_info.number].price += map_info[select_info.number].build[key].price;
+                        map_info[select_info.number].pass = map_info[select_info.number].pass + map_info[select_info.number].build[key].price;      
                         
+                        console.log(map_info)
                         delete map_info[select_info.number].build[key]['select'];
                         
                         const now_location = map_info[player_list[turn - 1].location].name;
 
-                        const ment = `<div class='game_alert_2'> <b class='color_player_${turn}'> 플레이어 ${turn} </b>　|　${now_location} 에 ${map_info[select_info.number].build[key].name} 건설 <b class='custom_color_1'> ( ${map_info[select_info.number].build[key].price} 만원 ) </b>  <br /> <b class='gray'> ( 통행료　|　${origin_pass} 만원　=>　<b class='red'>${map_info[select_info.number].pass} 만원</b> ) </b> </div>`;
+                        const ment = `<div class='game_alert_2'> <b class='color_player_${turn}'> 플레이어 ${turn} </b>　|　${now_location} 에 ${map_info[select_info.number].build[key].name} 건설 <b class='red'> ( ${_splitMoneyUnit(map_info[select_info.number].build[key].price)} ) </b>  <br /> <b class='gray'> ( 통행료　|　${_splitMoneyUnit(origin_pass)}　=>　<b class='custom_color_1'>${_splitMoneyUnit(map_info[select_info.number].pass * pass_price)} </b> ) </b> </div>`;
                         _addLog(ment);
 
                         _checkEstatePlayerMoney(turn, result['player'], map_info);
@@ -168,7 +173,7 @@ class Build extends React.Component<AllProps> {
                             }
 
                         } else {
-                            _addLog(`<div class='game_alert_2'> <b class='custom_color_1'> ${now_location} </b> 랜드마크 건설 ! </div>`)                                
+                            _addLog(`<div class='game_alert_2'> <b class='custom_color_1'> ${now_location} </b> 랜드마크 건설 ! <br /> <b class='gray'> ( 통행료　|　${_splitMoneyUnit(origin_pass)}　=>　<b class='custom_color_1'>${_splitMoneyUnit(map_info[select_info.number].pass * pass_price)} </b> ) </b> </div>`)                                
                         }
 
                     } else {
@@ -236,9 +241,9 @@ class Build extends React.Component<AllProps> {
                         <div className='build_notice_grid_div'>
                             <div className='aRight'> 통행료　|　</div>
                             <div id='pass_price_notice_div'> 
-                                { _commaMoney(select_info.pass) } 
+                                { _commaMoney(select_info.pass * pass_price) } 
                                 {pass_price > 1
-                                    ? ' ( ' + select_info.pass / pass_price + ' X ' + pass_price + ' 배 ) '
+                                    ? ' ( ' + select_info.pass * pass_price / pass_price + ' X ' + pass_price + ' 배 ) '
 
                                     : undefined
                                 }
@@ -407,7 +412,8 @@ export default connect(
     bank_info : game.bank_info,
     _checkPlayerMoney : functions._checkPlayerMoney,
     _minusPlayerMoney : functions._minusPlayerMoney,
-    _checkEstatePlayerMoney : functions._checkEstatePlayerMoney
+    _checkEstatePlayerMoney : functions._checkEstatePlayerMoney,
+    _splitMoneyUnit : functions._splitMoneyUnit
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

@@ -23,14 +23,16 @@ export interface AllProps {
   map_info : string,
   _addLog : Function,
   _timerOn : Function,
-  _turnEnd : Function
+  _turnEnd : Function,
+  settle_type : string | null,
+  bank_info : string
 };
 
 class Settle extends React.Component<AllProps> {
 
   // 소유지 매각하기
   _saleSettle = (_map_info : any) => {
-    const { _splitMoneyUnit, _addLog, settle_extra_money, turn, initActions, gameActions, _turnEnd } = this.props;
+    const { _splitMoneyUnit, _addLog, settle_extra_money, turn, initActions, gameActions, _turnEnd, settle_type } = this.props;
     const map_info = JSON.parse(this.props.map_info);
     const player_list = JSON.parse(this.props.player_list);
 
@@ -68,6 +70,18 @@ class Settle extends React.Component<AllProps> {
 
       if(extra_money === 0) {
         save_obj['settle_modal'] = false;
+
+        if(settle_type === 'loan') {
+          // 대출 정산하기
+          const bank_info = JSON.parse(this.props.bank_info);
+
+          bank_info[turn]['repay_day'] = 0;
+          bank_info[turn]['loan'] = 0;
+          bank_info[turn]['loan_incentive'] = 0;
+
+          gameActions.event_info({ 'bank_info' : JSON.stringify(bank_info) });
+        }
+        save_obj['settle_type'] = null;
 
         window.setTimeout(() => {
           // 턴 종료
@@ -250,7 +264,9 @@ export default connect(
     map_info : init.map_info,
     _addLog : functions._addLog,
     _timerOn : functions._timerOn,
-    _turnEnd : functions._turnEnd
+    _turnEnd : functions._turnEnd,
+    settle_type : game.settle_type,
+    bank_info : game.bank_info
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

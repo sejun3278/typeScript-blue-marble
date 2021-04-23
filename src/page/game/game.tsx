@@ -3,7 +3,7 @@ import $ from 'jquery';
 import Modal from 'react-modal';
 
 import { actionCreators as initActions } from '../../Store/modules/init';
-import { actionCreators as gameActions } from '../../Store/modules/game';
+import game, { actionCreators as gameActions } from '../../Store/modules/game';
 import { actionCreators as functionsActions } from '../../Store/modules/functions';
 
 import { connect } from 'react-redux'; 
@@ -488,6 +488,8 @@ class Game extends React.Component<AllProps> {
           // 대출기간 완료
           // 대출금 상환하기
           const payback_result = this._minusPlayerMoney(player, (bank_info[key].loan * 100), bank_info, false);
+
+          gameActions.settle_player_money({ 'settle_type' : 'loan' })
 
           bank_info[key] = payback_result['info'];
 
@@ -1110,11 +1112,11 @@ class Game extends React.Component<AllProps> {
 
           estate_money += map.price;
 
-          map.build.map( (cu : any) => {
-            if(cu.build === true) {
-              estate_money += cu.price;
-            }
-          })
+          // map.build.map( (cu : any) => {
+          //   if(cu.build === true) {
+          //     estate_money += cu.price;
+          //   }
+          // })
         })
       }
 

@@ -1544,11 +1544,11 @@ body #notice_divs {
   border-bottom: dotted 1px #ababab;
   font-size: 12px;
   display: grid;
-  grid-template-columns: 70px 110px auto;
+  grid-template-columns: 70px 120px auto;
 }
 #player_settle_divs #player_settle_grid_div #player_settle_estate_money_state #player_settle_estate_list_div #player_sale_estate_div #player_settle_estate_list .player_settle_estate_list_divs .player_settle_estate_build_state_div div {
   display: inline-block;
-  width: 40px;
+  width: 30px;
 }
 #player_settle_divs #player_settle_grid_div #player_settle_estate_money_state #player_settle_estate_list_div #player_sale_estate_div #player_settle_estate_list .player_settle_estate_list_divs .player_settle_estate_build_state_div div .player_settle_build_icon {
   width: 15px;

@@ -36,7 +36,8 @@ export interface AllProps {
   _addLog : Function,
   round : number,
   _splitMoneyUnit : Function,
-  _minusPlayerMoney : Function
+  _minusPlayerMoney : Function,
+  pass_price : number
 };
 
 class Card extends React.Component<AllProps> {
@@ -313,8 +314,12 @@ class Card extends React.Component<AllProps> {
 
     // 이동 후 액션취하기
     _action = (arrive : number, log_ment : string, player_list : any) => {
-        const { turn, initActions, gameActions, time_over, _removeAlertMent, _timer, stop_days, _addLog, round, _splitMoneyUnit, _minusPlayerMoney } = this.props;
+        const { 
+            turn, initActions, gameActions, time_over, _removeAlertMent, _timer, stop_days, _addLog, 
+            round, _splitMoneyUnit, _minusPlayerMoney
+        } = this.props;
         // const player_list : any = JSON.parse(this.props.player_list);
+        const _pass_price = this.props.pass_price;
 
         const city : any = JSON.parse(this.props.map_info);
         const city_info = city[String(arrive)];
@@ -378,7 +383,7 @@ class Card extends React.Component<AllProps> {
         } else if(city_info.type === 'map') {
             if(city_info.host !== null && turn !== city_info.host) {
                 // 상대방 땅에 도착함
-                const pass_price = _splitMoneyUnit(city_info.pass);
+                const pass_price = _splitMoneyUnit(city_info.pass * _pass_price);
 
                 let arrive_name = city_info.name;
                 if(arrive_name === '경기 광명') {
@@ -388,13 +393,13 @@ class Card extends React.Component<AllProps> {
                 _addLog(`<div class='game_alert'> <b class='color_player_${turn}'> ${turn} 플레이어</b>가 <b class='color_player_${city_info.host}'> ${city_info.host} 플레이어</b>의 <b class='custom_color_1'>${arrive_name}</b>에 도착합니다. <br /> <b class='red'>${pass_price}</b>을 통행료로 지불합니다.  </div>`);
                 
                 // 도착한 플레이어의 돈 감소
-                const remove_money = _minusPlayerMoney(turn, city_info.pass, null, true);
+                const remove_money = _minusPlayerMoney(turn, city_info.pass * _pass_price, null, true);
                 player_list = remove_money['player'];
 
                 player_list[Number(turn) - 1].location = arrive;
 
                 // 토지 소유주의 돈 증가
-                player_list[city_info.host - 1].money += city_info.pass;
+                player_list[city_info.host - 1].money += city_info.pass * _pass_price;
 
             }
         }
@@ -503,7 +508,8 @@ export default connect(
     _addLog : functions._addLog,
     round : game.round,
     _splitMoneyUnit : functions._splitMoneyUnit,
-    _minusPlayerMoney : functions._minusPlayerMoney
+    _minusPlayerMoney : functions._minusPlayerMoney,
+    pass_price : init.pass_price
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

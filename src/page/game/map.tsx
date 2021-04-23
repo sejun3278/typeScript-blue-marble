@@ -23,7 +23,8 @@ export interface AllProps {
     move_event_able : boolean,
     _removeAlertMent : Function,
     _moveCharacter : Function,
-    stop_days : number
+    stop_days : number,
+    pass_price : number
 };
 
 class Map extends React.Component<AllProps> {
@@ -55,7 +56,10 @@ class Map extends React.Component<AllProps> {
   }
 
   render() {
-    const { class_col, style, playing, able_player, move_location, _commaMoney, round, move_event_able, stop_days } = this.props;
+    const { 
+      class_col, style, playing, able_player, move_location, _commaMoney, 
+      round, move_event_able, stop_days, pass_price 
+    } = this.props;
     const { _moveMap } = this;
 
     const info = JSON.parse(this.props.info);
@@ -83,7 +87,7 @@ class Map extends React.Component<AllProps> {
           
         } else {
           // 소유주가 있을 경우 통행료로 표시
-          city_price = city_info[info.number].pass;
+          city_price = city_info[info.number].pass * pass_price;
           city_style['color'] = player_list[city_info[info.number].host - 1].color
         }
       }
@@ -280,7 +284,8 @@ export default connect(
     move_event_able : game.move_event_able,
     _removeAlertMent : functions._removeAlertMent,
     _moveCharacter : functions._moveCharacter,
-    stop_days : init.stop_days
+    stop_days : init.stop_days,
+    pass_price : init.pass_price
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

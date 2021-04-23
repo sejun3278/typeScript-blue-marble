@@ -81,7 +81,8 @@ export interface gameState {
     news_list : string,
     news_round : number,
     news_set : boolean,
-    player_estate_info_alert : boolean
+    player_estate_info_alert : boolean,
+    settle_type : string | null
 }
 
 const initialState : gameState = {
@@ -135,7 +136,8 @@ const initialState : gameState = {
     news_round : 1,
     news_set : false,
     player_estate_info_alert : false,
-    settle_bill : JSON.stringify({ })
+    settle_bill : JSON.stringify({ }),
+    settle_type : null,
 }
 
 export default handleActions<gameState> ({
@@ -255,7 +257,8 @@ export default handleActions<gameState> ({
             ...state,
             settle_modal : data.payload.settle_modal !== undefined ? data.payload.settle_modal : state.settle_modal,
             settle_extra_money : data.payload.settle_extra_money !== undefined ? data.payload.settle_extra_money : state.settle_extra_money,
-            settle_bill : data.payload.settle_bill !== undefined ? data.payload.settle_bill : state.settle_bill
+            settle_bill : data.payload.settle_bill !== undefined ? data.payload.settle_bill : state.settle_bill,
+            settle_type : data.payload.settle_type !== undefined ? data.payload.settle_type : state.settle_type
         }
     },
 
