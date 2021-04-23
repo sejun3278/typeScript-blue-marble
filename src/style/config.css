@@ -1544,7 +1544,7 @@ body #notice_divs {
   border-bottom: dotted 1px #ababab;
   font-size: 12px;
   display: grid;
-  grid-template-columns: 70px 130px auto;
+  grid-template-columns: 70px 110px auto;
 }
 #player_settle_divs #player_settle_grid_div #player_settle_estate_money_state #player_settle_estate_list_div #player_sale_estate_div #player_settle_estate_list .player_settle_estate_list_divs .player_settle_estate_build_state_div div {
   display: inline-block;
@@ -1557,7 +1557,7 @@ body #notice_divs {
   text-align: right;
 }
 #player_settle_divs #player_settle_grid_div #player_settle_estate_money_state #player_settle_estate_list_div #player_sale_estate_div #player_settle_estate_list .player_settle_estate_list_divs .player_settle_price_and_sale_div input {
-  margin-left: 25px;
+  margin-left: 20px;
   font-size: 11px;
   border: none;
   background-color: white;

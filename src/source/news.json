@@ -4,7 +4,7 @@
             "1" : {
                 "title" : "전국 땅값 인상",
                 "ment" : "전국의 모든 도시의 토지 매입값이 인상됩니다.",
-                "range" : [5, 15],
+                "range" : [5, 10],
                 "target" : [0],
                 "apply" : true,
                 "type" : true,
@@ -17,7 +17,7 @@
             "2" : {
                 "title" : "안동 땅값 인상",
                 "ment" : "안동의 땅값이 인상됩니다.",
-                "range" : [5, 10],
+                "range" : [5, 15],
                 "target" : [1],
                 "apply" : true,
                 "type" : true,
@@ -30,7 +30,7 @@
             "3" : {
                 "title" : "평창 땅값 인상",
                 "ment" : "평창의 땅값이 인상됩니다.",
-                "range" : [5, 10],
+                "range" : [5, 15],
                 "target" : [2],
                 "apply" : true,
                 "type" : true,
@@ -43,7 +43,7 @@
             "4" : {
                 "title" : "부산 땅값 인상",
                 "ment" : "부산의 땅값이 인상됩니다.",
-                "range" : [5, 10],
+                "range" : [5, 15],
                 "target" : [3],
                 "apply" : true,
                 "type" : true,
@@ -56,7 +56,7 @@
             "5" : {
                 "title" : "여수 땅값 인상",
                 "ment" : "여수의 땅값이 인상됩니다.",
-                "range" : [5, 10],
+                "range" : [5, 15],
                 "target" : [4],
                 "apply" : true,
                 "type" : true,
@@ -69,7 +69,7 @@
             "6" : {
                 "title" : "제주 땅값 인상",
                 "ment" : "제주의 땅값이 인상됩니다.",
-                "range" : [5, 10],
+                "range" : [5, 15],
                 "target" : [5],
                 "apply" : true,
                 "type" : true,
@@ -82,7 +82,7 @@
             "7" : {
                 "title" : "독도 땅값 인상",
                 "ment" : "독도의 땅값이 인상됩니다.",
-                "range" : [5, 10],
+                "range" : [5, 15],
                 "target" : [7],
                 "apply" : true,
                 "type" : true,
@@ -95,7 +95,7 @@
             "8" : {
                 "title" : "광명 땅값 인상",
                 "ment" : "광명의 땅값이 인상됩니다.",
-                "range" : [5, 10],
+                "range" : [5, 15],
                 "target" : [8],
                 "apply" : true,
                 "type" : true,
@@ -110,7 +110,7 @@
             "1" : {
                 "title" : "전국 땅값 인하",
                 "ment" : "전국의 모든 도시 토지 매입값이 인하됩니다.",
-                "range" : [10, 20],
+                "range" : [5, 10],
                 "target" : [0],
                 "apply" : true,
                 "type" : false,

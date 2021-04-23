@@ -52,7 +52,7 @@ const initialState : initState = {
     setting_type : null,
     setting_able : true,
     setting_stage : 1,
-    start_price : 800,
+    start_price : 8000,
     round_timer : 0,
     game_event : true,
     setting_modify : false,

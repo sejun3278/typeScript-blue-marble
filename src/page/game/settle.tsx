@@ -39,6 +39,7 @@ class Settle extends React.Component<AllProps> {
       _addLog(`<div class='game_alert_2'> <b class='color_player_${_map_info.host}'>${_map_info.host} 플레이어</b>가 <b class='orange'>${_map_info.name}</b>에 대한 소유권을 포기했습니다. </div>`)
 
       map_info[_map_info.number].host = null;
+      map_info[_map_info.number].price = map_info[_map_info.number].pass;
 
       if(_map_info.pass - extra_money > 0) {
         // 매각 후 돈이 남을 경우
@@ -56,7 +57,7 @@ class Settle extends React.Component<AllProps> {
       player_list[Number(turn) - 1].maps =
       player_list[Number(turn) - 1].maps.filter( (el : any) => {
         return el !== null;
-      })
+      });
 
       // 맵 저장
       initActions.set_setting_state({ 'map_info' : JSON.stringify(map_info) });

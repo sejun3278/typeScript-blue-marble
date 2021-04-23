@@ -107,28 +107,28 @@
             {
                 "level" : 1,
                 "name" : "주택",
-                "price" : 45,
+                "price" : 65,
                 "build" : false
             },
 
             {
                 "level" : 2,
                 "name" : "아파트",
-                "price" : 95,
+                "price" : 115,
                 "build" : false
             },
 
             {
                 "level" : 3,
                 "name" : "호텔",
-                "price" : 150,
+                "price" : 200,
                 "build" : false
             },
 
             {
                 "level" : 4,
                 "name" : "해운대 해수욕장",
-                "price" : 230,
+                "price" : 300,
                 "build" : false,
                 "info" : "<div> 해운대해수욕장(海雲臺海水浴場, Haeundae Beach)은 대한민국 부산광역시 해운대구 중동과 우동에 걸쳐서 위치한 해수욕장이다. <br /><br /> 모래사장의 총면적은 120,000m2, <br />길이는 1.5 km, 폭은 70m ~ 90m이다. <br /> <br /> 이 곳에는 300여개의 편의·숙박시설이 있고, <br /> 해수욕장의 가까운 부산조선비치호텔, <br /> 동백섬 누리마루(APEC하우스) 등이 있다. <br /> <br />개장기간은 6월초부터 9월말까지다. <br /><br /> 2012년 CNN GO가 선정한 한국에서 가봐야 할 아름다운 곳 TOP 50 명단에 37위에 랭크되어 있다. </div>"
             }
@@ -736,28 +736,28 @@
             {
                 "level" : 1,
                 "name" : "주택",
-                "price" : 50,
+                "price" : 65,
                 "build" : false
             },
 
             {
                 "level" : 2,
                 "name" : "아파트",
-                "price" : 105,
+                "price" : 115,
                 "build" : false
             },
 
             {
                 "level" : 3,
                 "name" : "호텔",
-                "price" : 150,
+                "price" : 170,
                 "build" : false
             },
 
             {
                 "level" : 4,
                 "name" : "월미도",
-                "price" : 210,
+                "price" : 230,
                 "build" : false,
                 "info" : "<div> 월미도는 월미산을 중심으로 남북으로 <br /> 긴 삼각형 모양을 이루었으나 지금은 간척되어 육지가 된 인천 앞바다의 육계도이다. <br /> <br /> 월미도는 면적이 0.7 km²밖에 되지 않는 작은 섬이었지만 제물포가 항구 역할을 제대로 하는 데 큰 공헌을 했다. <br /> <br /> 현재는 명성이 자자한 월미도 바이킹과 <br /> 디스코팡팡 등의 놀이기구 관광지로 유명하다. </div>"
             }

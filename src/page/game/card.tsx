@@ -376,18 +376,26 @@ class Card extends React.Component<AllProps> {
                 gameActions.player_bank_info({ 'player_bank_info_alert' : true })
             }
         } else if(city_info.type === 'map') {
-            if(city_info.host !== null) {
+            if(city_info.host !== null && turn !== city_info.host) {
                 // 상대방 땅에 도착함
                 const pass_price = _splitMoneyUnit(city_info.pass);
 
-                _addLog(`<div class='game_alert'> <b class='color_player_${turn}'> ${turn} 플레이어</b>가 <b class='color_player_${city_info.host}'> ${city_info.host} 플레이어</b>의 도시에 도착합니다. <br /> <b class='red'>${pass_price}</b>을 통행료로 지불합니다.  </div>`);
+                let arrive_name = city_info.name;
+                if(arrive_name === '경기 광명') {
+                    arrive_name = '광명';
+                }
+
+                _addLog(`<div class='game_alert'> <b class='color_player_${turn}'> ${turn} 플레이어</b>가 <b class='color_player_${city_info.host}'> ${city_info.host} 플레이어</b>의 <b class='custom_color_1'>${arrive_name}</b>에 도착합니다. <br /> <b class='red'>${pass_price}</b>을 통행료로 지불합니다.  </div>`);
                 
                 // 도착한 플레이어의 돈 감소
-                const remove_money = _minusPlayerMoney(turn, city_info.pass, null, null);
+                const remove_money = _minusPlayerMoney(turn, city_info.pass, null, true);
                 player_list = remove_money['player'];
+
+                player_list[Number(turn) - 1].location = arrive;
 
                 // 토지 소유주의 돈 증가
                 player_list[city_info.host - 1].money += city_info.pass;
+
             }
         }
 
