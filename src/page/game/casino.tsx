@@ -37,10 +37,19 @@ export interface AllProps {
 
 class Casino extends React.Component<AllProps> {
 
+    componentDidMount() {
+        const { turn, gameActions } = this.props;
+        const player_list = JSON.parse(this.props.player_list);
+
+        const min = player_list[Number(turn) - 1].money > 0 ? 1 : 0;
+        gameActions.event_info({ 'casino_betting' : min })
+    }
+
   _checkMoney = (event : any, max : number) => {
     const { gameActions } = this.props;
 
     const target = event.target;
+
     let value = Number(target.value);
 
     if(value > max) {
@@ -56,9 +65,15 @@ class Casino extends React.Component<AllProps> {
 
   _bettingGameStart = () => {
     const { gameActions, casino_betting, _removeAlertMent, _playerMoney, turn, casino_game_start, _flash, _addLog } = this.props;
+    const player_list = JSON.parse(this.props.player_list);
+    
     if(casino_betting <= 0) {
         document.getElementById('betting_input')?.focus();
         _removeAlertMent('배팅금은 1 만원 이상부터 가능합니다.')
+        return;
+
+    } else if(player_list[Number(turn) - 1].money < casino_betting) {
+        _removeAlertMent('현금이 부족합니다.')
         return;
     }
 
@@ -277,6 +292,13 @@ class Casino extends React.Component<AllProps> {
 
     const now_player = player_list[Number(turn) - 1];
 
+    let max : number = now_player.money;
+    let min : number = 1;
+    if(now_player.money < 1) {
+        min = 0;
+        max = 0;
+    }
+
     let game_result_ment = '';
     const casino_result_style : any = {}
     if(casino_game_result === true) {
@@ -297,7 +319,7 @@ class Casino extends React.Component<AllProps> {
                 ?
                 <div id='casino_betting_input_div'>
                     <b> 배팅금　|　</b>
-                    <input type='number' id='betting_input' defaultValue={1} max={now_player.money} 
+                    <input type='number' id='betting_input' defaultValue={min} max={max} 
                         onChange={(event) => _checkMoney(event, now_player.money)}
                         readOnly={casino_game_start !== false}
                     /> 만원

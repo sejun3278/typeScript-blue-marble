@@ -290,6 +290,32 @@
             "unit" : "라운드",
             "limit" : 1,
             "good" : true
+        },
+
+        "7" : {
+            "title" : "매각 수수료 인상",
+            "ment" : "",
+            "range" : [1, 5],
+            "state" : "sale_incentive",
+            "apply" : false,
+            "result" : true,
+            "other_ment" : " % 인상 ",
+            "unit" : "%",
+            "limit" : 10,
+            "good" : false
+        },
+
+        "8" : {
+            "title" : "매각 수수료 인하",
+            "ment" : "",
+            "range" : [1, 5],
+            "state" : "sale_incentive",
+            "apply" : false,
+            "result" : false,
+            "other_ment" : " % 인하 ",
+            "unit" : "%",
+            "limit" : 0,
+            "good" : true
         }
     }
 }

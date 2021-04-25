@@ -13,6 +13,7 @@ const SETTILEPLAYERMONEY = 'game/settle_player_money';
 const PLAYERBANKINFO = 'game/player_bank_info';
 const SETGAMELOG = 'game/set_game_log';
 const SETNEWSINFO = 'game/set_news_info';
+const GAMEPLAYTIME = 'game/game_play_time';
 
 export const actionCreators = {
     game_loading : createAction(GAMELOADING),
@@ -28,6 +29,7 @@ export const actionCreators = {
     player_bank_info : createAction(PLAYERBANKINFO),
     set_game_log : createAction(SETGAMELOG),
     set_news_info : createAction(SETNEWSINFO),
+    game_play_time : createAction(GAMEPLAYTIME),
 }
 
 export interface gameState {
@@ -82,7 +84,8 @@ export interface gameState {
     news_round : number,
     news_set : boolean,
     player_estate_info_alert : boolean,
-    settle_type : string | null
+    settle_type : string | null,
+    play_time : number,
 }
 
 const initialState : gameState = {
@@ -138,6 +141,7 @@ const initialState : gameState = {
     player_estate_info_alert : false,
     settle_bill : JSON.stringify({ }),
     settle_type : null,
+    play_time : 0,
 }
 
 export default handleActions<gameState> ({
@@ -283,6 +287,13 @@ export default handleActions<gameState> ({
             news_list : data.payload.news_list !== undefined ? data.payload.news_list : state.news_list,
             news_round : data.payload.news_round !== undefined ? data.payload.news_round : state.news_round,
             news_set : data.payload.news_set !== undefined ? data.payload.news_set : state.news_set
+        }
+    },
+
+    [GAMEPLAYTIME] : (state : any, data : any) => {
+        return {
+            ...state,
+            play_time : data.payload.play_time !== undefined ? data.payload.play_time : state.play_time
         }
     }
 

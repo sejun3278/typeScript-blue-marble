@@ -42,7 +42,8 @@ export interface initState {
     stop_days : number,
     loan_percent : number,
     news_info_list : string,
-    add_land_info : string
+    add_land_info : string,
+    sale_incentive : number
 }
 
 const initialState : initState = {
@@ -53,11 +54,11 @@ const initialState : initState = {
     setting_able : true,
     setting_stage : 1,
     start_price : 100,
-    round_timer : 0,
+    round_timer : 60,
     game_event : true,
     setting_modify : false,
     round_limit : 0,
-    pass_price : 2,
+    pass_price : 1,
     player_list : JSON.stringify([]),
     able_player : 2,
     card_limit : 1,
@@ -71,7 +72,8 @@ const initialState : initState = {
     stop_days : 1,
     loan_percent : 5,
     news_info_list : JSON.stringify({}),
-    add_land_info : JSON.stringify({})
+    add_land_info : JSON.stringify({}),
+    sale_incentive : 0
 }
 
 // const initialState = {
@@ -139,7 +141,9 @@ export default handleActions<initState> ({
             // 뉴스 정보
             news_info_list : data.payload.news_info_list !== undefined? data.payload.news_info_list : state.news_info_list,
             // 땅 & 건설 추가 비용 정보
-            add_land_info : data.payload.add_land_info !== undefined ? data.payload.add_land_info : state.add_land_info
+            add_land_info : data.payload.add_land_info !== undefined ? data.payload.add_land_info : state.add_land_info,
+            // 매각 수수료
+            sale_incentive : data.payload.sale_incentive !== undefined ? data.payload.sale_incentive : state.sale_incentive
         }
     },
 

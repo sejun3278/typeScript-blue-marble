@@ -606,6 +606,8 @@ body #notice_divs {
   font-family: SDSamliphopangche_Outline;
   color: orange;
   font-size: 22px;
+  position: absolute;
+  margin-top: 55px;
 }
 #game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div {
   min-height: 103px;
@@ -643,6 +645,7 @@ body #notice_divs {
   text-align: center;
   margin-top: -60px;
   background-color: white;
+  z-index: 1000;
 }
 #game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_bank_info h3 {
   margin: 10px 0px !important;
@@ -1331,7 +1334,7 @@ body #notice_divs {
   grid-template-columns: 170px auto;
 }
 
-#game_play_other_div {
+#game_play_other_div, #game_setting_status_divs {
   position: absolute;
   margin-left: 75.2%;
   margin-top: 130px;
@@ -1339,16 +1342,16 @@ body #notice_divs {
   width: 333px;
   height: 460px;
 }
-#game_play_other_div #news_div {
+#game_play_other_div #news_div, #game_setting_status_divs #news_div {
   border-bottom: solid 2px #ababab;
 }
-#game_play_other_div #news_div #news_title_div {
+#game_play_other_div #news_div #news_title_div, #game_setting_status_divs #news_div #news_title_div {
   padding: 5px 0px;
   border-bottom: dotted 1px black;
   text-align: center;
   background-color: #d6b0b1;
 }
-#game_play_other_div #news_div #news_title_div #news_title {
+#game_play_other_div #news_div #news_title_div #news_title, #game_setting_status_divs #news_div #news_title_div #news_title {
   padding-right: 25px;
   display: inline-block;
   margin: 0px;
@@ -1356,33 +1359,33 @@ body #notice_divs {
   font-family: Recipekorea;
   color: white;
 }
-#game_play_other_div #news_div #news_title_div img {
+#game_play_other_div #news_div #news_title_div img, #game_setting_status_divs #news_div #news_title_div img {
   position: absolute;
   width: 25px;
   margin: 3px -10px;
   cursor: pointer;
 }
-#game_play_other_div #news_div #news_round_divs {
+#game_play_other_div #news_div #news_round_divs, #game_setting_status_divs #news_div #news_round_divs {
   padding: 5px;
   text-align: center;
   border-bottom: solid 1px black;
 }
-#game_play_other_div #news_div #news_round_divs input {
+#game_play_other_div #news_div #news_round_divs input, #game_setting_status_divs #news_div #news_round_divs input {
   width: 30px;
   text-align: center;
   border: solid 1px #ababab;
 }
-#game_play_other_div #news_div #news_round_divs b {
+#game_play_other_div #news_div #news_round_divs b, #game_setting_status_divs #news_div #news_round_divs b {
   font-size: 12px;
   font-family: Recipekorea;
 }
-#game_play_other_div #news_div #news_round_divs img {
+#game_play_other_div #news_div #news_round_divs img, #game_setting_status_divs #news_div #news_round_divs img {
   width: 15px;
   position: absolute;
   margin-top: 5.5px;
   cursor: pointer;
 }
-#game_play_other_div #news_div #news_state_divs .news_state_divs {
+#game_play_other_div #news_div #news_state_divs .news_state_divs, #game_setting_status_divs #news_div #news_state_divs .news_state_divs {
   height: 20px;
   line-height: 25px;
   background-color: #6e7582;
@@ -1393,7 +1396,7 @@ body #notice_divs {
   font-size: 13px;
   font-family: Recipekorea;
 }
-#game_play_other_div #news_div #new_event_off_div {
+#game_play_other_div #news_div #new_event_off_div, #game_setting_status_divs #news_div #new_event_off_div {
   width: 333px;
   border: solid 2px black;
   position: absolute;
@@ -1408,30 +1411,30 @@ body #notice_divs {
   text-align: center;
   line-height: 225px;
 }
-#game_play_other_div #game_log_div {
+#game_play_other_div #game_log_div, #game_setting_status_divs #game_log_div {
   height: 306px;
 }
-#game_play_other_div #game_log_div #game_log_list_div {
+#game_play_other_div #game_log_div #game_log_list_div, #game_setting_status_divs #game_log_div #game_log_list_div {
   overflow: auto;
   height: 275px;
   display: flex;
   flex-direction: column-reverse;
 }
-#game_play_other_div #game_log_div #game_player_chat_div {
+#game_play_other_div #game_log_div #game_player_chat_div, #game_setting_status_divs #game_log_div #game_player_chat_div {
   border-top: solid 2px #ababab;
 }
-#game_play_other_div #game_log_div #game_player_chat_div #game_chat_grid_div {
+#game_play_other_div #game_log_div #game_player_chat_div #game_chat_grid_div, #game_setting_status_divs #game_log_div #game_player_chat_div #game_chat_grid_div {
   display: grid;
   grid-template-columns: 280px auto;
 }
-#game_play_other_div #game_log_div #game_player_chat_div #game_chat_grid_div #game_chat {
+#game_play_other_div #game_log_div #game_player_chat_div #game_chat_grid_div #game_chat, #game_setting_status_divs #game_log_div #game_player_chat_div #game_chat_grid_div #game_chat {
   width: 95%;
   padding: 4.5px;
   border: solid 2px #ababab;
   padding-left: 8px;
   color: #ababab;
 }
-#game_play_other_div #game_log_div #game_player_chat_div #game_chat_grid_div #game_chat_submit {
+#game_play_other_div #game_log_div #game_player_chat_div #game_chat_grid_div #game_chat_submit, #game_setting_status_divs #game_log_div #game_player_chat_div #game_chat_grid_div #game_chat_submit {
   width: 49px;
   height: 29px;
   line-height: 27px;
@@ -1441,6 +1444,48 @@ body #notice_divs {
   border: solid 2px #ababab;
   font-family: Recipekorea;
   margin-left: 2px;
+}
+
+#game_setting_status_divs {
+  margin-left: 0% !important;
+  width: 335px;
+}
+#game_setting_status_divs h4 {
+  margin: 10px 0px;
+  text-align: center;
+  font-family: SDSamliphopangche_Outline;
+  color: #ababab;
+  border-bottom: solid 1px #ababab;
+  padding-bottom: 10px;
+  margin-bottom: 0px !important;
+}
+#game_setting_status_divs #game_setting_status_list {
+  height: 390px;
+  font-size: 13px;
+}
+#game_setting_status_divs #game_setting_status_list .game_setting_status_divs {
+  height: 30px;
+  line-height: 30px;
+  padding: 3px 10px;
+  border-bottom: dotted 1px #ababab;
+  display: grid;
+  grid-template-columns: 200px auto;
+}
+#game_setting_status_divs #game_play_time_div {
+  border-top: solid 1px #ababab;
+  display: grid;
+  grid-template-columns: 120px auto;
+  padding: 5px;
+  font-size: 13px;
+  font-family: Y_Spotlight;
+  line-height: 1.7;
+}
+#game_setting_status_divs #game_play_time_div #game_play_time_title {
+  border-right: solid 1px #ababab;
+  padding-left: 10px;
+}
+#game_setting_status_divs #game_play_time_div #game_play_contents_div {
+  padding-left: 25px;
 }
 
 .log_divs {
@@ -1468,6 +1513,14 @@ body #notice_divs {
 
 #player_settle_divs {
   min-height: 300px;
+}
+#player_settle_divs #player_settle_timer_div {
+  border: solid 1px black;
+  height: 10px;
+  margin-top: -6px;
+  background-color: #ababab;
+  width: 100%;
+  margin-bottom: 10px;
 }
 #player_settle_divs h3 {
   margin: 5px 0px;
@@ -1520,6 +1573,14 @@ body #notice_divs {
 }
 #player_settle_divs #player_settle_grid_div #player_settle_bank_money_state #player_settle_bank_bill_div #player_settle_bank_bill_result_div div {
   padding: 0px;
+}
+#player_settle_divs #player_settle_grid_div #player_settle_estate_money_state #player_sale_incentive_notice_div {
+  position: absolute;
+  font-size: 12px;
+  margin-top: -15px;
+  width: 51%;
+  text-align: right;
+  color: #ababab;
 }
 #player_settle_divs #player_settle_grid_div #player_settle_estate_money_state #player_settle_estate_list_div {
   border: solid 1px #ababab;

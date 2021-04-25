@@ -875,21 +875,21 @@
             {
                 "level" : 1,
                 "name" : "주택",
-                "price" : 35,
+                "price" : 40,
                 "build" : false
             },
 
             {
                 "level" : 2,
                 "name" : "아파트",
-                "price" : 80,
+                "price" : 90,
                 "build" : false
             },
 
             {
                 "level" : 3,
                 "name" : "호텔",
-                "price" : 120,
+                "price" : 130,
                 "build" : false
             },
 
@@ -1051,28 +1051,28 @@
             {
                 "level" : 1,
                 "name" : "주택",
-                "price" : 45,
+                "price" : 35,
                 "build" : false
             },
 
             {
                 "level" : 2,
                 "name" : "아파트",
-                "price" : 100,
+                "price" : 60,
                 "build" : false
             },
 
             {
                 "level" : 3,
                 "name" : "호텔",
-                "price" : 160,
+                "price" : 100,
                 "build" : false
             },
 
             {
                 "level" : 4,
                 "name" : "불국사",
-                "price" : 240,
+                "price" : 200,
                 "build" : false,
                 "info" : "<div> 경상북도 경주시 불국로 385 (진현동) <br /> 토함산 기슭에 위치한 신라 연간을 기원으로 하는 사찰. <br /> <br />  1995년 12월에 토함산 중턱의 암자 석굴암과 공동으로 유네스코 세계문화유산으로 지정되었다. <br /> <br /> 대체적으로 수학여행 관광지로 <br /> 유명하기도 하다. </div>"
             }

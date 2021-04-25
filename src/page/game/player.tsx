@@ -107,6 +107,10 @@ class Player extends React.Component<AllProps> {
             contents_class += ' aRight';
 
             my_turn_style['textAlign'] = 'right';
+
+            if(info.number === 2 || info.number === 4) {
+              my_turn_style['marginLeft'] = '253px';
+            }
         }
 
     } else {

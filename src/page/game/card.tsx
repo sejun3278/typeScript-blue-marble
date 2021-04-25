@@ -353,13 +353,18 @@ class Card extends React.Component<AllProps> {
             } else if(city_info.number === 14) {
                 // 카지노
                 tap_info = 3;
-                turn_end['turn_end_able'] = false;
-
                 gameActions.event_info({ 'casino_start' : true })
-                _timer(false)
 
-                _addLog(`<div class='game_alert'> 카지노에 도착했습니다. <br /> 배팅을 시작해주세요. </div>`);
+                if(player_list[Number(turn) - 1].money > 0) {
+                    turn_end['turn_end_able'] = false;
 
+                    _timer(false)
+
+                    _addLog(`<div class='game_alert'> 카지노에 도착했습니다. <br /> 배팅을 시작해주세요. </div>`);
+                
+                } else {
+                    _addLog(`<div class='game_alert'> 현금이 없어 카지노를 이용할 수 없습니다. </div>`);
+                }
 
             } else if(city_info.number === 20) {
                 // 김포공항
@@ -425,7 +430,7 @@ class Card extends React.Component<AllProps> {
       const { _toggleCardEvent } = this;
 
       const toggle_able = card_select_able === true && round_start === true && turn === 1 && time_over === false;
-      console.log(card_select_able)
+
     return(
       <div id='card_select_div' className='aLeft'>
 

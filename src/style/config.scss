@@ -707,6 +707,8 @@ body {
                         font-family: $SDSamliphopangche_Outline;
                         color: orange;
                         font-size: 22px;
+                        position: absolute;
+                        margin-top: 55px;
                     }
                 }
             }
@@ -753,6 +755,7 @@ body {
                         text-align: center;
                         margin-top: -60px;
                         background-color: white;
+                        z-index: 1000;
                         // padding-bottom: 20px;
                         
                         h3 { 
@@ -1640,7 +1643,7 @@ body {
     }
 }
 
-#game_play_other_div {
+#game_play_other_div, #game_setting_status_divs {
     position: absolute;
     margin-left: 75.2%;
     margin-top: 130px;
@@ -1775,6 +1778,54 @@ body {
 
 }
 
+#game_setting_status_divs {
+    margin-left: 0% !important;
+    width: 335px;
+
+    h4 {
+        margin: 10px 0px;
+        text-align: center;
+        font-family: $SDSamliphopangche_Outline;
+        color: #ababab;
+        border-bottom: solid 1px #ababab;
+        padding-bottom: 10px;
+        margin-bottom: 0px !important;
+    }
+
+    #game_setting_status_list {
+        height: 390px;
+        font-size: 13px;
+
+        .game_setting_status_divs {
+            height: 30px;
+            line-height: 30px;
+            padding: 3px 10px;
+            border-bottom: dotted 1px #ababab;
+            display: grid;
+            grid-template-columns: 200px auto;
+        }
+    }
+
+    #game_play_time_div {
+        border-top: solid 1px #ababab;
+        display: grid;
+        grid-template-columns: 120px auto;
+        padding: 5px;
+        font-size: 13px;
+        font-family: $Y_Spotlight;
+        line-height: 1.7;
+
+        #game_play_time_title {
+            border-right: solid 1px #ababab;
+            padding-left: 10px;
+        }
+
+        #game_play_contents_div {
+            padding-left: 25px;
+        }
+    }
+}
+
 .log_divs {
     border-top: dotted 1px #ababab;
     padding: 4px 5px;
@@ -1804,6 +1855,15 @@ body {
 
 #player_settle_divs {
     min-height: 300px;
+
+    #player_settle_timer_div {
+        border: solid 1px black;
+        height: 10px;
+        margin-top: -6px;
+        background-color: #ababab;
+        width: 100%;
+        margin-bottom: 10px;
+    }
 
     h3 {
         margin: 5px 0px;
@@ -1874,6 +1934,16 @@ body {
         }
 
         #player_settle_estate_money_state {
+
+            #player_sale_incentive_notice_div {
+                position: absolute;
+                font-size: 12px;
+                margin-top: -15px;
+                width: 51%;
+                text-align: right;
+                color: #ababab;
+            }
+
             #player_settle_estate_list_div {
                 border: solid 1px #ababab;
                 height: 200px;

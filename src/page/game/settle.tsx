@@ -1,4 +1,5 @@
 import * as React from 'react';
+import $ from 'jquery';
 
 import { actionCreators as initActions } from '../../Store/modules/init';
 import { actionCreators as gameActions } from '../../Store/modules/game';
@@ -25,31 +26,75 @@ export interface AllProps {
   _timerOn : Function,
   _turnEnd : Function,
   settle_type : string | null,
-  bank_info : string
+  bank_info : string,
+  round_timer : number,
+  _flash : Function,
+  sale_incentive : number
 };
 
+let settle_timer : any = false;
 class Settle extends React.Component<AllProps> {
+
+  componentDidMount() {
+    const { round_timer, _turnEnd, gameActions, _flash } = this.props;
+
+    let second = 1;
+    if(round_timer > 0) {
+      const timer = round_timer === 60 ? 1.65 : Number(String(100 / round_timer).slice(0, 4));
+      const target : any = document.getElementById('player_settle_timer_div');
+
+      target.style.width = '100%';
+
+      $(target).stop().animate({
+        'width' : 0
+      }, round_timer * 1000);
+
+      settle_timer = window.setInterval( () => {
+        if(second >= round_timer) {
+          clearInterval(settle_timer);
+
+          gameActions.settle_player_money({ 'settle_modal' : false, 'settle_type' : null, 'settle_bill' : JSON.stringify({}), 'settle_extra_money' : 0 })
+          _turnEnd();
+
+          return;
+        }
+
+        const width : number = Number(String(100 - (timer * second)).slice(0, 4));
+
+        if(round_timer - second <= 10) {
+          _flash('#player_settle_timer_div', false, 1.4, true, 40, null, 1);
+        }
+
+        second += 1;
+      }, 1000)
+    }
+  }
 
   // 소유지 매각하기
   _saleSettle = (_map_info : any) => {
-    const { _splitMoneyUnit, _addLog, settle_extra_money, turn, initActions, gameActions, _turnEnd, settle_type } = this.props;
+    const { _splitMoneyUnit, _addLog, settle_extra_money, turn, initActions, gameActions, _turnEnd, settle_type, _flash, sale_incentive } = this.props;
     const map_info = JSON.parse(this.props.map_info);
     const player_list = JSON.parse(this.props.player_list);
 
+    // 수수료가 적용된 가격
+    const incentive = Math.floor(_map_info.pass * sale_incentive / 100);
+    const map_price = _map_info.pass - incentive;
+
     let extra_money = settle_extra_money;
-    if(window.confirm(_map_info.name + '에 대한 소유권을 포기하고 매각하시겠습니까? \n매각시 [ ' + _splitMoneyUnit(_map_info.pass) + '] 을 회수합니다.')) {
+    if(window.confirm(_map_info.name + '에 대한 소유권을 포기하고 매각하시겠습니까? \n매각시 [ ' + _splitMoneyUnit(map_price) + '] 을 회수합니다.')) {
       _addLog(`<div class='game_alert_2'> <b class='color_player_${_map_info.host}'>${_map_info.host} 플레이어</b>가 <b class='orange'>${_map_info.name}</b>에 대한 소유권을 포기했습니다. </div>`)
 
       map_info[_map_info.number].host = null;
       map_info[_map_info.number].price = map_info[_map_info.number].pass;
 
-      if(_map_info.pass - extra_money > 0) {
+      _flash('#extra_debt', false, 1.4, true, 40, null, 1);
+      if(map_price - extra_money > 0) {
         // 매각 후 돈이 남을 경우
-        player_list[Number(turn) - 1].money = _map_info.pass - extra_money;
+        player_list[Number(turn) - 1].money = map_price - extra_money;
         extra_money = 0;
 
       } else {
-        extra_money = extra_money - _map_info.pass;
+        extra_money = extra_money - map_price;
       }
 
       // 소유권 포기한 맵 없애기
@@ -97,9 +142,26 @@ class Settle extends React.Component<AllProps> {
     }
   }
 
+  _getPlayerEstatePrice = (maps : any) => {
+    // 수수료가 적용된 총 자산 구하기
+    let result = 0;
+
+    const { sale_incentive } = this.props;
+    const map_info = JSON.parse(this.props.map_info);
+
+    maps.forEach( (el : any) => {
+      const map = map_info[el];
+
+      const incentive = Math.floor(map.pass * sale_incentive / 100);
+      result += map.pass - incentive;
+    })
+
+    return result;
+  }
+
   render() {
-    const { settle_extra_money, _splitMoneyUnit, turn } = this.props;
-    const { _saleSettle } = this;
+    const { settle_extra_money, _splitMoneyUnit, turn, round_timer, sale_incentive } = this.props;
+    const { _saleSettle, _getPlayerEstatePrice } = this;
 
     const settle_bill = JSON.parse(this.props.settle_bill);
     const player_list = JSON.parse(this.props.player_list);
@@ -111,7 +173,13 @@ class Settle extends React.Component<AllProps> {
 
     return(
       <div id='player_settle_divs'>
-        <h3>　빚 청산까지 <b className='red'> {_splitMoneyUnit(settle_extra_money)} </b> 남았습니다. </h3>
+        <h3>　빚 청산까지 <b className='red' id='extra_debt'> {_splitMoneyUnit(settle_extra_money)} </b> 남았습니다. </h3>
+
+        {round_timer > 0
+        ?
+          <div id='player_settle_timer_div' />
+
+        : undefined}
 
         <div id='player_settle_grid_div'>
           <div id='player_settle_bank_money_state'
@@ -119,6 +187,7 @@ class Settle extends React.Component<AllProps> {
           >
             <h4> 은행 정산 영수증 </h4>
 
+          { Object.keys(settle_bill).length > 0 ?
             <div id='player_settle_bank_bill_div'>
               <div className='player_settle_bank_grid_div' id='player_settle_bank_bill_loan_div'>
                 <div> 정산 목표　|　 </div>
@@ -154,21 +223,36 @@ class Settle extends React.Component<AllProps> {
               </div>
             </div>
 
+            : undefined}
+
           </div>
 
           <div id='player_settle_estate_money_state'>
             <h4 className='aCenter'> 소유 토지 매각하기 </h4>
 
+            {sale_incentive > 0
+              ? <div id='player_sale_incentive_notice_div'>
+                  <b> * 매각 수수료　|　{sale_incentive} % </b>
+                </div>
+
+              : undefined
+            }
+
             <div id='player_settle_estate_list_div'>
               {my_map_list.length > 0
                 ? <div id='player_sale_estate_div'>
                     <div id='player_all_estate_money_div'>
-                      부동산 자산　|　{_splitMoneyUnit(my_info.estate_money)}
+                      부동산 자산　|　{
+                        _splitMoneyUnit(_getPlayerEstatePrice(my_map_list))
+                        // _splitMoneyUnit(my_info.estate_money)
+                      }
                     </div>
 
                     <div id='player_settle_estate_list'>
                       {my_map_list.map( (el : any, key : number) => {
                         const map = map_info[el];
+
+                        const incentive = Math.floor(map.pass * sale_incentive / 100);
 
                         let map_name = map.name;
                         if(map_name === '경기 광명') {
@@ -226,7 +310,7 @@ class Settle extends React.Component<AllProps> {
                             </div>
                             
                             <div className='player_settle_price_and_sale_div'>
-                              <b> {_splitMoneyUnit(map.pass)} </b>
+                              <b> {_splitMoneyUnit(map.pass - incentive)} </b>
                               <input type='button' value='매각' className='player_settle_sale_estate' 
                                      onClick={() => _saleSettle(map)}
                               />
@@ -266,7 +350,10 @@ export default connect(
     _timerOn : functions._timerOn,
     _turnEnd : functions._turnEnd,
     settle_type : game.settle_type,
-    bank_info : game.bank_info
+    bank_info : game.bank_info,
+    round_timer: init.round_timer,
+    _flash : functions._flash,
+    sale_incentive : init.sale_incentive
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

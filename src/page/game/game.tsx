@@ -57,6 +57,12 @@ export interface AllProps {
   add_land_info : string,
   game_log : string,
   settle_extra_money: number,
+  play_time: number,
+  round_start : boolean,
+  start_price : number,
+  round_limit : number,
+  pass_price : number,
+  sale_incentive : number
 };
 
 const flash_info : any = {
@@ -81,6 +87,7 @@ let game_start_button = false;
 let timer_play : any = false;
 
 let overlap_news_number : any = {};
+let play_time_count : any = false;
 
 class Game extends React.Component<AllProps> {
 
@@ -250,6 +257,8 @@ class Game extends React.Component<AllProps> {
             gameActions.set_game_notice_ment({ "main_ment" : "<div> <b class='color_player_1'> 플레이어 1 (나) </b> 부터 시작합니다. </div>" })
   
             return window.setTimeout( () => {
+              this._setGamePlayTimeCount(true);
+
               return this._roundStart('turn');
   
             }, 1000);
@@ -362,7 +371,11 @@ class Game extends React.Component<AllProps> {
         const timer_el : any = document.getElementById('timer_slide_div');
 
         timer_el.style.opacity = 1.4;
-        timer_el.style.width = String(6 * round_timer) + 'px';
+        // timer_el.style.width = String(6 * round_timer) + 'px';
+
+        $(timer_el).animate({
+          'width' : String(6 * round_timer) + 'px'
+        }, 500)
 
         gameActions.set_timer({ 'timer' : String(round_timer) })
 
@@ -377,9 +390,13 @@ class Game extends React.Component<AllProps> {
 
   // 타이머 가동하기
   _timerOn = () => {
-    const { round_timer } = this.props;
+    const { round_timer, timer } = this.props;
 
     if(round_timer !== 0) {
+        $('#timer_slide_div').animate({
+          'width' : 0
+        }, (Number(timer) * 1000))
+
       timer_play = window.setInterval( () => {
         return this._timer(true);
       }, 1000)
@@ -395,13 +412,21 @@ class Game extends React.Component<AllProps> {
         gameActions.set_timer({ 'timer' : String(Number(timer) - 1) })
 
         if(Number(timer) === 11) {
-          this._addLog(`<div class='game_alert_2 red'> 10 초 남았습니다. </div>`)
+          this._addLog(`<div class='game_alert_2 red'> 10 초 남았습니다. </div>`);
+        }
+
+        if(Number(timer) <= 11) {
+          _flash('#timer_slide_div', false, 1.4, true, 25, null, 1);
         }
 
         _flash('#timer_notice_div', false, 1.4, true, 25, null, 1);
 
-        const timer_el : any = document.getElementById('timer_slide_div');
-        timer_el.style.width = String(6 * (Number(timer) - 1)) + 'px';
+        // const timer_el : any = document.getElementById('timer_slide_div');
+
+        // $(timer_el).animate({
+        //   'width' : String(6 * Number(timer) - 1) + 'px'
+        // }, 800)
+        // timer_el.style.width = String(6 * (Number(timer) - 1)) + 'px';
 
         if((Number(timer) - 1) <= 0) {
           // 타임 아웃
@@ -622,6 +647,10 @@ class Game extends React.Component<AllProps> {
     _flash('#player_main_character_' + turn, true, 0, false, 30);
 
     // 턴 종료
+    $('#timer_slide_div').stop().animate({
+      'width' : 0
+    }, 0)
+
     window.clearInterval(timer_play);
 
     gameActions.player_bank_info({ 'player_bank_info_alert' : false })
@@ -901,8 +930,10 @@ class Game extends React.Component<AllProps> {
     } else if(type === 'option') {
       const _recursion : Function = () => {
         const option_length : number = (Object.keys(news_info['option']).length + 1);
+        console.log(option_length)
         const random : number = Math.trunc(Math.random() * (option_length - 1) + 1);
         // const random = 5;
+        // const random : number = Math.trunc(Math.random() * (6 - 9) + 9);
 
         // 옵션 타입의 뉴스를 가져온다.
         const option_news_result = news_info['option'][random];
@@ -958,9 +989,9 @@ class Game extends React.Component<AllProps> {
           this._newsApply(option_news_result, type, map_list);
         }
 
-        const origin_str = origin_value + ' ' +option_news_result['unit'];
+        const origin_str = origin_value + ' ' + option_news_result['unit'];
         const result_str = result_value + ' ' + option_news_result['unit'];
-        if(random >= 1 && random < 5) {
+        if(random >= 1 && random < 5 || random >= 7 && random < 9) {
           option_news_result['summary'] = `　( ${origin_str}　=>　${result_str} )`;
 
         } else if(random >= 5 && random < 7) {
@@ -1163,13 +1194,69 @@ class Game extends React.Component<AllProps> {
     return trans_money;
   }
 
+  // 게임 플레이 타임 카운트
+  _setGamePlayTimeCount = (on : boolean) => {
+    const { gameActions } = this.props;
+    let play_time = this.props.play_time;
+
+    if(on === true) {
+      play_time_count = window.setInterval( () => {
+        play_time = play_time + 1;
+
+        gameActions.game_play_time({ 'play_time' : play_time });
+      }, 1000)
+
+    } else if(on === false) {
+      window.clearInterval(play_time_count);
+    }
+  }
+
+  // 시간 변환하기
+  _transTimer = (_timer : number) => {
+    let timer : string = '';
+
+    // 시간 (hour) 구하기
+    // if(_timer / 3600 > 0) {
+      const hour : number = Math.floor(_timer / 3600);
+
+      _timer -= (3600 * hour);
+      timer += hour + ' 시간　';
+    // }
+
+    // 분 (minute) 구하기
+    // if(_timer / 60 > 0) {
+      const minute : number = Math.floor(_timer / 60);
+
+      _timer -= (60 * minute);
+      timer += minute + ' 분　';
+    // }
+
+    timer += _timer + ' 초';
+
+    return timer;
+  }
+
   render() {
     const player_list = JSON.parse(this.props.player_list);
-    const { _commaMoney, _realGameStart } = this;
-    const { playing, settle_modal } = this.props;
+    const { _commaMoney, _realGameStart, _transTimer } = this;
+    const { 
+      playing, settle_modal, play_time, round_start
+    } = this.props;
+
+    const props : any = this.props;
 
     const top_player_list = player_list.slice(0, 2);
     const bottom_player_list = player_list.slice(2, 4);
+
+    const setting_list : any = [
+      { "name" : "시작 자금", "value" : "start_price", "unit" : "만원" },
+      { "name" : "라운드 시간", "value" : "round_timer", "unit" : "초"  },
+      { "name" : "라운드 제한", "value" : "round_limit", "unit" : "라운드" },
+      { "name" : "통행료 배율", "value" : "pass_price", "unit" : "배" },
+      { "name" : "통행 카드 갯수", "value" : "card_limit", "unit" : "장" },
+      { "name" : "통행 카드 중복", "value" : "overlap_card", "info" : { "true" : "ON", "false" : "OFF" } },
+      { "name" : "이벤트 영향", "value" : "game_event", "info" : { "true" : "ON", "false" : "OFF" } }
+    ]
 
     return(
       <div id='game_div'>
@@ -1204,6 +1291,32 @@ class Game extends React.Component<AllProps> {
           />
 
           <div id='game_main_contents_div'>
+            <div id='game_setting_status_divs'>
+              <h4> 게임 설정 </h4>
+
+              <div id='game_setting_status_list'>
+                {setting_list.map( (el : any, key : number) => {
+                  let contents = props[el.value] + ' ' + el.unit;
+
+                  if(el.info !== undefined) {
+                    contents = el.info[String(props[el.value])];
+                  }
+
+                  return(
+                    <div key={key} className='game_setting_status_divs gray'>
+                      <div className='game_setting_status_name_div'> {el.name} </div>
+                      <div className='aRight'> {contents} </div>
+                    </div>
+                  )
+                })}
+              </div>
+
+              <div id='game_play_time_div' style={round_start === false ? { 'color' : '#ababab' } : undefined}>
+                <div id='game_play_time_title'> Play Time </div>
+                <div id='game_play_contents_div'> {_transTimer(play_time)} </div>
+              </div>
+            </div>
+            
             <div id='game_main_map_div'>
                 {playing === false 
                 ? <div id='game_main_start_ready_div'>
@@ -1341,7 +1454,13 @@ export default connect(
     stop_days : init.stop_days,
     add_land_info : init.add_land_info,
     game_log : game.game_log,
-    settle_extra_money : game.settle_extra_money
+    settle_extra_money : game.settle_extra_money,
+    play_time : game.play_time,
+    round_start : game.round_start,
+    start_price : init.start_price,
+    round_limit : init.round_limit,
+    pass_price : init.pass_price,
+    sale_incentive : init.sale_incentive
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),
