@@ -84,7 +84,7 @@ class Loading extends React.Component<AllProps> {
           // 대출금
           bank_info[i + 1]['loan'] = 0;
           if(i === 0) {
-            // bank_info[i + 1]['loan'] = 5
+            bank_info[i + 1]['loan'] = 5
           }
 
           // 대출 이자금
@@ -100,7 +100,7 @@ class Loading extends React.Component<AllProps> {
           bank_info[i + 1]['repay_day'] = 0;
 
           if(i === 0) {
-            // bank_info[i + 1]['repay_day'] = 1;
+            bank_info[i + 1]['repay_day'] = 1;
           }
 
         }
@@ -114,10 +114,17 @@ class Loading extends React.Component<AllProps> {
 
       // 턴 제한 여부 설정하기
       const stop_info = JSON.parse(this.props.stop_info);
+
+      const settle_state : any = {};
       for(let i = 1; i <= able_player; i++) {
         stop_info[i] = 0;
+        settle_state[i] = false;
       }
       gameActions.event_info({ 'stop_info' : JSON.stringify(stop_info), 'bank_info' : JSON.stringify(bank_info) })
+
+      gameActions.settle_player_money({ 
+        'settle_state' : JSON.stringify(settle_state)
+      })
 
       // 맵 저장하기
       initActions.set_setting_state({ 

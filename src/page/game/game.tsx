@@ -62,7 +62,9 @@ export interface AllProps {
   start_price : number,
   round_limit : number,
   pass_price : number,
-  sale_incentive : number
+  sale_incentive : number,
+  save_money_index : string,
+  settle_state: string
 };
 
 const flash_info : any = {
@@ -112,7 +114,8 @@ class Game extends React.Component<AllProps> {
       '_minusPlayerMoney' : this._minusPlayerMoney,
       '_checkEstatePlayerMoney' : this._checkEstatePlayerMoney,
       '_splitMoneyUnit' : this._splitMoneyUnit,
-      '_turnEnd' : this._turnEnd
+      '_turnEnd' : this._turnEnd,
+      '_getMyRating' : this._getMyRating
     })
   }
 
@@ -276,6 +279,7 @@ class Game extends React.Component<AllProps> {
     const stop_info = JSON.parse(this.props.stop_info)
     const player_list = JSON.parse(this.props.player_list);
     const map_info = JSON.parse(this.props.map_info);
+    const settle_state = JSON.parse(this.props.settle_state)
 
     let ment : string = '';
     if(type === 'round') {
@@ -302,6 +306,12 @@ class Game extends React.Component<AllProps> {
     } else if(type === 'turn') {
 
       gameActions.round_start({ 'time_over' : false });
+
+      const settle_check = settle_state[turn];
+      if(settle_check === true) {
+        // 파산일 경우 바로 끝내기
+        return this._turnEnd();
+      }
 
       if(stop_info[turn] > 0) {
         // 무인도에 있을 경우
@@ -341,6 +351,10 @@ class Game extends React.Component<AllProps> {
         this._playingComputerAction();
       }
 
+      // 신용등급 업데이트
+      const bank_info = this._getMyRating(turn, JSON.parse(this.props.bank_info));
+      gameActions.event_info({ 'bank_info' : JSON.stringify(bank_info) });
+
       this._addLog(`<div class='game_alert'> <b class='color_player_${turn}'> ${turn} 플레이어 </b> 의 턴입니다.  </div>`);
 
       if(settle_extra_money > 0) {
@@ -364,19 +378,22 @@ class Game extends React.Component<AllProps> {
       save_card_info['card_notice_ment'] = "첫번째 통행 카드를 뽑아주세요.";
       gameActions.select_card_info(save_card_info);
 
-      // this._infiniteFlash('player_main_character_' + turn, 60, true);
+      this._infiniteFlash('player_main_character_' + turn, 60, true, null);
 
       // 타이머 지정하기
       if(round_timer !== 0) {
         const timer_el : any = document.getElementById('timer_slide_div');
 
         timer_el.style.opacity = 1.4;
-        // timer_el.style.width = String(6 * round_timer) + 'px';
 
-        $(timer_el).animate({
-          'width' : String(6 * round_timer) + 'px'
-        }, 500)
+        if(turn === 1) {
+          $(timer_el).animate({
+            'width' : String(6 * round_timer) + 'px'
+          }, 500)
 
+        } else {
+          timer_el.style.width = String(6 * round_timer) + 'px';
+        }
         gameActions.set_timer({ 'timer' : String(round_timer) })
 
         // 타이머 가동하기
@@ -446,6 +463,10 @@ class Game extends React.Component<AllProps> {
   _nextGames = (turn : number) => {
     const { gameActions, able_player, _flash, overlap_card, _setCardDeck, round } = this.props;
 
+    $('#timer_slide_div').stop().animate({
+      'width' : 0
+    }, 0);
+
     if(turn <= able_player) {
       gameActions.round_start({ 'turn' : turn });
 
@@ -481,13 +502,18 @@ class Game extends React.Component<AllProps> {
     }
   }
 
-  _setPlayerBank = () => {
-    const { gameActions, turn } = this.props;
-    const bank_info = JSON.parse(this.props.bank_info);
+  _setPlayerBank = async () => {
+    const { gameActions, turn, round } = this.props;
+    const save_money_index = JSON.parse(this.props.save_money_index);
+    let bank_info = JSON.parse(this.props.bank_info);
+
+    save_money_index[round] = {};
 
     let player = 0;
     for(let key in bank_info) {
       player += 1;
+
+      save_money_index[round][player] = bank_info[key].save_money;
 
       // 예금 정산하기
       if(bank_info[key].round_incentive) {
@@ -532,24 +558,20 @@ class Game extends React.Component<AllProps> {
             // 게임 일시정지
             this._timer(false);
             gameActions.select_card_info({ 'card_select_able' : false })
-            
           }
         }
       }
-
-      // 신용등급 판단하기
-      bank_info[key].my_rating = this._getMyRating(turn, bank_info[key].my_rating, bank_info);
     }
 
-    return gameActions.event_info({ 'bank_info' : JSON.stringify(bank_info) });
+    return gameActions.event_info({ 'bank_info' : JSON.stringify(bank_info), 'save_money_index' : JSON.stringify(save_money_index) });
   }
 
   // 신용등급 판단하기
-  _getMyRating = (player : number, _rating : number, bank_info : any) => {
+  _getMyRating = (player : number, bank_info : any) => {
     const player_list = JSON.parse(this.props.player_list);
     const my_info = player_list[player - 1];
 
-    let my_rating = _rating;
+    let my_rating = 9;
 
     // 보유 도시 보기
     const my_city_length = my_info.maps.length;
@@ -577,17 +599,30 @@ class Game extends React.Component<AllProps> {
         } else if(my_city_length >= 20) {
             // 20개 이상 소유
             my_rating = my_rating - 6;
-
         }
     }
-    
+
     // 예금액 보기
-    const save_money : number = bank_info.save_money;
+    const save_money : number = bank_info[player].save_money;
+
     if(save_money > 0) {
-        if(save_money >= 100 && save_money < 200) {
-            my_rating = my_rating - 1;
-        } else if(save_money >= 200 && save_money < 300) {
-            my_rating = my_rating - 2;
+        if(save_money >= 100 && save_money < 300) {
+          my_rating = my_rating - 1;
+
+        } else if(save_money >= 300 && save_money < 500) {
+          my_rating = my_rating - 2;
+
+        } else if(save_money >= 500 && save_money < 1000) {
+          my_rating = my_rating - 3;
+
+        } else if(save_money >= 1000 && save_money < 2000) {
+          my_rating = my_rating - 4;
+
+        } else if(save_money >= 2000 && save_money < 3000) {
+          my_rating = my_rating - 5;
+
+        } else if(save_money >= 3000) {
+          my_rating = my_rating - 6;
         }
     }
 
@@ -595,7 +630,21 @@ class Game extends React.Component<AllProps> {
         my_rating = 1;
     }
 
-    return my_rating;
+    // 대출 한도액
+    let limit_loan = 0;
+    if(my_rating !== 1) {
+      for(let i = 9; i >= my_rating; i--) {
+        limit_loan += 5;
+      }
+
+    } else if(my_rating === 1) {
+      limit_loan = 50;
+    }
+    
+    bank_info[player].bank_loan_limit = limit_loan;
+    bank_info[player].my_rating = my_rating;
+
+    return bank_info;
   }
 
   // 무한 플래쉬 효과
@@ -647,9 +696,9 @@ class Game extends React.Component<AllProps> {
     _flash('#player_main_character_' + turn, true, 0, false, 30);
 
     // 턴 종료
-    $('#timer_slide_div').stop().animate({
-      'width' : 0
-    }, 0)
+    // $('#timer_slide_div').stop().animate({
+    //   'width' : 0
+    // }, 0)
 
     window.clearInterval(timer_play);
 
@@ -782,8 +831,8 @@ class Game extends React.Component<AllProps> {
           gameActions.select_card_info({
             'card_notice_ment' : save_obj['all_card_num'] + ' 칸을 이동합니다.'
           })
-          // await _moveCharacter(save_obj['all_card_num'], null);
-          await _moveCharacter(1, null);
+          await _moveCharacter(save_obj['all_card_num'], null);
+          // await _moveCharacter(1, null);
   
           return initActions.set_setting_state({ 'card_deck' : JSON.stringify(card_deck) });
 
@@ -930,7 +979,6 @@ class Game extends React.Component<AllProps> {
     } else if(type === 'option') {
       const _recursion : Function = () => {
         const option_length : number = (Object.keys(news_info['option']).length + 1);
-        console.log(option_length)
         const random : number = Math.trunc(Math.random() * (option_length - 1) + 1);
         // const random = 5;
         // const random : number = Math.trunc(Math.random() * (6 - 9) + 9);
@@ -1236,6 +1284,33 @@ class Game extends React.Component<AllProps> {
     return timer;
   }
 
+  // 게임 오버 체크하기
+  _checkGameOver = () => {
+    const settle_state = JSON.parse(this.props.settle_state);
+
+    let winner : string | null = null;
+    let game_over = true;
+    let check : number = 0;
+
+    for(let key in settle_state) {
+      check += 1;
+
+      if(settle_state[key] === false) {
+        if(winner !== null) {
+          game_over = false;
+        }
+        winner = key;
+      }
+    }
+
+    const result = {
+      'check' : game_over,
+      'winner' : winner
+    }
+
+    return result;
+  }
+
   render() {
     const player_list = JSON.parse(this.props.player_list);
     const { _commaMoney, _realGameStart, _transTimer } = this;
@@ -1250,8 +1325,8 @@ class Game extends React.Component<AllProps> {
 
     const setting_list : any = [
       { "name" : "시작 자금", "value" : "start_price", "unit" : "만원" },
-      { "name" : "라운드 시간", "value" : "round_timer", "unit" : "초"  },
-      { "name" : "라운드 제한", "value" : "round_limit", "unit" : "라운드" },
+      { "name" : "라운드 시간", "value" : "round_timer", "unit" : "초", "info" : { "0" : "제한 없음" } },
+      { "name" : "라운드 제한", "value" : "round_limit", "unit" : "라운드", "info" : { "0" : "제한 없음" } },
       { "name" : "통행료 배율", "value" : "pass_price", "unit" : "배" },
       { "name" : "통행 카드 갯수", "value" : "card_limit", "unit" : "장" },
       { "name" : "통행 카드 중복", "value" : "overlap_card", "info" : { "true" : "ON", "false" : "OFF" } },
@@ -1299,7 +1374,9 @@ class Game extends React.Component<AllProps> {
                   let contents = props[el.value] + ' ' + el.unit;
 
                   if(el.info !== undefined) {
-                    contents = el.info[String(props[el.value])];
+                    if( el.info[String(props[el.value])]) {
+                      contents = el.info[String(props[el.value])];
+                    }
                   }
 
                   return(
@@ -1460,7 +1537,9 @@ export default connect(
     start_price : init.start_price,
     round_limit : init.round_limit,
     pass_price : init.pass_price,
-    sale_incentive : init.sale_incentive
+    sale_incentive : init.sale_incentive,
+    save_money_index : game.save_money_index,
+    settle_state : game.settle_state
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

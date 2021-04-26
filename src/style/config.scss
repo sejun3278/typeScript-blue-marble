@@ -713,7 +713,7 @@ body {
                 }
             }
 
-            .game_contents_player_info_div {
+            .game_contents_player_info_div, .settle_player_div {
                 min-height: 103px;
                 // border: solid 1px #ababab;
 
@@ -757,6 +757,15 @@ body {
                         background-color: white;
                         z-index: 1000;
                         // padding-bottom: 20px;
+
+                        p {
+                            text-align: right;
+                            font-size: 12px;
+                            margin: -2px 0px;
+                            padding-right: 10px;
+                            font-family: $Y_Spotlight;
+                            color: #51c4d3;
+                        }
                         
                         h3 { 
                             margin: 10px 0px !important;
@@ -914,15 +923,32 @@ body {
                         }
                     }
                 }
+
+                .settle_player_div {
+                    position: absolute;
+                    margin: -105px 0px;
+                    z-index: 1000;
+                    border: solid 2px #ababab;
+                    background-color: black;
+                    opacity: 0.5;
+                }
             }
 
-            .game_contents_player_info_margin {
-                // margin: 0px -2px;
-
+            .settle_player_icon {
+                h3 {
+                    position: absolute;
+                    color: $red !important;
+                    margin : 70px 0px 0px 15px;
+                    font-size: 30px;
+                    font-family: $recipe_korea;
+                    -webkit-transform: rotate(330deg);
+                }
             }
-            // .game_player_profile_divs {
-            //     display: $inline_block;
-            // }
+
+            .settle_character {
+                -webkit-transform: rotate(270deg);
+                opacity: 0.3;
+            }
         }
     }
 }
@@ -1567,6 +1593,7 @@ body {
                 .bank_loan_grid_div {
                     display: grid;
                     grid-template-columns: 70% auto;
+                    margin-left: -35px;
                 }
 
                 #bank_loan_order_div {

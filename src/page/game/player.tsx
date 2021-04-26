@@ -30,7 +30,8 @@ export interface AllProps {
   player_estate_info_alert : boolean,
   map_info : string,
   _splitMoneyUnit : Function,
-  pass_price : number
+  pass_price : number,
+  settle_state : string
 };
 
 class Player extends React.Component<AllProps> {
@@ -55,9 +56,11 @@ class Player extends React.Component<AllProps> {
       gameActions, float_style, _commaMoney, number, turn, round_start, round, player_bank_info_alert,
       bank_incentive_percent, loan_percent, player_estate_info_alert, _splitMoneyUnit, pass_price
     } = this.props;
+
     const { _setInfoAlert } = this;
     const info : any = JSON.parse(this.props.info);
     const map_list = JSON.parse(this.props.map_info)
+    const settle_state = JSON.parse(this.props.settle_state);
 
     let img_list : any = img.img.character;
     const MapInfo = require('./city_info.json');
@@ -158,6 +161,19 @@ class Player extends React.Component<AllProps> {
       }
     }
 
+    if(info.able === true) {
+      if(settle_state[info.number] === true) {
+        my_thumb = img_list.stop[info.character];
+        thumb_class += ' settle_character'
+
+        name_style['backgroundColor'] = '#ababab';
+        contents_style['backgroundColor'] = '#bbbbbb';
+
+        bank_icon = img.icon.empty_bank;
+        estate_notice_icon = img.icon.notice_gray;
+      }
+    }
+
     const bank_info_alert_info = [
       {
         "title" : "예금 정보",
@@ -200,7 +216,7 @@ class Player extends React.Component<AllProps> {
     return(
       <div className='game_contents_player_profile_div' key={number}
              id={info.number + '_player_info_div'}
-             style={float_style} 
+             style={contents_style} 
              onMouseLeave={() => gameActions.player_bank_info({ 'player_bank_info_alert' : false })}
         >
         <div style={float_style} className='game_contents_player_thumbnail_div'> 
@@ -218,7 +234,9 @@ class Player extends React.Component<AllProps> {
                 ? <h4 className='empty_player_title'> Empty Player </h4>
 
                 : <div className='game_contents_user_info_div'>
-                    <div className='game_user_have_money_div'> 
+                    <div className='game_user_have_money_div'
+                         style={settle_state[info.number] === true ? { 'color' : '#ababab' } : undefined}
+                    > 
                       보유 자산　|　{player_money}
 
                       <img alt='' className='game_user_bank_info_icon' src={bank_icon} id='bank_icon' 
@@ -240,6 +258,7 @@ class Player extends React.Component<AllProps> {
                              onMouseLeave={() => turn === info.number ? gameActions.player_bank_info({ 'player_bank_info_alert' : false }) : undefined}
                         > 
                           <h3> 플레이어 {turn} 의 은행 정보 </h3>
+                          <p> 신용등급　|　{my_bank.my_rating} 등급 </p>
 
                           {bank_info_alert_info.map( (el, key) => {
                             return(
@@ -396,14 +415,27 @@ class Player extends React.Component<AllProps> {
                   </div>
             }
             
+            {/* {settle_state[info.number] === true
+              ? <div className='settle_player_div' />
+
+              : undefined
+            } */}
         </div>
 
-        {info.number === turn 
+        {info.number === turn && settle_state[info.number] === false
         ?
           <div className='player_my_turn_icon'
               style={my_turn_style}>
             <h3> My Turn </h3>
           </div>
+
+          : undefined
+        }
+
+        {settle_state[info.number] === true
+          ? <div className='settle_player_icon'>
+              <h3> 파산 </h3>
+            </div>
 
           : undefined
         }
@@ -425,7 +457,8 @@ export default connect(
     player_estate_info_alert : game.player_estate_info_alert,
     map_info : init.map_info,
     _splitMoneyUnit : functions._splitMoneyUnit,
-    pass_price : init.pass_price
+    pass_price : init.pass_price,
+    settle_state: game.settle_state
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

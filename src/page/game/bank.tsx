@@ -28,7 +28,12 @@ export interface AllProps {
   _flash : Function,
   loan_order_confirm : boolean,
   _addLog : Function,
-  _splitMoneyUnit : Function
+  _splitMoneyUnit : Function,
+  _getMyRating: Function,
+  save_money_index : string,
+  round : number,
+  _checkPlayerMoney : Function,
+  _minusPlayerMoney : Function
 };
 
 class Bank extends React.Component<AllProps> {
@@ -81,9 +86,11 @@ class Bank extends React.Component<AllProps> {
 
   // 예금액 조정하기
   _saveMoney = (event : any) => {
-    const { turn, gameActions, initActions, bank_incentive_percent } = this.props;
-    const bank_info = JSON.parse(this.props.bank_info);
+    const { turn, round, gameActions, initActions, bank_incentive_percent, _getMyRating } = this.props;
+    let bank_info = JSON.parse(this.props.bank_info);
+
     const player_list = JSON.parse(this.props.player_list);
+    const save_money_index = JSON.parse(this.props.save_money_index);
 
     let save_money : number = Number(event.target.value);
 
@@ -92,10 +99,10 @@ class Bank extends React.Component<AllProps> {
     }
 
     // 1. 예금되어 있는 기존의 금액
-    const my_save_money : number = bank_info[Number(turn)].save_money;
+    const origin_save_money : number = bank_info[Number(turn)].save_money;
     
     // 2. 기존의 예금액 - Input 으로 받아온 예금액
-    let extra_money = my_save_money - save_money;
+    let extra_money = origin_save_money - save_money;
 
     // 3. 플레이어의 돈 - 2. 의 금액 빼기
     let player_money = player_list[Number(turn) - 1].money + extra_money;
@@ -126,16 +133,18 @@ class Bank extends React.Component<AllProps> {
 
   // 누적 이자금 환급받기
   _returnTotalIncentive = () => {
-    const { turn, _removeAlertMent, gameActions, _playerMoney, _addLog } = this.props;
+    const { turn, _removeAlertMent, gameActions, _playerMoney, _addLog, _splitMoneyUnit, _checkPlayerMoney } = this.props;
     const bank_info = JSON.parse(this.props.bank_info);
     const my_info = bank_info[Number(turn)];
+
+    const my_money = _checkPlayerMoney(turn);
 
     if(my_info.total_incentive === 0) {
         return _removeAlertMent('환급될 누적 이자가 없습니다.');
 
     } else {
         _playerMoney(turn, my_info.total_incentive, 'plus');
-        _addLog(`<div class='game_alert_2'> 누적 이자금 <b class='custom_color_1'> ${my_info.total_incentive} 만원</b>을 환급받으셨습니다. </div>`)
+        _addLog(`<div class='game_alert_2'> 누적 이자금 <b class='custom_color_1'> ${_splitMoneyUnit(my_info.total_incentive)} </b>을 환급받으셨습니다. </div>`)
 
         my_info.total_incentive = 0;
         gameActions.event_info({ 'bank_info' : JSON.stringify(bank_info) })
@@ -201,12 +210,23 @@ class Bank extends React.Component<AllProps> {
         result = 0;
 
     } else {
-        const percent = (loan_percent / 100)
+        // 최소 이자금액 설정 (1%)
+        const min = (loan_order_money * 100) / 100;
+
+        // 백분율 구하기 (이자율 / 100 === 0.01);
+        const percent = (loan_percent / 100);
+
+        result = Math.round( (loan_order_money * 100)  * percent );
+        // console.log(result, loan_order_money, percent)
         const minus_percent = (loan_payback_date - 3) * 0.005
-        
+
         const total_percent = Number(String(percent - minus_percent).slice(0, 5));
         
         result = Math.ceil((loan_order_money * 100) * total_percent);
+
+        if(result < min) {
+            result = min;
+        } 
     }
   
     return gameActions.event_info({ 
@@ -216,7 +236,10 @@ class Bank extends React.Component<AllProps> {
 
   // 대출 신청하기
   _orderLoan = () => {
-    const { turn, _addLog, gameActions, loan_plus_incentive, loan_order_money, loan_payback_date, loan_order_confirm, _removeAlertMent, _playerMoney } = this.props;
+    const { 
+        turn, _addLog, gameActions, loan_plus_incentive, loan_order_money, loan_payback_date, 
+        loan_order_confirm, _removeAlertMent, _playerMoney, _splitMoneyUnit
+    } = this.props;
 
     const bank_info = JSON.parse(this.props.bank_info);
 
@@ -241,7 +264,7 @@ class Bank extends React.Component<AllProps> {
             'loan_order_confirm' : true
         })
         
-        _addLog(`<div class='game_alert_2'> 은행으로부터 <b class='custom_color_1'>${(loan_order_money * 100)} 만원</b>을 대출받았습니다. <br /> <b class='orange'>${loan_payback_date} 라운드</b> 후 자동으로 상환됩니다. </div>`)
+        _addLog(`<div class='game_alert_2'> 은행으로부터 <b class='custom_color_1'>${ _splitMoneyUnit((loan_order_money * 100)) }</b>을 대출받았습니다. <br /> <b class='orange'>${loan_payback_date} 라운드</b> 후 자동으로 상환됩니다. </div>`)
         return _playerMoney(turn, (loan_order_money * 100), 'plus');
 
     } else {
@@ -252,27 +275,31 @@ class Bank extends React.Component<AllProps> {
 
   // 대출 상환하기
   _repayLoan = (money : number, loan : number) => {
-    const { gameActions, _playerMoney, _removeAlertMent, turn, _addLog } = this.props;
-    const bank_info = JSON.parse(this.props.bank_info);
+    const { gameActions, _removeAlertMent, turn, _addLog, _splitMoneyUnit, _minusPlayerMoney } = this.props;
+    let bank_info = JSON.parse(this.props.bank_info);
 
     if(money < loan) {
-        return _removeAlertMent('상환금 ' + loan + ' 만원이 필요합니다.');
+        return _removeAlertMent('상환금　<b class="red">' + _splitMoneyUnit(loan) + '</b>이 필요합니다.');
 
     } else {
-        _playerMoney(turn, loan, 'minus');
+        const repay = _minusPlayerMoney(turn, loan, bank_info, false);
+        bank_info = repay['bank'];
 
         bank_info[Number(turn)]['loan'] = 0;
         bank_info[Number(turn)]['loan_incentive'] = 0;
         bank_info[Number(turn)]['repay_day'] = 0;
 
-        _addLog(`<div class='game_alert_2'> 대출금 <b class='custom_color_1'> ${loan} 만원 </b> 을 상환하셨습니다. </div>`)
+        _addLog(`<div class='game_alert_2'> 대출금 <b class='custom_color_1'> ${_splitMoneyUnit(loan)} </b> 을 상환하셨습니다. </div>`)
     }
 
     return gameActions.event_info({ 'bank_info' : JSON.stringify(bank_info), 'loan_order_confirm' : false })
   }
 
   render() {
-    const { bank_tap, gameActions, bank_incentive_percent, turn, loan_percent, loan_order_money, loan_plus_incentive, loan_payback_date, loan_order_confirm ,_splitMoneyUnit } = this.props;
+    const { 
+        bank_tap, gameActions, bank_incentive_percent, turn, loan_percent, loan_order_money, loan_plus_incentive, loan_payback_date, loan_order_confirm,
+        _splitMoneyUnit, _checkPlayerMoney 
+    } = this.props;
     const { _clickBankTap, _toggleHomeDiv, _saveMoney, _returnTotalIncentive, _setLoanInput, _setLoanPaybackDate, _orderLoan, _repayLoan } = this;
 
     const bank_info = JSON.parse(this.props.bank_info);
@@ -283,6 +310,9 @@ class Bank extends React.Component<AllProps> {
 
     const tap_arr : string[] = ['예금', '대출']
     const home_arr : string[] = ['예금 정보', '대출 정보'];
+
+    const my_money = _checkPlayerMoney(turn);
+
 
     return(
       <div id='bank_event_map_div'>
@@ -441,7 +471,7 @@ class Bank extends React.Component<AllProps> {
                                     <div id='loan_bill_list_div'>
                                         <div className='loan_bill_grid_div'>
                                             <div className='aRight'> 대출금　|　 </div>
-                                            <div className='aLeft'> {my_info.loan * 100} 만원 </div>
+                                            <div className='aLeft'> {_splitMoneyUnit(my_info.loan * 100)} </div>
                                         </div>
 
                                         <div className='loan_bill_grid_div'>
@@ -451,7 +481,7 @@ class Bank extends React.Component<AllProps> {
 
                                         <div className='loan_bill_grid_div'>
                                             <div className='aRight'> 대출 이자　|　 </div>
-                                            <div className='aLeft'> {my_info.loan_incentive} 만원 </div>
+                                            <div className='aLeft'> {_splitMoneyUnit(my_info.loan_incentive)} </div>
                                         </div>
                                     </div>
                                 </div>
@@ -462,18 +492,18 @@ class Bank extends React.Component<AllProps> {
                             <h3> 내 대출 정보 </h3>
 
                             <input type='button' value='대출 상환하기' id='loan_repay_button' 
-                                   style={player_list[Number(turn) - 1].money < (my_info.loan * 100) + my_info.loan_incentive
+                                   style={my_money < (my_info.loan * 100) + my_info.loan_incentive
                                         ? { 'color' : 'white', 'backgroundColor' : '#ababab' }
 
-                                        : undefined
+                                        : { 'color' : 'white', 'backgroundColor' : '#9dbeb9' }
                                     }
-                                    onClick={() => _repayLoan(player_list[Number(turn) - 1].money, (my_info.loan * 100) + my_info.loan_incentive)}
+                                    onClick={() => _repayLoan(my_money, (my_info.loan * 100) + my_info.loan_incentive)}
                             />
 
                             <div id='loan_state_div'>
                                 <div className='loan_bill_grid_div'>
                                     <div className='aRight'> 대출 상환금　|　 </div>
-                                    <div className='aLeft'> { (my_info.loan * 100) + my_info.loan_incentive } 만원 </div>
+                                    <div className='aLeft'> { _splitMoneyUnit((my_info.loan * 100) + my_info.loan_incentive) } </div>
                                 </div>
 
                                 <div className='loan_bill_grid_div'>
@@ -512,7 +542,12 @@ export default connect(
     _flash : functions._flash,
     loan_order_confirm : game.loan_order_confirm,
     _addLog : functions._addLog,
-    _splitMoneyUnit: functions._splitMoneyUnit
+    _splitMoneyUnit: functions._splitMoneyUnit,
+    _getMyRating: functions._getMyRating,
+    save_money_index : game.save_money_index,
+    round : game.round,
+    _checkPlayerMoney : functions._checkPlayerMoney,
+    _minusPlayerMoney : functions._minusPlayerMoney
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

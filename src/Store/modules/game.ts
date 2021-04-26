@@ -14,6 +14,7 @@ const PLAYERBANKINFO = 'game/player_bank_info';
 const SETGAMELOG = 'game/set_game_log';
 const SETNEWSINFO = 'game/set_news_info';
 const GAMEPLAYTIME = 'game/game_play_time';
+const GAMEOVER = 'game/game_over';
 
 export const actionCreators = {
     game_loading : createAction(GAMELOADING),
@@ -30,6 +31,7 @@ export const actionCreators = {
     set_game_log : createAction(SETGAMELOG),
     set_news_info : createAction(SETNEWSINFO),
     game_play_time : createAction(GAMEPLAYTIME),
+    game_over : createAction(GAMEOVER),
 }
 
 export interface gameState {
@@ -86,6 +88,9 @@ export interface gameState {
     player_estate_info_alert : boolean,
     settle_type : string | null,
     play_time : number,
+    save_money_index : string,
+    game_over : boolean,
+    settle_state : string
 }
 
 const initialState : gameState = {
@@ -142,6 +147,9 @@ const initialState : gameState = {
     settle_bill : JSON.stringify({ }),
     settle_type : null,
     play_time : 0,
+    save_money_index : JSON.stringify({}),
+    game_over : false,
+    settle_state : JSON.stringify({})
 }
 
 export default handleActions<gameState> ({
@@ -231,7 +239,8 @@ export default handleActions<gameState> ({
             loan_order_money : data.payload.loan_order_money !== undefined ? data.payload.loan_order_money : state.loan_order_money,
             loan_payback_date : data.payload.loan_payback_date !== undefined ? data.payload.loan_payback_date : state.loan_payback_date,
             loan_plus_incentive : data.payload.loan_plus_incentive !== undefined ? data.payload.loan_plus_incentive : state.loan_plus_incentive,
-            loan_order_confirm : data.payload.loan_order_confirm !== undefined ? data.payload.loan_order_confirm : state.loan_order_confirm
+            loan_order_confirm : data.payload.loan_order_confirm !== undefined ? data.payload.loan_order_confirm : state.loan_order_confirm,
+            save_money_index : data.payload.save_money_index !== undefined ? data.payload.save_money_index : state.save_money_index
         }
     },
 
@@ -262,7 +271,8 @@ export default handleActions<gameState> ({
             settle_modal : data.payload.settle_modal !== undefined ? data.payload.settle_modal : state.settle_modal,
             settle_extra_money : data.payload.settle_extra_money !== undefined ? data.payload.settle_extra_money : state.settle_extra_money,
             settle_bill : data.payload.settle_bill !== undefined ? data.payload.settle_bill : state.settle_bill,
-            settle_type : data.payload.settle_type !== undefined ? data.payload.settle_type : state.settle_type
+            settle_type : data.payload.settle_type !== undefined ? data.payload.settle_type : state.settle_type,
+            settle_state : data.payload.settle_state !== undefined ? data.payload.settle_state : state.settle_state
         }
     },
 
@@ -294,6 +304,13 @@ export default handleActions<gameState> ({
         return {
             ...state,
             play_time : data.payload.play_time !== undefined ? data.payload.play_time : state.play_time
+        }
+    },
+
+    [GAMEOVER] : (state : any, data : any) => {
+        return {
+            ...state,
+            game_over : data.payload.game_over !== undefined ? data.payload.game_over : state.game_over
         }
     }
 

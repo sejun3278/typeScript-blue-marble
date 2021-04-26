@@ -29,14 +29,15 @@ export interface AllProps {
   bank_info : string,
   round_timer : number,
   _flash : Function,
-  sale_incentive : number
+  sale_incentive : number,
+  settle_state : string
 };
 
 let settle_timer : any = false;
 class Settle extends React.Component<AllProps> {
 
   componentDidMount() {
-    const { round_timer, _turnEnd, gameActions, _flash } = this.props;
+    const { round_timer, _turnEnd, gameActions, _flash, turn } = this.props;
 
     let second = 1;
     if(round_timer > 0) {
@@ -51,15 +52,13 @@ class Settle extends React.Component<AllProps> {
 
       settle_timer = window.setInterval( () => {
         if(second >= round_timer) {
-          clearInterval(settle_timer);
-
-          gameActions.settle_player_money({ 'settle_modal' : false, 'settle_type' : null, 'settle_bill' : JSON.stringify({}), 'settle_extra_money' : 0 })
-          _turnEnd();
+          // 파산하기
+          this._confirmSettle(turn);
 
           return;
         }
 
-        const width : number = Number(String(100 - (timer * second)).slice(0, 4));
+        // const width : number = Number(String(100 - (timer * second)).slice(0, 4));
 
         if(round_timer - second <= 10) {
           _flash('#player_settle_timer_div', false, 1.4, true, 40, null, 1);
@@ -159,6 +158,25 @@ class Settle extends React.Component<AllProps> {
     return result;
   }
 
+  // 파산하기
+  _confirmSettle = (player : number) => {
+    const { _turnEnd, gameActions, _addLog } = this.props;
+    const settle_state = JSON.parse(this.props.settle_state);
+
+    // 파산
+    settle_state[player] = true;
+
+    gameActions.settle_player_money({ 'settle_state' : JSON.stringify(settle_state) })
+
+    const ment = `<div class='game_alert_2 back_black red'> <b class='color_player_${player}'> ${player} 플레이어 </b>가 파산했습니다. </div>`
+    _addLog(ment);
+
+    clearInterval(settle_timer);
+
+    gameActions.settle_player_money({ 'settle_modal' : false, 'settle_type' : null, 'settle_bill' : JSON.stringify({}), 'settle_extra_money' : 0 })
+    _turnEnd();
+  }
+
   render() {
     const { settle_extra_money, _splitMoneyUnit, turn, round_timer, sale_incentive } = this.props;
     const { _saleSettle, _getPlayerEstatePrice } = this;
@@ -187,7 +205,7 @@ class Settle extends React.Component<AllProps> {
           >
             <h4> 은행 정산 영수증 </h4>
 
-          { Object.keys(settle_bill).length > 0 ?
+          { settle_bill[turn] !== undefined ?
             <div id='player_settle_bank_bill_div'>
               <div className='player_settle_bank_grid_div' id='player_settle_bank_bill_loan_div'>
                 <div> 정산 목표　|　 </div>
@@ -330,7 +348,9 @@ class Settle extends React.Component<AllProps> {
         </div>
 
         <div id='player_settle_confirm_div'>
-          <input type='button' value='파산 신청 ( 게임 포기 )'/>
+          <input type='button' value='파산 신청 ( 게임 포기 )'
+                 onClick={() => window.confirm('파산을 신청하면 게임에서 패배합니다. \n정말 파산하시겠습니까?') ? this._confirmSettle(turn) : undefined}
+          />
         </div>
 
       </div>
@@ -353,7 +373,8 @@ export default connect(
     bank_info : game.bank_info,
     round_timer: init.round_timer,
     _flash : functions._flash,
-    sale_incentive : init.sale_incentive
+    sale_incentive : init.sale_incentive,
+    settle_state : game.settle_state
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

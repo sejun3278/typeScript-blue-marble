@@ -609,34 +609,34 @@ body #notice_divs {
   position: absolute;
   margin-top: 55px;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div, #game_div #game_contents_div .game_contents_player_div .settle_player_div {
   min-height: 103px;
   min-width: 250px;
   max-width: 400px;
   text-align: left;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div, #game_div #game_contents_div .game_contents_player_div .settle_player_div .game_contents_user_info_div {
   font-size: 14px;
   padding: 10px;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_have_money_div, #game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_my_location, #game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_has_location {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_have_money_div, #game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_my_location, #game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_has_location, #game_div #game_contents_div .game_contents_player_div .settle_player_div .game_contents_user_info_div .game_user_have_money_div, #game_div #game_contents_div .game_contents_player_div .settle_player_div .game_contents_user_info_div .game_user_my_location, #game_div #game_contents_div .game_contents_player_div .settle_player_div .game_contents_user_info_div .game_user_has_location {
   padding: 5px;
   font-size: 13px;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_have_money_div {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_have_money_div, #game_div #game_contents_div .game_contents_player_div .settle_player_div .game_contents_user_info_div .game_user_have_money_div {
   font-family: Recipekorea;
   border-bottom: solid 1px #ababab;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_have_money_div .game_user_bank_info_icon {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_have_money_div .game_user_bank_info_icon, #game_div #game_contents_div .game_contents_player_div .settle_player_div .game_contents_user_info_div .game_user_have_money_div .game_user_bank_info_icon {
   width: 15px;
   position: absolute;
   margin-left: 15px;
   cursor: pointer;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_have_money_div #bank_icon {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_have_money_div #bank_icon, #game_div #game_contents_div .game_contents_player_div .settle_player_div .game_contents_user_info_div .game_user_have_money_div #bank_icon {
   margin-left: 15px;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_bank_info {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_bank_info, #game_div #game_contents_div .game_contents_player_div .settle_player_div .game_contents_user_info_div .game_user_bank_info {
   position: absolute;
   width: 215px;
   border: solid 2px black;
@@ -647,35 +647,43 @@ body #notice_divs {
   background-color: white;
   z-index: 1000;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_bank_info h3 {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_bank_info p, #game_div #game_contents_div .game_contents_player_div .settle_player_div .game_contents_user_info_div .game_user_bank_info p {
+  text-align: right;
+  font-size: 12px;
+  margin: -2px 0px;
+  padding-right: 10px;
+  font-family: Y_Spotlight;
+  color: #51c4d3;
+}
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_bank_info h3, #game_div #game_contents_div .game_contents_player_div .settle_player_div .game_contents_user_info_div .game_user_bank_info h3 {
   margin: 10px 0px !important;
   font-size: 14px;
   font-family: Recipekorea;
   padding-bottom: 10px;
   border-bottom: dotted 1px #ababab;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_bank_info .game_user_bank_info_divs {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_bank_info .game_user_bank_info_divs, #game_div #game_contents_div .game_contents_player_div .settle_player_div .game_contents_user_info_div .game_user_bank_info .game_user_bank_info_divs {
   padding-left: 10px;
   margin-top: 20px;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_bank_info .game_user_bank_info_divs h4 {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_bank_info .game_user_bank_info_divs h4, #game_div #game_contents_div .game_contents_player_div .settle_player_div .game_contents_user_info_div .game_user_bank_info .game_user_bank_info_divs h4 {
   font-size: 13px;
   margin: 15px 0px 3px 0px !important;
   color: #ababab;
   text-align: left;
   font-family: SDSamliphopangche_Outline;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_bank_info .game_user_bank_info_divs h4 b {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_bank_info .game_user_bank_info_divs h4 b, #game_div #game_contents_div .game_contents_player_div .settle_player_div .game_contents_user_info_div .game_user_bank_info .game_user_bank_info_divs h4 b {
   color: black;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_bank_info .game_user_bank_info_divs .game_user_bank_info_grid_div {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_bank_info .game_user_bank_info_divs .game_user_bank_info_grid_div, #game_div #game_contents_div .game_contents_player_div .settle_player_div .game_contents_user_info_div .game_user_bank_info .game_user_bank_info_divs .game_user_bank_info_grid_div {
   display: grid;
   grid-template-columns: 100px auto;
   font-size: 12px;
   margin-top: 10px;
   font-family: Y_Spotlight;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_bank_info #game_user_bank_info_round_bonus_alert {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_bank_info #game_user_bank_info_round_bonus_alert, #game_div #game_contents_div .game_contents_player_div .settle_player_div .game_contents_user_info_div .game_user_bank_info #game_user_bank_info_round_bonus_alert {
   border: solid 2px black;
   margin-top: 25px;
   padding: 5px;
@@ -686,40 +694,40 @@ body #notice_divs {
   font-size: 12px;
   font-family: Recipekorea;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_bank_info #game_user_bank_info_round_bonus_alert div {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_bank_info #game_user_bank_info_round_bonus_alert div, #game_div #game_contents_div .game_contents_player_div .settle_player_div .game_contents_user_info_div .game_user_bank_info #game_user_bank_info_round_bonus_alert div {
   display: inline-block;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_bank_info #game_user_bank_info_round_bonus_alert div #game_bonus_money_info_alert_icon {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_bank_info #game_user_bank_info_round_bonus_alert div #game_bonus_money_info_alert_icon, #game_div #game_contents_div .game_contents_player_div .settle_player_div .game_contents_user_info_div .game_user_bank_info #game_user_bank_info_round_bonus_alert div #game_bonus_money_info_alert_icon {
   width: 17px;
   position: absolute;
   margin: -1px 10px;
   cursor: pointer;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #player_estate_info_div {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #player_estate_info_div, #game_div #game_contents_div .game_contents_player_div .settle_player_div .game_contents_user_info_div #player_estate_info_div {
   margin-top: -20px;
   width: 230px;
   margin-left: -7px;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #player_estate_info_div #player_estate_length_div {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #player_estate_info_div #player_estate_length_div, #game_div #game_contents_div .game_contents_player_div .settle_player_div .game_contents_user_info_div #player_estate_info_div #player_estate_length_div {
   margin: 3px;
   font-size: 14px;
   font-family: SDSamliphopangche_Outline;
   word-spacing: 3px;
   padding-bottom: 10px;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #player_estate_info_div #player_estate_list_div {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #player_estate_info_div #player_estate_list_div, #game_div #game_contents_div .game_contents_player_div .settle_player_div .game_contents_user_info_div #player_estate_info_div #player_estate_list_div {
   border-top: dotted 1px #ababab;
   padding-top: 10px;
   min-height: 200px;
   max-height: 300px;
   overflow: auto;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #player_estate_info_div #player_estate_list_empty_div {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #player_estate_info_div #player_estate_list_empty_div, #game_div #game_contents_div .game_contents_player_div .settle_player_div .game_contents_user_info_div #player_estate_info_div #player_estate_list_empty_div {
   color: #ababab;
   line-height: 150px;
   font-family: paybooc-Bold;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #player_estate_info_div #player_estate_money_result_div {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #player_estate_info_div #player_estate_money_result_div, #game_div #game_contents_div .game_contents_player_div .settle_player_div .game_contents_user_info_div #player_estate_info_div #player_estate_money_result_div {
   border-top: solid 2px black;
   display: grid;
   grid-template-columns: 100px auto;
@@ -729,7 +737,7 @@ body #notice_divs {
   color: black;
   font-family: Recipekorea;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #player_estate_info_div #player_estate_list_div .player_estate_list_divs {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #player_estate_info_div #player_estate_list_div .player_estate_list_divs, #game_div #game_contents_div .game_contents_player_div .settle_player_div .game_contents_user_info_div #player_estate_info_div #player_estate_list_div .player_estate_list_divs {
   display: grid;
   grid-template-columns: 50px 95px auto;
   padding: 3px 5px;
@@ -738,42 +746,63 @@ body #notice_divs {
   height: 20px;
   line-height: 20px;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #player_estate_info_div #player_estate_list_div .player_estate_list_divs .player_estate_city_name {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #player_estate_info_div #player_estate_list_div .player_estate_list_divs .player_estate_city_name, #game_div #game_contents_div .game_contents_player_div .settle_player_div .game_contents_user_info_div #player_estate_info_div #player_estate_list_div .player_estate_list_divs .player_estate_city_name {
   font-weight: bold;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #player_estate_info_div #player_estate_list_div .player_estate_list_divs .player_estate_build_state_div {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #player_estate_info_div #player_estate_list_div .player_estate_list_divs .player_estate_build_state_div, #game_div #game_contents_div .game_contents_player_div .settle_player_div .game_contents_user_info_div #player_estate_info_div #player_estate_list_div .player_estate_list_divs .player_estate_build_state_div {
   line-height: 25px;
   text-align: left;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #player_estate_info_div #player_estate_list_div .player_estate_list_divs .player_estate_build_state_div .player_estate_building_divs {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #player_estate_info_div #player_estate_list_div .player_estate_list_divs .player_estate_build_state_div .player_estate_building_divs, #game_div #game_contents_div .game_contents_player_div .settle_player_div .game_contents_user_info_div #player_estate_info_div #player_estate_list_div .player_estate_list_divs .player_estate_build_state_div .player_estate_building_divs {
   display: inline-block;
   width: 25px;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #player_estate_info_div #player_estate_list_div .player_estate_list_divs .player_estate_build_state_div .player_estate_building_divs img {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #player_estate_info_div #player_estate_list_div .player_estate_list_divs .player_estate_build_state_div .player_estate_building_divs img, #game_div #game_contents_div .game_contents_player_div .settle_player_div .game_contents_user_info_div #player_estate_info_div #player_estate_list_div .player_estate_list_divs .player_estate_build_state_div .player_estate_building_divs img {
   width: 20px;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #player_estate_info_div #player_estate_list_div .player_estate_list_divs .player_estate_build_state_div .player_estate_landmark_state_div img {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #player_estate_info_div #player_estate_list_div .player_estate_list_divs .player_estate_build_state_div .player_estate_landmark_state_div img, #game_div #game_contents_div .game_contents_player_div .settle_player_div .game_contents_user_info_div #player_estate_info_div #player_estate_list_div .player_estate_list_divs .player_estate_build_state_div .player_estate_landmark_state_div img {
   width: 20px;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #player_estate_info_div #player_estate_list_div .player_estate_list_divs .player_estate_total_money_div {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div #player_estate_info_div #player_estate_list_div .player_estate_list_divs .player_estate_total_money_div, #game_div #game_contents_div .game_contents_player_div .settle_player_div .game_contents_user_info_div #player_estate_info_div #player_estate_list_div .player_estate_list_divs .player_estate_total_money_div {
   font-family: Recipekorea;
   font-size: 10px;
   line-height: 25px;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_my_location, #game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_has_location {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_my_location, #game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_has_location, #game_div #game_contents_div .game_contents_player_div .settle_player_div .game_contents_user_info_div .game_user_my_location, #game_div #game_contents_div .game_contents_player_div .settle_player_div .game_contents_user_info_div .game_user_has_location {
   margin-top: 5px;
   color: #ababab;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_has_location {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_has_location, #game_div #game_contents_div .game_contents_player_div .settle_player_div .game_contents_user_info_div .game_user_has_location {
   margin-top: 0px;
   padding-bottom: 0px;
 }
-#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_has_location .game_user_estate_info_icon {
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .game_contents_user_info_div .game_user_has_location .game_user_estate_info_icon, #game_div #game_contents_div .game_contents_player_div .settle_player_div .game_contents_user_info_div .game_user_has_location .game_user_estate_info_icon {
   width: 15px;
   position: absolute;
   margin: 2.5px 10px;
   cursor: pointer;
 }
+#game_div #game_contents_div .game_contents_player_div .game_contents_player_info_div .settle_player_div, #game_div #game_contents_div .game_contents_player_div .settle_player_div .settle_player_div {
+  position: absolute;
+  margin: -105px 0px;
+  z-index: 1000;
+  border: solid 2px #ababab;
+  background-color: black;
+  opacity: 0.5;
+}
+#game_div #game_contents_div .game_contents_player_div .settle_player_icon h3 {
+  position: absolute;
+  color: #ce1f6a !important;
+  margin: 70px 0px 0px 15px;
+  font-size: 30px;
+  font-family: Recipekorea;
+  -webkit-transform: rotate(330deg);
+}
+#game_div #game_contents_div .game_contents_player_div .settle_character {
+  -webkit-transform: rotate(270deg);
+  opacity: 0.3;
+}
+
 #play_game_divs #play_game_main_div {
   padding: 10px 0px;
 }
@@ -1279,6 +1308,7 @@ body #notice_divs {
 #bank_event_map_div #bank_loan_div #bank_loan_grid_div #bank_loan_info_div .bank_loan_grid_div {
   display: grid;
   grid-template-columns: 70% auto;
+  margin-left: -35px;
 }
 #bank_event_map_div #bank_loan_div #bank_loan_grid_div #bank_loan_info_div #bank_loan_order_div {
   margin: 5px 0px;

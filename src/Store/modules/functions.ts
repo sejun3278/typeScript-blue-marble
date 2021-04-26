@@ -21,7 +21,8 @@ export interface functionsState {
     _minusPlayerMoney : Function,
     _checkEstatePlayerMoney : Function,
     _splitMoneyUnit : Function,
-    _turnEnd : Function
+    _turnEnd : Function,
+    _getMyRating : Function
 }
 
 const initialState : functionsState = {
@@ -39,7 +40,8 @@ const initialState : functionsState = {
     _minusPlayerMoney : () => {},
     _checkEstatePlayerMoney : () => {},
     _splitMoneyUnit : () => {},
-    _turnEnd : () => {}
+    _turnEnd : () => {},
+    _getMyRating : () => {}
 }
 
 export default handleActions<functionsState> ({
@@ -60,7 +62,8 @@ export default handleActions<functionsState> ({
         _minusPlayerMoney : data.payload._minusPlayerMoney !== undefined ? data.payload._minusPlayerMoney : state._minusPlayerMoney,
         _checkEstatePlayerMoney : data.payload._checkEstatePlayerMoney !== undefined ? data.payload._checkEstatePlayerMoney : state._checkEstatePlayerMoney,
         _splitMoneyUnit : data.payload._splitMoneyUnit !== undefined ? data.payload._splitMoneyUnit : state._splitMoneyUnit,
-        _turnEnd : data.payload._turnEnd !== undefined ? data.payload._turnEnd : state._turnEnd
+        _turnEnd : data.payload._turnEnd !== undefined ? data.payload._turnEnd : state._turnEnd,
+        _getMyRating : data.payload._getMyRating !== undefined ? data.payload._getMyRating : state._getMyRating
       };
     }
 
