@@ -64,7 +64,11 @@ export interface AllProps {
   pass_price : number,
   sale_incentive : number,
   save_money_index : string,
-  settle_state: string
+  settle_state: string,
+  game_over : boolean,
+  winner : number,
+  player_rank : string,
+  rank_update : boolean
 };
 
 const flash_info : any = {
@@ -96,6 +100,8 @@ class Game extends React.Component<AllProps> {
   componentDidMount() {
     const { functionsActions } = this.props;
 
+    this._setPlayerRank();
+
     // 초기 scrollTop 위치 잡기
     window.scrollTo(0, 80);
 
@@ -115,8 +121,19 @@ class Game extends React.Component<AllProps> {
       '_checkEstatePlayerMoney' : this._checkEstatePlayerMoney,
       '_splitMoneyUnit' : this._splitMoneyUnit,
       '_turnEnd' : this._turnEnd,
-      '_getMyRating' : this._getMyRating
+      '_getMyRating' : this._getMyRating,
+      '_setPlayerRank' : this._setPlayerRank
     })
+  }
+
+  componentDidUpdate() {
+    const { rank_update, gameActions } = this.props;
+
+    if(rank_update === true) {
+      this._setPlayerRank();
+
+      gameActions.event_info({ 'rank_update' : false })
+    }
   }
 
   // 돈 삭감하기
@@ -274,12 +291,13 @@ class Game extends React.Component<AllProps> {
 
   // 라운드 (턴) 시작하기
   _roundStart = (type : string) => {
-    const { gameActions, round, turn, _flash, round_timer, _setCardDeck, game_event, settle_extra_money } = this.props;
+    const { gameActions, able_player, round, turn, _flash, round_timer, _setCardDeck, game_event, settle_extra_money } = this.props;
 
     const stop_info = JSON.parse(this.props.stop_info)
     const player_list = JSON.parse(this.props.player_list);
     const map_info = JSON.parse(this.props.map_info);
-    const settle_state = JSON.parse(this.props.settle_state)
+    const settle_state = JSON.parse(this.props.settle_state);
+    const bank_info = JSON.parse(this.props.bank_info);
 
     let ment : string = '';
     if(type === 'round') {
@@ -304,25 +322,42 @@ class Game extends React.Component<AllProps> {
       }, 1000);
 
     } else if(type === 'turn') {
-
       gameActions.round_start({ 'time_over' : false });
 
-      const settle_check = settle_state[turn];
-      if(settle_check === true) {
-        // 파산일 경우 바로 끝내기
-        return this._turnEnd();
+      let next_turn = turn;
+      // 무인도에 있거나 파산할 경우 다음 플레이어로 턴 자동 이동
+
+      for(let i = next_turn; i <= able_player; i++) {
+
+        if(stop_info[i] > 0 || settle_state[i] === true) {
+          if(stop_info[i] > 0) {
+
+            // 단 대출 상환 기간과 겹치면 상환하고 넘어간다.
+            if(bank_info[i].repay_day === 0 && bank_info[i]['loan'] > 0) {
+              next_turn = i;
+
+              break;
+            }
+
+            if(settle_state[i] === false) {
+              stop_info[i] = stop_info[i] - 1;
+              gameActions.event_info({ 'stop_info' : JSON.stringify(stop_info) })
+            }
+          }
+
+          next_turn += 1;
+        }
       }
 
-      if(stop_info[turn] > 0) {
-        // 무인도에 있을 경우
+      if(next_turn > able_player) {
+        this._addLog(`<div class='game_alert'> <b class='red'>행동 가능한 플레이어가 없습니다.</b> <br />자동으로 다음 라운드를 시작합니다. </div>`)
 
-        stop_info[turn] = stop_info[turn] - 1;
-        gameActions.event_info({ 'stop_info' : JSON.stringify(stop_info) })
-
-        return this._turnEnd();
+        return this._turnEnd(next_turn);
       }
 
-      if(round === 1 && turn === 1) {
+      gameActions.round_start({ 'turn' : next_turn })
+
+      if(round === 1 && next_turn === 1) {
         this._addLog(`<div class='game_alert back_black'> 1 라운드를 시작합니다. </div>`)
 
         if(game_event === true) {
@@ -334,33 +369,33 @@ class Game extends React.Component<AllProps> {
       _flash('#play_main_notice_div', false, 1.4, true, 30, null, 1);
       _flash('#playing_action_div', true, 0, false, 30);
 
-      const player_target : any = document.getElementById(String(turn) + '_player_info_div');
+      const player_target : any = document.getElementById(String(next_turn) + '_player_info_div');
       player_target.style.border = 'solid 3px black';
 
       const save_card_info : any = {};
-      if(turn === 1) {
+      if(next_turn === 1) {
         ment = '<div> 내 턴입니다. </div>';
         save_card_info['card_select_able'] = true;
 
-        // gameActions.round_start({ "turn_end_able" : true })
+        // gameActions.round_start({ "next_turn_end_able" : true })
 
       } else {
-        ment = `<div> <b class=${'color_player_' + turn}> 플레이어 ${turn} </b>의 턴입니다. </div>`;
+        ment = `<div> <b class=${'color_player_' + next_turn}> 플레이어 ${next_turn} </b>의 턴입니다. </div>`;
 
         // 컴퓨터 행동하기
         this._playingComputerAction();
       }
 
       // 신용등급 업데이트
-      const bank_info = this._getMyRating(turn, JSON.parse(this.props.bank_info));
-      gameActions.event_info({ 'bank_info' : JSON.stringify(bank_info) });
+      const _bank_info = this._getMyRating(next_turn, bank_info);
+      gameActions.event_info({ 'bank_info' : JSON.stringify(_bank_info) });
 
-      this._addLog(`<div class='game_alert'> <b class='color_player_${turn}'> ${turn} 플레이어 </b> 의 턴입니다.  </div>`);
+      this._addLog(`<div class='game_alert'> <b class='color_player_${next_turn}'> ${next_turn} 플레이어 </b> 의 턴입니다.  </div>`);
 
       if(settle_extra_money > 0) {
         // 파산 단계라면 잠시 일시정지한다.
 
-        this._addLog(`<div class='game_alert_2 back_black white'> <b class='color_player_${turn}'> ${turn} 플레이어 </b> 가 빚 <b class='red'> ${this._splitMoneyUnit(settle_extra_money)} </b> 을 청산중입니다.  </div>`)
+        this._addLog(`<div class='game_alert_2 back_black white'> <b class='color_player_${next_turn}'> ${next_turn} 플레이어 </b> 가 빚 <b class='red'> ${this._splitMoneyUnit(settle_extra_money)} </b> 을 청산중입니다.  </div>`)
         gameActions.settle_player_money({ 'settle_modal' : true });
 
         const event : any = document.querySelectorAll('.ReactModal__Overlay');
@@ -370,7 +405,7 @@ class Game extends React.Component<AllProps> {
       }
 
       // 플레이어 현재 위치 파악하기
-      const now_location = player_list[turn - 1].location;
+      const now_location = player_list[next_turn - 1].location;
       gameActions.move({ 'move_location' : now_location })
 
       gameActions.select_type({ 'select_info' : JSON.stringify( map_info[now_location] )})
@@ -378,7 +413,7 @@ class Game extends React.Component<AllProps> {
       save_card_info['card_notice_ment'] = "첫번째 통행 카드를 뽑아주세요.";
       gameActions.select_card_info(save_card_info);
 
-      this._infiniteFlash('player_main_character_' + turn, 60, true, null);
+      this._infiniteFlash('player_main_character_' + next_turn, 60, true, null);
 
       // 타이머 지정하기
       if(round_timer !== 0) {
@@ -386,7 +421,7 @@ class Game extends React.Component<AllProps> {
 
         timer_el.style.opacity = 1.4;
 
-        if(turn === 1) {
+        if(next_turn === 1) {
           $(timer_el).animate({
             'width' : String(6 * round_timer) + 'px'
           }, 500)
@@ -450,7 +485,7 @@ class Game extends React.Component<AllProps> {
           gameActions.round_start({ 'time_over' : true })
           gameActions.select_card_info({ 'card_select_able' : false });
 
-          return this._turnEnd();
+          return this._turnEnd(null);
         }
       // }
 
@@ -688,9 +723,17 @@ class Game extends React.Component<AllProps> {
   }
 
   // 턴 끝내기
-  _turnEnd = async () => {
-    const { turn, _flash, gameActions, move_event_able, _moveCharacter, time_over, move_able } = this.props;
+  _turnEnd = async (_turn : number | null | undefined) => {
+    const {_flash, gameActions, move_event_able, _moveCharacter, time_over, move_able, game_over } = this.props;
+
+    const turn = !_turn ? this.props.turn : _turn;
     const _target : any = document.getElementById(String(turn) + '_player_info_div');
+
+    if(game_over === true) {
+      // 게임 종료
+      this._gameOver();
+      return;
+    }
 
     this._infiniteFlash('player_main_character_' + turn, 60, false, null);
     _flash('#player_main_character_' + turn, true, 0, false, 30);
@@ -767,6 +810,8 @@ class Game extends React.Component<AllProps> {
             }, 300)
       
           const next_turn = turn + 1;
+          console.log(next_turn)
+
           return this._nextGames(next_turn);
         }, 200)
       }, 200)
@@ -831,8 +876,8 @@ class Game extends React.Component<AllProps> {
           gameActions.select_card_info({
             'card_notice_ment' : save_obj['all_card_num'] + ' 칸을 이동합니다.'
           })
-          await _moveCharacter(save_obj['all_card_num'], null);
-          // await _moveCharacter(1, null);
+          // await _moveCharacter(save_obj['all_card_num'], null);
+          await _moveCharacter(3, null);
   
           return initActions.set_setting_state({ 'card_deck' : JSON.stringify(card_deck) });
 
@@ -858,7 +903,7 @@ class Game extends React.Component<AllProps> {
       this._drawRandomCard();
 
       window.setTimeout( () => {
-        this._turnEnd();
+        this._turnEnd(null);
 
       }, 2000)
     }, 2000)
@@ -1284,40 +1329,71 @@ class Game extends React.Component<AllProps> {
     return timer;
   }
 
-  // 게임 오버 체크하기
-  _checkGameOver = () => {
-    const settle_state = JSON.parse(this.props.settle_state);
+  // 게임 오버
+  _gameOver = () => {
+    const { winner, turn } = this.props;
+    const player_target : any = document.getElementById(turn + '_player_info_div');
+  
+    player_target.style.border = 'solid 1px #ababab';
 
-    let winner : string | null = null;
-    let game_over = true;
-    let check : number = 0;
+    const winner_target : any = document.getElementById(winner + '_player_info_div');
+    winner_target.style.border = 'solid 3px #9ede73';
 
-    for(let key in settle_state) {
-      check += 1;
+    this._addLog(`<div id='game_over_alert'> 게임 종료 ! <br /><b class='color_player_${winner}'>${winner} 플레이어</b>의 승리입니다! </div>`)
 
-      if(settle_state[key] === false) {
-        if(winner !== null) {
-          game_over = false;
-        }
-        winner = key;
+    this._setGamePlayTimeCount(false);
+  }
+
+  // 랭크 정리하기
+  _setPlayerRank = () => {
+    // 자산 + 은행 예금 + 부동산 자산으로 순위를 매김
+
+    const { able_player, gameActions } = this.props;
+    // const player_rank = JSON.parse(this.props.player_rank);
+    // let player_rank : any = { }
+    const bank_info = JSON.parse(this.props.bank_info);
+    const player_list = JSON.parse(this.props.player_list);
+
+    let all_money : number = 0;
+
+    const rank_obj : any = {};
+    for(let i = 1; i <= able_player; i++) {
+      const player_info = player_list[i - 1];
+      const player_id = player_list[i - 1].number;
+
+      const my_bank = bank_info[player_id];
+      all_money = player_info.money + (my_bank.save_money + my_bank.total_incentive) + player_info.estate_money;
+
+      if(rank_obj[all_money] === undefined) {
+        rank_obj[all_money] = [];
       }
+      rank_obj[all_money].push(player_id);
     }
 
-    const result = {
-      'check' : game_over,
-      'winner' : winner
-    }
+    const trans_arr = Object.entries(rank_obj).reverse();
 
-    return result;
+    let rank = 1;
+
+    const rank_result : any = {};
+    trans_arr.forEach( (el : any) => {
+      el[1].forEach( (cu : any) => {
+        rank_result[cu] = { 'money' : el[0], 'rank' : rank };
+      })
+
+      rank += el[1].length;
+    })
+
+    gameActions.event_info({ 'player_rank' : JSON.stringify(rank_result) })
   }
 
   render() {
     const player_list = JSON.parse(this.props.player_list);
     const { _commaMoney, _realGameStart, _transTimer } = this;
     const { 
-      playing, settle_modal, play_time, round_start
+      playing, settle_modal, play_time, round, game_over
     } = this.props;
 
+    // this._setPlayerRank();
     const props : any = this.props;
 
     const top_player_list = player_list.slice(0, 2);
@@ -1388,7 +1464,7 @@ class Game extends React.Component<AllProps> {
                 })}
               </div>
 
-              <div id='game_play_time_div' style={round_start === false ? { 'color' : '#ababab' } : undefined}>
+              <div id='game_play_time_div' style={round === 0 && game_over === false ? { 'color' : '#ababab' } : undefined}>
                 <div id='game_play_time_title'> Play Time </div>
                 <div id='game_play_contents_div'> {_transTimer(play_time)} </div>
               </div>
@@ -1539,7 +1615,11 @@ export default connect(
     pass_price : init.pass_price,
     sale_incentive : init.sale_incentive,
     save_money_index : game.save_money_index,
-    settle_state : game.settle_state
+    settle_state : game.settle_state,
+    game_over : game.game_over,
+    winner : game.winner,
+    player_rank: game.player_rank,
+    rank_update : game.rank_update
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

@@ -22,7 +22,8 @@ export interface functionsState {
     _checkEstatePlayerMoney : Function,
     _splitMoneyUnit : Function,
     _turnEnd : Function,
-    _getMyRating : Function
+    _getMyRating : Function,
+    _setPlayerRank : Function
 }
 
 const initialState : functionsState = {
@@ -41,7 +42,8 @@ const initialState : functionsState = {
     _checkEstatePlayerMoney : () => {},
     _splitMoneyUnit : () => {},
     _turnEnd : () => {},
-    _getMyRating : () => {}
+    _getMyRating : () => {},
+    _setPlayerRank : () => {}
 }
 
 export default handleActions<functionsState> ({
@@ -63,7 +65,8 @@ export default handleActions<functionsState> ({
         _checkEstatePlayerMoney : data.payload._checkEstatePlayerMoney !== undefined ? data.payload._checkEstatePlayerMoney : state._checkEstatePlayerMoney,
         _splitMoneyUnit : data.payload._splitMoneyUnit !== undefined ? data.payload._splitMoneyUnit : state._splitMoneyUnit,
         _turnEnd : data.payload._turnEnd !== undefined ? data.payload._turnEnd : state._turnEnd,
-        _getMyRating : data.payload._getMyRating !== undefined ? data.payload._getMyRating : state._getMyRating
+        _getMyRating : data.payload._getMyRating !== undefined ? data.payload._getMyRating : state._getMyRating,
+        _setPlayerRank : data.payload._setPlayerRank !== undefined ? data.payload._setPlayerRank : state._setPlayerRank
       };
     }
 

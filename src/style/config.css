@@ -798,6 +798,13 @@ body #notice_divs {
   font-family: Recipekorea;
   -webkit-transform: rotate(330deg);
 }
+#game_div #game_contents_div .game_contents_player_div #winner_player_icon h3 {
+  position: absolute;
+  font-family: Recipekorea;
+  font-size: 20px;
+  margin: 55px 0px 0px 252px;
+  color: #9ede73;
+}
 #game_div #game_contents_div .game_contents_player_div .settle_character {
   -webkit-transform: rotate(270deg);
   opacity: 0.3;
@@ -1540,6 +1547,15 @@ body #notice_divs {
   text-align: center;
   font-family: Recipekorea;
 }
+.log_divs #game_over_alert {
+  height: 200px;
+  line-height: 50px;
+  font-size: 20px;
+  text-align: center;
+  font-family: Recipekorea;
+  color: #9ede73;
+  padding-top: 100px;
+}
 
 #player_settle_divs {
   min-height: 300px;
@@ -1669,6 +1685,20 @@ body #notice_divs {
   font-size: 20px;
   font-family: Recipekorea;
   cursor: pointer;
+}
+
+.player_rank_div h3 {
+  position: absolute;
+  width: 45px;
+  height: 45px;
+  line-height: 50px;
+  border: solid 2px #ababab;
+  text-align: center;
+  border-radius: 30px;
+  font-size: 16px;
+  font-family: Recipekorea;
+  background-color: white;
+  color: #ababab;
 }
 
 /*# sourceMappingURL=config.css.map */

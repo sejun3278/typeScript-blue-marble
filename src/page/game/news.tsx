@@ -189,7 +189,7 @@ export default connect(
     round : game.round,
     playing : game.playing,
     game_event : init.game_event,
-    news_set : game.news_set
+    news_set : game.news_set,
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

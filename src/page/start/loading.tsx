@@ -62,11 +62,24 @@ class Loading extends React.Component<AllProps> {
       // 은행 정보 저장
       const bank_info : any = {};
       
+      // let test_money = 50;
+
       // 플레이어 설정하기
       for(let i = 0; i < player_list.length; i++) {
         // 초기 시작 자금 설정
+
         if(player_list[i]['able'] === true) {
           player_list[i]['money'] = start_price;
+
+          // if(i > 1) {
+            // test_money += 50;
+            // player_list[i]['money'] = test_money
+          // }
+
+          // player_list[0]['money'] = 150;
+          // player_list[3]['money'] = 50;
+
+
           player_list[i]['maps'] = [];
           player_list[i]['location'] = 0;
           player_list[i]['estate_money'] = 0;
@@ -102,7 +115,6 @@ class Loading extends React.Component<AllProps> {
           if(i === 0) {
             bank_info[i + 1]['repay_day'] = 1;
           }
-
         }
       }
 
@@ -115,12 +127,22 @@ class Loading extends React.Component<AllProps> {
       // 턴 제한 여부 설정하기
       const stop_info = JSON.parse(this.props.stop_info);
 
+      // 플레이어 랭크 설정하기
+      const player_rank : any = {};
+
       const settle_state : any = {};
       for(let i = 1; i <= able_player; i++) {
         stop_info[i] = 0;
         settle_state[i] = false;
+
+        player_rank[i] = { 'money' : start_price, 'rank' : 1 };
       }
-      gameActions.event_info({ 'stop_info' : JSON.stringify(stop_info), 'bank_info' : JSON.stringify(bank_info) })
+
+      gameActions.event_info({ 
+        'stop_info' : JSON.stringify(stop_info), 
+        'bank_info' : JSON.stringify(bank_info),
+        'player_rank' : JSON.stringify(player_rank),
+      })
 
       gameActions.settle_player_money({ 
         'settle_state' : JSON.stringify(settle_state)

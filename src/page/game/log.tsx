@@ -14,18 +14,19 @@ export interface AllProps {
   functionsActions : any,
   playing : boolean,
   _addLog : Function,
-  game_log : string
+  game_log : string,
+  game_over : boolean
 };
 
 class Log extends React.Component<AllProps> {
 
   // 채팅 입력
   _chat = (event : any) => {
-    const { playing, _addLog } = this.props;
+    const { playing, _addLog, game_over } = this.props;
 
     event.preventDefault();
 
-    if(playing === false) {
+    if(playing === false || game_over === true) {
       return;
     }
 
@@ -46,7 +47,7 @@ class Log extends React.Component<AllProps> {
   }
 
   render() {
-    const { playing } = this.props;
+    const { playing, game_over } = this.props;
     const { _chat } = this;
 
     const game_log = JSON.parse(this.props.game_log);
@@ -68,13 +69,14 @@ class Log extends React.Component<AllProps> {
             <div id='game_chat_grid_div'>
               <div> 
                 <input type='text' name='chat' id='game_chat' maxLength={30} placeholder={playing === false ? undefined : '채팅 입력'}
-                       disabled={playing === false} readOnly={playing === false}
+                       disabled={playing === false || game_over === true} readOnly={playing === false || game_over === true}
                 /> 
               
               </div>
 
               <div className='aCenter'> 
                 <input type='submit' value='입력' id='game_chat_submit' 
+                       style={playing === false || game_over === true ? { 'color' : '#ababab' } : undefined}
                        className={playing === false ? 'gray' : undefined}
                 /> 
               </div>
@@ -90,7 +92,8 @@ export default connect(
   ( { init, game, functions } : StoreState  ) => ({
     playing : game.playing,
     _addLog : functions._addLog,
-    game_log : game.game_log
+    game_log : game.game_log,
+    game_over : game.game_over
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

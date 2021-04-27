@@ -2,7 +2,7 @@ import * as React from 'react';
 import $ from 'jquery';
 
 import { actionCreators as initActions } from '../../Store/modules/init';
-import { actionCreators as gameActions } from '../../Store/modules/game';
+import game, { actionCreators as gameActions } from '../../Store/modules/game';
 import { actionCreators as functionsActions } from '../../Store/modules/functions';
 
 import { connect } from 'react-redux'; 
@@ -162,10 +162,18 @@ class Settle extends React.Component<AllProps> {
   _confirmSettle = (player : number) => {
     const { _turnEnd, gameActions, _addLog } = this.props;
     const settle_state = JSON.parse(this.props.settle_state);
+    const bank_info = JSON.parse(this.props.bank_info);
 
     // 파산
-    settle_state[player] = true;
 
+    // 빚 전부 청산하기
+    bank_info[player]['repay_day'] = 0;
+    bank_info[player]['loan'] = 0;
+    bank_info[player]['loan_incentive'] = 0;
+
+    gameActions.event_info({ 'bank_info' : JSON.stringify(bank_info) });
+
+    settle_state[player] = true;
     gameActions.settle_player_money({ 'settle_state' : JSON.stringify(settle_state) })
 
     const ment = `<div class='game_alert_2 back_black red'> <b class='color_player_${player}'> ${player} 플레이어 </b>가 파산했습니다. </div>`
@@ -174,7 +182,31 @@ class Settle extends React.Component<AllProps> {
     clearInterval(settle_timer);
 
     gameActions.settle_player_money({ 'settle_modal' : false, 'settle_type' : null, 'settle_bill' : JSON.stringify({}), 'settle_extra_money' : 0 })
-    _turnEnd();
+   
+    // 게임 종료 여건 체크하기
+    let winner : string | null = null;
+    let game_over = true;
+    let check : number = 0;
+
+    for(let key in settle_state) {
+      check += 1;
+
+      if(settle_state[key] === false) {
+        if(winner !== null) {
+          game_over = false;
+        }
+        winner = key;
+      }
+    }
+   
+    if(game_over === true) {
+      // 게임 종료
+      gameActions.game_over({ 'game_over' : true, 'winner' : Number(winner) })
+    }
+
+    return window.setTimeout(() => {
+      return _turnEnd();
+    }, 300);
   }
 
   render() {

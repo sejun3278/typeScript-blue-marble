@@ -31,7 +31,10 @@ export interface AllProps {
   map_info : string,
   _splitMoneyUnit : Function,
   pass_price : number,
-  settle_state : string
+  settle_state : string,
+  game_over : boolean,
+  winner : number,
+  player_rank : string
 };
 
 class Player extends React.Component<AllProps> {
@@ -54,13 +57,15 @@ class Player extends React.Component<AllProps> {
   render() {
     const { 
       gameActions, float_style, _commaMoney, number, turn, round_start, round, player_bank_info_alert,
-      bank_incentive_percent, loan_percent, player_estate_info_alert, _splitMoneyUnit, pass_price
+      bank_incentive_percent, loan_percent, player_estate_info_alert, _splitMoneyUnit, game_over, winner
     } = this.props;
 
     const { _setInfoAlert } = this;
     const info : any = JSON.parse(this.props.info);
     const map_list = JSON.parse(this.props.map_info)
     const settle_state = JSON.parse(this.props.settle_state);
+
+    const player_rank = JSON.parse(this.props.player_rank)
 
     let img_list : any = img.img.character;
     const MapInfo = require('./city_info.json');
@@ -100,6 +105,7 @@ class Player extends React.Component<AllProps> {
       player_money = _splitMoneyUnit(info.money);
     }
 
+    const rank_style : any = {};
     if(info.number === 2 || info.number === 4) {
       contents_style['borderRight'] = 'solid 1px #ababab';
 
@@ -113,6 +119,13 @@ class Player extends React.Component<AllProps> {
 
             if(info.number === 2 || info.number === 4) {
               my_turn_style['marginLeft'] = '253px';
+
+              if(info.number === 2) {
+                rank_style['margin'] = '75px 0px 0px -35px';
+
+              } else if(info.number === 4) {
+                rank_style['margin'] = '-20px 0px 0px -35px';
+              }
             }
         }
 
@@ -122,6 +135,14 @@ class Player extends React.Component<AllProps> {
     }
 
     if(info.able === true) {
+      if(info.number === 1) {
+        rank_style['margin'] = '75px 0px 0px 315px';
+
+      } else if(info.number === 3) {
+        rank_style['margin'] = '-20px 0px 0px 315px';
+
+      }
+
       if(round_start === true) {
         if(turn === Number(info.number) && info) {
           img_list = img.img.character;
@@ -158,6 +179,11 @@ class Player extends React.Component<AllProps> {
         if(info.maps.length > 0) {
           estate_notice_icon = img.icon.notice
         }
+      }
+
+      if(turn === info.number) {
+        rank_style['border'] = 'solid 2px black';
+        rank_style['color'] = 'black';
       }
     }
 
@@ -211,7 +237,12 @@ class Player extends React.Component<AllProps> {
       }
     }
 
-    // console.log(player_money)
+    if(game_over === true) {
+      if(info.number === Number(winner)) {
+        img_list = img.img.character.action;
+        my_thumb = img_list[info.character];
+      }
+    }
 
     return(
       <div className='game_contents_player_profile_div' key={number}
@@ -240,7 +271,7 @@ class Player extends React.Component<AllProps> {
                       보유 자산　|　{player_money}
 
                       <img alt='' className='game_user_bank_info_icon' src={bank_icon} id='bank_icon' 
-                           onMouseEnter={() => turn === info.number && turn === 1 ? gameActions.player_bank_info({ 'player_bank_info_alert' : true, 'player_estate_info_alert' : false }) : undefined}
+                           onMouseEnter={() => turn === info.number && turn === 1 && settle_state[1] === false ? gameActions.player_bank_info({ 'player_bank_info_alert' : true, 'player_estate_info_alert' : false }) : undefined}
                       />
 
                     </div>
@@ -249,7 +280,7 @@ class Player extends React.Component<AllProps> {
                     <div className='game_user_has_location' style={info.maps.length > 0 ? { 'color' : '#194350', 'fontWeight' : 'bold' } : undefined}> 
                       보유 도시　|　{info.maps.length}　도시 보유 중 
                       <img alt='' className='game_user_estate_info_icon' src={estate_notice_icon} 
-                           onMouseEnter={() => turn === info.number && turn === 1 ? gameActions.player_bank_info({ 'player_estate_info_alert' : true, 'player_bank_info_alert' : false })  : undefined}
+                           onMouseEnter={() => turn === info.number && turn === 1 && settle_state[1] === false ? gameActions.player_bank_info({ 'player_estate_info_alert' : true, 'player_bank_info_alert' : false })  : undefined}
                       />
                     </div>
 
@@ -422,6 +453,18 @@ class Player extends React.Component<AllProps> {
             } */}
         </div>
 
+        {info.able === true
+          ? <div className='player_rank_div'>
+              <h3
+                style={rank_style}
+              > 
+                {player_rank[info.number].rank} 위 
+              </h3>
+            </div>
+
+          : undefined
+        }
+
         {info.number === turn && settle_state[info.number] === false
         ?
           <div className='player_my_turn_icon'
@@ -434,7 +477,29 @@ class Player extends React.Component<AllProps> {
 
         {settle_state[info.number] === true
           ? <div className='settle_player_icon'>
-              <h3> 파산 </h3>
+              <h3 style={info.number === 2 || info.number === 4
+                ? { 'marginLeft' : '265px' }
+
+                : undefined
+              }> 
+                파산 
+              </h3>
+            </div>
+
+          : undefined
+        }
+
+        {winner === info.number
+          ? <div id='winner_player_icon'>
+              <h3
+                style={info.number === 1 || info.number === 3
+                  ? { 'marginLeft' : '0px' }
+
+                  : undefined
+                }
+              > 
+                Winner 
+              </h3>
             </div>
 
           : undefined
@@ -458,7 +523,10 @@ export default connect(
     map_info : init.map_info,
     _splitMoneyUnit : functions._splitMoneyUnit,
     pass_price : init.pass_price,
-    settle_state: game.settle_state
+    settle_state: game.settle_state,
+    game_over : game.game_over,
+    winner : game.winner,
+    player_rank : game.player_rank
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

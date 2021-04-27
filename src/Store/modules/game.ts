@@ -90,7 +90,10 @@ export interface gameState {
     play_time : number,
     save_money_index : string,
     game_over : boolean,
-    settle_state : string
+    winner : number,
+    settle_state : string,
+    player_rank : string,
+    rank_update : boolean
 }
 
 const initialState : gameState = {
@@ -149,7 +152,10 @@ const initialState : gameState = {
     play_time : 0,
     save_money_index : JSON.stringify({}),
     game_over : false,
-    settle_state : JSON.stringify({})
+    winner : 0,
+    settle_state : JSON.stringify({}),
+    player_rank : JSON.stringify({}),
+    rank_update : false
 }
 
 export default handleActions<gameState> ({
@@ -240,7 +246,9 @@ export default handleActions<gameState> ({
             loan_payback_date : data.payload.loan_payback_date !== undefined ? data.payload.loan_payback_date : state.loan_payback_date,
             loan_plus_incentive : data.payload.loan_plus_incentive !== undefined ? data.payload.loan_plus_incentive : state.loan_plus_incentive,
             loan_order_confirm : data.payload.loan_order_confirm !== undefined ? data.payload.loan_order_confirm : state.loan_order_confirm,
-            save_money_index : data.payload.save_money_index !== undefined ? data.payload.save_money_index : state.save_money_index
+            save_money_index : data.payload.save_money_index !== undefined ? data.payload.save_money_index : state.save_money_index,
+            player_rank : data.payload.player_rank !== undefined ? data.payload.player_rank : state.player_rank,
+            rank_update : data.payload.rank_update !== undefined ? data.payload.rank_update : state.rank_update
         }
     },
 
@@ -310,7 +318,8 @@ export default handleActions<gameState> ({
     [GAMEOVER] : (state : any, data : any) => {
         return {
             ...state,
-            game_over : data.payload.game_over !== undefined ? data.payload.game_over : state.game_over
+            game_over : data.payload.game_over !== undefined ? data.payload.game_over : state.game_over,
+            winner : data.payload.winner !== undefined ? data.payload.winner : state.winner
         }
     }
 

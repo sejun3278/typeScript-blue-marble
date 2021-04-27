@@ -37,7 +37,8 @@ export interface AllProps {
   round : number,
   _splitMoneyUnit : Function,
   _minusPlayerMoney : Function,
-  pass_price : number
+  pass_price : number,
+  _setPlayerRank : Function
 };
 
 class Card extends React.Component<AllProps> {
@@ -287,9 +288,11 @@ class Card extends React.Component<AllProps> {
                         circle = true;
                         // 한바퀴 순환
 
-                        // 순환시 현재 자금의 10% 추가
+                        // 순환시 지원금 50 만원 추가
                         _removeAlertMent('은행으로부터 50 만원의 추가금을 받았습니다.');
                         _addLog(`<div class='game_alert color_player_${turn}'> 은행으로부터 지원금 50 만원을 받았습니다. </div>`);
+
+                        this.props.gameActions.event_info({ 'rank_update' : true })
 
                         player_list[Number(turn) - 1].money += 50;
                         _playerMoney(turn, 50, 'plus');
@@ -380,6 +383,8 @@ class Card extends React.Component<AllProps> {
 
                 _removeAlertMent('은행으로부터 50 만원의 지원금을 받았습니다.');
                 _addLog(`<div class='game_alert color_player_${turn}'> 은행으로부터 지원금 50 만원을 받았습니다. </div>`);
+
+                this.props.gameActions.event_info({ 'rank_update' : true })
 
                 player_list[Number(turn) - 1].money += 50;    
 
@@ -514,7 +519,8 @@ export default connect(
     round : game.round,
     _splitMoneyUnit : functions._splitMoneyUnit,
     _minusPlayerMoney : functions._minusPlayerMoney,
-    pass_price : init.pass_price
+    pass_price : init.pass_price,
+    _setPlayerRank : functions._setPlayerRank
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

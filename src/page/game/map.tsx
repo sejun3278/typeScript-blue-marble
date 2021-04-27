@@ -24,7 +24,8 @@ export interface AllProps {
     _removeAlertMent : Function,
     _moveCharacter : Function,
     stop_days : number,
-    pass_price : number
+    pass_price : number,
+    settle_state : string
 };
 
 class Map extends React.Component<AllProps> {
@@ -61,6 +62,7 @@ class Map extends React.Component<AllProps> {
       round, move_event_able, stop_days, pass_price 
     } = this.props;
     const { _moveMap } = this;
+    const settle_state = JSON.parse(this.props.settle_state);
 
     const info = JSON.parse(this.props.info);
     const city_info = JSON.parse(this.props.map_info)
@@ -257,6 +259,10 @@ class Map extends React.Component<AllProps> {
                     margin_style['marginLeft'] = (key + 1) * 16 + 'px';
                   }
 
+                  if(settle_state[key + 1] === true) {
+                    margin_style['backgroundColor'] = '#ababab';
+                  }
+
                   if(el.able === true) {
                     return(
                       <div key={key} className='player_mini_character' style={margin_style} 
@@ -285,7 +291,8 @@ export default connect(
     _removeAlertMent : functions._removeAlertMent,
     _moveCharacter : functions._moveCharacter,
     stop_days : init.stop_days,
-    pass_price : init.pass_price
+    pass_price : init.pass_price,
+    settle_state : game.settle_state
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),
