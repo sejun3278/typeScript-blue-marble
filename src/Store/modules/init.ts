@@ -57,7 +57,7 @@ const initialState : initState = {
     round_timer : 0,
     game_event : true,
     setting_modify : false,
-    round_limit : 0,
+    round_limit : 2,
     pass_price : 1,
     player_list : JSON.stringify([]),
     able_player : 2,

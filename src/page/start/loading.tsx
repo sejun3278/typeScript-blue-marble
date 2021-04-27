@@ -61,8 +61,6 @@ class Loading extends React.Component<AllProps> {
 
       // 은행 정보 저장
       const bank_info : any = {};
-      
-      // let test_money = 50;
 
       // 플레이어 설정하기
       for(let i = 0; i < player_list.length; i++) {
@@ -71,14 +69,7 @@ class Loading extends React.Component<AllProps> {
         if(player_list[i]['able'] === true) {
           player_list[i]['money'] = start_price;
 
-          // if(i > 1) {
-            // test_money += 50;
-            // player_list[i]['money'] = test_money
-          // }
-
-          // player_list[0]['money'] = 150;
-          // player_list[3]['money'] = 50;
-
+          // player_list[0]['money'] = 1000;
 
           player_list[i]['maps'] = [];
           player_list[i]['location'] = 0;
@@ -97,7 +88,7 @@ class Loading extends React.Component<AllProps> {
           // 대출금
           bank_info[i + 1]['loan'] = 0;
           if(i === 0) {
-            bank_info[i + 1]['loan'] = 5
+            // bank_info[i + 1]['loan'] = 8
           }
 
           // 대출 이자금
@@ -113,7 +104,7 @@ class Loading extends React.Component<AllProps> {
           bank_info[i + 1]['repay_day'] = 0;
 
           if(i === 0) {
-            bank_info[i + 1]['repay_day'] = 1;
+            // bank_info[i + 1]['repay_day'] = 2;
           }
         }
       }

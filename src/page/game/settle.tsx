@@ -201,7 +201,7 @@ class Settle extends React.Component<AllProps> {
    
     if(game_over === true) {
       // 게임 종료
-      gameActions.game_over({ 'game_over' : true, 'winner' : Number(winner) })
+      gameActions.game_over({ 'game_over' : true, 'winner' : winner })
     }
 
     return window.setTimeout(() => {

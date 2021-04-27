@@ -91,6 +91,7 @@ export interface gameState {
     save_money_index : string,
     game_over : boolean,
     winner : number,
+    multiple_winner : string,
     settle_state : string,
     player_rank : string,
     rank_update : boolean
@@ -153,6 +154,7 @@ const initialState : gameState = {
     save_money_index : JSON.stringify({}),
     game_over : false,
     winner : 0,
+    multiple_winner : JSON.stringify([]),
     settle_state : JSON.stringify({}),
     player_rank : JSON.stringify({}),
     rank_update : false
@@ -319,7 +321,8 @@ export default handleActions<gameState> ({
         return {
             ...state,
             game_over : data.payload.game_over !== undefined ? data.payload.game_over : state.game_over,
-            winner : data.payload.winner !== undefined ? data.payload.winner : state.winner
+            winner : data.payload.winner !== undefined ? data.payload.winner : state.winner,
+            multiple_winner : data.payload.multiple_winner !== undefined ? data.payload.multiple_winner : state.multiple_winner
         }
     }
 

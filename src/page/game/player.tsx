@@ -34,7 +34,8 @@ export interface AllProps {
   settle_state : string,
   game_over : boolean,
   winner : number,
-  player_rank : string
+  player_rank : string,
+  multiple_winner : string
 };
 
 class Player extends React.Component<AllProps> {
@@ -65,7 +66,8 @@ class Player extends React.Component<AllProps> {
     const map_list = JSON.parse(this.props.map_info)
     const settle_state = JSON.parse(this.props.settle_state);
 
-    const player_rank = JSON.parse(this.props.player_rank)
+    const player_rank = JSON.parse(this.props.player_rank);
+    const multiple_winner = JSON.parse(this.props.multiple_winner)
 
     let img_list : any = img.img.character;
     const MapInfo = require('./city_info.json');
@@ -238,9 +240,12 @@ class Player extends React.Component<AllProps> {
     }
 
     if(game_over === true) {
-      if(info.number === Number(winner)) {
+      if(info.number === Number(winner) || multiple_winner.includes(info.number)) {
         img_list = img.img.character.action;
         my_thumb = img_list[info.character];
+
+        rank_style['border'] = 'solid 3px #9ede73';
+        rank_style['color'] = '#9ede73' 
       }
     }
 
@@ -465,7 +470,7 @@ class Player extends React.Component<AllProps> {
           : undefined
         }
 
-        {info.number === turn && settle_state[info.number] === false
+        {info.number === turn && settle_state[info.number] === false && game_over === false
         ?
           <div className='player_my_turn_icon'
               style={my_turn_style}>
@@ -489,8 +494,8 @@ class Player extends React.Component<AllProps> {
           : undefined
         }
 
-        {winner === info.number
-          ? <div id='winner_player_icon'>
+        {winner === info.number || multiple_winner.includes(info.number)
+          ? <div className='winner_player_icon'>
               <h3
                 style={info.number === 1 || info.number === 3
                   ? { 'marginLeft' : '0px' }
@@ -526,7 +531,8 @@ export default connect(
     settle_state: game.settle_state,
     game_over : game.game_over,
     winner : game.winner,
-    player_rank : game.player_rank
+    player_rank : game.player_rank,
+    multiple_winner : game.multiple_winner
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

@@ -945,7 +945,7 @@ body {
                 }
             }
 
-            #winner_player_icon {
+            .winner_player_icon {
                 h3 {
                     position: absolute;
                     font-family: $recipe_korea;
@@ -1897,6 +1897,7 @@ body {
         font-family: $recipe_korea;
         color: #9ede73;
         padding-top: 100px;
+        padding-bottom: 30px;
     }
 }
 
@@ -2083,4 +2084,8 @@ body {
         background-color: white;
         color: #ababab;
     }
+}
+
+#winner_player_list_div {
+    line-height: 30px;
 }
