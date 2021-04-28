@@ -289,7 +289,7 @@ class Player extends React.Component<AllProps> {
                       />
                     </div>
 
-                    {player_bank_info_alert === true && turn === info.number
+                    {player_bank_info_alert === true && turn === info.number && game_over === false
                       ? <div className={'game_user_bank_info color_player_' + turn} id='game_user_bank_info'
                              onMouseLeave={() => turn === info.number ? gameActions.player_bank_info({ 'player_bank_info_alert' : false }) : undefined}
                         > 
@@ -344,7 +344,7 @@ class Player extends React.Component<AllProps> {
 
                       : undefined}
 
-                      {player_estate_info_alert === true && turn === info.number
+                      {player_estate_info_alert === true && turn === info.number && game_over === false
                         ? <div className={'game_user_bank_info color_player_' + turn}
                                id='player_estate_info_div'
                                onMouseLeave={() => gameActions.player_bank_info({ 'player_estate_info_alert' : false })}
@@ -507,6 +507,24 @@ class Player extends React.Component<AllProps> {
               </h3>
             </div>
 
+          : undefined
+        }
+
+        {game_over === true
+          ? multiple_winner.includes(info.number) === false && info.able === true
+            ? <div className='lose_player_icon'>
+                <h3
+                  style={info.number % 2 === 0
+                    ? { 'marginLeft' : '263px' }
+
+                    : undefined
+                  }
+                >
+                  Lose
+                </h3>
+              </div>
+
+            : undefined
           : undefined
         }
       </div>

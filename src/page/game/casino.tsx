@@ -319,9 +319,10 @@ class Casino extends React.Component<AllProps> {
                 ?
                 <div id='casino_betting_input_div'>
                     <b> 배팅금　|　</b>
-                    <input type='number' id='betting_input' defaultValue={min} max={max} 
+                    <input type='number' id='betting_input' defaultValue={min} max={max}
                         onChange={(event) => _checkMoney(event, now_player.money)}
                         readOnly={casino_game_start !== false}
+                        disabled={turn !== 1}
                     /> 만원
                 </div>
 
@@ -335,7 +336,7 @@ class Casino extends React.Component<AllProps> {
                   
                     <input type='button' value='배팅 완료' id='betting_confirm_input'
                            style={casino_betting <= 0 ? { 'backgroundColor' : '#ababab' } : undefined}
-                           onClick={() => casino_game_start === false ? _bettingGameStart() : undefined}
+                           onClick={() => casino_game_start === false && turn === 1 ? _bettingGameStart() : undefined}
                     />
                   </div>
 

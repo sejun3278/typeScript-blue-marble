@@ -23,7 +23,10 @@ export interface functionsState {
     _splitMoneyUnit : Function,
     _turnEnd : Function,
     _getMyRating : Function,
-    _setPlayerRank : Function
+    _setPlayerRank : Function,
+    _buyMap : Function,
+    _checkLandMark : Function,
+    _build : Function
 }
 
 const initialState : functionsState = {
@@ -43,7 +46,10 @@ const initialState : functionsState = {
     _splitMoneyUnit : () => {},
     _turnEnd : () => {},
     _getMyRating : () => {},
-    _setPlayerRank : () => {}
+    _setPlayerRank : () => {},
+    _buyMap : () => {},
+    _checkLandMark : () => {},
+    _build : () => {}
 }
 
 export default handleActions<functionsState> ({
@@ -66,7 +72,10 @@ export default handleActions<functionsState> ({
         _splitMoneyUnit : data.payload._splitMoneyUnit !== undefined ? data.payload._splitMoneyUnit : state._splitMoneyUnit,
         _turnEnd : data.payload._turnEnd !== undefined ? data.payload._turnEnd : state._turnEnd,
         _getMyRating : data.payload._getMyRating !== undefined ? data.payload._getMyRating : state._getMyRating,
-        _setPlayerRank : data.payload._setPlayerRank !== undefined ? data.payload._setPlayerRank : state._setPlayerRank
+        _setPlayerRank : data.payload._setPlayerRank !== undefined ? data.payload._setPlayerRank : state._setPlayerRank,
+        _buyMap : data.payload._buyMap !== undefined ? data.payload._buyMap : state._buyMap,
+        _checkLandMark : data.payload._checkLandMark !== undefined ? data.payload._checkLandMark : state._checkLandMark,
+        _build : data.payload._build !== undefined ? data.payload._build : state._build
       };
     }
 

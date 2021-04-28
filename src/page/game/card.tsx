@@ -38,7 +38,13 @@ export interface AllProps {
   _splitMoneyUnit : Function,
   _minusPlayerMoney : Function,
   pass_price : number,
-  _setPlayerRank : Function
+  _setPlayerRank : Function,
+  game_over : boolean,
+  _checkPlayerMoney : Function,
+  _turnEnd : Function,
+  _buyMap : Function,
+  _checkLandMark : Function,
+  _build : Function
 };
 
 class Card extends React.Component<AllProps> {
@@ -55,8 +61,8 @@ class Card extends React.Component<AllProps> {
     const target = event !== null ? event.target : document.getElementById(event);
     const card_deck : any = JSON.parse(this.props.card_deck);
 
-    const { time_over } = this.props;
-    const able = card_deck[key].select === false && card_deck[key].use === false && time_over === false
+    const { time_over, game_over } = this.props;
+    const able = card_deck[key].select === false && card_deck[key].use === false && time_over === false && game_over === false
 
         if(able === true) {
             if(type === 'on') {
@@ -116,8 +122,8 @@ class Card extends React.Component<AllProps> {
                 if(save_obj['card_select_able'] === false) {
                     save_obj['card_notice_ment'] = save_obj['all_card_num'] + ' 칸을 이동합니다.';
 
-                    // this._moveCharacter(save_obj['all_card_num'], null);
-                    this._moveCharacter(3, null) //
+                    this._moveCharacter(save_obj['all_card_num'], null);
+                    // this._moveCharacter(20, null) //
 
                     // 김포공항행
 
@@ -292,7 +298,9 @@ class Card extends React.Component<AllProps> {
                         _removeAlertMent('은행으로부터 50 만원의 추가금을 받았습니다.');
                         _addLog(`<div class='game_alert color_player_${turn}'> 은행으로부터 지원금 50 만원을 받았습니다. </div>`);
 
-                        this.props.gameActions.event_info({ 'rank_update' : true })
+                        window.setTimeout(() => {
+                            this.props.gameActions.event_info({ 'rank_update' : true })                            
+                        }, 200);
 
                         player_list[Number(turn) - 1].money += 50;
                         _playerMoney(turn, 50, 'plus');
@@ -384,7 +392,9 @@ class Card extends React.Component<AllProps> {
                 _removeAlertMent('은행으로부터 50 만원의 지원금을 받았습니다.');
                 _addLog(`<div class='game_alert color_player_${turn}'> 은행으로부터 지원금 50 만원을 받았습니다. </div>`);
 
-                this.props.gameActions.event_info({ 'rank_update' : true })
+                window.setTimeout(() => {
+                    this.props.gameActions.event_info({ 'rank_update' : true })                            
+                }, 200);
 
                 player_list[Number(turn) - 1].money += 50;    
 
@@ -410,7 +420,6 @@ class Card extends React.Component<AllProps> {
 
                 // 토지 소유주의 돈 증가
                 player_list[city_info.host - 1].money += city_info.pass * _pass_price;
-
             }
         }
 
@@ -423,18 +432,224 @@ class Card extends React.Component<AllProps> {
         gameActions.round_start(turn_end)
         gameActions.move({ 'move_able' : false });;
         gameActions.select_type({ 'select_type' : select_type, 'select_info' : JSON.stringify(city_info), "select_tap" : tap_info })
-        initActions.set_player_info({ 'player_list' : JSON.stringify(player_list) })
+        initActions.set_player_info({ 'player_list' : JSON.stringify(player_list) });
+
+        if(Number(turn) > 1) {
+            window.setTimeout( () => {
+                // 컴퓨터 행동 함수 실행하기
+                return this._actionComputer(Number(turn), city_info, player_list);
+            }, 200)
+        }
+    }
+
+    // 컴퓨터 행동 알고리즘
+    _actionComputer = (player : number, city : any, player_list : any) => {
+        const { _checkPlayerMoney, _turnEnd, gameActions } = this.props;
+
+        // 플레이어의 현재 자산 + 은행 자산
+        const my_money = _checkPlayerMoney(player);
+
+        // 도착한 토지의 타입 파악
+        if(city.type === 'map') {
+            // 일반 맵
+            if(city.host !== null) {
+                // 주인이 있는 경우 
+                
+                // (상대 플레이어의 토지인 경우) 바로 턴 종료
+                if(city.host !== player) {
+                    return this._computerTurnEnd();
+
+                } else {
+                    // 내가 구매한 토지인 경우
+                    // 건설을 위한 알고리즘 실행
+                    return this._computerBuild(player, 'build', player_list, city);
+                }
+
+            } else if(city.host === null) {
+                // 주인이 없는 경우 토지 구매에 대한 알고리즘 실행
+                return this._computerBuild(player, 'land', player_list, city);
+            }
+
+        } else if(city.type === 'event') {
+            // 이벤트 맵
+            if(city.number === 6) {
+                // 무인도에 도착할 경우 바로 턴 종료
+                return this._computerTurnEnd();
+
+            } else if(city.number === 14) {
+                // 카지노
+
+            } else if(city.number === 20) {
+                // 김포공항
+
+            } else if(city.number === 0) {
+                // 은행
+            }
+        }
+    }
+
+    // 컴퓨터 턴 종료
+    _computerTurnEnd = () => {
+        const { _turnEnd, turn } = this.props;
+
+        return window.setTimeout( () => {
+            return _turnEnd(turn);
+        }, 500)
+    }
+
+    // 컴퓨터 토지 구매 및 건설 알고리즘 함수
+    _computerBuild : Function = (player : number, type : string, player_list : any, city : any) => {
+        // type = land : 토지 구매, build : 건설
+        const { _checkPlayerMoney, _buyMap } = this.props;
+
+        // 플레이어의 현재 자산 + 은행 자산
+        const my_money = _checkPlayerMoney(player);
+
+        // 구매 확률
+        let able : any = null;
+        if(type === 'land') {
+            // 토지 구매하기
+            if(my_money > city.price) {
+                // 컴퓨터의 토지 구매확률 구하기
+                able = this._computerBuyPercent(50, city, 'land', city.price);
+
+                // 알고리즘을 통해 구매에 확정할 경우
+                if(able === true) {
+                    return setTimeout( () => {
+                        _buyMap('click', player_list[player - 1], city);
+                        
+                        // 토지 구매후 건설을 위한 함수 재실행
+                        return window.setTimeout( () => {
+                            return this._computerTurnEnd();
+                            // return this._computerBuild(player, 'build', player_list, city);
+                        }, 500)
+                    }, 500);
+                }
+
+            } else {
+                // 돈 부족할 경우 바로 턴 종료
+                return this._computerTurnEnd();
+            }
+
+        } else if(type === 'build') {
+            // 건설하기
+            return this._computerBuyPercent(50, city, 'build', 0);
+        }
+
+        if(able === false) {
+            return this._computerTurnEnd();
+        }
+    }
+
+    // 확률
+    _computerBuyPercent = (percent : number, city : any, type : string, buy_money : number) => {
+        // percent : 시작 확률
+        const { turn, _checkPlayerMoney, _checkLandMark, _build } = this.props;
+        const my_money = _checkPlayerMoney(turn);
+
+        if(type === 'land') {
+            const player_list = JSON.parse(this.props.player_list);
+
+            // 소유중인 토지의 갯수에 따라 확률 조정
+            const my_maps : number = player_list[Number(turn) - 1].maps.length
+            if(my_maps >= 0 && my_maps < 4) {
+                // 소유 토지가 0개 이상, 4개 미만일 경우 (0 ~ 3개)
+                percent += 20;
+
+            } else if(my_maps >= 4 && my_maps < 8) {
+                // 소유 토지가 4개 이상, 8개 미만일 경우 (4 ~ 7개)
+                percent -= 5;
+
+            } else if(my_maps >= 8) {
+                // 소유 토지가 8개 이상일 경우
+                percent -= 10;
+            }
+
+        } else if(type === 'build') {
+            // 랜드마크 건설 여부 확인 : true 일 경우 랜드마크 건설 가능
+            const lendmark_able = _checkLandMark(city);
+
+            if(lendmark_able === false) {
+                // 랜드마크 구매가 불가능한 상황
+                for(let i = 0; i < 3; i++) {
+                    // 랜드마크 전까지의 인덱스까지 반복문 실행
+                    if(city.build[i].build === false) {
+                        // 건설되지 않을 경우만 실행
+                        const my_money : number = _checkPlayerMoney(turn);
+
+                        if(my_money >= city.build[i].price) {
+                            window.setTimeout( () => {
+                                const able = this._computerBuyPercent(50, city, 'check', city.build[i].price);
+
+                                if(able === true) {
+                                    // 건설하기
+                                    _build('click', i, city);
+                                }
+                            }, 1000)
+
+                        } else {
+                            // 구매할 돈이 없다면 바로 턴 종료
+                            return this._computerTurnEnd();
+                        }
+                    }
+                }
+
+                return this._computerTurnEnd();
+
+            } else if(lendmark_able === true) {
+                // 랜드마크 구매 가능
+                // return this._computerBuyPercent(50, city, 'check', city.build[3].price);
+            }
+        }
+
+        const extra_money : number = Number(my_money - buy_money);
+        if(extra_money <= 0 && extra_money > 20) {
+            // 구매 후 남은 자산이 0 만원 ~ 20 만원 사이
+            percent -= 30;
+    
+        } else if(extra_money <= 20 && extra_money > 40) {
+            // 구매 후 남은 자산이 20 만원 ~ 40 만원 사이
+            percent -= 15;
+
+        } else if(extra_money <= 40 && extra_money > 60) {
+            // 구매 후 남은 자산이 40 만원 ~ 60 만원 사이
+            percent += 5;
+
+        } else if(extra_money <= 60 && extra_money > 80) {
+            // 구매 후 남은 자산이 60 만원 ~ 80 만원 사이
+            percent += 15;
+
+        } else if(extra_money <= 80 && extra_money > 100) {
+            // 구매 후 남은 자산이 80 만원 ~ 100 만원 사이
+            percent += 20;
+
+        } else if(extra_money <= 100) {
+            // 구매 후 남은 자산이 100 만원 이상
+            percent += 30;
+        }
+
+        percent = percent > 100 ? 100 : percent;
+        const random = Math.floor( Math.random() * (100 - 0) + 0 );
+
+        console.log(percent, random)
+        if(percent >= random) {
+            // 확률이 랜덤 숫자보다 클 경우 true
+            return true;
+
+        } else {
+            return false;
+        }
     }
 
   render() {
       const { 
           card_notice_ment, select_first_card, select_last_card, turn, round_start, card_select_able,
-          card_limit, time_over
+          card_limit, time_over, game_over
         } = this.props;
       const card_deck = JSON.parse(this.props.card_deck);
       const { _toggleCardEvent } = this;
 
-      const toggle_able = card_select_able === true && round_start === true && turn === 1 && time_over === false;
+      const toggle_able = card_select_able === true && round_start === true && turn === 1 && time_over === false && game_over === false;
 
     return(
       <div id='card_select_div' className='aLeft'>
@@ -520,7 +735,13 @@ export default connect(
     _splitMoneyUnit : functions._splitMoneyUnit,
     _minusPlayerMoney : functions._minusPlayerMoney,
     pass_price : init.pass_price,
-    _setPlayerRank : functions._setPlayerRank
+    _setPlayerRank : functions._setPlayerRank,
+    game_over : game.game_over,
+    _checkPlayerMoney : functions._checkPlayerMoney,
+    _turnEnd : functions._turnEnd,
+    _buyMap : functions._buyMap,
+    _checkLandMark : functions._checkLandMark,
+    _build : functions._build
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

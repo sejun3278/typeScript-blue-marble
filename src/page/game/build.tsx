@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { actionCreators as initActions } from '../../Store/modules/init';
-import game, { actionCreators as gameActions } from '../../Store/modules/game';
+import { actionCreators as gameActions } from '../../Store/modules/game';
 import { actionCreators as functionsActions } from '../../Store/modules/functions';
 
 import { connect } from 'react-redux'; 
@@ -13,6 +13,7 @@ import img from '../../source/icon.json';
 export interface AllProps {
   initActions : any,
   gameActions : any,
+  functionsActions : any,
   select_info : string,
   turn : number | null,
   player_list : string,
@@ -30,28 +31,41 @@ export interface AllProps {
 
 class Build extends React.Component<AllProps> {
 
+    componentDidMount() {
+        const { functionsActions } = this.props;
+
+        functionsActions.save_function({
+            '_buyMap' : this._buyMap,
+            '_checkLandMark' : this._checkLandMark,
+            '_build' : this._build
+        })
+    }
+
     // 토지 구매하기
-    _buyMap = (event : any, type : string, my_info : any | undefined | null) => {
-        const select_info = JSON.parse(this.props.select_info);
+    _buyMap = (type : string, my_info : any | undefined | null, city : any | undefined | null) => {
+        const select_info = (city !== null && city !== undefined) ? city : JSON.parse(this.props.select_info);
         const map_info = JSON.parse(this.props.map_info);
-        // const player_list = JSON.parse(this.props.player_list);
+        const player_list = JSON.parse(this.props.player_list);
         
         const { 
             initActions, gameActions, _removeAlertMent, pass_price, _addLog, turn, _checkPlayerMoney, _minusPlayerMoney, _checkEstatePlayerMoney, _splitMoneyUnit
         } = this.props; 
 
         const player_all_money = _checkPlayerMoney(turn);
+        const event : any = document.getElementById('but_map_button');
+
+        const _my_info = my_info === undefined ? player_list[Number(turn) - 1] : my_info;
 
         if(type === 'on') {
             if(player_all_money >= select_info.price) {
-                event.target.style.backgroundColor = '#9fd8df';
-                event.target.style.color = 'white'
+                event.style.backgroundColor = '#9fd8df';
+                event.style.color = 'white'
             }
 
         } else if(type === 'off') {
             if(player_all_money >= select_info.price) {
-                event.target.style.backgroundColor = 'white';
-                event.target.style.color = 'black'
+                event.style.backgroundColor = 'white';
+                event.style.color = 'black'
             }
 
         } else if(type === 'click') {
@@ -67,7 +81,7 @@ class Build extends React.Component<AllProps> {
                 
                 const player_list = result['player'];
 
-                player_list[my_info.number - 1]['maps'].push(select_info.number);
+                player_list[_my_info.number - 1]['maps'].push(select_info.number);
 
                 initActions.set_player_info({ 
                     'player_list' : JSON.stringify(player_list), 
@@ -76,11 +90,11 @@ class Build extends React.Component<AllProps> {
                 gameActions.event_info({ 'bank_info' : JSON.stringify(result['bank']) })
 
                 // 맵 설정
-                map_info[select_info.number].host = my_info.number;
+                map_info[select_info.number].host = _my_info.number;
                 map_info[select_info.number].pass = select_info.price;
                 initActions.set_setting_state({ 'map_info' : JSON.stringify(map_info) });
 
-                select_info.host = my_info.number;
+                select_info.host = _my_info.number;
                 select_info.pass = select_info.price;
                 gameActions.select_type({ 'select_info' : JSON.stringify(select_info) })
 
@@ -115,9 +129,9 @@ class Build extends React.Component<AllProps> {
     }
 
     // 건물 건설하기
-    _build = (type : string, key : number) => {
+    _build = (type : string, key : number, city : any) => {
         const map_info = JSON.parse(this.props.map_info);
-        const select_info = JSON.parse(this.props.select_info);
+        const select_info = city !== null ? city : JSON.parse(this.props.select_info);
 
         const player_list : any = JSON.parse(this.props.player_list);
 
@@ -125,7 +139,7 @@ class Build extends React.Component<AllProps> {
             gameActions, initActions, turn, _removeAlertMent, pass_price, _addLog, _checkPlayerMoney, _minusPlayerMoney, _checkEstatePlayerMoney, _splitMoneyUnit
         } = this.props;
 
-        if(turn === 1) {
+        // if(turn === 1) {
             if(type === 'on') {
                 for(let i = 0; i < map_info[select_info.number].build.length; i++) {
                     delete map_info[select_info.number].build[i]['select'];
@@ -150,10 +164,9 @@ class Build extends React.Component<AllProps> {
                         map_info[select_info.number].price += map_info[select_info.number].build[key].price;
                         map_info[select_info.number].pass = map_info[select_info.number].pass + map_info[select_info.number].build[key].price;      
                         
-                        console.log(map_info)
                         delete map_info[select_info.number].build[key]['select'];
                         
-                        const now_location = map_info[player_list[turn - 1].location].name;
+                        const now_location = map_info[player_list[Number(turn) - 1].location].name;
 
                         const ment = `<div class='game_alert_2'> <b class='color_player_${turn}'> 플레이어 ${turn} </b>　|　${now_location} 에 ${map_info[select_info.number].build[key].name} 건설 <b class='red'> ( ${_splitMoneyUnit(map_info[select_info.number].build[key].price)} ) </b>  <br /> <b class='gray'> ( 통행료　|　${_splitMoneyUnit(origin_pass)}　=>　<b class='custom_color_1'>${_splitMoneyUnit(map_info[select_info.number].pass * pass_price)} </b> ) </b> </div>`;
                         _addLog(ment);
@@ -181,7 +194,7 @@ class Build extends React.Component<AllProps> {
                     }
                 }
             }
-        }
+        // }
 
         gameActions.select_type({ 'select_info' : JSON.stringify(map_info[select_info.number]) });
         initActions.set_setting_state({ 'map_info' : JSON.stringify(map_info) });
@@ -260,11 +273,12 @@ class Build extends React.Component<AllProps> {
             ? <div id='buy_map_div'>
                 <h3> 토지 매입 가격 </h3>
                 <input 
+                    id='but_map_button'
                     style={buy_button_style}
                     type='button' value={select_info.price + ' 만원'} 
-                    onMouseEnter={(event) => buy_able === true && turn === 1 ? _buyMap(event, 'on', my_info) : undefined}
-                    onMouseOut={(event) => buy_able === true && turn === 1 ? _buyMap(event, 'off', my_info) : undefined}
-                    onClick={(event) => turn === 1 ? _buyMap(event, 'click', my_info) : undefined}
+                    onMouseEnter={() => buy_able === true && turn === 1 ? _buyMap('on', my_info, null) : undefined}
+                    onMouseOut={() => buy_able === true && turn === 1 ? _buyMap('off', my_info, null) : undefined}
+                    onClick={() => turn === 1 ? _buyMap('click', my_info, null) : undefined}
                 />
               </div>
             
@@ -309,8 +323,8 @@ class Build extends React.Component<AllProps> {
                         if(key < 3) {
                             return(
                                 <div key={key} className='build_select_divs'
-                                     onMouseEnter={() => able_condition === true ? _build('on', key) : undefined}
-                                     onClick={() => able_condition === true ? _build('click', key) : undefined}
+                                     onMouseEnter={() => able_condition === true ? _build('on', key, null) : undefined}
+                                     onClick={() => able_condition === true ? _build('click', key, null) : undefined}
                                      style={el.build === false ? { 'color' : '#ababab'} : { 'color' : 'black' }}
                                 >
                                     <div className='build_select_title_div'>
@@ -328,7 +342,7 @@ class Build extends React.Component<AllProps> {
 
                                         {el.select === true
                                             ? <div id='build_confirm_div'
-                                                 onMouseOut={() => able_condition === true ? _build('off', key) : undefined}
+                                                 onMouseOut={() => able_condition === true ? _build('off', key, null) : undefined}
                                             >
                                                 건설
                                               </div>
@@ -376,7 +390,7 @@ class Build extends React.Component<AllProps> {
                                                     ?
                                                         <input type='button' value='건설' 
                                                                id={player_all_money < el.price ? "unable_build_landmark" : undefined}
-                                                               onClick={() => player_all_money >= el.price && turn === 1 ? _build('click', 3) : undefined}
+                                                               onClick={() => player_all_money >= el.price && turn === 1 ? _build('click', 3, null) : undefined}
                                                         />
 
                                                     : undefined

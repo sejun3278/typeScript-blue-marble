@@ -25,7 +25,7 @@ $margin_60 : 60px;
 /* Color */
 $gray : #ababab; .gray { color : $gray }
 $black : black; .black { color : $black }
-$white : white; .white { color : $white }
+$white : white; .white { color : $white !important }
 $red : #ce1f6a; .red { color : $red }
 $custom_color_1 : #00c7f5; .custom_color_1 { color : $custom_color_1 }
 .orange { color : orange}
@@ -38,10 +38,10 @@ $float_left : left; .float_left { float : left };
 $float_right : right; .float_right { float : right };
 
 /* player color */
-.color_player_1 { color : #28527a !important };
-.color_player_2 { color : #ad6c80 !important };
-.color_player_3 { color : #007965 !important };
-.color_player_4 { color : #f8dc81 !important };
+.color_player_1 { color : #28527a !important }; .back_player_1 { background-color: #28527a; }
+.color_player_2 { color : #ad6c80 !important }; .back_player_2 { background-color: #ad6c80; }
+.color_player_3 { color : #007965 !important }; .back_player_3 { background-color: #007965; }
+.color_player_4 { color : #f8dc81 !important }; .back_player_4 { background-color: #f8dc81; }
 
 /* font style */
 @font-face {
@@ -101,9 +101,19 @@ $font_14 : 14px;
 $font_13 : 13px;
 $font_12 : 12px;
 
+/* padding-bottom */
+$padding_bottom_10 : 10px; .padding_bottom_10 { padding-bottom: $padding_bottom_10; }
+$padding_bottom_20 : 20px; .padding_bottom_20 { padding-bottom: $padding_bottom_20; }
+$padding_bottom_30 : 30px; .padding_bottom_30 { padding-bottom: $padding_bottom_30; }
+$padding_bottom_40 : 40px; .padding_bottom_40 { padding-bottom: $padding_bottom_40; }
+
+html {
+    min-width : 1500px;
+    overflow-x: hidden !important;
+}
+
 body {
     cursor: default !important;
-    min-width : 1500px;
 
     #notice_div { 
         position: $absolute !important;
@@ -510,6 +520,23 @@ body {
 #game_div {
     // opacity: 0;
 
+    #game_over_notice_div {
+        position: absolute;
+        width: 100%;
+        border: solid 5px black;
+        left: 0px;
+        height: 150px;
+        background-color: black;
+        color: white;
+        top: 45%;
+        z-index: 2000;
+        text-align: center;
+        line-height: 150px;
+        font-size: 30px;
+        font-family: $recipe_korea;
+        opacity: 0
+    }
+
     #game_other_div { 
         display: grid;
         grid-template-columns: 50% 50%;
@@ -576,7 +603,7 @@ body {
                 height: 720px;
                 border: solid 2px #ababab;
                 // transform: rotate(405deg);
-                margin-left: 28% !important;
+                margin-left: 28%;
                 // margin-top: -109px !important;
 
                 .game_main_map_divs {
@@ -952,6 +979,16 @@ body {
                     font-size: 20px;
                     margin: 55px 0px 0px 252px;
                     color: #9ede73;
+                }
+            }
+
+            .lose_player_icon {
+                h3 {
+                    position: absolute;
+                    color: $red;
+                    font-size: 23px;
+                    margin : 52px 0px 0px 10px;
+                    font-family: $recipe_korea;
                 }
             }
 
@@ -1897,7 +1934,6 @@ body {
         font-family: $recipe_korea;
         color: #9ede73;
         padding-top: 100px;
-        padding-bottom: 30px;
     }
 }
 
@@ -2088,4 +2124,46 @@ body {
 
 #winner_player_list_div {
     line-height: 30px;
+}
+
+#play_end_info_div {
+    border: solid 2px #ababab;
+    margin: 40px 40px;
+    height: 250px;
+
+    h3 {
+        font-family: $SDSamliphopangche_Outline;
+        display: inline-block;
+        cursor: pointer;
+        margin-top: 20px;
+        font-size: 25px;
+        margin-bottom: 10px;
+        color: $custom_color_1;
+    }
+
+    #made_info_div {
+        border: dotted 1px #ababab;
+        margin: 5px 15px;
+        margin-bottom: 10px;
+        padding: 10px 0px;
+        font-family: $recipe_korea;
+        margin-top: 10px;
+
+        p {
+            font-size: 13px;
+            margin-bottom: 0px;
+            margin-top: 40px;
+        }
+
+        .made_info_grid_div {
+            display: grid;
+            grid-template-columns: 40% auto;
+        }
+    }
+}
+
+@media (max-width : 1500px) {
+    #game_play_other_div { margin-left: 1125px;}
+    #game_main_map_div { margin-left: 420px !important; }
+    #game_over_notice_div { width: 100% !important; }
 }

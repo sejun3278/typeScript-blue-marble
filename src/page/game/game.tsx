@@ -69,7 +69,8 @@ export interface AllProps {
   winner : number,
   player_rank : string,
   rank_update : boolean,
-  multiple_winner : string
+  multiple_winner : string,
+  select_info : string
 };
 
 const flash_info : any = {
@@ -131,7 +132,9 @@ class Game extends React.Component<AllProps> {
     const { rank_update, gameActions } = this.props;
 
     if(rank_update === true) {
-      this._setPlayerRank();
+      window.setTimeout( () => {
+        this._setPlayerRank();
+      }, 300)
 
       gameActions.event_info({ 'rank_update' : false })
     }
@@ -228,7 +231,9 @@ class Game extends React.Component<AllProps> {
     result_obj['player'] = player_list;
     result_obj['bank'] = bank_info;
 
-    this.props.gameActions.event_info({ 'rank_update' : true })
+    window.setTimeout(() => {
+      this.props.gameActions.event_info({ 'rank_update' : true })                            
+    }, 200);
 
     return result_obj;
   }
@@ -252,7 +257,9 @@ class Game extends React.Component<AllProps> {
       'player_list' : JSON.stringify(player_list)
      })
 
-    this.props.gameActions.event_info({ 'rank_update' : true });
+     window.setTimeout(() => {
+       this._setPlayerRank();              
+    }, 200);
 
      return result;
   }
@@ -303,7 +310,7 @@ class Game extends React.Component<AllProps> {
     const map_info = JSON.parse(this.props.map_info);
     const settle_state = JSON.parse(this.props.settle_state);
     const bank_info = JSON.parse(this.props.bank_info);
-    const player_rank = JSON.parse(this.props.player_rank);
+    // const player_rank = JSON.parse(this.props.player_rank);
 
     let ment : string = '';
     if(type === 'round') {
@@ -342,10 +349,8 @@ class Game extends React.Component<AllProps> {
       // 무인도에 있거나 파산할 경우 다음 플레이어로 턴 자동 이동
 
       for(let i = next_turn; i <= able_player; i++) {
-
         if(stop_info[i] > 0 || settle_state[i] === true) {
           if(stop_info[i] > 0) {
-
             // 단 대출 상환 기간과 겹치면 상환하고 넘어간다.
             if(bank_info[i].repay_day === 0 && bank_info[i]['loan'] > 0) {
               next_turn = i;
@@ -363,6 +368,9 @@ class Game extends React.Component<AllProps> {
           }
 
           next_turn += 1;
+
+        } else {
+          break;
         }
       }
 
@@ -400,14 +408,18 @@ class Game extends React.Component<AllProps> {
         ment = `<div> <b class=${'color_player_' + next_turn}> 플레이어 ${next_turn} </b>의 턴입니다. </div>`;
 
         // 컴퓨터 행동하기
-        this._playingComputerAction();
+        gameActions.select_type({ 'select_tap' : 0 })
+
+        window.setTimeout( () => {
+          this._drawRandomCard();
+        }, 1000)
       }
 
       // 신용등급 업데이트
       const _bank_info = this._getMyRating(next_turn, bank_info);
       gameActions.event_info({ 'bank_info' : JSON.stringify(_bank_info) });
 
-      this._addLog(`<div class='game_alert'> <b class='color_player_${next_turn}'> ${next_turn} 플레이어 </b> 의 턴입니다.  </div>`);
+      this._addLog(`<div class='game_alert white back_player_${next_turn}'> 플레이어 ${next_turn} 의 턴입니다. </div>`);
 
       if(settle_extra_money > 0) {
         // 파산 단계라면 잠시 일시정지한다.
@@ -911,8 +923,8 @@ class Game extends React.Component<AllProps> {
           gameActions.select_card_info({
             'card_notice_ment' : save_obj['all_card_num'] + ' 칸을 이동합니다.'
           })
-          await _moveCharacter(save_obj['all_card_num'], null);
-          // await _moveCharacter(3, null);
+          // await _moveCharacter(save_obj['all_card_num'], null);
+          await _moveCharacter(2, null);
   
           return initActions.set_setting_state({ 'card_deck' : JSON.stringify(card_deck) });
 
@@ -925,23 +937,6 @@ class Game extends React.Component<AllProps> {
     }
 
     return get_random_card(1);
-  }
-
-  // 컴퓨터 행동 함수
-  _playingComputerAction = () => {
-    const { _moveCharacter, gameActions, turn, move_location } = this.props;
-    const player_list = JSON.parse(this.props.player_list);
-
-    gameActions.select_type({ 'select_tap' : 0 })
-
-    window.setTimeout( () => {
-      this._drawRandomCard();
-
-      window.setTimeout( () => {
-        this._turnEnd(null);
-
-      }, 2000)
-    }, 2000)
   }
 
   // 부가 메세지 삭제하기
@@ -1366,42 +1361,56 @@ class Game extends React.Component<AllProps> {
 
   // 게임 오버
   _gameOver = () => {
-    const { winner, turn } = this.props;
+    const { winner, turn, _flash } = this.props;
     const multiple_winner = JSON.parse(this.props.multiple_winner);
 
     const player_target : any = document.getElementById(turn + '_player_info_div');
     player_target.style.border = 'solid 1px #ababab';
 
-    let winner_ment : string = ``;
-    // 다수의 우승자가 나올 경우
-    if(multiple_winner.length > 1) {
-      multiple_winner.forEach( (el : number) => {
-        const winner_target : any = document.getElementById(el + '_player_info_div');
+    this._setGamePlayTimeCount(false);
+
+    _flash('#game_over_notice_div', true, 0, false, 30);
+    window.setTimeout( () => {
+      _flash('#game_over_notice_div', false, 1.4, false, 30);
+
+      let padding_bottom : number = 0;
+      let winner_ment : string = ``;
+      // 다수의 우승자가 나올 경우
+      if(multiple_winner.length > 1) {
+        multiple_winner.forEach( (el : number, key : number) => {
+          if(key > 0) {
+            padding_bottom += 10;
+          }
+
+          const winner_target : any = document.getElementById(el + '_player_info_div');
+          winner_target.style.border = 'solid 3px #9ede73';
+
+          winner_ment += `<b class='color_player_${el}'>${el} 플레이어</b> <br />`;
+        })
+        winner_ment = `<div id='winner_player_list_div'> ${winner_ment} </div> 들의 공동 우승입니다.`
+
+      } else {
+        const winner_target : any = document.getElementById(winner + '_player_info_div');
         winner_target.style.border = 'solid 3px #9ede73';
 
-        winner_ment += `<b class='color_player_${el}'>${el} 플레이어</b> <br />`;
-      })
-      winner_ment = `<div id='winner_player_list_div'> ${winner_ment} </div> 들의 공동 우승입니다.`
+        winner_ment = `<b class='color_player_${winner}'>${winner} 플레이어</b>의 승리입니다!`;
+      }
 
-    } else {
-      const winner_target : any = document.getElementById(winner + '_player_info_div');
-      winner_target.style.border = 'solid 3px #9ede73';
+      const padding_bottom_class = 'padding_bottom_' + String(padding_bottom);
+      this._addLog(`<div id='game_over_alert' class=${padding_bottom_class}> 게임 종료 ! <br /> ${winner_ment} </div>`)
 
-      winner_ment = `<b class='color_player_${winner}'>${winner} 플레이어</b>의 승리입니다!`;
-    }
-
-    this._addLog(`<div id='game_over_alert'> 게임 종료 ! <br /> ${winner_ment} </div>`)
-
-    this._setGamePlayTimeCount(false);
+      window.setTimeout( () => {
+        document.getElementById('game_over_notice_div')?.remove();
+        document.getElementById('playing_action_div')?.remove();
+      }, 500)
+    }, 1500)
   }
 
   // 랭크 정리하기
   _setPlayerRank = () => {
     // 자산 + 은행 예금 + 부동산 자산으로 순위를 매김
-
     const { able_player, gameActions } = this.props;
-    // const player_rank = JSON.parse(this.props.player_rank);
-    // let player_rank : any = { }
+
     const bank_info = JSON.parse(this.props.bank_info);
     const player_list = JSON.parse(this.props.player_list);
 
@@ -1462,6 +1471,14 @@ class Game extends React.Component<AllProps> {
 
     return(
       <div id='game_div'>
+
+      {game_over === true
+        ? <div id='game_over_notice_div'>
+            게임 종료
+          </div>
+
+        : undefined
+      }
         <div id='game_other_div'>
           <div id='game_title_div'>
             <h2> 대한의 마블 </h2>
@@ -1671,7 +1688,8 @@ export default connect(
     winner : game.winner,
     player_rank: game.player_rank,
     rank_update : game.rank_update,
-    multiple_winner : game.multiple_winner
+    multiple_winner : game.multiple_winner,
+    select_info : game.select_info
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

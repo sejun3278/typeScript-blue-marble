@@ -37,7 +37,8 @@ export interface AllProps {
   card_select_able : boolean,
   time_over : boolean,
   select_first_card : number,
-  select_last_card : number
+  select_last_card : number,
+  game_over : boolean
 };
 
 class PlayGame extends React.Component<AllProps> {
@@ -80,7 +81,7 @@ class PlayGame extends React.Component<AllProps> {
   render() {
     const { 
       round, main_ment, alert_ment, timer, round_timer, round_limit, round_start, turn, _turnEnd, time_over, select_tap, 
-      move_location, turn_end_able, card_select_able
+      move_location, turn_end_able, card_select_able, game_over
     } = this.props;
     const { _moveTap } = this;
 
@@ -156,9 +157,35 @@ class PlayGame extends React.Component<AllProps> {
               </div>
 
               <div>
-                <div id='playing_action_div'>
+                {game_over === true
+                    ? <div id='play_end_info_div'>
+                        <h3 onClick={() => window.location.reload()}> 다시 하기 </h3>
 
-                  {round_start === true
+                        <div id='made_info_div'>
+
+                          <div className='made_info_grid_div'>
+                            <div className='aRight'> 개발자　|　</div>
+                            <div className='aLeft'> Sejun3278 </div>
+                          </div>
+
+                          <div className='made_info_grid_div'>
+                            <div className='aRight'> 기술 스택　|　</div>
+                            <div className='aLeft'> TypeScript, Redux, Sass </div>
+                          </div>
+
+                          <div className='made_info_grid_div'>
+                            <div className='aRight'> 개발 기간　|　</div>
+                            <div className='aLeft'> 2021.03 ~ 2021.04 </div>
+                          </div>
+
+                          <p> 플레이해주셔서 감사합니다! </p>
+                        </div>
+                      </div>
+
+                    : undefined
+                  }
+                <div id='playing_action_div'>
+                  {round_start === true && game_over === false
                   ?
                     <div id='playing_contents_div'>
                       <div id='playing_select_div'>
@@ -267,7 +294,8 @@ export default connect(
     card_select_able : game.card_select_able,
     time_over : game.time_over,
     select_first_card : game.select_first_card,
-    select_last_card : game.select_last_card
+    select_last_card : game.select_last_card,
+    game_over : game.game_over
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),
