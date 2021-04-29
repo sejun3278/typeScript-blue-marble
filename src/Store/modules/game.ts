@@ -57,6 +57,7 @@ export interface gameState {
     move_able : boolean,
     alert_able : boolean,
     stop_info : string,
+    now_stop : number,
     turn_end_able : boolean,
     move_event_able : boolean,
     time_over : boolean,
@@ -120,6 +121,7 @@ const initialState : gameState = {
     move_able : true,
     alert_able : true,
     stop_info : JSON.stringify({}),
+    now_stop : 0,
     turn_end_able : false,
     move_event_able : false,
     time_over : false,
@@ -230,6 +232,7 @@ export default handleActions<gameState> ({
         return {
             ...state,
             stop_info : data.payload.stop_info !== undefined ? data.payload.stop_info : state.stop_info,
+            now_stop: data.payload.now_stop !== undefined ? data.payload.now_stop : state.now_stop,
             move_event_able : data.payload.move_event_able !== undefined ? data.payload.move_event_able : state.move_event_able,
             casino_start : data.payload.casino_start !== undefined ? data.payload.casino_start : state.casino_start,
             casino_betting : data.payload.casino_betting !== undefined ? data.payload.casino_betting : state.casino_betting,

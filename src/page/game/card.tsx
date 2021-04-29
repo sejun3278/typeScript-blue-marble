@@ -122,8 +122,8 @@ class Card extends React.Component<AllProps> {
                 if(save_obj['card_select_able'] === false) {
                     save_obj['card_notice_ment'] = save_obj['all_card_num'] + ' 칸을 이동합니다.';
 
-                    this._moveCharacter(save_obj['all_card_num'], null);
-                    // this._moveCharacter(20, null) //
+                    // this._moveCharacter(save_obj['all_card_num'], null);
+                    this._moveCharacter(6, null) //
 
                     // 김포공항행
 
@@ -357,7 +357,7 @@ class Card extends React.Component<AllProps> {
                 const stop_info : any = JSON.parse(this.props.stop_info);
                 stop_info[Number(turn)] = stop_days;
 
-                gameActions.event_info({ 'stop_info' : JSON.stringify(stop_info) })
+                gameActions.event_info({ 'stop_info' : JSON.stringify(stop_info), 'now_stop' : stop_days })
 
                 _addLog(`<div class='game_alert white back_black'> 무인도에 떨어졌습니다. <br /> <b class='red'> ${stop_days} 라운드 </b> 후에 탈출 할 수 있습니다. </div>`);
 
@@ -438,7 +438,7 @@ class Card extends React.Component<AllProps> {
             window.setTimeout( () => {
                 // 컴퓨터 행동 함수 실행하기
                 return this._actionComputer(Number(turn), city_info, player_list);
-            }, 200)
+            }, 500)
         }
     }
 
@@ -498,7 +498,7 @@ class Card extends React.Component<AllProps> {
     }
 
     // 컴퓨터 토지 구매 및 건설 알고리즘 함수
-    _computerBuild : Function = (player : number, type : string, player_list : any, city : any) => {
+    _computerBuild : Function = async (player : number, type : string, player_list : any, city : any) => {
         // type = land : 토지 구매, build : 건설
         const { _checkPlayerMoney, _buyMap } = this.props;
 
@@ -511,17 +511,17 @@ class Card extends React.Component<AllProps> {
             // 토지 구매하기
             if(my_money > city.price) {
                 // 컴퓨터의 토지 구매확률 구하기
-                able = this._computerBuyPercent(50, city, 'land', city.price);
+                able = await this._computerBuyPercent(50, city, 'land', city.price);
 
                 // 알고리즘을 통해 구매에 확정할 경우
                 if(able === true) {
                     return setTimeout( () => {
                         _buyMap('click', player_list[player - 1], city);
-                        
+
                         // 토지 구매후 건설을 위한 함수 재실행
                         return window.setTimeout( () => {
-                            return this._computerTurnEnd();
-                            // return this._computerBuild(player, 'build', player_list, city);
+                            // return this._computerTurnEnd();
+                            return this._computerBuild(player, 'build', player_list, city);
                         }, 500)
                     }, 500);
                 }
@@ -571,30 +571,55 @@ class Card extends React.Component<AllProps> {
 
             if(lendmark_able === false) {
                 // 랜드마크 구매가 불가능한 상황
-                for(let i = 0; i < 3; i++) {
-                    // 랜드마크 전까지의 인덱스까지 반복문 실행
-                    if(city.build[i].build === false) {
-                        // 건설되지 않을 경우만 실행
-                        const my_money : number = _checkPlayerMoney(turn);
+                let key : number = 0;
 
-                        if(my_money >= city.build[i].price) {
-                            window.setTimeout( () => {
-                                const able = this._computerBuyPercent(50, city, 'check', city.build[i].price);
+                const build_loop : Function = () => {
+                    if(key === 3) {
+                        return;
+                    }
 
-                                if(able === true) {
-                                    // 건설하기
-                                    _build('click', i, city);
+                    if(city.build[key].build === false) {
+                    // 건설되지 않을 경우만 실행
+                    const my_money : number = _checkPlayerMoney(turn);
+
+                    if(my_money >= city.build[key].price) {
+                        const able = this._computerBuyPercent(50, city, 'check', city.build[key].price);
+                        if(able === true) {
+                            // 건설하기
+                            _build('click', key, city);
+
+                            return window.setTimeout( () => {
+                                key += 1;
+
+                                if(key === 3) {
+                                    return;
+
+                                } else {
+                                    return build_loop();
                                 }
-                            }, 1000)
+                            }, 800)
+
+                        } else {
+                            return window.setTimeout( () => {
+                                key += 1;
+                                return build_loop();
+                            }, 800)
+                        }
 
                         } else {
                             // 구매할 돈이 없다면 바로 턴 종료
                             return this._computerTurnEnd();
                         }
+
+                    } else {
+                        key += 1;
+                        return build_loop();
                     }
                 }
 
-                return this._computerTurnEnd();
+                return window.setTimeout( () => {
+                    return build_loop()
+                }, 800)
 
             } else if(lendmark_able === true) {
                 // 랜드마크 구매 가능
@@ -631,7 +656,6 @@ class Card extends React.Component<AllProps> {
         percent = percent > 100 ? 100 : percent;
         const random = Math.floor( Math.random() * (100 - 0) + 0 );
 
-        console.log(percent, random)
         if(percent >= random) {
             // 확률이 랜덤 숫자보다 클 경우 true
             return true;

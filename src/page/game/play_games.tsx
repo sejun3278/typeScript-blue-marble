@@ -33,6 +33,7 @@ export interface AllProps {
   _removeAlertMent : Function,
   map_info : string,
   stop_info : string,
+  now_stop : number,
   turn_end_able : boolean,
   card_select_able : boolean,
   time_over : boolean,
@@ -81,7 +82,7 @@ class PlayGame extends React.Component<AllProps> {
   render() {
     const { 
       round, main_ment, alert_ment, timer, round_timer, round_limit, round_start, turn, _turnEnd, time_over, select_tap, 
-      move_location, turn_end_able, card_select_able, game_over
+      move_location, turn_end_able, card_select_able, game_over, now_stop
     } = this.props;
     const { _moveTap } = this;
 
@@ -223,7 +224,7 @@ class PlayGame extends React.Component<AllProps> {
                       {select_tap === 2
                         ? <div id='stop_div' className='event_ment_div'>
                             <h3> 당신은 공기 좋고 물 좋은 무인도에 갇혔습니다. </h3>
-                            <h3> 약 <b style={{ 'color' : "#e2703a" }}> { stop_info[turn] } 턴 </b> 후 구조선이 도착합니다. </h3>
+                            <h3> 약 <b style={{ 'color' : "#e2703a" }}> { now_stop } 턴 </b> 후 구조선이 도착합니다. </h3>
                             <h3> 그때까지 충분한 휴식을 취하십시오. </h3>
                           </div>
                         
@@ -290,6 +291,7 @@ export default connect(
     move_location : game.move_location,
     map_info : init.map_info,
     stop_info : game.stop_info,
+    now_stop : game.now_stop,
     turn_end_able : game.turn_end_able,
     card_select_able : game.card_select_able,
     time_over : game.time_over,
