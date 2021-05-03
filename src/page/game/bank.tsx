@@ -297,16 +297,16 @@ class Bank extends React.Component<AllProps> {
 
   render() {
     const { 
-        bank_tap, gameActions, bank_incentive_percent, turn, loan_percent, loan_order_money, loan_plus_incentive, loan_payback_date, loan_order_confirm,
+        bank_tap, gameActions, bank_incentive_percent, loan_percent, loan_order_money, loan_plus_incentive, loan_payback_date, loan_order_confirm,
         _splitMoneyUnit, _checkPlayerMoney 
     } = this.props;
     const { _clickBankTap, _toggleHomeDiv, _saveMoney, _returnTotalIncentive, _setLoanInput, _setLoanPaybackDate, _orderLoan, _repayLoan } = this;
 
+    const turn = Number(this.props.turn);
+
     const bank_info = JSON.parse(this.props.bank_info);
     const my_info = bank_info[Number(turn)];
     const loan_date_list = JSON.parse(this.props.loan_date_list);
-
-    const player_list = JSON.parse(this.props.player_list);
 
     const tap_arr : string[] = ['예금', '대출']
     const home_arr : string[] = ['예금 정보', '대출 정보'];
@@ -341,9 +341,9 @@ class Bank extends React.Component<AllProps> {
                     {home_arr.map( (el : string, key : number) => {
                         return(
                             <div key={key} className='bank_select_home_divs'
-                                 onMouseEnter={(event) => _toggleHomeDiv(event, 'on')}
-                                 onMouseLeave={(event) => _toggleHomeDiv(event, 'off')}
-                                 onClick={() => gameActions.event_info({ 'bank_tap' : key + 1 }) }
+                                 onMouseEnter={(event) => turn === 1 ? _toggleHomeDiv(event, 'on') : undefined}
+                                 onMouseLeave={(event) => turn === 1 ? _toggleHomeDiv(event, 'off') : undefined}
+                                 onClick={() => turn === 1 ?  gameActions.event_info({ 'bank_tap' : key + 1 }) : undefined}
                             >
                                 {el}
                             </div>
@@ -363,7 +363,7 @@ class Bank extends React.Component<AllProps> {
                         <div className='aLeft'>
                             <input type='number' id='bank_my_save_money_input' 
                                    defaultValue={my_info.save_money}
-                                   onChange={(event) => _saveMoney(event)}
+                                   onChange={(event) => turn === 1 ? _saveMoney(event) : undefined}
                             /> 
                             <b> 만원 </b>
                         </div>

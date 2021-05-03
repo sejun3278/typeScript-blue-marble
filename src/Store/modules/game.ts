@@ -95,7 +95,9 @@ export interface gameState {
     multiple_winner : string,
     settle_state : string,
     player_rank : string,
-    rank_update : boolean
+    rank_update : boolean,
+    computer_casingo : boolean,
+    computer_move : boolean
 }
 
 const initialState : gameState = {
@@ -159,7 +161,9 @@ const initialState : gameState = {
     multiple_winner : JSON.stringify([]),
     settle_state : JSON.stringify({}),
     player_rank : JSON.stringify({}),
-    rank_update : false
+    rank_update : false,
+    computer_casingo : false,
+    computer_move : false
 }
 
 export default handleActions<gameState> ({
@@ -253,7 +257,9 @@ export default handleActions<gameState> ({
             loan_order_confirm : data.payload.loan_order_confirm !== undefined ? data.payload.loan_order_confirm : state.loan_order_confirm,
             save_money_index : data.payload.save_money_index !== undefined ? data.payload.save_money_index : state.save_money_index,
             player_rank : data.payload.player_rank !== undefined ? data.payload.player_rank : state.player_rank,
-            rank_update : data.payload.rank_update !== undefined ? data.payload.rank_update : state.rank_update
+            rank_update : data.payload.rank_update !== undefined ? data.payload.rank_update : state.rank_update,
+            computer_casingo : data.payload.computer_casingo !== undefined ? data.payload.computer_casingo : state.computer_casingo,
+            computer_move : data.payload.computer_move !== undefined ? data.payload.computer_move : state.computer_move
         }
     },
 

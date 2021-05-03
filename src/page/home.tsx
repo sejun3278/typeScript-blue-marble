@@ -14,6 +14,7 @@ import Setting from './start/setting';
 import Notice from './start/notice';
 import Loading from './start/loading';
 import Game from './game/game';
+import Init from './init';
 
 import icon from '../source/icon.json';
 
@@ -215,6 +216,8 @@ class Home extends React.Component<AllProps> {
 
     return(
       <div id='game_home_div'>
+        <Init />
+        
         <div id='game_sound_divs'>
           {/* <audio id='game_effect_1_audio' controls /> */}
         </div>

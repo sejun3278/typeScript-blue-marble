@@ -12,6 +12,7 @@ import { StoreState } from '../../Store/modules';
 export interface AllProps {
   initActions : any,
   gameActions : any,
+  functionsActions : any,
   turn : number | null,
   player_list : string,
   casino_start : boolean,
@@ -32,17 +33,50 @@ export interface AllProps {
   _timer : Function,
   round_timer : number,
   _timerOn : Function,
-  _addLog : Function
+  _addLog : Function,
+  _bettingGameStart : Function,
+  _selectCard : Function,
+  _setSelectCardEffect : Function,
+  computer_casingo : boolean,
+  _turnEnd : Function
 };
 
 class Casino extends React.Component<AllProps> {
 
     componentDidMount() {
         const { turn, gameActions } = this.props;
+
         const player_list = JSON.parse(this.props.player_list);
 
         const min = player_list[Number(turn) - 1].money > 0 ? 1 : 0;
         gameActions.event_info({ 'casino_betting' : min })
+    }
+
+    componentDidUpdate() { 
+        const { computer_casingo, gameActions } = this.props;
+        if(computer_casingo === true) {
+            // 카드 뽑기
+            this._computerCardSelect(1);
+
+            gameActions.event_info({ 'computer_casingo' : false })
+        }
+    }
+
+    _computerCardSelect = (num : number) => {
+        const { casino_select_card, gameActions } = this.props;
+
+        if(casino_select_card < num) {
+            return;
+        }
+
+        gameActions.event_info({ 
+            'casino_card_select' : true,
+            'casino_now_card_number' : num
+        });
+
+        return window.setTimeout(() => {
+            this._selectBettingCard(num, true);
+        }, 500)
     }
 
   _checkMoney = (event : any, max : number) => {
@@ -63,122 +97,9 @@ class Casino extends React.Component<AllProps> {
     gameActions.event_info({ 'casino_betting' : value })
   }
 
-  _bettingGameStart = () => {
-    const { gameActions, casino_betting, _removeAlertMent, _playerMoney, turn, casino_game_start, _flash, _addLog } = this.props;
-    const player_list = JSON.parse(this.props.player_list);
-    
-    if(casino_betting <= 0) {
-        document.getElementById('betting_input')?.focus();
-        _removeAlertMent('배팅금은 1 만원 이상부터 가능합니다.')
-        return;
-
-    } else if(player_list[Number(turn) - 1].money < casino_betting) {
-        _removeAlertMent('현금이 부족합니다.')
-        return;
-    }
-
-    if(casino_game_start !== false) {
-        return;
-    }
-    _playerMoney(turn, casino_betting, 'minus');
-
-    _addLog(`<div class='game_alert_2'> <b class='color_player_${turn}'> ${turn} 플레이어 </b>　|　${casino_betting} 만원 배팅 </div>`)
-
-    gameActions.event_info({ 'casino_game_start' : null })
-
-    _flash('#casino_betting_confirm_div', false, 1.4, false, 30);
-    _flash('#casino_betting_input_div', false, 1.4, false, 30);
-
-    return window.setTimeout( () => {
-        gameActions.event_info({ 'casino_game_start' : true })
-        _flash('#casino_card_limit_select', true, 0, false, 30);
-    }, 300)
-  }
-
   // 카드 선택하기
-  _selectCard = (event : any, type : string, num : number) => {
-    const { gameActions, _flash, casino_select_card } = this.props;
-    const target = event.target;
-
-    if(casino_select_card !== 0) {
-        return;
-    }
-
-    if(type === 'on') {
-        target.style.backgroundColor = 'white';
-        target.style.color = 'black';
-
-    } else if(type === 'off') {
-        target.style.backgroundColor = '#bbbbbb';
-        target.style.color = 'white';
-
-    } else if(type === 'click') {
-        target.style.backgroundColor = 'white';
-        target.style.color = 'black';
-
-        gameActions.event_info({ 'casino_select_card' : 1 })
-
-        return window.setTimeout( () => {
-            _flash('#casino_card_limit_select', false, 1.4, false, 30);
-
-            return window.setTimeout( () => {
-                const card_tool : any = [];
-                let card_result_obj : any = { "1" : null, "2" : null };
-
-                let cover_num : number = 0;
-                if(num === 2) {
-                    cover_num = 3;
-
-                } else if(num === 3) {
-                    cover_num = 5;
-                    card_result_obj['3'] = null;
-                }
-
-                let card_num = 1;
-                for(let i = 0; i < cover_num; i++) {
-                    card_tool[i] = {};
-
-                    if(i % 2 === 0) {
-                        // 카드 뽑기
-                        card_tool[i]['card'] = true;
-                        card_tool[i]['number'] = card_num;
-
-                        card_num += 1;
-
-                    } else {
-                        card_tool[i]['card'] = false;
-                    }
-                }
-
-                gameActions.event_info({ 'casino_select_card' : num, 'casino_card_tool' : JSON.stringify(card_tool), 'casino_select_result' : JSON.stringify(card_result_obj) })
-                _flash('#casino_game_contents_div', true, 0, false, 30);
-
-                return window.setTimeout( () => {
-                    gameActions.event_info({ 'casino_card_ment' : "1 번 배팅 카드를 뽑아주세요.", 'casino_card_select' : true, 'casino_now_card_number' : 1 });
-                    return this._setSelectCardEffect(1, true);
-                }, 300)
-            }, 300)
-        }, 300)
-    }
-  }
-
-  // 선택할 카드 표시하기
-  _setSelectCardEffect = (num : number, on : boolean) => {
-    const { _infiniteFlash } = this.props;
-    const event : any = document.getElementById('select_casino_card_' + num);
-
-    if(on === true) {
-        _infiniteFlash('select_casino_card_' + num, 50, true, null)
-        $(event).css({
-            'border' : 'solid 2px black',
-            'color' : 'black'
-        })
-    }
-  }
-
-  // 카드 선택하기
-  _selectBettingCard = (num : number) => {
-    const { casino_card_select, casino_now_card_number, casino_select_card, _infiniteFlash } = this.props;
+  _selectBettingCard = (num : number, computer : boolean) => {
+    const { casino_card_select, casino_now_card_number, casino_select_card, _setSelectCardEffect } = this.props;
     const casino_select_result = JSON.parse(this.props.casino_select_result);
 
     const save_obj : any = {};
@@ -187,13 +108,13 @@ class Casino extends React.Component<AllProps> {
             const random_card = Math.trunc(Math.random() * (10 - 2) + 2);
             // const random_card = 7;
 
-            _infiniteFlash('select_casino_card_' + num, 50, false, 1.4);
+            // _infiniteFlash('select_casino_card_' + num, 50, false, 1.4);
             $('select_casino_card_' + num).css({
                 'border' : 'solid 2px black',
                 'color' : 'black',
             })
 
-            casino_select_result[num] = random_card; 
+            casino_select_result[num] = random_card;
             
             save_obj['casino_select_result'] = JSON.stringify(casino_select_result);
             
@@ -201,16 +122,16 @@ class Casino extends React.Component<AllProps> {
                 save_obj['casino_now_card_number'] = casino_now_card_number + 1;
                 save_obj['casino_card_ment'] = save_obj['casino_now_card_number'] + ' 번 배팅 카드를 뽑아주세요.';
 
-                this._setSelectCardEffect(casino_now_card_number + 1, true);
+                _setSelectCardEffect(casino_now_card_number + 1, true);
             }
-
-            return this._getGameResult(num, casino_select_result, save_obj);
+            
+            return this._getGameResult(num, casino_select_result, save_obj, computer);
         }
     }
   }
 
   // 게임 결과 판정하기
-  _getGameResult = (now : number, obj : any, save : any) => {
+  _getGameResult = (now : number, obj : any, save : any, computer : boolean) => {
     const { casino_select_card, gameActions } = this.props;
     let result_check = true;
     let first_number : null | number = null;
@@ -220,6 +141,7 @@ class Casino extends React.Component<AllProps> {
 
     for(let key in obj) {
         result_money = result_money * obj[key];
+        
         if(first_number === null) {
             first_number = obj[key];
             result_money = obj[key];
@@ -233,19 +155,30 @@ class Casino extends React.Component<AllProps> {
     save['casino_card_select'] = true;
     gameActions.event_info(save);
 
+    if(computer === true) {
+        if(now !== casino_select_card) {
+            return window.setTimeout( () => {
+                this._computerCardSelect(now + 1)
+            }, 500)
+
+        } else if(now === casino_select_card) {
+            return this._endCasinoGame(result_check, result_money, true);
+        }
+    }
+
     if(result_check === true) {
-        return this._endCasinoGame(true, result_money);
+        return this._endCasinoGame(true, result_money, false);
 
     } else {
         if(now === casino_select_card) {
-            return this._endCasinoGame(false, 0);
+            return this._endCasinoGame(false, 0, false);
         }
     }
 
     if(casino_select_card === 3) {
         if(now >= 2) {
             if(obj[1] !== obj[2]) {
-                return this._endCasinoGame(false, 0);
+                return this._endCasinoGame(false, 0, false);
             }
         } 
     }
@@ -254,8 +187,8 @@ class Casino extends React.Component<AllProps> {
   }
 
   // 마무리 짓기
-  _endCasinoGame = (result : boolean, num : number) => {
-    const { gameActions, casino_betting,_playerMoney, turn, _commaMoney, _timerOn, round_timer, _addLog } = this.props;
+  _endCasinoGame = (result : boolean, num : number, computer : boolean) => {
+    const { gameActions, casino_betting,_playerMoney, turn, _commaMoney, _timerOn, round_timer, _addLog, _turnEnd } = this.props;
 
     return window.setTimeout( () => {
         gameActions.event_info({ 'casino_game_result' : result });
@@ -279,12 +212,21 @@ class Casino extends React.Component<AllProps> {
         if(round_timer !== 0) {
             _timerOn()
         }
+
+        if(computer === true) {
+            return window.setTimeout( () => {
+                return _turnEnd()
+            }, 500)
+        }
     }, 500)
   }
 
   render() {
-    const { turn, casino_start, casino_betting, casino_game_start, casino_select_card, casino_card_select, casino_card_ment, casino_game_result } = this.props;
-    const { _checkMoney, _bettingGameStart, _selectCard, _selectBettingCard } = this;
+    const { 
+        turn, casino_start, casino_betting, casino_game_start, casino_select_card, casino_card_select, casino_card_ment, casino_game_result, 
+        _bettingGameStart, _selectCard 
+    } = this.props;
+    const { _checkMoney, _selectBettingCard } = this;
 
     const player_list = JSON.parse(this.props.player_list);
     const casino_card_tool = JSON.parse(this.props.casino_card_tool);
@@ -346,17 +288,19 @@ class Casino extends React.Component<AllProps> {
                     <h3> 진행할 카드의 갯수를 선택해주세요. </h3>
 
                     <div
-                        onMouseEnter={(event) => _selectCard(event, 'on', 2)}
-                        onMouseLeave={(event) => _selectCard(event, 'off', 2)}
-                        onClick={(event) => _selectCard(event, 'click', 2)}
+                        id='casino_two_card'
+                        onMouseEnter={() => turn === 1 ? _selectCard('on', 2) : undefined}
+                        onMouseLeave={() => turn === 1 ? _selectCard('off', 2) : undefined}
+                        onClick={() => turn === 1 ? _selectCard('click', 2) : undefined}
                     > 
                         2 카드 
                     </div>
 
                     <div
-                        onMouseEnter={(event) => _selectCard(event, 'on', 3)}
-                        onMouseLeave={(event) => _selectCard(event, 'off', 3)}
-                        onClick={(event) => _selectCard(event, 'click', 3)}
+                        id='casino_three_card'
+                        onMouseEnter={() => turn === 1 ? _selectCard('on', 3) : undefined}
+                        onMouseLeave={() => turn === 1 ? _selectCard('off', 3) : undefined}
+                        onClick={() => turn === 1 ? _selectCard('click', 3) : undefined}
                     > 
                         3 카드 
                     </div>
@@ -410,14 +354,14 @@ class Casino extends React.Component<AllProps> {
                                 return(
                                     <div key={key} style={div_style} id={el.card === true ? 'select_casino_card_' + el.number : undefined}
                                         className='select_casino_card_div'
-                                        onClick={() => card_click_able === true ? _selectBettingCard(el.number) : undefined}
+                                        onClick={() => card_click_able === true && turn === 1 ? _selectBettingCard(el.number, false) : undefined}
                                     >
                                         {contents}
 
                                         {card_click_able === true
                                             ? <div className='casino_select_card_able_div'> 
                                                 뽑기
-                                            </div>
+                                              </div>
                                             
                                             : undefined}
                                     </div>
@@ -473,7 +417,12 @@ export default connect(
     _timer : functions._timer,
     round_timer : init.round_timer,
     _timerOn : functions._timerOn,
-    _addLog : functions._addLog
+    _addLog : functions._addLog,
+    _bettingGameStart : functions._bettingGameStart,
+    _selectCard : functions._selectCard,
+    _setSelectCardEffect : functions._setSelectCardEffect,
+    computer_casingo : game.computer_casingo,
+    _turnEnd : functions._turnEnd
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

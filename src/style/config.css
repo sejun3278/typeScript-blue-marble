@@ -1635,7 +1635,7 @@ body #notice_divs {
   padding-bottom: 10px;
   border-bottom: solid 3px black;
 }
-#player_settle_divs h3 b {
+#player_settle_divs h3 #extra_debt {
   padding-bottom: 10px;
   margin: 0px 10px;
   border-bottom: solid 2px #ce1f6a;

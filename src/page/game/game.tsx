@@ -127,7 +127,8 @@ class Game extends React.Component<AllProps> {
       '_setPlayerRank' : this._setPlayerRank,
       '_buyMap' : this._buyMap,
       '_build' : this._build,
-      '_checkLandMark' : this._checkLandMark
+      '_checkLandMark' : this._checkLandMark,
+      '_gameOver' : this._gameOver
     })
   }
 
@@ -383,6 +384,12 @@ class Game extends React.Component<AllProps> {
         return this._turnEnd(next_turn);
       }
 
+      // 여기
+      if(round_timer !== 0) {
+        const timer_style : any = document.getElementById('timer_slide_div');
+        $(timer_style).css({ 'width' : '360px' })
+      }
+
       gameActions.round_start({ 'turn' : next_turn })
 
       if(round === 1 && next_turn === 1) {
@@ -419,6 +426,7 @@ class Game extends React.Component<AllProps> {
           this._drawRandomCard();
         }, 1000)
       }
+
 
       // 신용등급 업데이트
       const _bank_info = this._getMyRating(next_turn, bank_info);
@@ -928,8 +936,8 @@ class Game extends React.Component<AllProps> {
           gameActions.select_card_info({
             'card_notice_ment' : save_obj['all_card_num'] + ' 칸을 이동합니다.'
           })
-          // await _moveCharacter(save_obj['all_card_num'], null);
-          await _moveCharacter(2, null);
+          await _moveCharacter(save_obj['all_card_num'], null);
+          // await _moveCharacter(2, null);
   
           return initActions.set_setting_state({ 'card_deck' : JSON.stringify(card_deck) });
 
@@ -1262,6 +1270,7 @@ class Game extends React.Component<AllProps> {
 
     let estate_money = 0;
     for(let i = start; i <= end; i++) {
+      estate_money = 0;
       const player_info = player_list[i - 1];
 
       if(player_info['maps'].length > 0) {
@@ -1270,12 +1279,6 @@ class Game extends React.Component<AllProps> {
           const map = map_info[el];
 
           estate_money += map.price;
-
-          // map.build.map( (cu : any) => {
-          //   if(cu.build === true) {
-          //     estate_money += cu.price;
-          //   }
-          // })
         })
       }
 

@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { actionCreators as initActions } from '../../Store/modules/init';
-import game, { actionCreators as gameActions } from '../../Store/modules/game';
+import { actionCreators as gameActions } from '../../Store/modules/game';
 
 import { connect } from 'react-redux'; 
 import { bindActionCreators } from 'redux'; 

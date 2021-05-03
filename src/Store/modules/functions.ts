@@ -26,7 +26,11 @@ export interface functionsState {
     _setPlayerRank : Function,
     _buyMap : Function,
     _checkLandMark : Function,
-    _build : Function
+    _build : Function,
+    _bettingGameStart : Function,
+    _selectCard : Function,
+    _setSelectCardEffect : Function,
+    _gameOver : Function
 }
 
 const initialState : functionsState = {
@@ -49,7 +53,11 @@ const initialState : functionsState = {
     _setPlayerRank : () => {},
     _buyMap : () => {},
     _checkLandMark : () => {},
-    _build : () => {}
+    _build : () => {},
+    _bettingGameStart : () => {},
+    _selectCard : () => {},
+    _setSelectCardEffect : () => {},
+    _gameOver : () => {}
 }
 
 export default handleActions<functionsState> ({
@@ -75,7 +83,11 @@ export default handleActions<functionsState> ({
         _setPlayerRank : data.payload._setPlayerRank !== undefined ? data.payload._setPlayerRank : state._setPlayerRank,
         _buyMap : data.payload._buyMap !== undefined ? data.payload._buyMap : state._buyMap,
         _checkLandMark : data.payload._checkLandMark !== undefined ? data.payload._checkLandMark : state._checkLandMark,
-        _build : data.payload._build !== undefined ? data.payload._build : state._build
+        _build : data.payload._build !== undefined ? data.payload._build : state._build,
+        _bettingGameStart : data.payload._bettingGameStart !== undefined ? data.payload._bettingGameStart : state._bettingGameStart,
+        _selectCard : data.payload._selectCard !== undefined ? data.payload._selectCard : state._selectCard,
+        _setSelectCardEffect : data.payload._setSelectCardEffect !== undefined ? data.payload._setSelectCardEffect : state._setSelectCardEffect,
+        _gameOver : data.payload._gameOver !== undefined ? data.payload._gameOver : state._gameOver
       };
     }
 

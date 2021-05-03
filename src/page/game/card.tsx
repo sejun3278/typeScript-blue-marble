@@ -44,7 +44,10 @@ export interface AllProps {
   _turnEnd : Function,
   _buyMap : Function,
   _checkLandMark : Function,
-  _build : Function
+  _build : Function,
+  _bettingGameStart : Function,
+  _selectCard : Function,
+  casino_select_card : number
 };
 
 class Card extends React.Component<AllProps> {
@@ -122,8 +125,8 @@ class Card extends React.Component<AllProps> {
                 if(save_obj['card_select_able'] === false) {
                     save_obj['card_notice_ment'] = save_obj['all_card_num'] + ' 칸을 이동합니다.';
 
-                    // this._moveCharacter(save_obj['all_card_num'], null);
-                    this._moveCharacter(6, null) //
+                    this._moveCharacter(save_obj['all_card_num'], null);
+                    // this._moveCharacter(4, null) //
 
                     // 김포공항행
 
@@ -143,6 +146,8 @@ class Card extends React.Component<AllProps> {
         const { turn, gameActions, _removeAlertMent, _playerMoney, round } = this.props;
         const player_list = JSON.parse(this.props.player_list);
         const map_info = JSON.parse(this.props.map_info);
+
+        gameActions.event_info({ 'move_event_able' : false })
 
         let my_location : number = 0;
         if(_player_location !== undefined && _player_location !== null) {
@@ -400,6 +405,7 @@ class Card extends React.Component<AllProps> {
 
                 gameActions.player_bank_info({ 'player_bank_info_alert' : true })
             }
+
         } else if(city_info.type === 'map') {
             if(city_info.host !== null && turn !== city_info.host) {
                 // 상대방 땅에 도착함
@@ -409,6 +415,8 @@ class Card extends React.Component<AllProps> {
                 if(arrive_name === '경기 광명') {
                     arrive_name = '광명';
                 }
+
+                initActions.set_player_info({ 'player_list' : JSON.stringify(player_list) });
 
                 _addLog(`<div class='game_alert'> <b class='color_player_${turn}'> ${turn} 플레이어</b>가 <b class='color_player_${city_info.host}'> ${city_info.host} 플레이어</b>의 <b class='custom_color_1'>${arrive_name}</b>에 도착합니다. <br /> <b class='red'>${pass_price}</b>을 통행료로 지불합니다.  </div>`);
                 
@@ -420,6 +428,24 @@ class Card extends React.Component<AllProps> {
 
                 // 토지 소유주의 돈 증가
                 player_list[city_info.host - 1].money += city_info.pass * _pass_price;
+
+                if(remove_money.result === false) {
+                    // 돈이 남아 있을 경우
+                    gameActions.settle_player_money({ 'settle_extra_money' : remove_money['extra'] });
+                    gameActions.select_type({ 'select_tap' : 1 })
+
+                    // 게임 일시정지
+                    _timer(false);
+                    gameActions.select_card_info({ 'card_select_able' : false });
+
+                    _addLog(`<div class='game_alert_2 back_black white'> <b class='color_player_${turn}'> ${turn} 플레이어 </b> 가 빚 <b class='red'> ${_splitMoneyUnit(remove_money['extra'])} </b> 을 청산중입니다.  </div>`)
+                    gameActions.settle_player_money({ 'settle_modal' : true });
+            
+                    const event : any = document.querySelectorAll('.ReactModal__Overlay');
+                    event[0].style.backgroundColor = 'rgba(0, 0, 0, 0.75)';
+
+                    return
+                }
             }
         }
 
@@ -476,14 +502,9 @@ class Card extends React.Component<AllProps> {
                 // 무인도에 도착할 경우 바로 턴 종료
                 return this._computerTurnEnd();
 
-            } else if(city.number === 14) {
-                // 카지노
-
-            } else if(city.number === 20) {
-                // 김포공항
-
-            } else if(city.number === 0) {
-                // 은행
+            } else {
+                // 그 외에는 이벤트 처리 함수 실행
+                return this._computerEventAction(city.number);
             }
         }
     }
@@ -495,6 +516,112 @@ class Card extends React.Component<AllProps> {
         return window.setTimeout( () => {
             return _turnEnd(turn);
         }, 500)
+    }
+
+    // 컴퓨터의 이벤트 행동 메뉴얼
+    _computerEventAction : Function = async (map : number) => {
+        const { _addLog, gameActions, _bettingGameStart, _selectCard, _checkPlayerMoney, _turnEnd } = this.props;
+        const turn = Number(this.props.turn);
+        const player_list = JSON.parse(this.props.player_list);
+
+        if(map === 14) {
+            // 카지노
+
+            // 1. 배팅액 구하기
+            // 내 현금과 컴퓨터의 현금 정보 가져오기
+            const com_money : number = Number(player_list[turn - 1].money);
+
+                // 현재 자금이 만원도 없다면 턴 종료
+                if(com_money < 1) {
+                    _addLog(`<div class='game_alert'> 현금이 없어 카지노를 이용할 수 없습니다. </div>`);
+                    return this._computerTurnEnd();
+                }
+
+                // 최대 배팅액 구하기
+                // 현금의 10% 까지 사용할 수 있다.
+                const max = Math.round(com_money * 0.1);
+
+                // 배팅액 구하기
+                const betting = Math.floor( Math.random() * (max - 1) + 1 );
+
+                // 배팅 걸기
+                gameActions.event_info({ 'casino_betting' : betting });
+
+                window.setTimeout( () => {
+                    _bettingGameStart();
+
+                    window.setTimeout( () => {
+                        // 배팅할 숫자 카드 구하기
+                        const select_card = Math.floor( Math.random() * (4 - 2) + 2 );
+                        _selectCard('click', select_card);
+
+                        // 카드 뽑기
+                        window.setTimeout( () => {
+                            return gameActions.event_info({ 
+                                'computer_casingo' : true, 
+                                'casino_select_card' : select_card,
+                                'casino_card_select' : true,
+                                'casino_now_card_number' : 1
+                            })
+                        }, 600)                        
+
+                    }, 800)
+                }, 500)
+
+        } else if(map === 20) {
+            // 김포 공항
+            // window.setTimeout( () => {
+            //     gameActions.event_info({
+            //         'computer_move' : true
+            //     })
+            // }, 500)
+            
+            // return;
+            const my_money = _checkPlayerMoney(turn);
+
+            // 이동할 수 있는 맵 리스트 구하기
+            const map_list : Number[] = [];
+            const map_info = JSON.parse(this.props.map_info);
+
+            for(let key in map_info) {
+                const map = map_info[key];
+
+                if(map.type === 'map') {
+                    if(map.host === null) {
+                        if(my_money >= map.price) {
+                            map_list.push(map.number);
+                        }
+
+                    } else {
+                        if(map.host === turn) {
+                            map_list.push(map.number);
+                        }
+                    }
+
+                } else if(map.key === 'bank' || map.key === 'gold_key') {
+                    if(map.key === 'bank') {
+                        map_list.push(0);
+
+                    } else {
+                        map_list.push(14);
+                    }
+                } 
+            }
+            
+            const move_location = Math.floor( Math.random() * ((map_list.length + 1) - 0) + 0 );
+        
+            let move : number = move_location - 20;
+            // 이동 거리 구하기
+            if(move_location < 20) {
+                move = ( 27 - 20 ) + ( move_location + 1);
+            }
+
+            this._moveCharacter(move, 20) //
+ 
+        } else if(map === 0) {
+            // 은행
+            return _turnEnd();
+        }
     }
 
     // 컴퓨터 토지 구매 및 건설 알고리즘 함수
@@ -575,7 +702,7 @@ class Card extends React.Component<AllProps> {
 
                 const build_loop : Function = () => {
                     if(key === 3) {
-                        return;
+                        return this._computerTurnEnd();;
                     }
 
                     if(city.build[key].build === false) {
@@ -620,10 +747,6 @@ class Card extends React.Component<AllProps> {
                 return window.setTimeout( () => {
                     return build_loop()
                 }, 800)
-
-            } else if(lendmark_able === true) {
-                // 랜드마크 구매 가능
-                // return this._computerBuyPercent(50, city, 'check', city.build[3].price);
             }
         }
 
@@ -765,7 +888,10 @@ export default connect(
     _turnEnd : functions._turnEnd,
     _buyMap : functions._buyMap,
     _checkLandMark : functions._checkLandMark,
-    _build : functions._build
+    _build : functions._build,
+    _bettingGameStart: functions._bettingGameStart,
+    _selectCard : functions._selectCard,
+    casino_select_card : game.casino_select_card
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

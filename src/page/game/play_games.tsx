@@ -86,7 +86,7 @@ class PlayGame extends React.Component<AllProps> {
     } = this.props;
     const { _moveTap } = this;
 
-    const stop_info = JSON.parse(this.props.stop_info);
+    // const stop_info = JSON.parse(this.props.stop_info);
     // const map_info = JSON.parse(this.props.map_info);
     const select_info = JSON.parse(this.props.select_info);
     const icon_list = require('../../source/icon.json');

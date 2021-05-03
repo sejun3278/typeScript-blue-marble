@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { actionCreators as initActions } from '../../Store/modules/init';
-import { actionCreators as gameActions } from '../../Store/modules/game';
+import game, { actionCreators as gameActions } from '../../Store/modules/game';
 import { actionCreators as functionsActions } from '../../Store/modules/functions';
 
 import { connect } from 'react-redux'; 
@@ -25,13 +25,17 @@ export interface AllProps {
     _moveCharacter : Function,
     stop_days : number,
     pass_price : number,
-    settle_state : string
+    settle_state : string,
+    turn : number | null,
+    computer_move : boolean,
+    _checkPlayerMoney : Function
 };
 
 class Map extends React.Component<AllProps> {
 
   _moveMap = (number : number) => {
     const { move_event_able, _removeAlertMent, _moveCharacter, gameActions } = this.props;
+    // const map_info = JSON.parse(this.props.map_info);
 
     let move = 0;
     if(move_event_able === true) {
@@ -59,7 +63,7 @@ class Map extends React.Component<AllProps> {
   render() {
     const { 
       class_col, style, playing, able_player, move_location, _commaMoney, 
-      round, move_event_able, stop_days, pass_price 
+      round, move_event_able, stop_days, pass_price, turn
     } = this.props;
     const { _moveMap } = this;
     const settle_state = JSON.parse(this.props.settle_state);
@@ -132,7 +136,7 @@ class Map extends React.Component<AllProps> {
     return(
         <div className={class_col} style={cover_style}
             id={'map_number_' + info.number}
-            onClick={move_event_able === true ? () => _moveMap(info.number) : undefined}
+            onClick={move_event_able === true && turn === 1 ? () => _moveMap(info.number) : undefined}
         >
             <div className={map_class_col}
                  style={color_style}
@@ -292,7 +296,10 @@ export default connect(
     _moveCharacter : functions._moveCharacter,
     stop_days : init.stop_days,
     pass_price : init.pass_price,
-    settle_state : game.settle_state
+    settle_state : game.settle_state,
+    turn : game.turn,
+    computer_move : game.computer_move,
+    _checkPlayerMoney : functions._checkPlayerMoney
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

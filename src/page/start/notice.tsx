@@ -13,8 +13,7 @@ export interface AllProps {
 class Notice extends React.Component<AllProps> {
 
   render() {
-    const { initActions } = this.props;
-
+    
     return(
       <div id='game_notice_div'>
         {/* 게임 방법 */}
