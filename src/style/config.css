@@ -130,6 +130,10 @@
   font-style: normal;
 }
 /* font */
+.recipe_korea {
+  font-family: Recipekorea;
+}
+
 /* font-size */
 /* padding-bottom */
 .padding_bottom_10 {
@@ -1809,6 +1813,51 @@ body #notice_divs {
   #game_over_notice_div {
     width: 100% !important;
   }
+}
+#game_notice_div {
+  display: grid;
+  grid-template-columns: 18% auto;
+  max-height: 600px;
+  min-height: 500px;
+}
+#game_notice_div #game_notice_category_div {
+  padding: 5px 5px;
+  font-size: 15px;
+  font-family: HangeulNuri-Bold;
+  height: 500px;
+  border-right: solid 1px #ababab;
+  color: #bbb;
+}
+#game_notice_div #game_notice_category_div span {
+  height: 60px;
+  line-height: 60px;
+  cursor: pointer;
+}
+#game_notice_div #game_notice_category_div .game_notice_ul {
+  line-height: 25px;
+  margin-top: -5px;
+  margin-left: -10px;
+}
+#game_notice_div #game_notice_category_div .game_notice_ul li {
+  font-size: 13px;
+}
+#game_notice_div #game_notice_category_div .game_notice_ul li b {
+  cursor: pointer;
+}
+#game_notice_div #game_notice_contents_div {
+  height: 500px;
+}
+#game_notice_div #game_notice_contents_div #game_notice_thumbnail_div {
+  height: 450px;
+  width: auto;
+}
+#game_notice_div #game_notice_contents_div #game_notice_comment_div {
+  height: 60px;
+  line-height: 30px;
+  padding: 0px 10px;
+  padding-top: 10px;
+  border-top: solid 1px #ababab;
+  font-size: 13px;
 }
 
 /*# sourceMappingURL=config.css.map */

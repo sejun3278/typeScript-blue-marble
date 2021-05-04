@@ -540,9 +540,9 @@ class Card extends React.Component<AllProps> {
                 // 최대 배팅액 구하기
                 // 현금의 10% 까지 사용할 수 있다.
                 const max = Math.round(com_money * 0.1);
-
+                console.log(max)
                 // 배팅액 구하기
-                const betting = Math.floor( Math.random() * (max - 1) + 1 );
+                const betting = Math.floor( Math.random() * (max - 2) + 2 );
 
                 // 배팅 걸기
                 gameActions.event_info({ 'casino_betting' : betting });

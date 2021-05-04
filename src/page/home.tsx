@@ -43,6 +43,18 @@ const modalCustomStyles = {
   }
 };
 
+const modalCustomStyles2 = {
+  content : {
+    top                   : '350px',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)',
+    width                 : '800px',
+  }
+};
+
 class Home extends React.Component<AllProps> {
 
   componentDidMount() {
@@ -217,7 +229,7 @@ class Home extends React.Component<AllProps> {
     return(
       <div id='game_home_div'>
         <Init />
-        
+
         <div id='game_sound_divs'>
           {/* <audio id='game_effect_1_audio' controls /> */}
         </div>
@@ -249,7 +261,7 @@ class Home extends React.Component<AllProps> {
         {setting_modal === true
           ? <Modal
               isOpen={setting_modal}
-              style={modalCustomStyles}
+              style={modalCustomStyles2}
               ariaHideApp={false}
             >
               <div id='modal_title_div'>

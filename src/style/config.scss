@@ -88,7 +88,7 @@ $float_right : right; .float_right { float : right };
   
 /* font */
 $t_money_font : TmoneyRoundWindExtraBold;
-$recipe_korea : Recipekorea;
+$recipe_korea : Recipekorea; .recipe_korea { font-family: $recipe_korea; }
 $paybook_bold : paybooc-Bold;
 $SDSamliphopangche_Outline : SDSamliphopangche_Outline;
 $HangeulNuri-Bold : HangeulNuri-Bold;
@@ -2166,4 +2166,58 @@ body {
     #game_play_other_div { margin-left: 1125px;}
     #game_main_map_div { margin-left: 420px !important; }
     #game_over_notice_div { width: 100% !important; }
+}
+
+#game_notice_div {
+    display: grid;
+    grid-template-columns: 18% auto;
+    max-height: 600px;
+    min-height: 500px;
+
+    #game_notice_category_div {
+        padding: 5px 5px;
+        font-size: 15px;
+        font-family: $HangeulNuri-Bold;
+        height: 500px;
+        border-right: solid 1px #ababab;
+        color: #bbb;
+
+        span {
+            height: 60px;
+            line-height: 60px;
+            cursor: pointer;
+        }
+
+        .game_notice_ul {
+            line-height: 25px;
+            margin-top: -5px;
+            margin-left: -10px;
+
+            li {
+                font-size: 13px;
+
+                b {
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+
+    #game_notice_contents_div {
+        height: 500px;
+
+        #game_notice_thumbnail_div {
+            height: 450px;
+            width: auto;
+        }
+
+        #game_notice_comment_div {
+            height: 60px;
+            line-height: 30px;
+            padding: 0px 10px;
+            padding-top: 10px;
+            border-top: solid 1px #ababab;
+            font-size: 13px;
+        }
+    }
 }

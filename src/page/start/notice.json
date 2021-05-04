@@ -1,0 +1,45 @@
+[
+    {
+        "name" : "- 카테고리 선택",
+        "comment" : "<div class='aCenter recipe_korea'> 설명이 필요한 카테고리를 선택해주세요. <div class='bold gray recipe_korea'> ( 방향키로도 카테고리를 이동할 수 있습니다. ) <div> </div>",
+        "thumbnail" : ""
+    },
+
+    {
+        "name" : "게임 소개",
+        "comment" : "",
+        "thumbnail" : "",
+        "child" : [
+            {
+                "name" : "기본 게임 규칙",
+                "comment" : "",
+                "thumbnail" : ""
+            }
+        ]
+    },
+
+    {
+        "name" : "게임 설정",
+        "comment" : "",
+        "thumbnail" : "",
+        "child" : [
+            {
+                "name" : "게임 설정",
+                "comment" : "",
+                "thumbnail" : ""
+            },
+
+            {
+                "name" : "캐릭터 설정",
+                "comment" : "",
+                "thumbnail" : ""
+            }
+        ]
+    },
+
+    {
+        "name" : "카드 뽑기",
+        "comment" : "",
+        "thumbnail" : ""
+    }
+]

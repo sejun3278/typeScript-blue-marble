@@ -158,8 +158,8 @@ class Build extends React.Component<AllProps> {
                         if(key < 3) {
                             return(
                                 <div key={key} className='build_select_divs'
-                                     onMouseEnter={() => able_condition === true ? _build('on', key, null) : undefined}
-                                     onClick={() => able_condition === true ? _build('click', key, null) : undefined}
+                                     onMouseEnter={() => able_condition === true && select_info.host === turn ? _build('on', key, null) : undefined}
+                                     onClick={() => able_condition === true && select_info.host === turn ? _build('click', key, null) : undefined}
                                      style={el.build === false ? { 'color' : '#ababab'} : { 'color' : 'black' }}
                                 >
                                     <div className='build_select_title_div'>
@@ -177,7 +177,7 @@ class Build extends React.Component<AllProps> {
 
                                         {el.select === true
                                             ? <div id='build_confirm_div'
-                                                 onMouseOut={() => able_condition === true ? _build('off', key, null) : undefined}
+                                                 onMouseOut={() => able_condition === true && select_info.host === turn ? _build('off', key, null) : undefined}
                                             >
                                                 건설
                                               </div>

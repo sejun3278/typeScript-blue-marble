@@ -68,6 +68,7 @@ class Loading extends React.Component<AllProps> {
 
         if(player_list[i]['able'] === true) {
           player_list[i]['money'] = start_price;
+          // player_list[i]['money'] = 10;
 
           // player_list[0]['money'] = 1000;
 

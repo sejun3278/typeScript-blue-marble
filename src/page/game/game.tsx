@@ -384,12 +384,6 @@ class Game extends React.Component<AllProps> {
         return this._turnEnd(next_turn);
       }
 
-      // 여기
-      if(round_timer !== 0) {
-        const timer_style : any = document.getElementById('timer_slide_div');
-        $(timer_style).css({ 'width' : '360px' })
-      }
-
       gameActions.round_start({ 'turn' : next_turn })
 
       if(round === 1 && next_turn === 1) {
@@ -405,7 +399,9 @@ class Game extends React.Component<AllProps> {
       _flash('#playing_action_div', true, 0, false, 30);
 
       const player_target : any = document.getElementById(String(next_turn) + '_player_info_div');
-      player_target.style.border = 'solid 3px black';
+      if(player_target.style) {
+        player_target.style.border = 'solid 3px black';
+      }
 
       gameActions.event_info({ 'now_stop' : 0 })
 
@@ -463,14 +459,15 @@ class Game extends React.Component<AllProps> {
 
         timer_el.style.opacity = 1.4;
 
-        if(next_turn === 1) {
+        // if(next_turn === 1) {
+        //   console.log(123123, round_timer, timer_el)
           $(timer_el).animate({
             'width' : String(6 * round_timer) + 'px'
-          }, 500)
+          }, 0)
 
-        } else {
-          timer_el.style.width = String(6 * round_timer) + 'px';
-        }
+        // } else {
+        // timer_el.style.width = String(6 * round_timer) + 'px';
+        // }
         gameActions.set_timer({ 'timer' : String(round_timer) })
 
         // 타이머 가동하기
@@ -540,8 +537,9 @@ class Game extends React.Component<AllProps> {
   _nextGames = (turn : number) => {
     const { gameActions, able_player, _flash, overlap_card, _setCardDeck, round, round_limit } = this.props;
 
+    // $('#timer_slide_div').css({ 'width' : '0px' })
     $('#timer_slide_div').stop().animate({
-      'width' : 0
+      'width' : '0px'
     }, 0);
 
     if(turn <= able_player) {
@@ -785,9 +783,14 @@ class Game extends React.Component<AllProps> {
 
   // 턴 끝내기
   _turnEnd = async (_turn : number | null | undefined) => {
-    const {_flash, gameActions, move_event_able, _moveCharacter, time_over, move_able, game_over } = this.props;
+    const {_flash, gameActions, move_event_able, _moveCharacter, time_over, move_able, game_over, able_player } = this.props;
 
-    const turn = !_turn ? this.props.turn : _turn;
+    let turn = !_turn ? this.props.turn : _turn;
+    if(turn > 4 || turn > able_player) {
+      console.log(this.props.turn)
+      turn = 1;
+    }
+
     const _target : any = document.getElementById(String(turn) + '_player_info_div');
 
     if(game_over === true) {
@@ -799,10 +802,7 @@ class Game extends React.Component<AllProps> {
     this._infiniteFlash('player_main_character_' + turn, 60, false, null);
     _flash('#player_main_character_' + turn, true, 0, false, 30);
 
-    // 턴 종료
-    // $('#timer_slide_div').stop().animate({
-    //   'width' : 0
-    // }, 0)
+    // _flash('#timer_slide_div' + turn, false, 1.4, false, 30);
 
     window.clearInterval(timer_play);
 
@@ -857,12 +857,14 @@ class Game extends React.Component<AllProps> {
         _flash('#card_list_div', false, 1.4, false, 30);
 
         return window.setTimeout( () => {
-          _flash('#timer_slide_div', false, 1.4, false, 30);
+          // _flash('#timer_slide_div', false, 1.4, false, 30);
           _flash('#playing_action_div', false, 1.4, false, 30);
           _flash('#play_main_notice_div', false, 1.4, false, 30);
-      
-          _target.style.border = 'solid 1px #ababab';
-      
+          
+          if(_target.style !== null) {
+            _target.style.border = 'solid 1px #ababab';
+          }
+
           gameActions.set_timer({ 'timer' : '-' })
       
             window.setTimeout( () => {
@@ -937,7 +939,7 @@ class Game extends React.Component<AllProps> {
             'card_notice_ment' : save_obj['all_card_num'] + ' 칸을 이동합니다.'
           })
           await _moveCharacter(save_obj['all_card_num'], null);
-          // await _moveCharacter(2, null);
+          // await _moveCharacter(14, null);
   
           return initActions.set_setting_state({ 'card_deck' : JSON.stringify(card_deck) });
 
@@ -1371,7 +1373,8 @@ class Game extends React.Component<AllProps> {
   _gameOver = () => {
     const { winner, turn, _flash } = this.props;
     const multiple_winner = JSON.parse(this.props.multiple_winner);
-
+    
+    $('#playing_action_div').remove();
     const player_target : any = document.getElementById(turn + '_player_info_div');
     player_target.style.border = 'solid 1px #ababab';
 
@@ -1398,6 +1401,8 @@ class Game extends React.Component<AllProps> {
         winner_ment = `<div id='winner_player_list_div'> ${winner_ment} </div> 들의 공동 우승입니다.`
 
       } else {
+        console.log(winner)
+
         const winner_target : any = document.getElementById(winner + '_player_info_div');
         winner_target.style.border = 'solid 3px #9ede73';
 

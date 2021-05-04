@@ -191,7 +191,6 @@ class Player extends React.Component<AllProps> {
 
     if(info.able === true) {
       if(settle_state[info.number] === true) {
-        console.log(info.character, img_list)
         my_thumb = img_list[info.character];
         thumb_class += ' settle_character'
 
