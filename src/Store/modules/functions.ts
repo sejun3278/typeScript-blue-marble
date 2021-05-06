@@ -30,7 +30,9 @@ export interface functionsState {
     _bettingGameStart : Function,
     _selectCard : Function,
     _setSelectCardEffect : Function,
-    _gameOver : Function
+    _gameOver : Function,
+    _gameStart : Function,
+    _selectCategory : Function
 }
 
 const initialState : functionsState = {
@@ -57,7 +59,9 @@ const initialState : functionsState = {
     _bettingGameStart : () => {},
     _selectCard : () => {},
     _setSelectCardEffect : () => {},
-    _gameOver : () => {}
+    _gameOver : () => {},
+    _gameStart : () => {},
+    _selectCategory : () => {}
 }
 
 export default handleActions<functionsState> ({
@@ -87,7 +91,9 @@ export default handleActions<functionsState> ({
         _bettingGameStart : data.payload._bettingGameStart !== undefined ? data.payload._bettingGameStart : state._bettingGameStart,
         _selectCard : data.payload._selectCard !== undefined ? data.payload._selectCard : state._selectCard,
         _setSelectCardEffect : data.payload._setSelectCardEffect !== undefined ? data.payload._setSelectCardEffect : state._setSelectCardEffect,
-        _gameOver : data.payload._gameOver !== undefined ? data.payload._gameOver : state._gameOver
+        _gameOver : data.payload._gameOver !== undefined ? data.payload._gameOver : state._gameOver,
+        _gameStart : data.payload._gameStart !== undefined ? data.payload._gameStart : state._gameStart,
+        _selectCategory : data.payload._selectCategory !== undefined ? data.payload._selectCategory : state._selectCategory,
       };
     }
 

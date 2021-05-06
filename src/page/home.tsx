@@ -3,7 +3,8 @@ import Modal from 'react-modal';
 
 import { actionCreators as initActions } from '../Store/modules/init';
 import { actionCreators as gameActions } from '../Store/modules/game';
-import { actionCreators as functionsActions } from '../Store/modules/functions';
+import functions, { actionCreators as functionsActions } from '../Store/modules/functions';
+import { actionCreators as noticeActions } from '../Store/modules/notice';
 
 import { connect } from 'react-redux'; 
 import { bindActionCreators } from 'redux'; 
@@ -17,9 +18,11 @@ import Game from './game/game';
 import Init from './init';
 
 import icon from '../source/icon.json';
+import NoticeList from './start/notice.json';
 
 export interface AllProps {
   functionsActions : any,
+  noticeActions : any,
   game_start : boolean,
   setting_modal : boolean,
   setting_type : null | string,
@@ -28,31 +31,12 @@ export interface AllProps {
   loading : boolean,
   main_start : boolean,
   card_deck : string,
-  overlap_card_check : string
-};
-
-const modalCustomStyles = {
-  content : {
-    top                   : '350px',
-    left                  : '50%',
-    right                 : 'auto',
-    bottom                : 'auto',
-    marginRight           : '-50%',
-    transform             : 'translate(-50%, -50%)',
-    width                 : '600px',
-  }
-};
-
-const modalCustomStyles2 = {
-  content : {
-    top                   : '350px',
-    left                  : '50%',
-    right                 : 'auto',
-    bottom                : 'auto',
-    marginRight           : '-50%',
-    transform             : 'translate(-50%, -50%)',
-    width                 : '800px',
-  }
+  overlap_card_check : string,
+  large_cat : number,
+  small_cat : number,
+  setting_stage : number,
+  _gameStart : Function,
+  _selectCategory: Function
 };
 
 class Home extends React.Component<AllProps> {
@@ -65,6 +49,124 @@ class Home extends React.Component<AllProps> {
       '_addSound' : this._addSound,
       '_flash' : this._flash
     })
+
+    window.document.addEventListener('keydown', (event) => this._setKeyBoardKey(event))
+  }
+
+  componentWillUnmount() {
+    window.document.removeEventListener("keydown", (event) => this._setKeyBoardKey(event));
+  }
+
+  _setKeyBoardKey = (event : any) => {
+    const { noticeActions, initActions, large_cat, small_cat, setting_modal, setting_type, setting_stage, _gameStart, setting_able, _selectCategory } = this.props;
+
+    const keyCode : number = Number(event.keyCode);
+
+    let save_obj : any = {}
+    ///
+    const _prevCategory : Function = () => {
+      save_obj['large_cat'] = large_cat - 1;
+
+      const prev_category : any = NoticeList[large_cat - 1];
+      if(prev_category.child !== undefined) {
+        save_obj['small_cat'] = prev_category.child.length - 1;
+      _selectCategory(large_cat - 1,  prev_category.child.length - 1);
+
+      } else {
+      _selectCategory(large_cat - 1,  0);
+
+        save_obj['small_cat'] = 0;
+      }
+
+
+      // return save_obj;
+    }
+    ///
+
+    // 현재 카테고리
+    if(setting_modal === true) {
+      if(setting_type === 'notice') {
+        const category : any = NoticeList[large_cat];
+        if(keyCode === 40 || keyCode === 39) {
+          // 아래 키 && 오른쪽 키
+
+          if( (Object.keys(NoticeList).length - 1) !== large_cat ) {
+            if( category.child === undefined) {
+              _selectCategory(large_cat + 1, 0);
+              // save_obj['large_cat'] = large_cat + 1;
+              // save_obj['small_cat'] = 0;
+
+            } else {
+              if( small_cat !== (category.child.length - 1) ) {
+              _selectCategory(large_cat, small_cat + 1);
+
+                // save_obj['large_cat'] = large_cat
+                // save_obj['small_cat'] = small_cat + 1;
+
+              } else {
+              _selectCategory(large_cat + 1, 0);
+
+                // save_obj['large_cat'] = large_cat + 1;
+                // save_obj['small_cat'] = 0;
+              }
+            }
+          }
+
+        } else if(keyCode === 38 || keyCode === 37) {
+          // 윗 키
+
+          if(large_cat !== 0) {
+            if(category.child !== undefined) {
+              if(small_cat === 0) {
+                _prevCategory();
+
+              } else {
+              _selectCategory(large_cat, small_cat - 1);
+
+                // save_obj['large_cat'] = large_cat;
+                // save_obj['small_cat'] = small_cat - 1; 
+              }
+
+            } else {
+              _prevCategory();
+            }
+          }
+        }
+        // noticeActions.select_tap(save_obj);
+
+      } else if(setting_type === 'setting') {
+        if(keyCode === 49) {
+          // 1번 키 클릭
+          initActions.set_setting_state({ 'stage' : 1 });
+
+        } else if(keyCode === 50) {
+          initActions.set_setting_state({ 'stage' : 2 });
+
+        } else if(keyCode === 51) {
+          initActions.set_setting_state({ 'stage' : 3 });
+        
+        } else {
+          if(keyCode === 39) {
+            // 오른쪽 
+            if(setting_stage !== 3) {
+              initActions.set_setting_state({ 'stage' : setting_stage + 1 });
+            }
+
+          } else if(keyCode === 37) {
+            // 왼쪽
+            if(setting_stage > 1) {
+              initActions.set_setting_state({ 'stage' : setting_stage - 1 });
+            }
+
+          } else if(keyCode === 13) {
+            // 게임 시작
+            if(setting_able === true) {
+              return _gameStart();
+            }
+          }
+        }
+      }
+    }
   }
 
   _flash = (
@@ -220,11 +322,34 @@ class Home extends React.Component<AllProps> {
     audio.src = sound;
   }
 
+  // 모달 스타일 지정
+  _setModalStyle = () => {
+    const { setting_type } = this.props;
+
+    const modalCustomStyles = {
+      content : {
+        top                   : '50%',
+        left                  : '50%',
+        right                 : 'auto',
+        bottom                : 'auto',
+        marginRight           : '-50%',
+        transform             : 'translate(-50%, -50%)',
+        width                 : '600px',
+      }
+    };
+
+    if(setting_type === 'notice') {
+      modalCustomStyles['content']['width'] = '800px'
+    }
+
+    return modalCustomStyles;
+  }
+
   render() {
     const { game_start, setting_modal, setting_type, initActions, setting_able, loading, main_start } = this.props;
     const modal_title = setting_type === 'setting' ? '게임 셋팅' : '게임 방법';
 
-    const { _addSound } = this;
+    const { _addSound, _setModalStyle } = this;
 
     return(
       <div id='game_home_div'>
@@ -261,7 +386,7 @@ class Home extends React.Component<AllProps> {
         {setting_modal === true
           ? <Modal
               isOpen={setting_modal}
-              style={modalCustomStyles2}
+              style={_setModalStyle()}
               ariaHideApp={false}
             >
               <div id='modal_title_div'>
@@ -294,7 +419,7 @@ class Home extends React.Component<AllProps> {
 }
 
 export default connect( 
-  ( { init, game } : StoreState  ) => ({
+  ( { init, game, notice, functions } : StoreState  ) => ({
     game_start : init.game_start,
     setting_modal : init.setting_modal,
     setting_type : init.setting_type,
@@ -302,11 +427,17 @@ export default connect(
     loading : game.loading,
     main_start : game.main_start,
     card_deck : init.card_deck,
-    overlap_card_check : game.overlap_card_check
+    overlap_card_check : game.overlap_card_check,
+    large_cat : notice.large_cat,
+    small_cat : notice.small_cat,
+    setting_stage : init.setting_stage,
+    _gameStart : functions._gameStart,
+    _selectCategory : functions._selectCategory
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),
       gameActions: bindActionCreators(gameActions, dispatch),
-      functionsActions : bindActionCreators(functionsActions, dispatch)
+      functionsActions : bindActionCreators(functionsActions, dispatch),
+      noticeActions : bindActionCreators(noticeActions, dispatch)
   }) 
 )(Home);

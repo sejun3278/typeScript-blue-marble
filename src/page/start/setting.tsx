@@ -28,7 +28,7 @@ export interface AllProps {
   _flash : Function,
   setting_able : boolean,
   overlap_card : boolean,
-  _addSound : Function
+  _addSound : Function,
 };
 
 class Setting extends React.Component<AllProps> {

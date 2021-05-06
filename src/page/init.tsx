@@ -158,6 +158,23 @@ class Init extends React.Component<AllProps> {
         }
     }
 
+    // 게임 시작하기
+    _gameStart = () => {
+        const { _flash, initActions, gameActions } = this.props;
+
+        initActions.toggle_setting_modal({ 'able' : false });
+        gameActions.game_loading({ 'loading' : true })
+
+        return window.setTimeout( () => {
+            _flash('.ReactModal__Content', false, 1.4, false, 40);
+
+            return window.setTimeout( () => {
+                initActions.toggle_setting_modal({ 'modal' : false });
+            }, 500)
+
+        }, 200)
+    }
+
     componentDidMount() {
         const { functionsActions } = this.props;
 
@@ -165,7 +182,8 @@ class Init extends React.Component<AllProps> {
         functionsActions.save_function({
             '_bettingGameStart' : this._bettingGameStart,
             '_selectCard' : this._selectCard,
-            '_setSelectCardEffect' : this._setSelectCardEffect
+            '_setSelectCardEffect' : this._setSelectCardEffect,
+            '_gameStart' : this._gameStart
         })
     }
 

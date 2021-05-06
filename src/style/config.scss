@@ -2178,9 +2178,10 @@ body {
         padding: 5px 5px;
         font-size: 15px;
         font-family: $HangeulNuri-Bold;
-        height: 500px;
+        height: 550px;
         border-right: solid 1px #ababab;
         color: #bbb;
+        overflow: auto;
 
         span {
             height: 60px;
@@ -2204,10 +2205,23 @@ body {
     }
 
     #game_notice_contents_div {
-        height: 500px;
+        height: 550px;
+
+        h2 {
+            height: 50px;
+            line-height: 50px;
+            margin: 3px 0px;
+            text-align: $aCenter;
+            font-family: $recipe_korea;
+            border-bottom: solid 2px #ababab;
+            background-color: black;
+            color: white;
+            opacity: 0.7;
+            font-size: 17px;
+        }
 
         #game_notice_thumbnail_div {
-            height: 450px;
+            height: 440px;
             width: auto;
         }
 

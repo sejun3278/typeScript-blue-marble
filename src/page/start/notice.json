@@ -38,7 +38,138 @@
     },
 
     {
-        "name" : "카드 뽑기",
+        "name" : "이동 카드 뽑기",
+        "comment" : "",
+        "thumbnail" : "",
+        "child" : [
+            {
+                "name" : "2 카드",
+                "comment" : "",
+                "thumbnail" : ""
+            },
+
+            {
+                "name" : "통행료 지불",
+                "comment" : "",
+                "thumbnail" : ""
+            }
+        ]
+    },
+
+    {
+        "name" : "토지 매입",
+        "comment" : "",
+        "thumbnail" : ""
+    },
+
+    {
+        "name" : "건설",
+        "comment" : "",
+        "thumbnail" : "",
+        "child" : [
+            {
+                "name" : "건물 건설",
+                "comment" : "",
+                "thumbnail" : ""
+            },
+
+            {
+                "name" : "랜드마크",
+                "comment" : "",
+                "thumbnail" : ""
+            }
+        ]
+    },
+
+    {
+        "name" : "은행",
+        "comment" : "",
+        "thumbnail" : "",
+        "child" : [
+            {
+                "name" : "예금",
+                "comment" : "",
+                "thumbnail" : ""
+            },
+
+            {
+                "name" : "대출",
+                "comment" : "",
+                "thumbnail" : ""
+            }
+        ]
+    },
+
+    {
+        "name" : "무인도",
+        "comment" : "",
+        "thumbnail" : ""
+    },
+
+    {
+        "name" : "카지노",
+        "comment" : "",
+        "thumbnail" : "",
+        "child" : [
+            {
+                "name" : "배팅금 설정",
+                "comment" : "",
+                "thumbnail" : ""
+            },
+
+            {
+                "name" : "잭팟 카드 선택",
+                "comment" : "",
+                "thumbnail" : ""
+            },
+
+            {
+                "name" : "잭팟",
+                "comment" : "",
+                "thumbnail" : ""
+            }
+        ]
+    },
+
+    {
+        "name" : "김포공항",
+        "comment" : "",
+        "thumbnail" : ""
+    },
+
+    {
+        "name" : "파산",
+        "comment" : "",
+        "thumbnail" : "",
+        "child" : [
+            {
+                "name" : "빚 정산",
+                "comment" : "",
+                "thumbnail" : ""
+            },
+
+            {
+                "name" : "건물 매각",
+                "comment" : "",
+                "thumbnail" : ""
+            },
+
+            {
+                "name" : "최종 파산",
+                "comment" : "",
+                "thumbnail" : ""
+            }
+        ]
+    },
+
+    {
+        "name" : "승리",
+        "comment" : "",
+        "thumbnail" : ""
+    },
+
+    {
+        "name" : "개발자 정보",
         "comment" : "",
         "thumbnail" : ""
     }

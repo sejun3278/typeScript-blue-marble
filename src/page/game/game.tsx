@@ -128,7 +128,7 @@ class Game extends React.Component<AllProps> {
       '_buyMap' : this._buyMap,
       '_build' : this._build,
       '_checkLandMark' : this._checkLandMark,
-      '_gameOver' : this._gameOver
+      '_gameOver' : this._gameOver,
     })
   }
 
@@ -787,8 +787,9 @@ class Game extends React.Component<AllProps> {
 
     let turn = !_turn ? this.props.turn : _turn;
     if(turn > 4 || turn > able_player) {
-      console.log(this.props.turn)
-      turn = 1;
+      // turn = 1;
+
+      return this._nextGames(turn);
     }
 
     const _target : any = document.getElementById(String(turn) + '_player_info_div');
@@ -939,7 +940,7 @@ class Game extends React.Component<AllProps> {
             'card_notice_ment' : save_obj['all_card_num'] + ' 칸을 이동합니다.'
           })
           await _moveCharacter(save_obj['all_card_num'], null);
-          // await _moveCharacter(14, null);
+          // await _moveCharacter(6, null);
   
           return initActions.set_setting_state({ 'card_deck' : JSON.stringify(card_deck) });
 
@@ -1341,6 +1342,7 @@ class Game extends React.Component<AllProps> {
 
     } else if(on === false) {
       window.clearInterval(play_time_count);
+      $('#timer_slide_div').remove();
     }
   }
 
@@ -1394,17 +1396,19 @@ class Game extends React.Component<AllProps> {
           }
 
           const winner_target : any = document.getElementById(el + '_player_info_div');
-          winner_target.style.border = 'solid 3px #9ede73';
-
+          if(winner_target.style !== null) {
+            winner_target.style.border = 'solid 3px #9ede73';
+          }
+          
           winner_ment += `<b class='color_player_${el}'>${el} 플레이어</b> <br />`;
         })
         winner_ment = `<div id='winner_player_list_div'> ${winner_ment} </div> 들의 공동 우승입니다.`
 
       } else {
-        console.log(winner)
-
         const winner_target : any = document.getElementById(winner + '_player_info_div');
-        winner_target.style.border = 'solid 3px #9ede73';
+        if(winner_target.style !== null) {
+          winner_target.style.border = 'solid 3px #9ede73';
+        }
 
         winner_ment = `<b class='color_player_${winner}'>${winner} 플레이어</b>의 승리입니다!`;
       }
@@ -1538,6 +1542,7 @@ class Game extends React.Component<AllProps> {
       _removeAlertMent, _addLog, _checkPlayerMoney, _minusPlayerMoney, _checkEstatePlayerMoney, _splitMoneyUnit 
     } = this;
 
+    let check_lendMark : boolean = false;
     // if(turn === 1) {
         if(type === 'on') {
             for(let i = 0; i < map_info[select_info.number].build.length; i++) {
@@ -1575,7 +1580,7 @@ class Game extends React.Component<AllProps> {
                     _removeAlertMent(map_info[select_info.number].build[key].name + " (이)가 건설되었습니다.");
 
                     // 랜드마크 건설 여부 체크
-                    const check_lendMark = this._checkLandMark(map_info[select_info.number]);
+                    check_lendMark = this._checkLandMark(map_info[select_info.number]);
 
                     if(key !== 3) {
                         if(check_lendMark === true) {
@@ -1597,6 +1602,8 @@ class Game extends React.Component<AllProps> {
 
       gameActions.select_type({ 'select_info' : JSON.stringify(map_info[select_info.number]) });
       initActions.set_setting_state({ 'map_info' : JSON.stringify(map_info) });
+
+      return check_lendMark;
   }
 
   // 랜드마크 건설 가능 체크

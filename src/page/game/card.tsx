@@ -125,8 +125,8 @@ class Card extends React.Component<AllProps> {
                 if(save_obj['card_select_able'] === false) {
                     save_obj['card_notice_ment'] = save_obj['all_card_num'] + ' 칸을 이동합니다.';
 
-                    this._moveCharacter(save_obj['all_card_num'], null);
-                    // this._moveCharacter(4, null) //
+                    // this._moveCharacter(save_obj['all_card_num'], null);
+                    this._moveCharacter(4, null) //
 
                     // 김포공항행
 
@@ -428,6 +428,7 @@ class Card extends React.Component<AllProps> {
 
                 // 토지 소유주의 돈 증가
                 player_list[city_info.host - 1].money += city_info.pass * _pass_price;
+                initActions.set_player_info({ 'player_list' : JSON.stringify(player_list) });
 
                 if(remove_money.result === false) {
                     // 돈이 남아 있을 경우
@@ -540,7 +541,6 @@ class Card extends React.Component<AllProps> {
                 // 최대 배팅액 구하기
                 // 현금의 10% 까지 사용할 수 있다.
                 const max = Math.round(com_money * 0.1);
-                console.log(max)
                 // 배팅액 구하기
                 const betting = Math.floor( Math.random() * (max - 2) + 2 );
 
@@ -638,7 +638,7 @@ class Card extends React.Component<AllProps> {
             // 토지 구매하기
             if(my_money > city.price) {
                 // 컴퓨터의 토지 구매확률 구하기
-                able = await this._computerBuyPercent(50, city, 'land', city.price);
+                able = await this._computerBuyPercent(70, city, 'land', city.price);
 
                 // 알고리즘을 통해 구매에 확정할 경우
                 if(able === true) {
@@ -673,9 +673,9 @@ class Card extends React.Component<AllProps> {
         // percent : 시작 확률
         const { turn, _checkPlayerMoney, _checkLandMark, _build } = this.props;
         const my_money = _checkPlayerMoney(turn);
+        const player_list = JSON.parse(this.props.player_list);
 
         if(type === 'land') {
-            const player_list = JSON.parse(this.props.player_list);
 
             // 소유중인 토지의 갯수에 따라 확률 조정
             const my_maps : number = player_list[Number(turn) - 1].maps.length
@@ -694,32 +694,49 @@ class Card extends React.Component<AllProps> {
 
         } else if(type === 'build') {
             // 랜드마크 건설 여부 확인 : true 일 경우 랜드마크 건설 가능
-            const lendmark_able = _checkLandMark(city);
+            const landmark = _checkLandMark(city);
 
-            if(lendmark_able === false) {
+            if(landmark === false) {
                 // 랜드마크 구매가 불가능한 상황
                 let key : number = 0;
+                const build_loop : Function = async () => {
 
-                const build_loop : Function = () => {
                     if(key === 3) {
-                        return this._computerTurnEnd();;
-                    }
+                        const _landmark = city.build[0].build && city.build[1].build && city.build[2].build;
 
+                        if(_landmark === false) {
+                            return this._computerTurnEnd();
+
+                        } else {
+                            return this._computerBuild(player_list[Number(turn) - 1], 'build', player_list, city);
+                        }
+                    }
+                    
+                    console.log(city.build[key], city)
                     if(city.build[key].build === false) {
                     // 건설되지 않을 경우만 실행
                     const my_money : number = _checkPlayerMoney(turn);
 
                     if(my_money >= city.build[key].price) {
                         const able = this._computerBuyPercent(50, city, 'check', city.build[key].price);
+                        // const able = true;
+
                         if(able === true) {
                             // 건설하기
-                            _build('click', key, city);
+                            const build = _build('click', key, city);
+                            city.build[key].build = true;
 
-                            return window.setTimeout( () => {
+                            return await window.setTimeout( () => {
                                 key += 1;
 
-                                if(key === 3) {
-                                    return;
+                                if(key >= 3) {
+                                    if(build === true) {
+                                        // 랜드마크 건설 가능
+                                        return this._computerBuild(player_list[Number(turn) - 1], 'build', player_list, city);
+
+                                    } else {
+                                        return this._computerTurnEnd();
+                                    }
 
                                 } else {
                                     return build_loop();
@@ -727,7 +744,7 @@ class Card extends React.Component<AllProps> {
                             }, 800)
 
                         } else {
-                            return window.setTimeout( () => {
+                            return await window.setTimeout( () => {
                                 key += 1;
                                 return build_loop();
                             }, 800)
@@ -747,6 +764,28 @@ class Card extends React.Component<AllProps> {
                 return window.setTimeout( () => {
                     return build_loop()
                 }, 800)
+
+            } else {
+                // 랜드마크 건설하기
+                const _landmark = city.build[0].build && city.build[1].build && city.build[2].build;
+
+                if(_landmark === true) {
+                    const able = this._computerBuyPercent(50, city, 'check', city.build[3].price);
+                    // const able = true;
+
+                    if(able === true) {
+                        // 랜드마크 건설
+                        _build('click', 3, city);
+
+                        return window.setTimeout( () => {
+                            return this._computerTurnEnd();
+                        }, 800)
+
+                    } else {
+                        return this._computerTurnEnd();
+                    }
+                }
+                return;
             }
         }
 

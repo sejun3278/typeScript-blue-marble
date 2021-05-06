@@ -54,11 +54,13 @@ class Settle extends React.Component<AllProps> {
       }, round_timer * 1000);
 
       settle_timer = window.setInterval( () => {
-        if(second >= round_timer) {
-          // 파산하기
-          this._confirmSettle(turn);
-
-          return;
+        if(turn === 1) {
+          if(second >= round_timer) {
+            // 파산하기
+            this._confirmSettle(turn);
+  
+            return;
+          }
         }
 
         // const width : number = Number(String(100 - (timer * second)).slice(0, 4));
@@ -210,6 +212,10 @@ class Settle extends React.Component<AllProps> {
     const bank_info = JSON.parse(this.props.bank_info);
     const player_list = JSON.parse(this.props.player_list);
     const map_info = JSON.parse(this.props.map_info);
+
+    if(settle_state[player] === true) {
+      return _turnEnd();
+    }
 
     // 파산
 

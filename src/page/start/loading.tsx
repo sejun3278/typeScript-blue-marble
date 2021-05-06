@@ -105,7 +105,7 @@ class Loading extends React.Component<AllProps> {
           bank_info[i + 1]['repay_day'] = 0;
 
           if(i === 0) {
-            // bank_info[i + 1]['repay_day'] = 2;
+            // bank_info[i + 1]['repay_day'] = 1;
           }
         }
       }

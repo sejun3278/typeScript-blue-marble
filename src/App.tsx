@@ -16,6 +16,17 @@ export interface AllProps {
 };
 
 class App extends React.Component<AllProps> {
+
+  componentDidMount() {
+    window.document.addEventListener('keydown', function(event) {
+      const keyCode : number = event.keyCode;
+      if(keyCode === 123) {
+        // F12 방지
+        // event.returnValue = false;
+      }
+    })
+  }
+
   render() {
     return(
       <div>
