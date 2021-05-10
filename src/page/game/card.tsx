@@ -125,8 +125,8 @@ class Card extends React.Component<AllProps> {
                 if(save_obj['card_select_able'] === false) {
                     save_obj['card_notice_ment'] = save_obj['all_card_num'] + ' 칸을 이동합니다.';
 
-                    // this._moveCharacter(save_obj['all_card_num'], null);
-                    this._moveCharacter(4, null) //
+                    this._moveCharacter(save_obj['all_card_num'], null);
+                    // this._moveCharacter(10, null) //
 
                     // 김포공항행
 
@@ -471,10 +471,7 @@ class Card extends React.Component<AllProps> {
 
     // 컴퓨터 행동 알고리즘
     _actionComputer = (player : number, city : any, player_list : any) => {
-        const { _checkPlayerMoney, _turnEnd, gameActions } = this.props;
-
-        // 플레이어의 현재 자산 + 은행 자산
-        const my_money = _checkPlayerMoney(player);
+        const { _checkPlayerMoney } = this.props;
 
         // 도착한 토지의 타입 파악
         if(city.type === 'map') {
@@ -712,7 +709,6 @@ class Card extends React.Component<AllProps> {
                         }
                     }
                     
-                    console.log(city.build[key], city)
                     if(city.build[key].build === false) {
                     // 건설되지 않을 경우만 실행
                     const my_money : number = _checkPlayerMoney(turn);

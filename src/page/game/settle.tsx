@@ -215,62 +215,60 @@ class Settle extends React.Component<AllProps> {
 
     if(settle_state[player] === true) {
       return _turnEnd();
+
     }
+      // 빚 전부 청산하기
+      bank_info[player]['repay_day'] = 0;
+      bank_info[player]['loan'] = 0;
+      bank_info[player]['loan_incentive'] = 0;
 
-    // 파산
+      gameActions.event_info({ 'bank_info' : JSON.stringify(bank_info) });
 
-    // 빚 전부 청산하기
-    bank_info[player]['repay_day'] = 0;
-    bank_info[player]['loan'] = 0;
-    bank_info[player]['loan_incentive'] = 0;
+      settle_state[player] = true;
+      gameActions.settle_player_money({ 'settle_state' : JSON.stringify(settle_state) })
 
-    gameActions.event_info({ 'bank_info' : JSON.stringify(bank_info) });
+      const ment = `<div class='game_alert_2 back_black red'> <b class='color_player_${player}'> ${player} 플레이어 </b>가 파산했습니다. </div>`
+      _addLog(ment);
 
-    settle_state[player] = true;
-    gameActions.settle_player_money({ 'settle_state' : JSON.stringify(settle_state) })
-
-    const ment = `<div class='game_alert_2 back_black red'> <b class='color_player_${player}'> ${player} 플레이어 </b>가 파산했습니다. </div>`
-    _addLog(ment);
-
-    if(player_list[player - 1].maps.length > 0) {
-      for(let i = 0; i < player_list[player - 1].maps.length; i++) {
-        const map_number = player_list[player - 1].maps[i];
-        map_info[map_number].host = null;
-      }
-    }
-
-    player_list[player - 1].maps = [];
-    initActions.set_player_info({ 'player_list' : JSON.stringify(player_list) });
-    initActions.set_setting_state({ 'map_info' : JSON.stringify(map_info) })
-
-    clearInterval(settle_timer);
-
-    gameActions.settle_player_money({ 'settle_modal' : false, 'settle_type' : null, 'settle_bill' : JSON.stringify({}), 'settle_extra_money' : 0 })
-   
-    // 게임 종료 여건 체크하기
-    let winner : string | null = null;
-    let game_over = true;
-
-    for(let key in settle_state) {
-      if(settle_state[key] === false) {
-        if(winner !== null) {
-          game_over = false;
+      if(player_list[player - 1].maps.length > 0) {
+        for(let i = 0; i < player_list[player - 1].maps.length; i++) {
+          const map_number = player_list[player - 1].maps[i];
+          map_info[map_number].host = null;
         }
-        winner = key;
       }
-    }
-   
-    if(game_over === true) {
-      // 게임 종료
-      gameActions.game_over({ 'game_over' : true, 'winner' : winner });
 
-      return _gameOver();
+      player_list[player - 1].maps = [];
+      initActions.set_player_info({ 'player_list' : JSON.stringify(player_list) });
+      initActions.set_setting_state({ 'map_info' : JSON.stringify(map_info) })
 
-    } else {
-      return window.setTimeout(() => {
-        return _turnEnd();
-      }, 300);
-    }
+      clearInterval(settle_timer);
+
+      gameActions.settle_player_money({ 'settle_modal' : false, 'settle_type' : null, 'settle_bill' : JSON.stringify({}), 'settle_extra_money' : 0 })
+    
+      // 게임 종료 여건 체크하기
+      let winner : string | null = null;
+      let game_over = true;
+
+      for(let key in settle_state) {
+        if(settle_state[key] === false) {
+          if(winner !== null) {
+            game_over = false;
+          }
+          winner = key;
+        }
+      }
+    
+      if(game_over === true) {
+        // 게임 종료
+        gameActions.game_over({ 'game_over' : true, 'winner' : winner });
+
+        return _gameOver(winner);
+
+      } else {
+        return window.setTimeout(() => {
+          return _turnEnd();
+        }, 300);
+      }
   }
 
   render() {

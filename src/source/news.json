@@ -103,6 +103,292 @@
                 "unit" : "만원",
                 "limit" : 1000,
                 "good" : true
+            },
+
+            "9" : {
+                "title" : "광주 땅값 인상",
+                "ment" : "광주의 땅값이 인상됩니다.",
+                "range" : [5, 15],
+                "target" : [9],
+                "apply" : true,
+                "type" : true,
+                "other_ment" : " 만원 인상 ",
+                "unit" : "만원",
+                "limit" : 1000,
+                "good" : true
+            },
+
+            "10" : {
+                "title" : "논산 땅값 인상",
+                "ment" : "논산의 땅값이 인상됩니다.",
+                "range" : [5, 15],
+                "target" : [10],
+                "apply" : true,
+                "type" : true,
+                "other_ment" : " 만원 인상 ",
+                "unit" : "만원",
+                "limit" : 1000,
+                "good" : true
+            },
+
+            "11" : {
+                "title" : "춘천 땅값 인상",
+                "ment" : "춘천의 땅값이 인상됩니다.",
+                "range" : [5, 15],
+                "target" : [11],
+                "apply" : true,
+                "type" : true,
+                "other_ment" : " 만원 인상 ",
+                "unit" : "만원",
+                "limit" : 1000,
+                "good" : true
+            },
+
+            "12" : {
+                "title" : "대구 땅값 인상",
+                "ment" : "대구의 땅값이 인상됩니다.",
+                "range" : [5, 15],
+                "target" : [12],
+                "apply" : true,
+                "type" : true,
+                "other_ment" : " 만원 인상 ",
+                "unit" : "만원",
+                "limit" : 1000,
+                "good" : true
+            },
+
+            "13" : {
+                "title" : "천안 땅값 인상",
+                "ment" : "천안의 땅값이 인상됩니다.",
+                "range" : [5, 15],
+                "target" : [13],
+                "apply" : true,
+                "type" : true,
+                "other_ment" : " 만원 인상 ",
+                "unit" : "만원",
+                "limit" : 1000,
+                "good" : true
+            },
+
+            "14" : {
+                "title" : "강릉 땅값 인상",
+                "ment" : "강릉의 땅값이 인상됩니다.",
+                "range" : [5, 15],
+                "target" : [15],
+                "apply" : true,
+                "type" : true,
+                "other_ment" : " 만원 인상 ",
+                "unit" : "만원",
+                "limit" : 1000,
+                "good" : true
+            },
+
+            "15" : {
+                "title" : "서울 땅값 인상",
+                "ment" : "서울의 땅값이 인상됩니다.",
+                "range" : [5, 15],
+                "target" : [16],
+                "apply" : true,
+                "type" : true,
+                "other_ment" : " 만원 인상 ",
+                "unit" : "만원",
+                "limit" : 1000,
+                "good" : true
+            },
+
+            "16" : {
+                "title" : "청주 땅값 인상",
+                "ment" : "청주의 땅값이 인상됩니다.",
+                "range" : [5, 15],
+                "target" : [17],
+                "apply" : true,
+                "type" : true,
+                "other_ment" : " 만원 인상 ",
+                "unit" : "만원",
+                "limit" : 1000,
+                "good" : true
+            },
+
+            "17" : {
+                "title" : "울산 땅값 인상",
+                "ment" : "울산의 땅값이 인상됩니다.",
+                "range" : [5, 15],
+                "target" : [18],
+                "apply" : true,
+                "type" : true,
+                "other_ment" : " 만원 인상 ",
+                "unit" : "만원",
+                "limit" : 1000,
+                "good" : true
+            },
+
+            "18" : {
+                "title" : "인천 땅값 인상",
+                "ment" : "인천의 땅값이 인상됩니다.",
+                "range" : [5, 15],
+                "target" : [19],
+                "apply" : true,
+                "type" : true,
+                "other_ment" : " 만원 인상 ",
+                "unit" : "만원",
+                "limit" : 1000,
+                "good" : true
+            },
+
+            "19" : {
+                "title" : "경기 땅값 인상",
+                "ment" : "경기의 땅값이 인상됩니다.",
+                "range" : [5, 15],
+                "target" : [21],
+                "apply" : true,
+                "type" : true,
+                "other_ment" : " 만원 인상 ",
+                "unit" : "만원",
+                "limit" : 1000,
+                "good" : true
+            },
+
+            "20" : {
+                "title" : "전주 땅값 인상",
+                "ment" : "전주의 땅값이 인상됩니다.",
+                "range" : [5, 15],
+                "target" : [22],
+                "apply" : true,
+                "type" : true,
+                "other_ment" : " 만원 인상 ",
+                "unit" : "만원",
+                "limit" : 1000,
+                "good" : true
+            },
+
+            "21" : {
+                "title" : "포항 땅값 인상",
+                "ment" : "포항의 땅값이 인상됩니다.",
+                "range" : [5, 15],
+                "target" : [23],
+                "apply" : true,
+                "type" : true,
+                "other_ment" : " 만원 인상 ",
+                "unit" : "만원",
+                "limit" : 1000,
+                "good" : true
+            },
+
+            "22" : {
+                "title" : "세종 땅값 인상",
+                "ment" : "세종의 땅값이 인상됩니다.",
+                "range" : [5, 15],
+                "target" : [24],
+                "apply" : true,
+                "type" : true,
+                "other_ment" : " 만원 인상 ",
+                "unit" : "만원",
+                "limit" : 1000,
+                "good" : true
+            },
+
+            "23" : {
+                "title" : "목포 땅값 인상",
+                "ment" : "목포의 땅값이 인상됩니다.",
+                "range" : [5, 15],
+                "target" : [25],
+                "apply" : true,
+                "type" : true,
+                "other_ment" : " 만원 인상 ",
+                "unit" : "만원",
+                "limit" : 1000,
+                "good" : true
+            },
+
+            "24" : {
+                "title" : "대전 땅값 인상",
+                "ment" : "대전의 땅값이 인상됩니다.",
+                "range" : [5, 15],
+                "target" : [26],
+                "apply" : true,
+                "type" : true,
+                "other_ment" : " 만원 인상 ",
+                "unit" : "만원",
+                "limit" : 1000,
+                "good" : true
+            },
+
+            "25" : {
+                "title" : "경주 땅값 인상",
+                "ment" : "경주의 땅값이 인상됩니다.",
+                "range" : [5, 15],
+                "target" : [27],
+                "apply" : true,
+                "type" : true,
+                "other_ment" : " 만원 인상 ",
+                "unit" : "만원",
+                "limit" : 1000,
+                "good" : true
+            },
+
+            "26" : {
+                "title" : "수도권 땅값 인상",
+                "ment" : "수도권 (경기, 서울, 인천, 광명) 의 땅값이 인상됩니다.",
+                "range" : [5, 15],
+                "target" : [8, 16, 19, 21],
+                "apply" : true,
+                "type" : true,
+                "other_ment" : " 만원 인상 ",
+                "unit" : "만원",
+                "limit" : 1000,
+                "good" : true
+            },
+
+            "27" : {
+                "title" : "충청권 땅값 인상",
+                "ment" : "충청권 (천안, 논산, 청주, 세종, 대전) 의 땅값이 인상됩니다.",
+                "range" : [5, 15],
+                "target" : [10, 13, 17, 24, 26],
+                "apply" : true,
+                "type" : true,
+                "other_ment" : " 만원 인상 ",
+                "unit" : "만원",
+                "limit" : 1000,
+                "good" : true
+            },
+
+            "28" : {
+                "title" : "강원권 땅값 인상",
+                "ment" : "강원권 (평창, 춘천, 강릉) 의 땅값이 인상됩니다.",
+                "range" : [5, 15],
+                "target" : [2, 11, 15],
+                "apply" : true,
+                "type" : true,
+                "other_ment" : " 만원 인상 ",
+                "unit" : "만원",
+                "limit" : 1000,
+                "good" : true
+            },
+
+            "29" : {
+                "title" : "경상권 땅값 인상",
+                "ment" : "경상권 (안동, 부산, 독도, 대구, 울산, 포항, 경주) 의 땅값이 인상됩니다.",
+                "range" : [5, 15],
+                "target" : [1, 3, 7, 12, 18, 23, 27],
+                "apply" : true,
+                "type" : true,
+                "other_ment" : " 만원 인상 ",
+                "unit" : "만원",
+                "limit" : 1000,
+                "good" : true
+            },
+
+            "30" : {
+                "title" : "전라권 땅값 인상",
+                "ment" : "전라권 (여수, 광주, 전주, 목포) 의 땅값이 인상됩니다.",
+                "range" : [5, 15],
+                "target" : [4, 9, 22, 25],
+                "apply" : true,
+                "type" : true,
+                "other_ment" : " 만원 인상 ",
+                "unit" : "만원",
+                "limit" : 1000,
+                "good" : true
             }
         },
 
@@ -203,6 +489,292 @@
                 "ment" : "광명의 땅값이 인하됩니다. ",
                 "range" : [1, 5],
                 "target" : [8],
+                "apply" : true,
+                "type" : false,
+                "other_ment" : " 만원 인하 ",
+                "unit" : "만원",
+                "limit" : 10,
+                "good" : false
+            },
+
+            "9" : {
+                "title" : "광주 땅값 인하",
+                "ment" : "광주의 땅값이 인하됩니다. ",
+                "range" : [1, 5],
+                "target" : [9],
+                "apply" : true,
+                "type" : false,
+                "other_ment" : " 만원 인하 ",
+                "unit" : "만원",
+                "limit" : 10,
+                "good" : false
+            },
+
+            "10" : {
+                "title" : "논산 땅값 인하",
+                "ment" : "논산의 땅값이 인하됩니다. ",
+                "range" : [1, 5],
+                "target" : [10],
+                "apply" : true,
+                "type" : false,
+                "other_ment" : " 만원 인하 ",
+                "unit" : "만원",
+                "limit" : 10,
+                "good" : false
+            },
+
+            "11" : {
+                "title" : "춘천 땅값 인하",
+                "ment" : "춘천의 땅값이 인하됩니다. ",
+                "range" : [1, 5],
+                "target" : [11],
+                "apply" : true,
+                "type" : false,
+                "other_ment" : " 만원 인하 ",
+                "unit" : "만원",
+                "limit" : 10,
+                "good" : false
+            },
+
+            "12" : {
+                "title" : "대구 땅값 인하",
+                "ment" : "대구의 땅값이 인하됩니다. ",
+                "range" : [1, 5],
+                "target" : [12],
+                "apply" : true,
+                "type" : false,
+                "other_ment" : " 만원 인하 ",
+                "unit" : "만원",
+                "limit" : 10,
+                "good" : false
+            },
+
+            "13" : {
+                "title" : "천안 땅값 인하",
+                "ment" : "천안의 땅값이 인하됩니다. ",
+                "range" : [1, 5],
+                "target" : [13],
+                "apply" : true,
+                "type" : false,
+                "other_ment" : " 만원 인하 ",
+                "unit" : "만원",
+                "limit" : 10,
+                "good" : false
+            },
+
+            "14" : {
+                "title" : "강릉 땅값 인하",
+                "ment" : "강릉의 땅값이 인하됩니다. ",
+                "range" : [1, 5],
+                "target" : [15],
+                "apply" : true,
+                "type" : false,
+                "other_ment" : " 만원 인하 ",
+                "unit" : "만원",
+                "limit" : 10,
+                "good" : false
+            },
+
+            "15" : {
+                "title" : "서울 땅값 인하",
+                "ment" : "서울의 땅값이 인하됩니다. ",
+                "range" : [1, 5],
+                "target" : [16],
+                "apply" : true,
+                "type" : false,
+                "other_ment" : " 만원 인하 ",
+                "unit" : "만원",
+                "limit" : 10,
+                "good" : false
+            },
+
+            "16" : {
+                "title" : "청주 땅값 인하",
+                "ment" : "청주의 땅값이 인하됩니다. ",
+                "range" : [1, 5],
+                "target" : [17],
+                "apply" : true,
+                "type" : false,
+                "other_ment" : " 만원 인하 ",
+                "unit" : "만원",
+                "limit" : 10,
+                "good" : false
+            },
+
+            "17" : {
+                "title" : "울산 땅값 인하",
+                "ment" : "울산의 땅값이 인하됩니다. ",
+                "range" : [1, 5],
+                "target" : [18],
+                "apply" : true,
+                "type" : false,
+                "other_ment" : " 만원 인하 ",
+                "unit" : "만원",
+                "limit" : 10,
+                "good" : false
+            },
+
+            "18" : {
+                "title" : "인천 땅값 인하",
+                "ment" : "인천의 땅값이 인하됩니다. ",
+                "range" : [1, 5],
+                "target" : [19],
+                "apply" : true,
+                "type" : false,
+                "other_ment" : " 만원 인하 ",
+                "unit" : "만원",
+                "limit" : 10,
+                "good" : false
+            },
+
+            "19" : {
+                "title" : "경기 땅값 인하",
+                "ment" : "경기의 땅값이 인하됩니다. ",
+                "range" : [1, 5],
+                "target" : [21],
+                "apply" : true,
+                "type" : false,
+                "other_ment" : " 만원 인하 ",
+                "unit" : "만원",
+                "limit" : 10,
+                "good" : false
+            },
+
+            "20" : {
+                "title" : "전주 땅값 인하",
+                "ment" : "전주의 땅값이 인하됩니다. ",
+                "range" : [1, 5],
+                "target" : [22],
+                "apply" : true,
+                "type" : false,
+                "other_ment" : " 만원 인하 ",
+                "unit" : "만원",
+                "limit" : 10,
+                "good" : false
+            },
+
+            "21" : {
+                "title" : "포항 땅값 인하",
+                "ment" : "포항의 땅값이 인하됩니다. ",
+                "range" : [1, 5],
+                "target" : [23],
+                "apply" : true,
+                "type" : false,
+                "other_ment" : " 만원 인하 ",
+                "unit" : "만원",
+                "limit" : 10,
+                "good" : false
+            },
+
+            "22" : {
+                "title" : "세종 땅값 인하",
+                "ment" : "세종의 땅값이 인하됩니다. ",
+                "range" : [1, 5],
+                "target" : [24],
+                "apply" : true,
+                "type" : false,
+                "other_ment" : " 만원 인하 ",
+                "unit" : "만원",
+                "limit" : 10,
+                "good" : false
+            },
+
+            "23" : {
+                "title" : "목포 땅값 인하",
+                "ment" : "목포의 땅값이 인하됩니다. ",
+                "range" : [1, 5],
+                "target" : [25],
+                "apply" : true,
+                "type" : false,
+                "other_ment" : " 만원 인하 ",
+                "unit" : "만원",
+                "limit" : 10,
+                "good" : false
+            },
+
+            "24" : {
+                "title" : "대전 땅값 인하",
+                "ment" : "대전의 땅값이 인하됩니다. ",
+                "range" : [1, 5],
+                "target" : [26],
+                "apply" : true,
+                "type" : false,
+                "other_ment" : " 만원 인하 ",
+                "unit" : "만원",
+                "limit" : 10,
+                "good" : false
+            },
+
+            "25" : {
+                "title" : "경주 땅값 인하",
+                "ment" : "경주의 땅값이 인하됩니다. ",
+                "range" : [1, 5],
+                "target" : [27],
+                "apply" : true,
+                "type" : false,
+                "other_ment" : " 만원 인하 ",
+                "unit" : "만원",
+                "limit" : 10,
+                "good" : false
+            },
+
+            "26" : {
+                "title" : "수도권 땅값 인하",
+                "ment" : "수도권 (경기, 서울, 인천, 광명)의 땅값이 인하됩니다.",
+                "range" : [1, 5],
+                "target" : [8, 16, 19, 21],
+                "apply" : true,
+                "type" : false,
+                "other_ment" : " 만원 인하 ",
+                "unit" : "만원",
+                "limit" : 10,
+                "good" : false
+            },
+
+            "27" : {
+                "title" : "충청권 땅값 인하",
+                "ment" : "충청권 (천안, 논산, 청주, 세종, 대전) 의 땅값이 인하됩니다.",
+                "range" : [1, 5],
+                "target" : [10, 13, 17, 24, 26],
+                "apply" : true,
+                "type" : false,
+                "other_ment" : " 만원 인하 ",
+                "unit" : "만원",
+                "limit" : 10,
+                "good" : false
+            },
+
+            "28" : {
+                "title" : "강원권 땅값 인하",
+                "ment" : "강원권 (평창, 춘천, 강릉) 의 땅값이 인하됩니다.",
+                "range" : [1, 5],
+                "target" : [2, 11, 15],
+                "apply" : true,
+                "type" : false,
+                "other_ment" : " 만원 인하 ",
+                "unit" : "만원",
+                "limit" : 10,
+                "good" : false
+            },
+
+            "29" : {
+                "title" : "경상권 땅값 인하",
+                "ment" : "경상권 (안동, 부산, 독도, 대구, 울산, 포항, 경주) 의 땅값이 인하됩니다.",
+                "range" : [1, 5],
+                "target" : [1, 3, 7, 12, 18, 23, 27],
+                "apply" : true,
+                "type" : false,
+                "other_ment" : " 만원 인하 ",
+                "unit" : "만원",
+                "limit" : 10,
+                "good" : false
+            },
+
+            "30" : {
+                "title" : "전라권 땅값 인하",
+                "ment" : "전라권 (여수, 광주, 전주, 목포) 의 땅값이 인하됩니다.",
+                "range" : [1, 5],
+                "target" : [4, 9, 22, 25],
                 "apply" : true,
                 "type" : false,
                 "other_ment" : " 만원 인하 ",

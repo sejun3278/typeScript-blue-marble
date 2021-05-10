@@ -1862,7 +1862,9 @@ body #notice_divs {
 }
 #game_notice_div #game_notice_contents_div #game_notice_thumbnail_div {
   height: 440px;
-  width: auto;
+  width: 656px;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
 }
 #game_notice_div #game_notice_contents_div #game_notice_comment_div {
   height: 60px;
@@ -1871,6 +1873,11 @@ body #notice_divs {
   padding-top: 10px;
   border-top: solid 1px #ababab;
   font-size: 13px;
+}
+
+.notice_comment {
+  text-align: center;
+  font-family: Recipekorea;
 }
 
 /*# sourceMappingURL=config.css.map */

@@ -3,7 +3,7 @@ import Modal from 'react-modal';
 
 import { actionCreators as initActions } from '../Store/modules/init';
 import { actionCreators as gameActions } from '../Store/modules/game';
-import functions, { actionCreators as functionsActions } from '../Store/modules/functions';
+import { actionCreators as functionsActions } from '../Store/modules/functions';
 import { actionCreators as noticeActions } from '../Store/modules/notice';
 
 import { connect } from 'react-redux'; 
@@ -36,9 +36,12 @@ export interface AllProps {
   small_cat : number,
   setting_stage : number,
   _gameStart : Function,
-  _selectCategory: Function
+  _selectCategory: Function,
+  _moveStage : Function,
+  bgm_number : number
 };
 
+let infinite_bgm : any = "";
 class Home extends React.Component<AllProps> {
 
   componentDidMount() {
@@ -58,7 +61,10 @@ class Home extends React.Component<AllProps> {
   }
 
   _setKeyBoardKey = (event : any) => {
-    const { noticeActions, initActions, large_cat, small_cat, setting_modal, setting_type, setting_stage, _gameStart, setting_able, _selectCategory } = this.props;
+    const { 
+      initActions, large_cat, small_cat, setting_modal, setting_type, setting_stage, _gameStart, 
+      setting_able, _selectCategory, _moveStage 
+    } = this.props;
 
     const keyCode : number = Number(event.keyCode);
 
@@ -77,9 +83,6 @@ class Home extends React.Component<AllProps> {
 
         save_obj['small_cat'] = 0;
       }
-
-
-      // return save_obj;
     }
     ///
 
@@ -137,25 +140,33 @@ class Home extends React.Component<AllProps> {
       } else if(setting_type === 'setting') {
         if(keyCode === 49) {
           // 1번 키 클릭
-          initActions.set_setting_state({ 'stage' : 1 });
+          if(setting_stage !== 1) {
+            _moveStage(1);
+          }
 
         } else if(keyCode === 50) {
-          initActions.set_setting_state({ 'stage' : 2 });
+          if(setting_stage !== 2) {
+            _moveStage(2);
+          }
 
         } else if(keyCode === 51) {
-          initActions.set_setting_state({ 'stage' : 3 });
+          if(setting_stage !== 3) {
+            _moveStage(3);
+          }
         
         } else {
           if(keyCode === 39) {
             // 오른쪽 
             if(setting_stage !== 3) {
-              initActions.set_setting_state({ 'stage' : setting_stage + 1 });
+              _moveStage(setting_stage + 1);
+              // initActions.set_setting_state({ 'stage' : setting_stage + 1 });
             }
 
           } else if(keyCode === 37) {
             // 왼쪽
             if(setting_stage > 1) {
-              initActions.set_setting_state({ 'stage' : setting_stage - 1 });
+              _moveStage(setting_stage - 1);
+              // initActions.set_setting_state({ 'stage' : setting_stage - 1 });
             }
 
           } else if(keyCode === 13) {
@@ -308,14 +319,22 @@ class Home extends React.Component<AllProps> {
 
   // 사운드 추가하기
   _addSound = (type : string, name : string, number : number) => {
+    const { bgm_number } = this.props;
+    
     const sound_list = require('../source/sound.json');
-    const sound = sound_list[type][name][number];
+    let sound : string = "";
 
     let audio : any = document.createElement('audio');
     audio.classList.add('game_sound_audio');
     
     if(type === 'effect') {
       audio.id = 'game_effect_sound';
+      sound = sound_list[type][name][number];
+
+    } else if(type === 'bgm') {
+      sound = sound_list[type][name][number];
+
+      
     }
 
     audio.autoplay = true
@@ -432,7 +451,9 @@ export default connect(
     small_cat : notice.small_cat,
     setting_stage : init.setting_stage,
     _gameStart : functions._gameStart,
-    _selectCategory : functions._selectCategory
+    _selectCategory : functions._selectCategory,
+    _moveStage : functions._moveStage,
+    bgm_number : game.bgm_number
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

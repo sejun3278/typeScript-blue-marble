@@ -10,5 +10,13 @@
             "3" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/sound/cat_2.mp3",
             "4" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/source/sound/cat_3.mp3"
         }
+    },
+
+    "bgm" : {
+        "main" : {
+            "0" : {
+
+                  }
+        }
     }
 }

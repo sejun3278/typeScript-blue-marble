@@ -15,6 +15,7 @@ const SETGAMELOG = 'game/set_game_log';
 const SETNEWSINFO = 'game/set_news_info';
 const GAMEPLAYTIME = 'game/game_play_time';
 const GAMEOVER = 'game/game_over';
+const GAMESOUND = 'game/game_sound';
 
 export const actionCreators = {
     game_loading : createAction(GAMELOADING),
@@ -32,6 +33,7 @@ export const actionCreators = {
     set_news_info : createAction(SETNEWSINFO),
     game_play_time : createAction(GAMEPLAYTIME),
     game_over : createAction(GAMEOVER),
+    game_sound : createAction(GAMESOUND)
 }
 
 export interface gameState {
@@ -97,7 +99,8 @@ export interface gameState {
     player_rank : string,
     rank_update : boolean,
     computer_casingo : boolean,
-    computer_move : boolean
+    computer_move : boolean,
+    bgm_number: number
 }
 
 const initialState : gameState = {
@@ -163,7 +166,8 @@ const initialState : gameState = {
     player_rank : JSON.stringify({}),
     rank_update : false,
     computer_casingo : false,
-    computer_move : false
+    computer_move : false,
+    bgm_number : 0
 }
 
 export default handleActions<gameState> ({
@@ -332,6 +336,13 @@ export default handleActions<gameState> ({
             game_over : data.payload.game_over !== undefined ? data.payload.game_over : state.game_over,
             winner : data.payload.winner !== undefined ? data.payload.winner : state.winner,
             multiple_winner : data.payload.multiple_winner !== undefined ? data.payload.multiple_winner : state.multiple_winner
+        }
+    },
+
+    [GAMESOUND] : (state : any, data : any) => {
+        return {
+            ...state,
+            bgm_number : data.payload.bgm_number !== undefined ? data.payload.bgm_number : state.bgm_number,
         }
     }
 

@@ -185,8 +185,11 @@ class PlayGame extends React.Component<AllProps> {
 
                     : undefined
                   }
+
+                {game_over === false 
+                ?
                 <div id='playing_action_div'>
-                  {round_start === true && game_over === false
+                  {round_start === true
                   ?
                     <div id='playing_contents_div'>
                       <div id='playing_select_div'>
@@ -254,7 +257,9 @@ class PlayGame extends React.Component<AllProps> {
 
                     </div>
                   : undefined}
+
                 </div>
+                : undefined}
 
                 {turn === 1 && turn_end_able === true && card_select_able === false && move_location !== 20 && time_over === false
                 ?

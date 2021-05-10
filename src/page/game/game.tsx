@@ -70,7 +70,8 @@ export interface AllProps {
   player_rank : string,
   rank_update : boolean,
   multiple_winner : string,
-  select_info : string
+  select_info : string,
+  _addSound : Function
 };
 
 const flash_info : any = {
@@ -274,7 +275,7 @@ class Game extends React.Component<AllProps> {
   }
 
   _realGameStart = () => {
-    const { _flash, gameActions } = this.props;
+    const { _flash, gameActions, _addSound } = this.props;
 
     if(game_start_button === false) {
       game_start_button = true;
@@ -294,6 +295,8 @@ class Game extends React.Component<AllProps> {
   
             return window.setTimeout( () => {
               this._setGamePlayTimeCount(true);
+
+              _addSound('bgm', 'main', 0);
 
               return this._roundStart('turn');
   
@@ -578,7 +581,7 @@ class Game extends React.Component<AllProps> {
 
         gameActions.game_over({ 'game_over' : true, 'winner' : _winner, 'multiple_winner' : JSON.stringify(multiple_winner) })
         // 게임 종료
-        this._gameOver();
+        this._gameOver(_winner);
         return;
       }
 
@@ -796,7 +799,7 @@ class Game extends React.Component<AllProps> {
 
     if(game_over === true) {
       // 게임 종료
-      this._gameOver();
+      this._gameOver(null);
       return;
     }
 
@@ -939,8 +942,8 @@ class Game extends React.Component<AllProps> {
           gameActions.select_card_info({
             'card_notice_ment' : save_obj['all_card_num'] + ' 칸을 이동합니다.'
           })
-          await _moveCharacter(save_obj['all_card_num'], null);
-          // await _moveCharacter(6, null);
+          // await _moveCharacter(save_obj['all_card_num'], null);
+          await _moveCharacter(4, null);
   
           return initActions.set_setting_state({ 'card_deck' : JSON.stringify(card_deck) });
 
@@ -1372,17 +1375,20 @@ class Game extends React.Component<AllProps> {
   }
 
   // 게임 오버
-  _gameOver = () => {
-    const { winner, turn, _flash } = this.props;
+  _gameOver = (_winner : number | null | undefined) => {
+    const { turn, _flash, gameActions } = this.props;
     const multiple_winner = JSON.parse(this.props.multiple_winner);
-    
-    $('#playing_action_div').remove();
+    const winner : number = _winner !== null && _winner !== undefined ? Number(_winner) : Number(this.props.winner);
+
     const player_target : any = document.getElementById(turn + '_player_info_div');
     player_target.style.border = 'solid 1px #ababab';
 
     this._setGamePlayTimeCount(false);
 
+    gameActions.set_game_notice_ment({ 'main_ment' : "게임 종료" })
+
     _flash('#game_over_notice_div', true, 0, false, 30);
+
     window.setTimeout( () => {
       _flash('#game_over_notice_div', false, 1.4, false, 30);
 
@@ -1405,12 +1411,13 @@ class Game extends React.Component<AllProps> {
         winner_ment = `<div id='winner_player_list_div'> ${winner_ment} </div> 들의 공동 우승입니다.`
 
       } else {
-        const winner_target : any = document.getElementById(winner + '_player_info_div');
-        if(winner_target.style !== null) {
-          winner_target.style.border = 'solid 3px #9ede73';
-        }
+        if(winner > 0) {
+          $('#' + winner + '_player_info_div').css({
+            'border' : 'solid 3px #9ede73'
+          })
 
-        winner_ment = `<b class='color_player_${winner}'>${winner} 플레이어</b>의 승리입니다!`;
+          winner_ment = `<b class='color_player_${winner}'>${winner} 플레이어</b>의 승리입니다!`;
+        }
       }
 
       const padding_bottom_class = 'padding_bottom_' + String(padding_bottom);
@@ -1653,13 +1660,14 @@ class Game extends React.Component<AllProps> {
     return(
       <div id='game_div'>
 
-      {game_over === true
-        ? <div id='game_over_notice_div'>
-            게임 종료
-          </div>
+        {game_over === true
+          ? <div id='game_over_notice_div'>
+              게임 종료
+            </div>
 
-        : undefined
-      }
+          : undefined
+        }
+
         <div id='game_other_div'>
           <div id='game_title_div'>
             <h2> 대한의 마블 </h2>
@@ -1870,7 +1878,8 @@ export default connect(
     player_rank: game.player_rank,
     rank_update : game.rank_update,
     multiple_winner : game.multiple_winner,
-    select_info : game.select_info
+    select_info : game.select_info,
+    _addSound : functions._addSound
   }), 
     (dispatch) => ({ 
       initActions: bindActionCreators(initActions, dispatch),

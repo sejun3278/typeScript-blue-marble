@@ -32,7 +32,8 @@ export interface functionsState {
     _setSelectCardEffect : Function,
     _gameOver : Function,
     _gameStart : Function,
-    _selectCategory : Function
+    _selectCategory : Function,
+    _moveStage : Function
 }
 
 const initialState : functionsState = {
@@ -61,7 +62,8 @@ const initialState : functionsState = {
     _setSelectCardEffect : () => {},
     _gameOver : () => {},
     _gameStart : () => {},
-    _selectCategory : () => {}
+    _selectCategory : () => {},
+    _moveStage : () => {}
 }
 
 export default handleActions<functionsState> ({
@@ -94,7 +96,8 @@ export default handleActions<functionsState> ({
         _gameOver : data.payload._gameOver !== undefined ? data.payload._gameOver : state._gameOver,
         _gameStart : data.payload._gameStart !== undefined ? data.payload._gameStart : state._gameStart,
         _selectCategory : data.payload._selectCategory !== undefined ? data.payload._selectCategory : state._selectCategory,
-      };
+        _moveStage : data.payload._moveStage !== undefined ? data.payload._moveStage : state._moveStage,
+        };
     }
 
 }, initialState);

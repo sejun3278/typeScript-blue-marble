@@ -151,6 +151,7 @@ class News extends React.Component<AllProps> {
                     return(
                         <div key={key} className='news_state_divs'
                              style={(key + 1) < news_list[news_round]['info'].length ? { 'borderBottom' : 'dotted 1px white' } : undefined}
+                             title={el.ment}
                         >
                             <div className='news_title_div'> 
                                 {el.title}

@@ -2222,7 +2222,9 @@ body {
 
         #game_notice_thumbnail_div {
             height: 440px;
-            width: auto;
+            width: 656px;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
         }
 
         #game_notice_comment_div {
@@ -2234,4 +2236,9 @@ body {
             font-size: 13px;
         }
     }
+}
+
+.notice_comment {
+    text-align: $aCenter;
+    font-family: $recipe_korea;
 }

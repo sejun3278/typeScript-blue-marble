@@ -31,16 +31,25 @@ class Notice extends React.Component<AllProps> {
   _selectCategory = (large : number, small : number) => {
     const { noticeActions } = this.props;
 
+    noticeActions.select_tap({ 'large_cat' : large, 'small_cat' : small });
 
-    noticeActions.select_tap({ 'large_cat' : large, 'small_cat' : small })
+    const yScroll = Number(document.getElementById('large_list_' + large)?.offsetTop) - 300;
+    
+    const list : any = document.getElementById('game_notice_category_div');
+    list?.scrollTo(0, yScroll)
   }
 
   render() {
     const { large_cat, small_cat } = this.props;
     const { _selectCategory } = this;
-    const category : any = NoticeList[large_cat];
+
+    let category : any = NoticeList[large_cat];
+    if(category.child !== undefined) {
+      category = category.child[small_cat];
+    }
 
     const large_comment : string = category.comment;
+    const thumb = category.thumbnail;
 
     let title = category.name;
     if(category.child !== undefined) {
@@ -49,6 +58,11 @@ class Notice extends React.Component<AllProps> {
 
         title += ' > ' + small_category.name;
       }
+    }
+
+    const style : any = { 'backgroundImage' : `url(${thumb})` };
+    if(category.comment_show !== undefined) {
+      style['height'] = '522px';
     }
 
     return(
@@ -95,10 +109,15 @@ class Notice extends React.Component<AllProps> {
 
         <div id='game_notice_contents_div'>
           <h2> {title} </h2>
-          <div id='game_notice_thumbnail_div' />
-          <div id='game_notice_comment_div' 
-               dangerouslySetInnerHTML={{ __html : large_comment }}
+          <div id='game_notice_thumbnail_div' 
+               style={style}
           />
+          {category.comment_show === undefined
+            ?  <div id='game_notice_comment_div' 
+                  dangerouslySetInnerHTML={{ __html : large_comment }}
+              />
+            : undefined
+          }
         </div>
       </div>
     )

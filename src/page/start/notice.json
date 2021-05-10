@@ -1,8 +1,8 @@
 [
     {
         "name" : "- 카테고리 선택",
-        "comment" : "<div class='aCenter recipe_korea'> 설명이 필요한 카테고리를 선택해주세요. <div class='bold gray recipe_korea'> ( 방향키로도 카테고리를 이동할 수 있습니다. ) <div> </div>",
-        "thumbnail" : ""
+        "comment" : "<div class='notice_comment'> 설명이 필요한 카테고리를 선택해주세요. <div class='bold gray recipe_korea'> ( 방향키로도 카테고리를 이동할 수 있습니다. ) <div> </div>",
+        "thumbnail" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/notice/1.+category.png"
     },
 
     {
@@ -11,55 +11,65 @@
         "thumbnail" : "",
         "child" : [
             {
-                "name" : "기본 게임 규칙",
+                "name" : "게임 소개",
                 "comment" : "",
-                "thumbnail" : ""
+                "comment_show" : false,
+                "thumbnail" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/notice/2-1.+game_notice.png"
+            },
+
+            {
+                "name" : "기본 규칙",
+                "comment" : "",
+                "comment_show" : false,
+                "thumbnail" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/notice/2-2.+game_rule.png"
             }
         ]
     },
 
     {
-        "name" : "게임 설정",
+        "name" : "게임 셋팅",
         "comment" : "",
         "thumbnail" : "",
         "child" : [
             {
                 "name" : "게임 설정",
-                "comment" : "",
-                "thumbnail" : ""
+                "comment" : "<div class='notice_comment'> 게임에 대한 진행 방식을 직접 커스텀 할 수 있습니다. <br /> </div>",
+                "comment_show" : false,
+                "thumbnail" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/notice/3-1.+game_setting.png"
             },
 
             {
-                "name" : "캐릭터 설정",
-                "comment" : "",
-                "thumbnail" : ""
+                "name" : "플레이어 설정",
+                "comment" : "<div class='notice_comment'> 게임을 진행할 플레이어들을 설정합니다. </div>",
+                "comment_show" : false,
+                "thumbnail" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/notice/3-2.+player_setting.png"
             }
         ]
     },
 
     {
-        "name" : "이동 카드 뽑기",
+        "name" : "통행 카드 뽑기",
         "comment" : "",
         "thumbnail" : "",
         "child" : [
             {
-                "name" : "2 카드",
-                "comment" : "",
-                "thumbnail" : ""
+                "name" : "카드 뽑기",
+                "comment" : "<div class='notice_comment'> 자신의 턴에서 통행 카드를 선택해 카드를 뽑을 수 있습니다. <br /> 나온 숫자만큼 거리를 이동합니다. </div>",
+                "thumbnail" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/notice/4-1.+card_draw.gif"
             },
 
             {
-                "name" : "통행료 지불",
-                "comment" : "",
-                "thumbnail" : ""
+                "name" : "2 카드",
+                "comment" : "<div class='notice_comment'> 2 카드에서는 카드 2 장을 뽑아 나온 <b class='custom_color_1'> 숫자의 합만큼 거리를 이동 </b>합니다. <br /> 게임 셋팅에서 통행 카드 갯수를 2 장으로 설정해야 적용됩니다. </div>",
+                "thumbnail" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/notice/4-2.+two_card_draw.gif"
             }
         ]
     },
 
     {
         "name" : "토지 매입",
-        "comment" : "",
-        "thumbnail" : ""
+        "comment" : "<div class='notice_comment'> 이동한 토지에 소유자가 없을 경우 비용을 지불하고 토지를 구매할 수 있습니다. <br /> 구매한 토지에 다른 플레이어가 도착하면 통행료를 받을 수 있습니다. </div>",
+        "thumbnail" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/notice/5.+buy_land.gif"
     },
 
     {
@@ -69,16 +79,28 @@
         "child" : [
             {
                 "name" : "건물 건설",
-                "comment" : "",
-                "thumbnail" : ""
+                "comment" : "<div class='notice_comment'> 구매한 토지에는 건물을 건설해 통행료를 올릴 수 있습니다. <br /> 한번 건설한 건물은 철거가 불가능하니 신중히 생각해주세요. </div>",
+                "thumbnail" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/notice/6-1.+build.gif"
             },
 
             {
                 "name" : "랜드마크",
-                "comment" : "",
-                "thumbnail" : ""
+                "comment" : "<div class='notice_comment'> 기본 건물들을 모두 건설하면, 지역의 랜드마크를 건설할 수 있습니다. </div>",
+                "thumbnail" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/notice/6-2.+build_landmark.gif"
             }
         ]
+    },
+
+    {
+        "name" : "이달의 뉴스",
+        "comment" : "",
+        "thumbnail" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/notice/7.+news_event.png"
+    },
+
+    {
+        "name" : "무인도",
+        "comment" : "<div class='notice_comment'> 무인도에 도착하면, <b class='red' title='기본으로 1 일이며, 뉴스 이벤트에 따라 증가하거나 감소할 수도 있습니다.'>지정된 턴</b> 동안 아무런 행동도 할 수 없습니다. <br /> 지정된 턴 수는 뉴스 이벤트의 영향을 받습니다. </div>",
+        "thumbnail" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/notice/8.+stop_event.png"
     },
 
     {
@@ -87,23 +109,29 @@
         "thumbnail" : "",
         "child" : [
             {
+                "name" : "은행 이벤트",
+                "comment" : "<div class='notice_comment'> 2 라운드 이후로 '출발점' 이 '은행'으로 변경이 되며, <br /> 은행에 도착하거나 지나치면 <b class='custom_color_1'> 50 만원의 지원금</b>을 추가로 얻습니다. </div>",
+                "thumbnail" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/notice/9-1.+change_bank.gif"
+            },
+
+            {
                 "name" : "예금",
                 "comment" : "",
-                "thumbnail" : ""
+                "thumbnail" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/notice/9-2.+save_money.png"
             },
 
             {
                 "name" : "대출",
                 "comment" : "",
-                "thumbnail" : ""
+                "thumbnail" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/notice/9-3.+loan.png"
+            },
+
+            {
+                "name" : "은행 정보",
+                "comment" : "",
+                "thumbnail" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/notice/9-4.+bank_info.png"
             }
         ]
-    },
-
-    {
-        "name" : "무인도",
-        "comment" : "",
-        "thumbnail" : ""
     },
 
     {
@@ -113,28 +141,34 @@
         "child" : [
             {
                 "name" : "배팅금 설정",
-                "comment" : "",
-                "thumbnail" : ""
+                "comment" : "<div class='notice_comment'> 배팅금을 설정합니다. <br /> 최소 1 만원부터 배팅할 수 있습니다. </div>",
+                "thumbnail" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/notice/10-1.+casino_betting.gif"
             },
 
             {
                 "name" : "잭팟 카드 선택",
-                "comment" : "",
-                "thumbnail" : ""
+                "comment" : "<div class='notice_comment'> 2 카드와 3 카드 방식 중에 하나를 선택합니다. </div>",
+                "thumbnail" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/notice/10-2.+select_card.gif"
+            },
+
+            {
+                "name" : "카드 뽑기",
+                "comment" : "<div class='notice_comment'> 1 부터 9 까지의 랜덤한 숫자 카드를 뽑습니다. <br /> <b class='custom_color_1'> 뽑은 카드의 숫자가 모두 동일할 경우 잭팟에 성공</b>합니다. </div>",
+                "thumbnail" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/notice/10-3.+draw_card.gif"
             },
 
             {
                 "name" : "잭팟",
-                "comment" : "",
-                "thumbnail" : ""
+                "comment" : "<div class='notice_comment'> 잭팟에 성공하면, <b class='custom_color_1'>동일한 숫자 카드의 수를 모두 곱한 배율로 배팅금을 환급</b>받습니다. <br /> 예를 들어, 투 카드로 숫자 7이 나왔다면 7 * 7 = 49 * 배팅금 10 만원인 <b class='red'>490 만원을 환급</b>받게 됩니다.   </div>",
+                "thumbnail" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/notice/10-4.+jackpot.gif"
             }
         ]
     },
 
     {
         "name" : "김포공항",
-        "comment" : "",
-        "thumbnail" : ""
+        "comment" : "<div class='notice_comment'> 공항에 도착시 맵 어디든지 이동할 수 있습니다. <br /> 단, 무인도와 상대 플레이어의 소유지에는 이동할 수 없습니다. </div>",
+        "thumbnail" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/notice/11.+move_event.gif"
     },
 
     {
@@ -144,20 +178,20 @@
         "child" : [
             {
                 "name" : "빚 정산",
-                "comment" : "",
-                "thumbnail" : ""
+                "comment" : "<div class='notice_comment'> 빚 <b class='red'>(대출금 및 통행료)</b> 을 지불할 자산이 없으면 파산 신청 창이 오픈됩니다. <br /> 1차적으로, <b class='custom_color_1'>[ 보유하고 있는 자산 + 은행 예금 + 누적 이자금 ]</b>에서 빚을 정산합니다.  </div>",
+                "thumbnail" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/notice/12-1.+settle.png"
             },
 
             {
                 "name" : "건물 매각",
-                "comment" : "",
-                "thumbnail" : ""
+                "comment" : "<div class='notice_comment'> 정산할 자산이 없으면, 보유중인 도시를 매각해서 빚을 정산할 수 있습니다. <br /> 이때, 뉴스 이벤트 영향으로 인해 <b class='red'>매각 수수료</b>가 붙을 수도 있습니다. </div>",
+                "thumbnail" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/notice/12-2.+sale_land.gif"
             },
 
             {
                 "name" : "최종 파산",
-                "comment" : "",
-                "thumbnail" : ""
+                "comment" : "<div class='notice_comment'> 빚을 정산할 소유지조차 없다면, 파산 신청을 통해 최종으로 파산하게 되며, <br /> <b class='red'> 파산 신청을 한 플레이어는 게임에서 패배합니다. </b> </div>",
+                "thumbnail" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/notice/12-3.+settle_complate.gif"
             }
         ]
     },

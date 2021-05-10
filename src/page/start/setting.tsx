@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import { actionCreators as initActions } from '../../Store/modules/init';
 import { actionCreators as gameActions } from '../../Store/modules/game';
+import { actionCreators as functionsActions } from '../../Store/modules/functions';
 
 import { connect } from 'react-redux'; 
 import { bindActionCreators } from 'redux'; 
@@ -12,6 +13,7 @@ import init_player from '../../source/player.json';
 export interface AllProps {
   initActions : any,
   gameActions : any,
+  functionsActions : any,
   setting_stage : number,
   start_price : number,
   round_timer : number,
@@ -35,7 +37,7 @@ class Setting extends React.Component<AllProps> {
 
     componentDidMount() {
         // 초기 플레이어 설정하기
-        const { initActions } = this.props;
+        const { initActions, functionsActions } = this.props;
         const player_list = JSON.parse(this.props.player_list);
 
         const save_obj : any = {};
@@ -54,6 +56,10 @@ class Setting extends React.Component<AllProps> {
         save_obj['select_character_list'] = JSON.stringify(select_character_obj);
 
         initActions.set_player_info(save_obj)
+
+        functionsActions.save_function({
+            '_moveStage' : this._moveStage
+        })
     }
 
     _moveStage = (stage : number) => {
@@ -755,7 +761,7 @@ class Setting extends React.Component<AllProps> {
     }
 
     export default connect( 
-    ( { init } : StoreState  ) => ({
+    ( { init} : StoreState  ) => ({
         setting_stage : init.setting_stage,
         start_price : init.start_price,
         round_timer : init.round_timer,
@@ -775,5 +781,6 @@ class Setting extends React.Component<AllProps> {
         (dispatch) => ({ 
         initActions: bindActionCreators(initActions, dispatch),
         gameActions: bindActionCreators(gameActions, dispatch),
+        functionsActions : bindActionCreators(functionsActions, dispatch)
     }) 
     )(Setting);
