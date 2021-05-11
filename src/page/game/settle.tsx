@@ -395,28 +395,48 @@ class Settle extends React.Component<AllProps> {
                                   }
                                 }
 
-                                if(map.build[3].build === false) {
-                                  if(key_2 < 3) {
-                                    return(
-                                      <div key={key_2}>
-                                        <img alt='' src={icon} className='player_settle_build_icon'/>
-                                      </div>
-                                    )
-                                  }
+                                const _landmark_list : any = landmark_list;
 
-                                } else {
-                                  if(key_2 === 3) {
-                                    icon = landmark_list;
-                                    icon = icon.landmark[map.number];
+                                return(
+                                  map.build[3].build === false
+                                    ? key_2 < 3 
+                                        ? <div key={key_2}>
+                                            <img alt='' src={icon} className='player_settle_build_icon'/>
+                                          </div>
 
-                                    return(
-                                      <div key={key_2} style={{ 'width' : '100px' }}>
-                                        <img alt='' src={icon} className='player_settle_build_icon' />
-                                        <b className='custom_color_1'> 랜드마크 </b>
-                                      </div>
-                                    )
-                                  }
-                                }
+                                        : undefined
+
+                                    : key_2 === 3
+                                        ? <div key={key_2} style={{ 'width' : '100px' }}>
+                                            <img alt='' src={_landmark_list.landmark[map.number]} className='player_settle_build_icon' />
+                                            <b className='custom_color_1'> 랜드마크 </b>
+                                          </div>
+
+                                        : undefined
+                                )
+
+                                // if(map.build[3].build === false) {
+                                //   if(key_2 < 3) {
+                                //     return(
+                                //       <div key={key_2}>
+                                //         <img alt='' src={icon} className='player_settle_build_icon'/>
+                                //       </div>
+                                //     )
+                                //   }
+
+                                // } else {
+                                //   if(key_2 === 3) {
+                                //     icon = landmark_list;
+                                //     icon = icon.landmark[map.number];
+
+                                //     return(
+                                //       <div key={key_2} style={{ 'width' : '100px' }}>
+                                //         <img alt='' src={icon} className='player_settle_build_icon' />
+                                //         <b className='custom_color_1'> 랜드마크 </b>
+                                //       </div>
+                                //     )
+                                //   }
+                                // }
 
                               })}
                             </div>

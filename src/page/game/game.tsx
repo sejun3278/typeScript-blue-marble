@@ -3,7 +3,7 @@ import $ from 'jquery';
 import Modal from 'react-modal';
 
 import { actionCreators as initActions } from '../../Store/modules/init';
-import game, { actionCreators as gameActions } from '../../Store/modules/game';
+import { actionCreators as gameActions } from '../../Store/modules/game';
 import { actionCreators as functionsActions } from '../../Store/modules/functions';
 
 import { connect } from 'react-redux'; 
@@ -1133,7 +1133,7 @@ class Game extends React.Component<AllProps> {
 
         const origin_str = origin_value + ' ' + option_news_result['unit'];
         const result_str = result_value + ' ' + option_news_result['unit'];
-        if(random >= 1 && random < 5 || random >= 7 && random < 9) {
+        if( (random >= 1 && random < 5) || (random >= 7 && random < 9)) {
           option_news_result['summary'] = `　( ${origin_str}　=>　${result_str} )`;
 
         } else if(random >= 5 && random < 7) {
@@ -1674,8 +1674,7 @@ class Game extends React.Component<AllProps> {
             <p> Blue Marble Of Korea </p>
           </div>
 
-          <div id='game_other_funtion_div'> 
-            <div> 게임 방법 </div>
+          <div id='game_other_funtion_div'>
             <div onClick={() => window.confirm('게임을 재시작 하시겠습니까?') ? window.location.reload() : undefined}> 재시작 </div>
           </div>
         </div>

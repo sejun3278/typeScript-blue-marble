@@ -134,13 +134,6 @@ class News extends React.Component<AllProps> {
 
                     const news_style : any = {};
 
-                    let origin_value : string = '';
-                    let result_value : string = '';
-                    if(option_check === true) {
-                        origin_value = el.origin_value + el.unit;
-                        result_value = el.result_value + el.unit;
-                    }
-
                     if(el.good === true) {
                         news_style['color'] = '#8ab6d6';
 

@@ -2,7 +2,7 @@ import * as React from 'react';
 import $ from 'jquery';
 
 import { actionCreators as initActions } from '../../Store/modules/init';
-import game, { actionCreators as gameActions } from '../../Store/modules/game';
+import { actionCreators as gameActions } from '../../Store/modules/game';
 import { actionCreators as functionsActions } from '../../Store/modules/functions';
 
 import { connect } from 'react-redux'; 
@@ -83,13 +83,13 @@ class Card extends React.Component<AllProps> {
                     return;
                 }
 
-                let select_num : number | null = null;
+                // let select_num : number | null = null;
                 const save_obj : any = { 'all_card_num' : all_card_num };
 
                 let z_idx = 100;
                 if(key !== null) {
                     if(card_deck[key].select === false && card_deck[key].use === false) {
-                        select_num = card_deck[key].number;
+                        // select_num = card_deck[key].number;
                         card_deck[key].select = true;
 
                         if(overlap_card === false) {
@@ -222,7 +222,7 @@ class Card extends React.Component<AllProps> {
                             start = 3;
                         }
 
-                    } else if(_location > 20 && _location <= 27 || _location === 0) {
+                    } else if( (_location > 20 && _location <= 27) || _location === 0) {
                         move_map_obj["4"] += 1;
 
                         if(start === 0) {
@@ -471,8 +471,6 @@ class Card extends React.Component<AllProps> {
 
     // 컴퓨터 행동 알고리즘
     _actionComputer = (player : number, city : any, player_list : any) => {
-        const { _checkPlayerMoney } = this.props;
-
         // 도착한 토지의 타입 파악
         if(city.type === 'map') {
             // 일반 맵

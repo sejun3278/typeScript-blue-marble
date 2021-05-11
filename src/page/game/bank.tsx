@@ -1,5 +1,4 @@
 import * as React from 'react';
-import $ from 'jquery';
 
 import { actionCreators as initActions } from '../../Store/modules/init';
 import { actionCreators as gameActions } from '../../Store/modules/game';
@@ -86,11 +85,11 @@ class Bank extends React.Component<AllProps> {
 
   // 예금액 조정하기
   _saveMoney = (event : any) => {
-    const { turn, round, gameActions, initActions, bank_incentive_percent, _getMyRating } = this.props;
+    const { turn, gameActions, initActions, bank_incentive_percent } = this.props;
     let bank_info = JSON.parse(this.props.bank_info);
 
     const player_list = JSON.parse(this.props.player_list);
-    const save_money_index = JSON.parse(this.props.save_money_index);
+    // const save_money_index = JSON.parse(this.props.save_money_index);
 
     let save_money : number = Number(event.target.value);
 
@@ -133,11 +132,11 @@ class Bank extends React.Component<AllProps> {
 
   // 누적 이자금 환급받기
   _returnTotalIncentive = () => {
-    const { turn, _removeAlertMent, gameActions, _playerMoney, _addLog, _splitMoneyUnit, _checkPlayerMoney } = this.props;
+    const { turn, _removeAlertMent, gameActions, _playerMoney, _addLog, _splitMoneyUnit } = this.props;
     const bank_info = JSON.parse(this.props.bank_info);
     const my_info = bank_info[Number(turn)];
 
-    const my_money = _checkPlayerMoney(turn);
+    // const my_money = _checkPlayerMoney(turn);
 
     if(my_info.total_incentive === 0) {
         return _removeAlertMent('환급될 누적 이자가 없습니다.');

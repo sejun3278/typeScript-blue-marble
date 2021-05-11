@@ -41,7 +41,6 @@ export interface AllProps {
   bgm_number : number
 };
 
-let infinite_bgm : any = "";
 class Home extends React.Component<AllProps> {
 
   componentDidMount() {
@@ -62,7 +61,7 @@ class Home extends React.Component<AllProps> {
 
   _setKeyBoardKey = (event : any) => {
     const { 
-      initActions, large_cat, small_cat, setting_modal, setting_type, setting_stage, _gameStart, 
+      large_cat, small_cat, setting_modal, setting_type, setting_stage, _gameStart, 
       setting_able, _selectCategory, _moveStage 
     } = this.props;
 
@@ -111,6 +110,13 @@ class Home extends React.Component<AllProps> {
 
                 // save_obj['large_cat'] = large_cat + 1;
                 // save_obj['small_cat'] = 0;
+              }
+            }
+
+          } else {
+            if(category.child !== undefined) {
+              if( small_cat !== (category.child.length - 1) ) {
+                _selectCategory(large_cat, small_cat + 1);
               }
             }
           }
@@ -319,8 +325,6 @@ class Home extends React.Component<AllProps> {
 
   // 사운드 추가하기
   _addSound = (type : string, name : string, number : number) => {
-    const { bgm_number } = this.props;
-    
     const sound_list = require('../source/sound.json');
     let sound : string = "";
 

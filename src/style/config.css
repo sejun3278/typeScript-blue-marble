@@ -1815,6 +1815,7 @@ body #notice_divs {
   }
 }
 #game_notice_div {
+  z-index: 9999;
   display: grid;
   grid-template-columns: 18% auto;
   max-height: 600px;

@@ -194,17 +194,5 @@
                 "thumbnail" : "https://typescript-blue-marble.s3.ap-northeast-2.amazonaws.com/notice/12-3.+settle_complate.gif"
             }
         ]
-    },
-
-    {
-        "name" : "승리",
-        "comment" : "",
-        "thumbnail" : ""
-    },
-
-    {
-        "name" : "개발자 정보",
-        "comment" : "",
-        "thumbnail" : ""
     }
 ]

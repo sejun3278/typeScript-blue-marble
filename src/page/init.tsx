@@ -146,7 +146,6 @@ class Init extends React.Component<AllProps> {
 
     // 선택할 카드 표시하기
     _setSelectCardEffect = (num : number, on : boolean) => {
-        const { _infiniteFlash } = this.props;
         const event : any = document.getElementById('select_casino_card_' + num);
 
         if(on === true) {

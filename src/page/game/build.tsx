@@ -40,7 +40,7 @@ class Build extends React.Component<AllProps> {
     } = this.props;
 
     const select_info = JSON.parse(this.props.select_info);
-    const bank_info = JSON.parse(this.props.bank_info);
+    // const bank_info = JSON.parse(this.props.bank_info);
 
     let my_info = JSON.parse(this.props.player_list);
     const landmark_list = require('../../source/landmark.json');

@@ -26,7 +26,24 @@ class Notice extends React.Component<AllProps> {
     functionsActions.save_function({
       '_selectCategory' : this._selectCategory
     })
+
+    window.document.addEventListener('keydown', (event) => this._closeKeyCode(event))
   }
+
+  componentWillUnmount() {
+    window.document.removeEventListener("keydown", (event) => this._closeKeyCode(event));
+  }
+
+  _closeKeyCode = (event : any) => {
+    const { initActions } = this.props;
+    const keyCode : number = event.keyCode;
+
+    if(keyCode === 27) {
+      // 닫기
+      initActions.toggle_setting_modal({ 'modal' : false, 'type' : null })
+    }
+  }
+
 
   _selectCategory = (large : number, small : number) => {
     const { noticeActions } = this.props;
